@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { NavigationBar } from "./components/common/NavigationBar";
-import { MainContent } from "./pages/main/MainContent";
+import { CommunityMainPage } from "./pages/main/CommunityMainPage";
 import { FooterBar } from "./components/common/FooterBar";
 import { Routes, Route } from "react-router-dom";
 
@@ -16,7 +16,7 @@ function App() {
       <NavigationBar />
       <main className="flex-fill">
         <Routes>
-          <Route path="/" element={<MainContent />} />
+          <Route path="/" element={<CommunityMainPage />} />
         </Routes>
       </main>
       <FooterBar />
