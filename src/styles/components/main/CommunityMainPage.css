@@ -1,0 +1,281 @@
+.community-main-page * {
+  /* 모든 자식 요소에 폰트 적용 */
+  font-family: "Pretendard-Regular", sans-serif !important;
+}
+
+.hero-section {
+  background-color: #202b3d;
+  background-size: cover;
+  background-position: center;
+  height: 400px;
+  width: 100%;
+}
+
+.hero-section h1,
+.hero-section p {
+  color: white;
+}
+
+.hero-section p {
+  font-size: 18px;
+}
+
+.main-article-section {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  min-height: 818px;
+}
+
+.main-article-section .main-article-container {
+  max-width: 1200px;
+  height: auto;
+}
+
+.main-article-section h2 {
+  font-size: 36px;
+  line-height: 0.88;
+  letter-spacing: -1%;
+  color: #0c151c;
+}
+
+.popular-post-card {
+  width: 100%;
+  height: 77px;
+  border-bottom: 1px solid #7f7f7f20;
+  background-color: #ffffff;
+}
+
+.popular-post-card .board-title {
+  width: 192px;
+  height: 32px;
+}
+
+.popular-post-card .board-title span {
+  font-size: 20px;
+  line-height: 1.6em;
+  letter-spacing: -1%;
+  color: #0c151c;
+}
+
+.popular-post-card .card-title {
+  font-size: 20px;
+  line-height: 1.4em;
+  letter-spacing: -1%;
+  color: #0c151c;
+}
+
+.popular-post-card .user-info {
+  min-width: 374px;
+}
+
+.popular-post-card .user-info .icon-placeholder {
+  width: 21px;
+  height: 20px;
+  background-color: #ccc;
+  display: inline-block;
+}
+
+.popular-post-card .user-info .card-text {
+  font-size: 14px;
+  line-height: 1.42;
+  letter-spacing: -1%;
+  color: #0c151c;
+}
+
+.popular-post-card .user-info .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #0c151c;
+}
+
+.popular-post-card .action-button {
+  min-width: 46px;
+  min-height: 46px;
+  border-radius: 5px;
+}
+
+.popular-post-card .action-button .icon-placeholder {
+  width: 20px;
+  height: 20px;
+  background-color: #ccc;
+  display: inline-block;
+}
+
+.popular-post-card .action-button span {
+  font-size: 14px;
+  line-height: 1.71;
+  color: #0c151c;
+}
+
+.popular-post-card .action-button.message span {
+  color: #000000;
+}
+
+.view-more-button {
+  background-color: #fbfbfd;
+  border-color: #2d4053;
+  border-width: 1px;
+  border-radius: 6px;
+  color: #2d4053;
+  height: 48px;
+  width: 200px;
+}
+
+.view-more-button span {
+  font-size: 16px;
+  line-height: 1.5em;
+  letter-spacing: -1%;
+}
+
+.sub-article-section {
+  background-color: #f9fafb;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  min-height: 947px;
+}
+
+.sub-article-section .container {
+  max-width: 1200px;
+  height: auto;
+}
+
+.sub-article-section h2 {
+  font-size: 36px;
+  line-height: 0.88;
+  letter-spacing: -1%;
+  color: #0c151c;
+}
+
+.board-card {
+  width: 373px;
+  height: 293px;
+  border-radius: 8px;
+  border-color: #2d3648;
+  background-color: #ffffff;
+  position: relative;
+}
+
+.board-card .card-body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.board-card .image-placeholder-container {
+  width: 100%;
+  height: auto;
+}
+
+.board-card .image-placeholder {
+  width: 384px;
+  height: 174px;
+  background-color: #edf0f7;
+  border-bottom: 2px solid #2d3648;
+}
+
+.board-card .image-placeholder img {
+  width: 40px;
+  height: 40px;
+}
+
+.board-card .card-title {
+  font-size: 20px;
+  line-height: 1.6em;
+  letter-spacing: -1%;
+  color: #0c151c;
+}
+
+.board-card .card-text {
+  font-size: 16px;
+  line-height: 1.5em;
+  letter-spacing: -1%;
+  color: #0c151c;
+}
+
+.community-status-section {
+  background-color: #202b3d;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  min-height: 322px;
+}
+
+.community-status-section .container {
+  max-width: 1200px;
+  height: auto;
+}
+
+.community-status-section h2 {
+  font-size: 36px;
+  line-height: 0.88;
+  letter-spacing: -1%;
+  color: white;
+}
+
+.community-status-item span.count {
+  font-size: 40px;
+  line-height: 0.8em;
+  letter-spacing: -1%;
+  color: white;
+}
+
+.community-status-item span.label {
+  font-size: 20px;
+  line-height: 1.6em;
+  letter-spacing: -1%;
+  color: white;
+}
+
+.call-to-action-section {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  min-height: 334px;
+}
+
+.call-to-action-section .container {
+  max-width: 1200px;
+  height: auto;
+}
+
+.call-to-action-section h2 {
+  font-size: 36px;
+  line-height: 0.88;
+  letter-spacing: -1%;
+}
+
+.call-to-action-section p {
+  font-size: 16px;
+}
+
+.call-to-action-section .btn-dark {
+  background-color: #2d4053;
+  color: #ffffff;
+  border-radius: 6px;
+  height: 48px;
+  padding: 0 24px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 2em;
+  letter-spacing: -1%;
+}
+
+.call-to-action-section .btn-outline-dark {
+  border-color: #2d4053;
+  color: #2d4053;
+  border-radius: 6px;
+  height: 48px;
+  padding: 0 24px;
+  background-color: #ffffff;
+  border-width: 1px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 2em;
+  letter-spacing: -1%;
+}

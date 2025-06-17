@@ -1,0 +1,161 @@
+.community-boards-wrapper {
+  width: 100%;
+  height: 100%;
+  padding-left: 120px;
+  padding-right: 120px;
+  background: #f9fafb;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 19px;
+  display: inline-flex;
+}
+
+.community-boards-inner {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 19px;
+  display: flex;
+}
+
+.community-boards-title-area {
+  width: 1200px;
+  height: 72px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  display: inline-flex;
+}
+
+.community-boards-title {
+  color: #0c151c;
+  font-size: 36px;
+  font-family: "Pretendard-Regular", sans-serif;
+  font-weight: 700;
+  line-height: 32px;
+  word-wrap: break-word;
+}
+
+.community-cards-section {
+  width: 1440px;
+  height: 692px;
+  padding-left: 104px;
+  padding-right: 104px;
+  background: #fbfbfd;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+}
+
+.community-cards-container {
+  width: 1200px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  justify-content: space-between;
+  align-items: center;
+  display: inline-flex;
+  flex-wrap: wrap; /* 카드가 다음 줄로 넘어갈 수 있도록 추가 */
+}
+
+.community-board-card-wrapper {
+  width: 373px;
+  height: 293px;
+  padding-left: 18px;
+  padding-right: 18px;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  position: relative;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.community-board-card {
+  width: 373px;
+  height: 294px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: white;
+  overflow: hidden;
+  border-radius: 8px;
+  outline: 2px #2d3648 solid;
+  outline-offset: -2px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 14px;
+  display: flex;
+}
+
+.card-content-top {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+}
+
+.card-image-placeholder {
+  width: 384px;
+  height: 174px;
+  position: relative;
+  background: #edf0f7;
+  outline: 2px #2d3648 solid;
+  outline-offset: -2px;
+}
+
+.card-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.card-icon-shape {
+  width: 40px;
+  height: 40px;
+  background-color: #ccc; /* 임시 아이콘 색상 */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.card-content-bottom {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  display: flex;
+}
+
+.card-title-text {
+  width: 192px;
+  height: 31px;
+  color: #0c151c;
+  font-size: 20px;
+  font-family: "Pretendard-Regular", sans-serif;
+  font-weight: 700;
+  line-height: 32px;
+  word-wrap: break-word;
+}
+
+.card-description-text {
+  width: 328px;
+  height: 48px;
+  color: #0c151c;
+  font-size: 16px;
+  font-family: "Pretendard-Regular", sans-serif;
+  font-weight: 500;
+  line-height: 24px;
+  word-wrap: break-word;
+}
