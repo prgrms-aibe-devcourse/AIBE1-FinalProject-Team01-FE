@@ -2,101 +2,148 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 48px 0;
+  padding: 3rem 1rem;
+  max-width: 75rem;
+  margin: 0 auto;
 }
 
 .popular-title {
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
 }
 
 .popular-posts-row {
-  display: flex;
-  gap: 32px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
   width: 100%;
   justify-content: center;
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
+}
+
+.board-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.board-section-title {
+  font-weight: bold;
+  font-size: 1.125rem;
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.board-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .popular-post-card {
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  padding: 24px 20px;
-  min-width: 280px;
-  max-width: 340px;
-  flex: 1 1 0;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.04);
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  border: 1px solid #eee;
-}
-
-.board-title {
-  font-weight: bold;
-  font-size: 1.1rem;
-  margin-bottom: 12px;
-  text-align: center;
+  min-height: 7.5rem;
+  border: 1px solid #f0f0f0;
 }
 
 .post-title {
   font-weight: bold;
-  font-size: 1.05rem;
-  margin-bottom: 16px;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  flex: 1;
+  margin-bottom: 0.75rem;
+}
+
+.post-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  font-size: 0.9rem;
   width: 100%;
-  font-size: 0.95rem;
+}
+
+.user-details {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .icon-user {
-  width: 21px;
-  height: 20px;
-  margin-right: 4px;
+  width: 18px;
+  height: 18px;
 }
 
 .dot {
-  width: 4px;
-  height: 4px;
+  width: 3px;
+  height: 3px;
   background: #bbb;
   border-radius: 50%;
   display: inline-block;
-  margin: 0 8px;
 }
 
 .post-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-left: auto;
+  gap: 16px;
+}
+
+.likes,
+.comments {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .icon-action {
-  width: 20px;
-  height: 20px;
-  margin-right: 2px;
+  width: 16px;
+  height: 16px;
 }
 
 .view-more-btn {
-  margin-top: 12px;
-  padding: 12px 32px;
+  margin-top: 0.75rem;
+  padding: 0.75rem 2rem;
   border: 1.5px solid #222;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   background: #fff;
   font-weight: bold;
   font-size: 1rem;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
   cursor: pointer;
   transition: background 0.15s;
 }
 
 .view-more-btn:hover {
   background: #f5f5f5;
+}
+
+/* 반응형 처리 */
+@media (max-width: 1024px) {
+  .popular-posts-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .popular-posts-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .popular-posts-section {
+    padding: 32px 20px;
+  }
 }

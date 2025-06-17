@@ -14,31 +14,28 @@ import iconComment from "../../assets/icon-comment.png";
  * @param {PopularPostsProps} props
  */
 export const PopularPosts = () => {
-  // 더미데이터 1개씩만 사용
-  const dummyPosts = [
+  // 더미 포스트 데이터
+  const dummyPost = {
+    title: "생성형 백엔드 데브코스 ㄹㅇ후기 알려줌",
+    user: "김유저",
+    time: "3시간 전",
+    likes: 2,
+    comments: 18,
+  };
+
+  // 3개 게시판의 데이터
+  const boardsData = [
     {
-      board: "자유게시판",
-      title: "생성형 백엔드 데브코스 ㄹㅇ후기 알려줌",
-      user: "김유저",
-      time: "3시간 전",
-      likes: 2,
-      comments: 18,
+      title: "자유게시판",
+      posts: Array(5).fill(dummyPost), // 각 게시판마다 5개씩
     },
     {
-      board: "자유게시판",
-      title: "생성형 백엔드 데브코스 ㄹㅇ후기 알려줌",
-      user: "김유저",
-      time: "3시간 전",
-      likes: 2,
-      comments: 18,
+      title: "질문토론",
+      posts: Array(5).fill(dummyPost),
     },
     {
-      board: "자유게시판",
-      title: "생성형 백엔드 데브코스 ㄹㅇ후기 알려줌",
-      user: "김유저",
-      time: "3시간 전",
-      likes: 2,
-      comments: 18,
+      title: "IT 뉴스",
+      posts: Array(5).fill(dummyPost),
     },
   ];
 
@@ -46,29 +43,43 @@ export const PopularPosts = () => {
     <section className="popular-posts-section">
       <h2 className="popular-title">인기 게시글</h2>
       <div className="popular-posts-row">
-        {dummyPosts.map((post, idx) => (
-          <div className="popular-post-card" key={idx}>
-            <div className="board-title">{post.board}</div>
-            <div className="post-title">{post.title}</div>
-            <div className="user-info">
-              <img src={iconUser} alt="user" className="icon-user" />
-              <span>{post.user}</span>
-              <span className="dot" />
-              <span>{post.time}</span>
-              <div className="post-actions">
-                <span className="likes">
-                  <img src={iconHeart} alt="heart" className="icon-action" />
-                  {post.likes}
-                </span>
-                <span className="comments">
-                  <img
-                    src={iconComment}
-                    alt="comment"
-                    className="icon-action"
-                  />
-                  {post.comments}
-                </span>
-              </div>
+        {boardsData.map((board, boardIdx) => (
+          <div className="board-section" key={boardIdx}>
+            <h3 className="board-section-title">{board.title}</h3>
+            <div className="board-posts">
+              {board.posts.map((post, postIdx) => (
+                <div className="popular-post-card" key={postIdx}>
+                  <div className="post-content">
+                    <div className="post-title">{post.title}</div>
+                  </div>
+                  <div className="user-info">
+                    <div className="user-details">
+                      <img src={iconUser} alt="user" className="icon-user" />
+                      <span>{post.user}</span>
+                      <span className="dot" />
+                      <span>{post.time}</span>
+                    </div>
+                    <div className="post-actions">
+                      <span className="likes">
+                        <img
+                          src={iconHeart}
+                          alt="heart"
+                          className="icon-action"
+                        />
+                        {post.likes}
+                      </span>
+                      <span className="comments">
+                        <img
+                          src={iconComment}
+                          alt="comment"
+                          className="icon-action"
+                        />
+                        {post.comments}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         ))}

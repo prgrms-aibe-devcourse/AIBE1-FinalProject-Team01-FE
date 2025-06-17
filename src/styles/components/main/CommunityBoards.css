@@ -53,14 +53,15 @@
   display: flex;
 }
 
+/* 카드 컨테이너 수정 - 한 줄에 3개씩, 줄 간격 추가 */
 .community-cards-container {
   width: 1200px;
   padding-top: 20px;
   padding-bottom: 20px;
-  justify-content: space-between;
-  align-items: center;
-  display: inline-flex;
-  flex-wrap: wrap; /* 카드가 다음 줄로 넘어갈 수 있도록 추가 */
+  display: grid; /* flexbox에서 grid로 변경 */
+  grid-template-columns: repeat(3, 1fr); /* 3개 컬럼으로 고정 */
+  gap: 40px 20px; /* 세로 간격 40px, 가로 간격 20px */
+  justify-items: center; /* 카드를 중앙 정렬 */
 }
 
 .community-board-card-wrapper {
