@@ -1,4 +1,8 @@
-# React + Vite
+# 아마추어스 | 프로그래머스 데브코스 수강생들을 위한 커뮤니티
+
+![Image](https://github.com/user-attachments/assets/eb332f09-cd8b-40ee-a3d8-56384621f1ed)
+
+## React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
