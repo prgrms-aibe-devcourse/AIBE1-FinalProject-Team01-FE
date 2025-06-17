@@ -25,6 +25,7 @@
   max-width: 1440px;
   margin: 0 auto;
   min-height: 818px;
+  /* 섹션 전체 패딩/마진 등만 남김 */
 }
 
 .main-article-section .main-article-container {
@@ -37,96 +38,6 @@
   line-height: 0.88;
   letter-spacing: -1%;
   color: #0c151c;
-}
-
-.popular-post-card {
-  width: 100%;
-  height: 77px;
-  border-bottom: 1px solid #7f7f7f20;
-  background-color: #ffffff;
-}
-
-.popular-post-card .board-title {
-  width: 192px;
-  height: 32px;
-}
-
-.popular-post-card .board-title span {
-  font-size: 20px;
-  line-height: 1.6em;
-  letter-spacing: -1%;
-  color: #0c151c;
-}
-
-.popular-post-card .card-title {
-  font-size: 20px;
-  line-height: 1.4em;
-  letter-spacing: -1%;
-  color: #0c151c;
-}
-
-.popular-post-card .user-info {
-  min-width: 374px;
-}
-
-.popular-post-card .user-info .icon-placeholder {
-  width: 21px;
-  height: 20px;
-  background-color: #ccc;
-  display: inline-block;
-}
-
-.popular-post-card .user-info .card-text {
-  font-size: 14px;
-  line-height: 1.42;
-  letter-spacing: -1%;
-  color: #0c151c;
-}
-
-.popular-post-card .user-info .dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background-color: #0c151c;
-}
-
-.popular-post-card .action-button {
-  min-width: 46px;
-  min-height: 46px;
-  border-radius: 5px;
-}
-
-.popular-post-card .action-button .icon-placeholder {
-  width: 20px;
-  height: 20px;
-  background-color: #ccc;
-  display: inline-block;
-}
-
-.popular-post-card .action-button span {
-  font-size: 14px;
-  line-height: 1.71;
-  color: #0c151c;
-}
-
-.popular-post-card .action-button.message span {
-  color: #000000;
-}
-
-.view-more-button {
-  background-color: #fbfbfd;
-  border-color: #2d4053;
-  border-width: 1px;
-  border-radius: 6px;
-  color: #2d4053;
-  height: 48px;
-  width: 200px;
-}
-
-.view-more-button span {
-  font-size: 16px;
-  line-height: 1.5em;
-  letter-spacing: -1%;
 }
 
 .sub-article-section {
@@ -149,76 +60,27 @@
   color: #0c151c;
 }
 
-.board-card {
-  width: 373px;
-  height: 293px;
-  border-radius: 8px;
-  border-color: #2d3648;
-  background-color: #ffffff;
-  position: relative;
-}
-
-.board-card .card-body {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.board-card .image-placeholder-container {
-  width: 100%;
-  height: auto;
-}
-
-.board-card .image-placeholder {
-  width: 384px;
-  height: 174px;
-  background-color: #edf0f7;
-  border-bottom: 2px solid #2d3648;
-}
-
-.board-card .image-placeholder img {
-  width: 40px;
-  height: 40px;
-}
-
-.board-card .card-title {
-  font-size: 20px;
-  line-height: 1.6em;
-  letter-spacing: -1%;
-  color: #0c151c;
-}
-
-.board-card .card-text {
-  font-size: 16px;
-  line-height: 1.5em;
-  letter-spacing: -1%;
-  color: #0c151c;
-}
-
 .community-status-section {
   background-color: #202b3d;
   width: 100%;
-  max-width: 1440px;
   margin: 0 auto;
   min-height: 322px;
 }
 
 .community-status-section .container {
-  max-width: 1200px;
+  max-width: 1440px;
   height: auto;
 }
 
 .community-status-section h2 {
-  font-size: 36px;
+  font-size: 32px;
   line-height: 0.88;
   letter-spacing: -1%;
   color: white;
 }
 
 .community-status-item span.count {
-  font-size: 40px;
+  font-size: 32px;
   line-height: 0.8em;
   letter-spacing: -1%;
   color: white;
@@ -236,16 +98,14 @@
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  min-height: 334px;
 }
 
 .call-to-action-section .container {
   max-width: 1200px;
-  height: auto;
 }
 
 .call-to-action-section h2 {
-  font-size: 36px;
+  font-size: 26px;
   line-height: 0.88;
   letter-spacing: -1%;
 }
@@ -264,6 +124,9 @@
   font-weight: 700;
   line-height: 2em;
   letter-spacing: -1%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .call-to-action-section .btn-outline-dark {
@@ -278,4 +141,21 @@
   font-weight: 700;
   line-height: 2em;
   letter-spacing: -1%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.community-status-section .row,
+.community-status-section .d-flex {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.community-status-item {
+  flex: 1 1 0;
+  max-width: 25%;
+  min-width: 0;
 }

@@ -27,15 +27,15 @@ export const PopularPosts = () => {
   const boardsData = [
     {
       title: "자유게시판",
-      posts: Array(5).fill(dummyPost), // 각 게시판마다 5개씩
+      posts: Array(4).fill(dummyPost), // 각 게시판마다 5개씩
     },
     {
       title: "질문토론",
-      posts: Array(5).fill(dummyPost),
+      posts: Array(4).fill(dummyPost),
     },
     {
       title: "IT 뉴스",
-      posts: Array(5).fill(dummyPost),
+      posts: Array(4).fill(dummyPost),
     },
   ];
 
@@ -51,31 +51,31 @@ export const PopularPosts = () => {
                 <div className="popular-post-card" key={postIdx}>
                   <div className="post-content">
                     <div className="post-title">{post.title}</div>
-                  </div>
-                  <div className="user-info">
-                    <div className="user-details">
-                      <img src={iconUser} alt="user" className="icon-user" />
-                      <span>{post.user}</span>
-                      <span className="dot" />
-                      <span>{post.time}</span>
-                    </div>
-                    <div className="post-actions">
-                      <span className="likes">
-                        <img
-                          src={iconHeart}
-                          alt="heart"
-                          className="icon-action"
-                        />
-                        {post.likes}
-                      </span>
-                      <span className="comments">
-                        <img
-                          src={iconComment}
-                          alt="comment"
-                          className="icon-action"
-                        />
-                        {post.comments}
-                      </span>
+                    <div className="user-info">
+                      <div className="user-details">
+                        <img src={iconUser} alt="user" className="icon-user" />
+                        <span>{post.user}</span>
+                        <span className="dot" />
+                        <span>{post.time}</span>
+                      </div>
+                      <div className="post-actions">
+                        <span className="likes">
+                          <img
+                            src={iconHeart}
+                            alt="heart"
+                            className="icon-action"
+                          />
+                          {post.likes}
+                        </span>
+                        <span className="comments">
+                          <img
+                            src={iconComment}
+                            alt="comment"
+                            className="icon-action"
+                          />
+                          {post.comments}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>

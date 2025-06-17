@@ -36,6 +36,9 @@
   font-weight: 700;
   line-height: 2em;
   letter-spacing: -1%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .main-navbar .btn-outline-dark {
@@ -50,4 +53,7 @@
   font-weight: 700;
   line-height: 2em;
   letter-spacing: -1%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

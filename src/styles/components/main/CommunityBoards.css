@@ -1,100 +1,96 @@
 .community-boards-wrapper {
   width: 100%;
   height: 100%;
-  padding-left: 120px;
-  padding-right: 120px;
+  padding-left: 7.5rem;
+  padding-right: 7.5rem;
   background: #f9fafb;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 19px;
-  display: inline-flex;
+  gap: 1.2rem;
+  display: flex;
 }
 
 .community-boards-inner {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 19px;
+  gap: 1.2rem;
   display: flex;
+  padding: 2rem 0;
 }
 
 .community-boards-title-area {
-  width: 1200px;
-  height: 72px;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  width: 75rem;
+  height: 4.5rem;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  display: inline-flex;
+  gap: 0.6rem;
+  display: flex;
 }
 
 .community-boards-title {
   color: #0c151c;
-  font-size: 36px;
-  font-family: "Pretendard-Regular", sans-serif;
+  font-size: 2.25rem;
   font-weight: 700;
-  line-height: 32px;
+  line-height: 2rem;
   word-wrap: break-word;
 }
 
 .community-cards-section {
-  width: 1440px;
-  height: 692px;
-  padding-left: 104px;
-  padding-right: 104px;
+  width: 90rem;
+  height: 43.25rem;
+  padding-left: 6.5rem;
+  padding-right: 6.5rem;
   background: #fbfbfd;
   overflow: hidden;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 0.6rem;
   display: flex;
 }
 
-/* 카드 컨테이너 수정 - 한 줄에 3개씩, 줄 간격 추가 */
 .community-cards-container {
-  width: 1200px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  display: grid; /* flexbox에서 grid로 변경 */
-  grid-template-columns: repeat(3, 1fr); /* 3개 컬럼으로 고정 */
-  gap: 40px 20px; /* 세로 간격 40px, 가로 간격 20px */
-  justify-items: center; /* 카드를 중앙 정렬 */
+  width: 75rem;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem 1.25rem;
+  justify-items: center;
 }
 
 .community-board-card-wrapper {
-  width: 373px;
-  height: 293px;
-  padding-left: 18px;
-  padding-right: 18px;
-  padding-top: 24px;
-  padding-bottom: 24px;
+  width: 23.3rem;
+  height: 18.3rem;
+  padding: 1.5rem 1.125rem;
   position: relative;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 10px;
-  display: inline-flex;
+  gap: 0.6rem;
+  display: flex;
   cursor: pointer;
 }
 
 .community-board-card {
-  width: 373px;
-  height: 294px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   left: 0;
   top: 0;
   background: white;
   overflow: hidden;
-  border-radius: 8px;
-  outline: 2px #2d3648 solid;
-  outline-offset: -2px;
+  border-radius: 0.5rem;
+  outline: 0.11rem #d6d6d6 solid;
+  outline-offset: -0.125rem;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 14px;
+  gap: 0.9rem;
   display: flex;
 }
 
@@ -102,17 +98,15 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 10px;
+  gap: 0.6rem;
   display: flex;
 }
 
 .card-image-placeholder {
-  width: 384px;
-  height: 174px;
+  width: 100%;
+  height: 10.9rem;
   position: relative;
-  background: #edf0f7;
-  outline: 2px #2d3648 solid;
-  outline-offset: -2px;
+  border-bottom: 1px solid #d6d6d6;
 }
 
 .card-icon {
@@ -122,9 +116,9 @@
 }
 
 .card-icon-shape {
-  width: 40px;
-  height: 40px;
-  background-color: #ccc; /* 임시 아이콘 색상 */
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #ccc;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -135,28 +129,26 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 10px;
+  gap: 0.6rem;
   display: flex;
 }
 
 .card-title-text {
-  width: 192px;
-  height: 31px;
+  width: 12rem;
+  height: 1.9rem;
   color: #0c151c;
-  font-size: 20px;
-  font-family: "Pretendard-Regular", sans-serif;
+  font-size: 1.25rem;
   font-weight: 700;
-  line-height: 32px;
+  line-height: 2rem;
   word-wrap: break-word;
 }
 
 .card-description-text {
-  width: 328px;
-  height: 48px;
+  width: 20.5rem;
+  height: 3rem;
   color: #0c151c;
-  font-size: 16px;
-  font-family: "Pretendard-Regular", sans-serif;
+  font-size: 1rem;
   font-weight: 500;
-  line-height: 24px;
+  line-height: 1.5rem;
   word-wrap: break-word;
 }

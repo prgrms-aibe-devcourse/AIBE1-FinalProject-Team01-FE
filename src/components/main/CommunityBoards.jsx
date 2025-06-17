@@ -1,6 +1,7 @@
 import React from "react";
 import { CommunityBoardCard } from "./CommunityBoardCard";
 import "../../styles/components/main/CommunityBoards.css";
+import { Container } from "react-bootstrap";
 
 /**
  * @typedef {{}} CommunityBoardsProps
@@ -23,14 +24,14 @@ export const CommunityBoards = () => {
       title: "질문 및 토론",
       description:
         "공부 중 궁금한 내용을 물어보고 토론해요<br/>으쓱이의 답변도 받을 수 있어요",
-      icon: "/src/assets/icon-comment.png", // 임시 아이콘 경로 (필요시 수정)
+      icon: "/src/assets/icon-image.png", // 임시 아이콘 경로 (필요시 수정)
       onClick: () => console.log("질문 및 토론 클릭"),
     },
     {
       title: "프로젝트 허브",
       description:
         "데브코스 중 진행한 프로젝트가 모여있어요<br/>수강생들의 완성도 높은 아이디어를 확인해 보세요",
-      icon: "/src/assets/icon-user.png", // 임시 아이콘 경로 (필요시 수정)
+      icon: "/src/assets/icon-image.png", // 임시 아이콘 경로 (필요시 수정)
       onClick: () => console.log("프로젝트 허브 클릭"),
     },
     {
@@ -44,14 +45,14 @@ export const CommunityBoards = () => {
       title: "질문 및 토론",
       description:
         "공부 중 궁금한 내용을 물어보고 토론해요<br/>으쓱이의 답변도 받을 수 있어요",
-      icon: "/src/assets/icon-comment.png", // 임시 아이콘 경로 (필요시 수정)
+      icon: "/src/assets/icon-image.png", // 임시 아이콘 경로 (필요시 수정)
       onClick: () => console.log("질문 및 토론 클릭"),
     },
     {
       title: "프로젝트 허브",
       description:
         "데브코스 중 진행한 프로젝트가 모여있어요<br/>수강생들의 완성도 높은 아이디어를 확인해 보세요",
-      icon: "/src/assets/icon-user.png", // 임시 아이콘 경로 (필요시 수정)
+      icon: "/src/assets/icon-image.png", // 임시 아이콘 경로 (필요시 수정)
       onClick: () => console.log("프로젝트 허브 클릭"),
     },
   ];

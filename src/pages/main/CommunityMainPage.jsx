@@ -76,7 +76,7 @@ export const CommunityMainPage = () => {
 
       {/* Slot Section - Call to Action */}
       <section className="call-to-action-section d-flex flex-column justify-content-center align-items-center py-5">
-        <Container className="d-flex flex-column align-items-center gap-4 py-5 px-5">
+        <Container className="d-flex flex-column align-items-center gap-4 px-5">
           <h2 className="fw-bold">아마추어스와 함께 성장하세요</h2>
           <p className="text-center">
             데브코스 수강생들을 위한 최고의 커뮤니티에 가입해보세요
