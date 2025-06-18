@@ -1,23 +1,22 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { NavigationBar } from "./components/common/NavigationBar";
-import { CommunityMainPage } from "./pages/main/CommunityMainPage";
 import { FooterBar } from "./components/common/FooterBar";
-import { Routes, Route } from "react-router-dom";
+import { AppRouter } from "./router/Router";
 
 /**
  * App 컴포넌트 (메인 페이지)
  */
 function App() {
-  const [count, setCount] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => setIsLoggedIn(true);
+  const handleLogout = () => setIsLoggedIn(false);
 
   return (
     <div className="d-flex flex-column min-vh-100">
-      <NavigationBar />
+      <NavigationBar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       <main className="flex-fill">
-        <Routes>
-          <Route path="/" element={<CommunityMainPage />} />
-        </Routes>
+        <AppRouter onLogin={handleLogin} />
       </main>
       <FooterBar />
     </div>
