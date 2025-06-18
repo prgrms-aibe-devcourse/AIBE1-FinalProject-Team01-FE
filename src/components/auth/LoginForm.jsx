@@ -45,10 +45,6 @@ export const LoginForm = () => {
         <div className="loginpage-figma-sns-btn kakao">kakao</div>
         <div className="loginpage-figma-sns-btn github">github</div>
       </div>
-      <div className="loginpage-figma-policy">
-        <a href="#">이용약관</a>
-        <a href="#">개인정보 처리방침</a>
-      </div>
     </div>
   );
 };

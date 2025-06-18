@@ -23,7 +23,13 @@ export const AuthLayout = ({ children }) => (
         <img src={masseuki} alt="머쓱이" className="loginpage-figma-masseuki" />
       </div>
       {/* 오른쪽: children(카드) */}
-      <div className="loginpage-figma-right">{children}</div>
+      <div className="loginpage-figma-right">
+        {children}
+        <div className="loginpage-figma-policy signup-policy">
+          <a href="#">이용약관</a>
+          <a href="#">개인정보 처리방침</a>
+        </div>
+      </div>
     </div>
   </div>
 );

@@ -372,3 +372,76 @@
 .signup-policy {
   margin-top: 24px;
 }
+
+/* 프로필 입력 페이지 전용 스타일 */
+.profile-setup-card {
+  /* 기존 signup-figma-card 스타일을 상속, 필요시 오버라이드 */
+  max-width: 480px;
+  min-height: 600px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 40px 32px;
+}
+
+.profile-setup-form {
+  gap: 20px;
+}
+
+.profile-nickname-group {
+  display: flex;
+  gap: 8px;
+}
+
+.profile-nickname-check-btn {
+  background: #2d4053;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  height: 36px;
+  padding: 0 16px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.profile-nickname-check-btn:hover {
+  background: #1a2733;
+}
+
+.profile-topic-group {
+  background: #f5f6fa;
+  border-radius: 8px;
+  min-height: 80px;
+  padding: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.profile-topic-btn {
+  background: #fff;
+  border: 1px solid #d7e2eb;
+  border-radius: 16px;
+  color: #2d4053;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.profile-topic-btn.selected {
+  background: #2d4053;
+  color: #fff;
+  border: 1px solid #2d4053;
+}
+
+.profile-topic-selected {
+  font-size: 12px;
+  color: #888;
+  margin-top: 2px;
+}
+
+.profile-setup-btn {
+  margin-top: 24px;
+  font-weight: 700;
+}
