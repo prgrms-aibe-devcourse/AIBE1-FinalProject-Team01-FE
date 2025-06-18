@@ -2,14 +2,14 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
 /**
- * @typedef {Object} CommunityStatusSectionProps
+ * @typedef {Object} MainStatusSectionProps
  */
 
 /**
- * CommunityStatusSection 컴포넌트 (커뮤니티 현황)
- * @param {CommunityStatusSectionProps} props
+ * MainStatusSection 컴포넌트 (커뮤니티 현황)
+ * @param {MainStatusSectionProps} props
  */
-export const CommunityStatusSection = () => {
+export const MainStatusSection = () => {
   return (
     <section className="community-status-section d-flex flex-column justify-content-center align-items-center py-5">
       <Container className="d-flex flex-column align-items-center gap-5 px-5 py-0">

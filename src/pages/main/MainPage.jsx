@@ -1,10 +1,10 @@
 import React from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import "../../styles/components/main/MainPage.css";
-import { CommunityBoards } from "../../components/main/CommunityBoards";
+import { MainBoardSection } from "../../components/main/MainBoardSection";
+import { MainStatusSection } from "../../components/main/MainStatusSection";
 import { PopularPosts } from "../../components/main/PopularPosts";
 import { HeroSection } from "../../components/main/HeroSection";
-import { CommunityStatusSection } from "../../components/main/CommunityStatusSection";
 import { CallToActionSection } from "../../components/main/CallToActionSection";
 
 /**
@@ -20,8 +20,8 @@ export const MainPage = () => {
     <div className="community-main-page">
       <HeroSection />
       <PopularPosts />
-      <CommunityBoards />
-      <CommunityStatusSection />
+      <MainBoardSection />
+      <MainStatusSection />
       <CallToActionSection />
     </div>
   );
