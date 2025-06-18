@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import "../../styles/components/auth/LoginPage.css";
+import "../../styles/components/auth/auth.css";
 
 export const LoginForm = () => {
   const { login } = useAuth();

@@ -1,9 +1,9 @@
 import React from "react";
 import { AuthLayout } from "../../components/auth/AuthLayout";
-import { LoginForm } from "../../components/auth/LoginForm";
+import { SignupForm } from "../../components/auth/SignupForm";
 
-export const LoginPage = () => (
+export const SignupPage = () => (
   <AuthLayout>
-    <LoginForm />
+    <SignupForm />
   </AuthLayout>
 );

@@ -1,16 +1,16 @@
 import React from "react";
 import masseuki from "../../assets/masseuki.png";
-import "../../styles/components/auth/LoginPage.css";
+import "../../styles/components/auth/auth.css";
 
 /**
- * @typedef {object} LoginLayoutProps
+ * @typedef {object} AuthLayoutProps
  * @property {React.ReactNode} children
  */
 
 /**
- * @param {LoginLayoutProps} props
+ * @param {AuthLayoutProps} props
  */
-export const LoginLayout = ({ children }) => (
+export const AuthLayout = ({ children }) => (
   <div className="loginpage-figma-bg">
     <div className="loginpage-figma-container">
       {/* 왼쪽: 소개 및 캐릭터 */}
