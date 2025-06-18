@@ -7,7 +7,12 @@ import { AuthProvider } from "./context/AuthContext";
 
 function AppContent() {
   const location = useLocation();
-  const hideNavOnPaths = ["/login", "/signup", "/signup/profile"];
+  const hideNavOnPaths = [
+    "/login",
+    "/signup",
+    "/signup/profile",
+    "/find-account",
+  ];
 
   return (
     <div className="d-flex flex-column min-vh-100">
