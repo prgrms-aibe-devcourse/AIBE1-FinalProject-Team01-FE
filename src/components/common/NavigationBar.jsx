@@ -7,7 +7,7 @@ import "../../styles/components/common/NavigationBar.css";
 
 export const NavigationBar = ({ onlyLogo }) => {
   const navigate = useNavigate();
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, user } = useAuth();
 
   return (
     <Navbar
@@ -43,6 +43,11 @@ export const NavigationBar = ({ onlyLogo }) => {
                   <PersonCircle
                     style={{ fontSize: "20px", cursor: "pointer" }}
                   />
+                  <span
+                    style={{ fontWeight: 500, marginLeft: 4, marginRight: 8 }}
+                  >
+                    {user?.name || "사용자"}
+                  </span>
                   <Button
                     variant="outline-dark"
                     className="px-4"
