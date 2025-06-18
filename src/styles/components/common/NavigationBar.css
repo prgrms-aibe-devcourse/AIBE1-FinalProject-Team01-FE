@@ -57,3 +57,11 @@
   align-items: center;
   justify-content: center;
 }
+
+.main-navbar.login-navbar {
+  background-color: #2d4053 !important;
+  border-bottom: none;
+}
+.main-navbar.login-navbar .navbar-brand-text {
+  color: #fff !important;
+}
