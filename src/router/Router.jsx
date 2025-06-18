@@ -3,11 +3,11 @@ import { Routes, Route } from "react-router-dom";
 import { CommunityMainPage } from "../pages/main/CommunityMainPage";
 import { LoginPage } from "../pages/auth/LoginPage";
 
-export function AppRouter({ onLogin }) {
+export function AppRouter() {
   return (
     <Routes>
       <Route path="/" element={<CommunityMainPage />} />
-      <Route path="/login" element={<LoginPage onLogin={onLogin} />} />
+      <Route path="/login" element={<LoginPage />} />
     </Routes>
   );
 }

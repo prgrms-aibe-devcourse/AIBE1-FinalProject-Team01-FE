@@ -3,24 +3,19 @@ import { NavigationBar } from "./components/common/NavigationBar";
 import { FooterBar } from "./components/common/FooterBar";
 import { AppRouter } from "./router/Router";
 
-/**
- * App 컴포넌트 (메인 페이지)
- */
+import { AuthProvider } from "./context/AuthContext";
+
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleLogin = () => setIsLoggedIn(true);
-  const handleLogout = () => setIsLoggedIn(false);
-
   return (
-    <div className="d-flex flex-column min-vh-100">
-      <NavigationBar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-      <main className="flex-fill">
-        <AppRouter onLogin={handleLogin} />
-      </main>
-      <FooterBar />
-    </div>
+    <AuthProvider>
+      <div className="d-flex flex-column min-vh-100">
+        <NavigationBar />
+        <main className="flex-fill">
+          <AppRouter />
+        </main>
+        <FooterBar />
+      </div>
+    </AuthProvider>
   );
 }
-
 export default App;

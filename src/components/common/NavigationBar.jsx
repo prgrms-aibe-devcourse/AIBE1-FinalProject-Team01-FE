@@ -1,10 +1,13 @@
 import React from "react";
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { Bell, ChatDots, PersonCircle } from "react-bootstrap-icons";
 import "../../styles/components/common/NavigationBar.css";
 
 export const NavigationBar = () => {
   const navigate = useNavigate();
+  const { isLoggedIn, logout } = useAuth();
 
   return (
     <Navbar expand="lg" className="main-navbar">
@@ -15,6 +18,7 @@ export const NavigationBar = () => {
         >
           <span className="navbar-brand-text">Amateurs</span>
         </Navbar.Brand>
+
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse
           id="basic-navbar-nav"
@@ -26,18 +30,34 @@ export const NavigationBar = () => {
             <Nav.Link href="#together">함께해요</Nav.Link>
             <Nav.Link href="#information">정보게시판</Nav.Link>
           </Nav>
-          <div className="d-flex gap-3">
-            <Button
-              variant="dark"
-              className="px-5 py-3"
-              onClick={() => navigate("/login")}
-            >
-              로그인
-            </Button>
-            <Button variant="outline-dark" className="px-5 py-3">
-              회원가입
-            </Button>
-          </div>
+
+          {isLoggedIn ? (
+            <div className="d-flex gap-3 align-items-center">
+              <Bell style={{ fontSize: "20px", cursor: "pointer" }} />
+              <ChatDots style={{ fontSize: "20px", cursor: "pointer" }} />
+              <PersonCircle style={{ fontSize: "20px", cursor: "pointer" }} />
+              <Button variant="outline-dark" className="px-4" onClick={logout}>
+                로그아웃
+              </Button>
+            </div>
+          ) : (
+            <div className="d-flex gap-3">
+              <Button
+                variant="dark"
+                className="px-5 py-3"
+                onClick={() => navigate("/login")}
+              >
+                로그인
+              </Button>
+              <Button
+                variant="outline-dark"
+                className="px-5 py-3"
+                onClick={() => navigate("/signup")}
+              >
+                회원가입
+              </Button>
+            </div>
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>
