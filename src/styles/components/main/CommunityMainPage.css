@@ -1,0 +1,161 @@
+.community-main-page * {
+  /* 모든 자식 요소에 폰트 적용 */
+  font-family: "Pretendard-Regular", sans-serif !important;
+}
+
+.hero-section {
+  background-color: #202b3d;
+  background-size: cover;
+  background-position: center;
+  height: 400px;
+  width: 100%;
+}
+
+.hero-section h1,
+.hero-section p {
+  color: white;
+}
+
+.hero-section p {
+  font-size: 18px;
+}
+
+.main-article-section {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  min-height: 818px;
+  /* 섹션 전체 패딩/마진 등만 남김 */
+}
+
+.main-article-section .main-article-container {
+  max-width: 1200px;
+  height: auto;
+}
+
+.main-article-section h2 {
+  font-size: 36px;
+  line-height: 0.88;
+  letter-spacing: -1%;
+  color: #0c151c;
+}
+
+.sub-article-section {
+  background-color: #f9fafb;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  min-height: 947px;
+}
+
+.sub-article-section .container {
+  max-width: 1200px;
+  height: auto;
+}
+
+.sub-article-section h2 {
+  font-size: 36px;
+  line-height: 0.88;
+  letter-spacing: -1%;
+  color: #0c151c;
+}
+
+.community-status-section {
+  background-color: #202b3d;
+  width: 100%;
+  margin: 0 auto;
+  min-height: 322px;
+}
+
+.community-status-section .container {
+  max-width: 1440px;
+  height: auto;
+}
+
+.community-status-section h2 {
+  font-size: 32px;
+  line-height: 0.88;
+  letter-spacing: -1%;
+  color: white;
+}
+
+.community-status-item span.count {
+  font-size: 32px;
+  line-height: 0.8em;
+  letter-spacing: -1%;
+  color: white;
+}
+
+.community-status-item span.label {
+  font-size: 20px;
+  line-height: 1.6em;
+  letter-spacing: -1%;
+  color: white;
+}
+
+.call-to-action-section {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.call-to-action-section .container {
+  max-width: 1200px;
+}
+
+.call-to-action-section h2 {
+  font-size: 26px;
+  line-height: 0.88;
+  letter-spacing: -1%;
+}
+
+.call-to-action-section p {
+  font-size: 16px;
+}
+
+.call-to-action-section .btn-dark {
+  background-color: #2d4053;
+  color: #ffffff;
+  border-radius: 6px;
+  height: 48px;
+  padding: 0 24px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 2em;
+  letter-spacing: -1%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.call-to-action-section .btn-outline-dark {
+  border-color: #2d4053;
+  color: #2d4053;
+  border-radius: 6px;
+  height: 48px;
+  padding: 0 24px;
+  background-color: #ffffff;
+  border-width: 1px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 2em;
+  letter-spacing: -1%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.community-status-section .row,
+.community-status-section .d-flex {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.community-status-item {
+  flex: 1 1 0;
+  max-width: 25%;
+  min-width: 0;
+}

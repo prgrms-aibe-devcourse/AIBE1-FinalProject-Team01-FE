@@ -1,0 +1,215 @@
+.popular-posts-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1rem;
+  width: 100%;
+  max-width: 90rem;
+  margin: 0 auto;
+}
+
+.popular-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #0c151c;
+}
+
+.popular-posts-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.board-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.board-section-title {
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.board-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.popular-post-card {
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.04);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 7rem;
+  border: 1px solid #f0f0f0;
+  width: 100%;
+  box-sizing: border-box;
+  transition: box-shadow 0.2s ease;
+}
+
+.popular-post-card:hover {
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.08);
+}
+
+.post-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+  width: 100%;
+}
+
+.post-title {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+  color: #0c151c;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.user-details {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.icon-user {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+}
+
+.dot {
+  width: 0.1875rem;
+  height: 0.1875rem;
+  background: #bbb;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.post-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.likes,
+.comments {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.icon-action {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.view-more-btn {
+  padding: 0.75rem 2rem;
+  border: 0.125rem solid #333;
+  border-radius: 0.5rem;
+  background: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-more-btn:hover {
+  background: #333;
+  color: #fff;
+}
+
+.view-more-btn:hover .icon-action {
+  filter: invert(1);
+}
+
+/* 태블릿 */
+@media (max-width: 68rem) {
+  .popular-posts-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .popular-posts-section {
+    padding: 2.5rem 1rem;
+  }
+
+  .popular-title {
+    font-size: 1.75rem;
+  }
+}
+
+/* 모바일 */
+@media (max-width: 48rem) {
+  .popular-posts-row {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .popular-posts-section {
+    padding: 2rem 1rem;
+  }
+
+  .popular-title {
+    font-size: 1.5rem;
+  }
+
+  .user-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .post-actions {
+    align-self: flex-end;
+  }
+}
+
+/* 작은 모바일 */
+@media (max-width: 30rem) {
+  .popular-posts-section {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .popular-post-card {
+    padding: 0.75rem;
+  }
+
+  .view-more-btn {
+    padding: 0.625rem 1.5rem;
+    font-size: 0.875rem;
+  }
+}

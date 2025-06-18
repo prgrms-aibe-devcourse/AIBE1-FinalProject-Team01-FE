@@ -1,0 +1,59 @@
+.main-navbar {
+  background-color: #ffffff;
+  height: 70px;
+  border-bottom: 1px solid #e9ecf3;
+}
+
+.main-navbar .container {
+  max-width: 1200px;
+}
+
+.main-navbar .navbar-brand span {
+  color: #2d4053;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4em;
+}
+
+.main-navbar .navbar-nav {
+  gap: 20px;
+}
+
+.main-navbar .nav-link {
+  color: #0c151c;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.6em;
+}
+
+.main-navbar .btn-dark {
+  background-color: #2d4053;
+  color: #ffffff;
+  border-radius: 6px;
+  height: 38px;
+  padding: 0 24px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 2em;
+  letter-spacing: -1%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-navbar .btn-outline-dark {
+  border-color: #2d4053;
+  color: #2d4053;
+  border-radius: 6px;
+  height: 38px;
+  padding: 0 24px;
+  background-color: #e9ecf3;
+  border-width: 1px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 2em;
+  letter-spacing: -1%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
