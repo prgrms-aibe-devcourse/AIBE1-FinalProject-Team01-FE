@@ -7,24 +7,24 @@ import React from "react";
  */
 
 /**
- * 커뮤니티 카테고리 바
+ * 커뮤니티 카테고리 바 (탭 형식)
  * @param {CommunityCategoryBarProps} props
  */
 export const CommunityCategoryBar = ({ selected, onSelect }) => {
   const categories = ["자유게시판", "QnA", "블로그/회고"];
   return (
-    <div className="d-flex gap-2 my-3">
+    <ul className="nav nav-tabs mb-3">
       {categories.map((cat) => (
-        <button
-          key={cat}
-          className={`btn ${
-            selected === cat ? "btn-primary" : "btn-outline-secondary"
-          }`}
-          onClick={() => onSelect(cat)}
-        >
-          {cat}
-        </button>
+        <li className="nav-item" key={cat}>
+          <button
+            className={`nav-link${selected === cat ? " active" : ""}`}
+            onClick={() => onSelect(cat)}
+            type="button"
+          >
+            {cat}
+          </button>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };

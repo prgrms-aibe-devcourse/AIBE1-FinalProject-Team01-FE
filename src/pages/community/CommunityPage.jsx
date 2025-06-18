@@ -44,7 +44,6 @@ export default function CommunityPage() {
 
   return (
     <>
-      <NavigationBar />
       <div className="container py-4">
         <h2 className="fw-bold mb-4">커뮤니티 - 자유게시판</h2>
         <CommunityCategoryBar selected={category} onSelect={setCategory} />
@@ -57,7 +56,6 @@ export default function CommunityPage() {
         <CommunityBoardList posts={filteredPosts} />
         <CommunityPagination page={page} total={5} onChange={setPage} />
       </div>
-      <FooterBar />
     </>
   );
 }

@@ -30,8 +30,16 @@ export const CommunityBoardList = ({ posts }) => {
                   </span>
                 ))}
             </span>
-            <span className="ms-auto small">
-              ❤️ {post.likes} 💬 {post.comments} 👁 {post.views}
+            <span className="ms-auto small d-flex align-items-center gap-3">
+              <span>
+                <i className="bi bi-heart"></i> {post.likes}
+              </span>
+              <span>
+                <i className="bi bi-chat"></i> {post.comments}
+              </span>
+              <span>
+                <i className="bi bi-eye"></i> {post.views}
+              </span>
             </span>
           </div>
         </div>
