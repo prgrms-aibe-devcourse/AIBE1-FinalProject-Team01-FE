@@ -1,5 +1,5 @@
 import React from "react";
-
+import "../../styles/components/community/community.css";
 /**
  * @typedef {Object} CommunityBoardListProps
  * @property {Array<Object>} posts

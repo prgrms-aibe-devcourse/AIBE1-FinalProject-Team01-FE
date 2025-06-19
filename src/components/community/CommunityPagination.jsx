@@ -1,5 +1,5 @@
 import React from "react";
-
+import "../../styles/components/community/community.css";
 /**
  * @typedef {Object} CommunityPaginationProps
  * @property {number} page

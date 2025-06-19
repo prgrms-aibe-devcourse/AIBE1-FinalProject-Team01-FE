@@ -1,4 +1,5 @@
 import React from "react";
+import "../../styles/components/community/community.css";
 
 /**
  * @typedef {Object} CommunityCategoryBarProps
@@ -13,7 +14,7 @@ import React from "react";
 export const CommunityCategoryBar = ({ selected, onSelect }) => {
   const categories = ["자유게시판", "QnA", "블로그/회고"];
   return (
-    <ul className="nav nav-tabs mb-3">
+    <ul className="community-category-bar nav nav-tabs mb-3">
       {categories.map((cat) => (
         <li className="nav-item" key={cat}>
           <button

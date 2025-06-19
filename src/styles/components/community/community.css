@@ -1,0 +1,122 @@
+/* 카테고리 바를 3등분 가로로 채우는 스타일 */
+.community-category-bar.nav-tabs {
+  display: flex;
+  width: 100%;
+}
+
+.community-category-bar .nav-item {
+  flex: 1 1 0;
+  width: 33.333%;
+  text-align: center;
+}
+
+.community-category-bar .nav-link {
+  width: 100%;
+  border-radius: 0 !important;
+}
+
+/* 커뮤니티 메인 컨테이너 가로 고정 및 가운데 정렬 */
+.community-main-container {
+  max-width: 1200px;
+  width: 100%;
+  min-height: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- CommunitySearchBar 커스텀 스타일 --- */
+.community-searchbar-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.community-filter-btn {
+  background: #e9ecf3;
+  color: #2d4053;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 100px;
+  transition: background 0.2s;
+}
+.community-filter-btn:active,
+.community-filter-btn:focus {
+  background: #d6dbe7;
+  outline: none;
+}
+.filter-icon {
+  font-size: 1.2em;
+  margin-right: 6px;
+}
+
+.community-filter-dropdown {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  min-width: 120px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.community-filter-dropdown li {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 0.98rem;
+  color: #2d4053;
+  transition: background 0.15s;
+}
+.community-filter-dropdown li:hover,
+.community-filter-dropdown li.active {
+  background: #e9ecf3;
+  font-weight: 700;
+}
+
+.community-search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.search-icon {
+  position: absolute;
+  left: 10px;
+  color: #2d4053;
+  font-size: 1.1em;
+  pointer-events: none;
+}
+.community-search-input {
+  padding-left: 32px;
+  max-width: 300px;
+  min-width: 200px;
+  border-radius: 8px;
+  border: 1px solid #d6dbe7;
+  height: 38px;
+  font-size: 1rem;
+}
+
+.community-write-btn {
+  background: #2d4053;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+.community-write-btn:hover,
+.community-write-btn:focus {
+  background: #1b2838;
+  color: #fff;
+}

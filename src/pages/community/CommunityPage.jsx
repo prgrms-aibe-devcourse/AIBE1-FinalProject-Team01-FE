@@ -38,6 +38,7 @@ export default function CommunityPage() {
   const [category, setCategory] = useState("자유게시판");
   const [keyword, setKeyword] = useState("");
   const [page, setPage] = useState(1);
+  const [sort, setSort] = useState("최신순");
 
   // 실제 데이터 연동 시 필터링/검색/페이지네이션 적용 필요
   const filteredPosts = DUMMY_POSTS.filter(
@@ -47,13 +48,21 @@ export default function CommunityPage() {
   return (
     <>
       <HeroSection backgroundImageSrc={heroCommunity} />
-      <div className="container py-4">
+      <div className="container py-4 community-main-container">
         <CommunityCategoryBar selected={category} onSelect={setCategory} />
         <CommunitySearchBar
           keyword={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           onWrite={() => alert("글쓰기 기능 준비중")}
-          onFilter={() => alert("필터 기능 준비중")}
+          sort={sort}
+          onSortChange={(option) => {
+            setSort(option);
+            // TODO: 정렬 옵션 변경 시 백엔드 데이터 요청 로직 추가 필요 (페이지네이션 등 고려)
+          }}
+          onSearch={() => {
+            // TODO: 검색 실행 시 백엔드 데이터 요청 로직 추가 필요 (페이지네이션 등 고려)
+            // 프론트에서는 keyword로 필터링만 적용 중
+          }}
         />
         <CommunityBoardList posts={filteredPosts} />
         <CommunityPagination page={page} total={5} onChange={setPage} />
