@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import "../../styles/components/auth/auth.css";
+import { useInput } from "../../hooks/useInput";
 
 /**
  * 비밀번호 찾기 폼
  */
 export const FindPasswordForm = () => {
-  const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
+  const { value: email, onChange: onEmailChange } = useInput("");
+  const [sent, setSent] = React.useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,7 +36,7 @@ export const FindPasswordForm = () => {
               type="email"
               placeholder="이메일을 입력해 주세요"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={onEmailChange}
               required
             />
           </div>

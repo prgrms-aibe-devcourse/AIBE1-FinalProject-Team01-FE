@@ -1,9 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import kakaoLoginImg from "../../assets/kakao_login_medium_narrow.png";
 import githubLoginImg from "../../assets/github_login.png";
 import "../../styles/components/auth/auth.css";
+import { useInput } from "../../hooks/useInput";
 
 export const LoginForm = () => {
   const { login } = useAuth();
@@ -11,8 +12,8 @@ export const LoginForm = () => {
   const emailRef = useRef(null);
   const pwRef = useRef(null);
 
-  const [email, setEmail] = useState("");
-  const [pw, setPw] = useState("");
+  const { value: email, onChange: onEmailChange } = useInput("");
+  const { value: pw, onChange: onPwChange } = useInput("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -40,15 +41,6 @@ export const LoginForm = () => {
     navigate("/");
   };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-    emailRef.current.setCustomValidity("");
-  };
-  const handlePwChange = (e) => {
-    setPw(e.target.value);
-    pwRef.current.setCustomValidity("");
-  };
-
   return (
     <div className="loginpage-figma-card">
       <div className="loginpage-figma-card-title">아마추어스 로그인</div>
@@ -58,7 +50,7 @@ export const LoginForm = () => {
             type="email"
             placeholder="이메일을 입력해 주세요"
             value={email}
-            onChange={handleEmailChange}
+            onChange={onEmailChange}
             ref={emailRef}
             required
           />
@@ -68,7 +60,7 @@ export const LoginForm = () => {
             type="password"
             placeholder="비밀번호를 입력해 주세요"
             value={pw}
-            onChange={handlePwChange}
+            onChange={onPwChange}
             ref={pwRef}
             required
           />

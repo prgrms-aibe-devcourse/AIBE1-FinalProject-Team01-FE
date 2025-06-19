@@ -122,3 +122,21 @@ export const DUMMY_POSTS = [
     ],
   },
 ];
+
+/**
+ * 더미 댓글/답글 생성 함수
+ * @param {string} content
+ * @returns {object}
+ */
+export function createDummyComment(content) {
+  return {
+    id: Date.now() + Math.random(),
+    author: "익명",
+    authorProfileImg: "https://via.placeholder.com/32",
+    devcourseName: null,
+    date: new Date().toLocaleString(),
+    content,
+    likes: 0,
+    replies: [],
+  };
+}
