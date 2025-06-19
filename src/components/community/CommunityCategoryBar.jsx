@@ -1,5 +1,9 @@
 import React from "react";
 import "../../styles/components/community/community.css";
+import {
+  CATEGORY_MAP,
+  CATEGORY_KEYS,
+} from "../../pages/community/communityData";
 
 /**
  * @typedef {Object} CommunityCategoryBarProps
@@ -12,17 +16,16 @@ import "../../styles/components/community/community.css";
  * @param {CommunityCategoryBarProps} props
  */
 export const CommunityCategoryBar = ({ selected, onSelect }) => {
-  const categories = ["자유게시판", "QnA", "블로그/회고"];
   return (
     <ul className="community-category-bar nav nav-tabs mb-3">
-      {categories.map((cat) => (
-        <li className="nav-item" key={cat}>
+      {CATEGORY_KEYS.map((catKey) => (
+        <li className="nav-item" key={catKey}>
           <button
-            className={`nav-link${selected === cat ? " active" : ""}`}
-            onClick={() => onSelect(cat)}
+            className={`nav-link${selected === catKey ? " active" : ""}`}
+            onClick={() => onSelect(catKey)}
             type="button"
           >
-            {cat}
+            {CATEGORY_MAP[catKey]}
           </button>
         </li>
       ))}

@@ -1,27 +1,42 @@
 import React from "react";
 import "../../styles/components/community/community.css";
+import { CATEGORY_MAP } from "../../pages/community/communityData";
+
 /**
  * @typedef {Object} CommunityBoardListProps
  * @property {Array<Object>} posts
+ * @property {string} [categoryLabel]
+ * @property {function} [onPostClick]
  */
 
 /**
  * 커뮤니티 게시글 리스트
  * @param {CommunityBoardListProps} props
  */
-export const CommunityBoardList = ({ posts }) => {
+export const CommunityBoardList = ({ posts, onPostClick }) => {
   return (
     <div className="d-flex flex-column gap-3">
       {posts.map((post, idx) => (
-        <div key={idx} className="card p-3 shadow-sm">
+        <div
+          key={idx}
+          className="card p-3 shadow-sm community-board-list-item"
+          style={{ cursor: onPostClick ? "pointer" : "default" }}
+          onClick={onPostClick ? () => onPostClick(post.id || idx) : undefined}
+        >
           <div className="d-flex align-items-center mb-2 gap-2">
-            <span className="badge bg-secondary">{post.category}</span>
+            <span className={`community-category-label label-${post.category}`}>
+              {CATEGORY_MAP[post.category]}
+            </span>
             <span className="fw-bold fs-5">{post.title}</span>
+            <div className="author-info ms-auto">
+              <span className="small">{post.author}</span>
+              <span className="mx-1">·</span>
+              <span className="small">{post.devcourseName}</span>
+              <span className="mx-1">·</span>
+              <span className="small">{post.time}</span>
+            </div>
           </div>
-          <div className="mb-2 text-muted">{post.content}</div>
           <div className="d-flex align-items-center gap-2">
-            <span className="small">{post.author}</span>
-            <span className="small">{post.time}</span>
             <span className="small">
               {post.tags &&
                 post.tags.map((tag, i) => (

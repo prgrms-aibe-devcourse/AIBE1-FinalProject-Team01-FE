@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { MainPage } from "../pages/main/MainPage";
 import { LoginPage } from "../pages/auth/LoginPage";
 import { SignupPage } from "../pages/auth/SignupPage";
@@ -15,7 +15,12 @@ export function AppRouter() {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/signup/profile" element={<ProfileSetupPage />} />
       <Route path="/find-account" element={<FindPasswordPage />} />
-      <Route path="/community" element={<CommunityPage />} />
+      <Route
+        path="/community"
+        element={<Navigate to="/community/free" replace />}
+      />
+      <Route path="/community/:category" element={<CommunityPage />} />
+      <Route path="/community/:category/:postId" element={<CommunityPage />} />
     </Routes>
   );
 }
