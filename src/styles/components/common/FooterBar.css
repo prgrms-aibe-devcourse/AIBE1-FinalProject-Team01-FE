@@ -1,0 +1,108 @@
+.footer-main-wrapper {
+  width: 100%;
+  height: 100%; /* 이 값은 필요에 따라 조정될 수 있습니다. */
+  padding-left: 120px;
+  padding-right: 120px;
+  background: #1a202c;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-content-area {
+  align-self: stretch;
+  height: 314px;
+  padding: 64px 104px;
+  background: #1a202c;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+}
+
+.footer-content-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 62px;
+}
+
+.footer-columns-wrapper {
+  width: 1200px;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.footer-column {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.footer-logo-text,
+.footer-heading {
+  color: #fbfbfd;
+  font-size: 20px;
+  font-family: "Pretendard-Regular", sans-serif;
+  font-weight: 700;
+  line-height: 32px;
+  word-wrap: break-word;
+}
+
+.footer-description,
+.footer-link-text {
+  color: #fbfbfd;
+  font-size: 12px;
+  font-family: "Pretendard-Regular", sans-serif;
+  font-weight: 400;
+  line-height: 15px; /* Description */
+  word-wrap: break-word;
+}
+
+.footer-link-text {
+  line-height: 16px; /* Links */
+  align-self: stretch;
+}
+
+.footer-social-icons {
+  width: 159px;
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 44px;
+}
+
+.social-icon {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-icon-shape {
+  width: 100%; /* Adjust as needed */
+  height: 100%; /* Adjust as needed */
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #fbfbfd;
+}
+
+.footer-copyright {
+  width: 223px;
+  text-align: center;
+  color: #fbfbfd;
+  font-size: 12px;
+  font-family: "Pretendard-Regular", sans-serif;
+  font-weight: 400;
+  line-height: 15px;
+  word-wrap: break-word;
+}
