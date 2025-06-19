@@ -6,6 +6,7 @@ import { SignupPage } from "../pages/auth/SignupPage";
 import ProfileSetupPage from "../pages/auth/ProfileSetupPage";
 import FindPasswordPage from "../pages/auth/FindPasswordPage";
 import CommunityPage from "../pages/community/CommunityPage";
+import CommunityWritePage from "../pages/community/CommunityWritePage";
 
 export function AppRouter() {
   return (
@@ -21,6 +22,10 @@ export function AppRouter() {
       />
       <Route path="/community/:category" element={<CommunityPage />} />
       <Route path="/community/:category/:postId" element={<CommunityPage />} />
+      <Route
+        path="/community/:category/write"
+        element={<CommunityWritePage />}
+      />
     </Routes>
   );
 }

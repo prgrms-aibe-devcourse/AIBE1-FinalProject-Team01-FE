@@ -8,6 +8,8 @@ import { HeroSection } from "../../components/common/HeroSection";
 import heroCommunity from "../../assets/hero-community.png";
 import CommunityBoardDetail from "../../components/community/CommunityBoardDetail";
 import { CATEGORY_MAP, DUMMY_POSTS } from "./communityData";
+import { CommunityEditor } from "../../components/editor/CommunityEditor";
+import { Modal, Button } from "react-bootstrap";
 
 export default function CommunityPage() {
   const navigate = useNavigate();
@@ -16,6 +18,8 @@ export default function CommunityPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState("최신순");
+  const [showWriteModal, setShowWriteModal] = useState(false);
+  const [editorContent, setEditorContent] = useState("");
 
   useEffect(() => {
     setSearchTerm("");
@@ -71,7 +75,7 @@ export default function CommunityPage() {
         <CommunitySearchBar
           keyword={keyword}
           onChange={(e) => setKeyword(e.target.value)}
-          onWrite={() => alert("글쓰기 기능 준비중")}
+          onWrite={() => navigate(`/community/${category}/write`)}
           sort={sort}
           onSortChange={setSort}
           onSearch={handleSearch}
