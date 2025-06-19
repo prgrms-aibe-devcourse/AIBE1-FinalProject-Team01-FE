@@ -5,6 +5,8 @@ import { CommunityBoardList } from "../../components/community/CommunityBoardLis
 import { CommunityPagination } from "../../components/community/CommunityPagination";
 import { NavigationBar } from "../../components/common/NavigationBar";
 import { FooterBar } from "../../components/common/FooterBar";
+import { HeroSection } from "../../components/common/HeroSection";
+import heroCommunity from "../../assets/hero-community.png";
 
 const DUMMY_POSTS = [
   {
@@ -19,7 +21,7 @@ const DUMMY_POSTS = [
     views: 157,
   },
   {
-    category: "자유게시판",
+    category: "QnA",
     title: "React Hook Form vs Formik 비교 분석해봤어요",
     content:
       "둘 다 써보니 장단점이 확실히 있네요. 여러분은 어떤 걸 선호하시나요?",
@@ -44,8 +46,8 @@ export default function CommunityPage() {
 
   return (
     <>
+      <HeroSection backgroundImageSrc={heroCommunity} />
       <div className="container py-4">
-        <h2 className="fw-bold mb-4">커뮤니티 - 자유게시판</h2>
         <CommunityCategoryBar selected={category} onSelect={setCategory} />
         <CommunitySearchBar
           keyword={keyword}

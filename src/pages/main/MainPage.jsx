@@ -4,7 +4,8 @@ import "../../styles/components/main/MainPage.css";
 import { MainBoardSection } from "../../components/main/MainBoardSection";
 import { MainStatusSection } from "../../components/main/MainStatusSection";
 import { PopularPosts } from "../../components/main/PopularPosts";
-import { HeroSection } from "../../components/main/HeroSection";
+import mainhero from "../../assets/hero-main.png";
+import { HeroSection } from "../../components/common/HeroSection";
 import { CallToActionSection } from "../../components/main/CallToActionSection";
 
 /**
@@ -18,7 +19,7 @@ import { CallToActionSection } from "../../components/main/CallToActionSection";
 export const MainPage = () => {
   return (
     <div className="community-main-page">
-      <HeroSection />
+      <HeroSection backgroundImageSrc={mainhero} />
       <PopularPosts />
       <MainBoardSection />
       <MainStatusSection />
