@@ -1,5 +1,6 @@
 import React from "react";
 import { useLike } from "../../hooks/useLike";
+import { useClipboard } from "../../hooks/useClipboard";
 
 /**
  * @typedef {Object} CommunityTagShareBarProps
@@ -13,21 +14,11 @@ import { useLike } from "../../hooks/useLike";
  */
 export default function CommunityTagShareBar({ tags, likes }) {
   const { liked, likeCount, toggleLike } = useLike(likes, false);
+  const { copy } = useClipboard();
 
   const handleShare = () => {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href);
-      alert("URL이 복사되었습니다!");
-    } else {
-      // fallback
-      const textarea = document.createElement("textarea");
-      textarea.value = window.location.href;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textarea);
-      alert("URL이 복사되었습니다!");
-    }
+    copy(window.location.href);
+    alert("URL이 복사되었습니다!");
   };
 
   return (

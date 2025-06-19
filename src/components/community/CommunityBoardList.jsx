@@ -1,6 +1,7 @@
 import React from "react";
 import "../../styles/components/community/community.css";
 import { CATEGORY_MAP } from "../../pages/community/communityData";
+import UserInfo from "../common/UserInfo";
 
 /**
  * @typedef {Object} CommunityBoardListProps
@@ -29,9 +30,10 @@ export const CommunityBoardList = ({ posts, onPostClick }) => {
             </span>
             <span className="fw-bold fs-5">{post.title}</span>
             <div className="author-info ms-auto">
-              <span className="small">{post.author}</span>
-              <span className="mx-1">·</span>
-              <span className="small">{post.devcourseName}</span>
+              <span className="author-name">{post.author}</span>
+              {post.devcourseName && (
+                <span className="author-batch">{post.devcourseName}</span>
+              )}
               <span className="mx-1">·</span>
               <span className="small">{post.time}</span>
             </div>
@@ -40,7 +42,7 @@ export const CommunityBoardList = ({ posts, onPostClick }) => {
             <span className="small">
               {post.tags &&
                 post.tags.map((tag, i) => (
-                  <span key={i} className="badge bg-light text-dark ms-1">
+                  <span key={i} className="badge bg-light text-dark ms-2 fs-6">
                     {tag}
                   </span>
                 ))}

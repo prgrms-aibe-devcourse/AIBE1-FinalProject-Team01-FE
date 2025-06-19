@@ -52,6 +52,7 @@ export const DUMMY_POSTS = [
             date: "2024-12-19 16:00",
             content: "오 좋은 아이디어네요! 앱 이름 알려주실 수 있을까요?",
             likes: 1,
+            replies: [],
           },
         ],
       },

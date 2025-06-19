@@ -1,5 +1,6 @@
 import React from "react";
 import { CATEGORY_MAP } from "../../pages/community/communityData";
+import UserInfo from "../common/UserInfo";
 
 /**
  * @typedef {Object} CommunityPostInfoProps
@@ -25,15 +26,11 @@ export default function CommunityPostInfo({ post }) {
         </div>
       </div>
       <div className="community-detail-meta d-flex justify-content-between align-items-center">
-        <div className="community-detail-author">
-          <img
-            src={post.authorProfileImg}
-            alt="프로필"
-            className="author-img"
-          />
-          <span className="author-name">{post.author}</span>
-          <span className="author-batch">{post.devcourseName}</span>
-        </div>
+        <UserInfo
+          authorProfileImg={post.authorProfileImg}
+          author={post.author}
+          devcourseName={post.devcourseName}
+        />
         <span className="community-detail-date">{post.date}</span>
       </div>
     </div>
