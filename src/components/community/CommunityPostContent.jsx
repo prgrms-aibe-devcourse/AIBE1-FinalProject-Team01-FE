@@ -19,11 +19,10 @@ export default function CommunityPostContent({ post }) {
           className="community-detail-image"
         />
       )}
-      <div className="community-detail-content-body">
-        {post.content.split("\n").map((line, index) => (
-          <p key={index}>{line || "\u00A0"}</p>
-        ))}
-      </div>
+      <div
+        className="community-detail-content-body"
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      />
       {post.contentList && (
         <ul className="community-detail-content-list">
           {post.contentList.map((item, idx) => (
