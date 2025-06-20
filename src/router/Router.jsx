@@ -7,6 +7,7 @@ import ProfileSetupPage from "../pages/auth/ProfileSetupPage";
 import FindPasswordPage from "../pages/auth/FindPasswordPage";
 import CommunityPage from "../pages/community/CommunityPage";
 import CommunityWritePage from "../pages/community/CommunityWritePage";
+import CommunityBoardDetailPage from "../pages/community/CommunityBoardDetailPage";
 
 export function AppRouter() {
   return (
@@ -21,7 +22,10 @@ export function AppRouter() {
         element={<Navigate to="/community/free" replace />}
       />
       <Route path="/community/:category" element={<CommunityPage />} />
-      <Route path="/community/:category/:postId" element={<CommunityPage />} />
+      <Route
+        path="/community/:category/:postId"
+        element={<CommunityBoardDetailPage />}
+      />
       <Route
         path="/community/:category/write"
         element={<CommunityWritePage />}
