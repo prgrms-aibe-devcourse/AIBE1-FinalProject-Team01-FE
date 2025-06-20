@@ -24,7 +24,7 @@ export default function CommunityPostInfo({ post, onEdit, onDelete }) {
       </div>
       <div className="community-detail-title-row">
         <h2 className="community-detail-title">{post.title}</h2>
-        <div className="community-detail-actions">
+        <div className="community-detail-actions d-flex align-items-center gap-2">
           {/* 작성자만 보이도록 처리, TODO: 백엔드에서 권한 검증 필요 */}
           {isAuthor && (
             <>

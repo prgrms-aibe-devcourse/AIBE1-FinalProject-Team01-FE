@@ -6,13 +6,22 @@ import { useClipboard } from "../../hooks/useClipboard";
  * @typedef {Object} CommunityTagShareBarProps
  * @property {string[]} tags
  * @property {number} likes
+ * @property {boolean} [bookmarked]
+ * @property {number} [bookmarkCount]
+ * @property {function} [onBookmarkToggle]
  */
 
 /**
  * 태그 및 공유/좋아요/북마크 버튼 컴포넌트
  * @param {CommunityTagShareBarProps} props
  */
-export default function CommunityTagShareBar({ tags, likes }) {
+export default function CommunityTagShareBar({
+  tags,
+  likes,
+  bookmarked,
+  bookmarkCount,
+  onBookmarkToggle,
+}) {
   const { liked, likeCount, toggleLike } = useLike(likes, false);
   const { copy } = useClipboard();
 
@@ -38,7 +47,14 @@ export default function CommunityTagShareBar({ tags, likes }) {
           ></i>{" "}
           {likeCount}
         </button>
-        <button className="btn-bookmark">북마크</button>
+        <button className="btn-bookmark" onClick={onBookmarkToggle}>
+          <i
+            className={
+              bookmarked ? "bi bi-bookmark-fill text-warning" : "bi bi-bookmark"
+            }
+          ></i>
+          <span className="ms-1 small">{bookmarkCount}</span>
+        </button>
         <button className="btn-share" onClick={handleShare}>
           공유하기
         </button>

@@ -23,6 +23,8 @@ export const DUMMY_POSTS = [
     views: 157,
     image: null,
     contentList: null,
+    bookmarked: false,
+    bookmarkCount: 0,
     comments: [
       {
         id: 1,
@@ -80,6 +82,8 @@ export const DUMMY_POSTS = [
       "Hook Form: TypeScript 지원이 더 우수함",
       "Formik: 복잡한 폼 validation에 유리함",
     ],
+    bookmarked: false,
+    bookmarkCount: 0,
     comments: [
       {
         id: 1,
@@ -109,6 +113,8 @@ export const DUMMY_POSTS = [
     views: 892,
     image: null,
     contentList: null,
+    bookmarked: false,
+    bookmarkCount: 0,
     comments: [
       {
         id: 1,

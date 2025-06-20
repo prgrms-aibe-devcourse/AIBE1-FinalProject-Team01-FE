@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CommunityPostInfo from "./CommunityPostInfo";
 import CommunityPostContent from "./CommunityPostContent";
@@ -16,6 +16,15 @@ import CommunityCommentSection from "./CommunityCommentSection";
  */
 export default function CommunityBoardDetail({ post }) {
   const navigate = useNavigate();
+
+  // 북마크 
+  const [bookmarked, setBookmarked] = useState(post.bookmarked || false);
+  const [bookmarkCount, setBookmarkCount] = useState(post.bookmarkCount || 0);
+  const handleBookmarkClick = () => {
+    setBookmarked((prev) => !prev);
+    setBookmarkCount((prev) => prev + (bookmarked ? -1 : 1));
+    // TODO: 백엔드에 북마크 토글 요청 보내기
+  };
 
   const handleEdit = () => {
     console.log("수정할 게시글 데이터:", post);
@@ -42,7 +51,13 @@ export default function CommunityBoardDetail({ post }) {
         onDelete={handleDelete}
       />
       <CommunityPostContent post={post} />
-      <CommunityTagShareBar tags={post.tags} likes={post.likes} />
+      <CommunityTagShareBar
+        tags={post.tags}
+        likes={post.likes}
+        bookmarked={bookmarked}
+        bookmarkCount={bookmarkCount}
+        onBookmarkToggle={handleBookmarkClick}
+      />
       <CommunityCommentSection postId={post.id} commentList={post.comments} />
     </div>
   );
