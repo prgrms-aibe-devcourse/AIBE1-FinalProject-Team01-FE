@@ -1,27 +1,35 @@
-import React from "react";
-import { HeroSection } from "../../components/common/HeroSection";
-import heroCommunity from "../../assets/hero-community.png";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { CommunityCategoryBar } from "../../components/community/CommunityCategoryBar";
 import { CommunitySearchBar } from "../../components/community/CommunitySearchBar";
-import { CommunityBoardList } from "../../components/community/CommunityBoardList";
 import { CommunityPagination } from "../../components/community/CommunityPagination";
-import { gatheringData, matchData, marketData } from "./togetherData";
+import { HeroSection } from "../../components/common/HeroSection";
+import heroTogether from "../../assets/hero-together.png";
 import { useBoardList } from "../../hooks/useBoardList";
+import { gatheringData, matchData, marketData } from "./togetherData";
+import { TogetherBoardList } from "../../components/together/TogetherBoardList";
+import "../../styles/components/community/community.css";
 
-const CATEGORY_LIST = [
-  { key: "gathering", label: "팀원구하기" },
+// 함께해요 카테고리(탭) 목록
+const TOGETHER_TABS = [
+  { key: "gathering", label: "팀원 구하기" },
   { key: "match", label: "커피챗/멘토링" },
   { key: "market", label: "장터" },
 ];
 
-const CATEGORY_DATA = {
+// 카테고리별 데이터 매핑
+const DATA_MAP = {
   gathering: gatheringData,
   match: matchData,
   market: marketData,
 };
 
 export default function TogetherPage() {
-  const [category, setCategory] = React.useState("gathering");
-  const data = CATEGORY_DATA[category] || [];
+  const { category = "match" } = useParams();
+  const navigate = useNavigate();
+
+  const handleTabSelect = (catKey) => navigate(`/together/${catKey}`);
+  const data = DATA_MAP[category] || [];
 
   const {
     keyword,
@@ -36,59 +44,33 @@ export default function TogetherPage() {
     reset,
   } = useBoardList({ data });
 
-  React.useEffect(() => {
+  useEffect(() => {
     reset();
   }, [category]);
 
-  // time 필드 추가 (작성 시간 표시용, 예시)
-  const now = new Date();
-  const postsWithTime = posts.map((item) => ({
-    ...item,
-    time: `${Math.max(
-      1,
-      Math.floor((now - new Date(item.date)) / (1000 * 60 * 60 * 24))
-    )}일 전`,
-    comments: item.comments || 0,
-    views: item.views || 0,
-    likes: item.likes || 0,
-    tags: item.tags || [],
-    author: item.author,
-    category: item.category,
-  }));
+  const handlePostClick = (postId) => {
+    // 상세 페이지 이동 등 구현 필요시 여기에 작성
+  };
 
   return (
     <>
-      <HeroSection backgroundImageSrc={heroCommunity} />
+      <HeroSection backgroundImageSrc={heroTogether} />
       <div className="py-4">
         <div className="community-main-container">
-          <div className="mb-3">
-            <ul className="community-category-bar nav nav-tabs mb-0">
-              {CATEGORY_LIST.map((cat) => (
-                <li className="nav-item" key={cat.key}>
-                  <button
-                    className={`nav-link${
-                      category === cat.key ? " active" : ""
-                    }`}
-                    onClick={() => {
-                      setCategory(cat.key);
-                    }}
-                    type="button"
-                  >
-                    {cat.label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <CommunityCategoryBar
+            selected={category}
+            onSelect={handleTabSelect}
+            tabs={TOGETHER_TABS}
+          />
           <CommunitySearchBar
             keyword={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            onWrite={() => {}}
+            onWrite={() => alert("글쓰기 기능은 추후 지원됩니다.")}
             sort={sort}
             onSortChange={setSort}
             onSearch={search}
           />
-          <CommunityBoardList posts={postsWithTime} />
+          <TogetherBoardList posts={posts} onPostClick={handlePostClick} />
           <CommunityPagination
             page={page}
             total={totalPages}
