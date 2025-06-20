@@ -8,7 +8,6 @@ import { HeroSection } from "../../components/common/HeroSection";
 import heroCommunity from "../../assets/hero-community.png";
 import CommunityBoardDetail from "../../components/community/CommunityBoardDetail";
 import { CATEGORY_MAP, DUMMY_POSTS } from "./communityData";
-import { CommunityEditor } from "../../components/editor/CommunityEditor";
 import { Modal, Button } from "react-bootstrap";
 
 export default function CommunityPage() {
