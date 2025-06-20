@@ -11,6 +11,7 @@ import { useInput } from "../../hooks/useInput";
  * @property {function} [onEdit]
  * @property {boolean} [liked]
  * @property {number} [depth]
+ * @property {object} user
  */
 
 function CommunityCommentItem(props) {
@@ -33,6 +34,8 @@ function CommunityCommentItem(props) {
     props.comment.liked
   );
   const depth = props.depth || 1;
+  const { user } = props;
+  const isAuthor = user && user.name === props.comment.author;
 
   const handleReplySubmit = (e) => {
     e.preventDefault();
@@ -142,18 +145,22 @@ function CommunityCommentItem(props) {
         >
           답글
         </button>
-        <button
-          className="btn btn-link btn-sm text-secondary ms-2"
-          onClick={handleEditClick}
-        >
-          수정
-        </button>
-        <button
-          className="btn btn-link btn-sm text-danger ms-1"
-          onClick={handleDelete}
-        >
-          삭제
-        </button>
+        {isAuthor && (
+          <>
+            <button
+              className="btn btn-link btn-sm text-secondary ms-2"
+              onClick={handleEditClick}
+            >
+              수정
+            </button>
+            <button
+              className="btn btn-link btn-sm text-danger ms-1"
+              onClick={handleDelete}
+            >
+              삭제
+            </button>
+          </>
+        )}
         {/* 답글 보기/숨기기 버튼은 depth=1(최상위 댓글)에서만 노출 */}
         {depth === 1 && replies.length > 0 && !showReplies && (
           <button
@@ -203,6 +210,7 @@ function CommunityCommentItem(props) {
               <CommunityCommentItem
                 key={reply.id}
                 comment={reply}
+                user={user}
                 onReplyAdd={props.onReplyAdd}
                 onLike={props.onLike}
                 onDelete={props.onDelete}

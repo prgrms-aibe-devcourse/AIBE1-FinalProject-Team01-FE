@@ -52,7 +52,10 @@ export const CommunityBoardList = ({ posts, onPostClick }) => {
                 <i className="bi bi-heart"></i> {post.likes}
               </span>
               <span>
-                <i className="bi bi-chat"></i> {post.comments}
+                <i className="bi bi-chat"></i>{" "}
+                {Array.isArray(post.comments)
+                  ? post.comments.length
+                  : post.comments || 0}
               </span>
               <span>
                 <i className="bi bi-eye"></i> {post.views}

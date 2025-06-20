@@ -23,7 +23,7 @@ export const DUMMY_POSTS = [
     views: 157,
     image: null,
     contentList: null,
-    commentList: [
+    comments: [
       {
         id: 1,
         author: "이민수",
@@ -80,7 +80,7 @@ export const DUMMY_POSTS = [
       "Hook Form: TypeScript 지원이 더 우수함",
       "Formik: 복잡한 폼 validation에 유리함",
     ],
-    commentList: [
+    comments: [
       {
         id: 1,
         author: "최개발",
@@ -109,7 +109,7 @@ export const DUMMY_POSTS = [
     views: 892,
     image: null,
     contentList: null,
-    commentList: [
+    comments: [
       {
         id: 1,
         author: "김멘토",

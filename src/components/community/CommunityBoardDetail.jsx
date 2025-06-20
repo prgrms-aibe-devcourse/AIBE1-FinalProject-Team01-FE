@@ -43,10 +43,7 @@ export default function CommunityBoardDetail({ post }) {
       />
       <CommunityPostContent post={post} />
       <CommunityTagShareBar tags={post.tags} likes={post.likes} />
-      <CommunityCommentSection
-        postId={post.id}
-        commentList={post.commentList}
-      />
+      <CommunityCommentSection postId={post.id} commentList={post.comments} />
     </div>
   );
 }

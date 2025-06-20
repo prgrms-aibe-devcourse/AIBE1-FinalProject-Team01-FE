@@ -175,6 +175,7 @@ export default function CommunityCommentSection({ postId, commentList = [] }) {
           <CommunityCommentItem
             key={c.id}
             comment={c}
+            user={user}
             onReplyAdd={handleReplyAdd}
             onLike={handleLikeToggle}
             onDelete={handleDelete}
