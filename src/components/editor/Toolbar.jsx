@@ -11,6 +11,7 @@ import {
   FaUndo,
   FaCode,
   FaImage,
+  FaSignOutAlt,
 } from "react-icons/fa";
 
 const Toolbar = ({ editor, handleImageUpload }) => {
@@ -91,6 +92,14 @@ const Toolbar = ({ editor, handleImageUpload }) => {
         type="button"
       >
         <FaCode />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().exitCode().run()}
+        className="btn btn-sm btn-light"
+        type="button"
+        title="코드블럭 종료 (Ctrl+Enter, Esc)"
+      >
+        <FaSignOutAlt />
       </button>
       <input
         type="file"

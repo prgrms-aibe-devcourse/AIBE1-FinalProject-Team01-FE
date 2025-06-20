@@ -15,13 +15,23 @@ import "../../styles/components/editor/editor.css";
 
 const lowlight = createLowlight(all);
 
+// 코드블럭에서 Ctrl+Enter, Esc로 벗어나는 단축키 지원
+const CustomCodeBlockLowlight = CodeBlockLowlight.extend({
+  addKeyboardShortcuts() {
+    return {
+      "Mod-Enter": () => this.editor.commands.exitCode(),
+      Escape: () => this.editor.commands.exitCode(),
+    };
+  },
+});
+
 export const CustomTiptapEditor = ({ content, onChange, placeholder }) => {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
         codeBlock: false,
       }),
-      CodeBlockLowlight.configure({
+      CustomCodeBlockLowlight.configure({
         lowlight,
       }),
       Markdown,
