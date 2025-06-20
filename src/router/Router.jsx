@@ -8,6 +8,7 @@ import FindPasswordPage from "../pages/auth/FindPasswordPage";
 import CommunityPage from "../pages/community/CommunityPage";
 import CommunityWritePage from "../pages/community/CommunityWritePage";
 import CommunityBoardDetailPage from "../pages/community/CommunityBoardDetailPage";
+import TogetherPage from "../pages/together/TogetherPage";
 
 export function AppRouter() {
   return (
@@ -30,6 +31,7 @@ export function AppRouter() {
         path="/community/:category/write"
         element={<CommunityWritePage />}
       />
+      <Route path="/together" element={<TogetherPage />} />
     </Routes>
   );
 }
