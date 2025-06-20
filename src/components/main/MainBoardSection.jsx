@@ -1,17 +1,17 @@
 import React from "react";
-import { CommunityBoardCard } from "./CommunityBoardCard";
-import "../../styles/components/main/CommunityBoards.css";
+import { MainBoardCard } from "./MainBoardCard";
+import "../../styles/components/main/MainBoards.css";
 import { Container } from "react-bootstrap";
 
 /**
- * @typedef {{}} CommunityBoardsProps
+ * @typedef {{}} MainBoardSectionProps
  */
 
 /**
- * CommunityBoards Component
- * @param {CommunityBoardsProps} props
+ * MainBoardSection Component
+ * @param {MainBoardSectionProps} props
  */
-export const CommunityBoards = () => {
+export const MainBoardSection = () => {
   const boardData = [
     {
       title: "자유 게시판",
@@ -66,7 +66,7 @@ export const CommunityBoards = () => {
         <div className="community-cards-section">
           <div className="community-cards-container">
             {boardData.map((board, index) => (
-              <CommunityBoardCard
+              <MainBoardCard
                 key={index}
                 title={board.title}
                 description={board.description}

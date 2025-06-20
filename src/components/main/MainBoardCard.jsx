@@ -1,14 +1,14 @@
 import React from "react";
 
 /**
- * @typedef {{ title: string, description: string, icon: string, onClick: function }} CommunityBoardCardProps
+ * @typedef {{ title: string, description: string, icon: string, onClick: function }} MainBoardCardProps
  */
 
 /**
- * CommunityBoardCard Component
- * @param {CommunityBoardCardProps} props
+ * MainBoardCard Component
+ * @param {MainBoardCardProps} props
  */
-export const CommunityBoardCard = ({ title, description, icon, onClick }) => {
+export const MainBoardCard = ({ title, description, icon, onClick }) => {
   return (
     <div className="community-board-card-wrapper" onClick={onClick}>
       <div className="community-board-card">

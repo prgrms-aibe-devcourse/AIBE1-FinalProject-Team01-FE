@@ -30,7 +30,9 @@ export const NavigationBar = ({ onlyLogo }) => {
               className="justify-content-between"
             >
               <Nav className="mx-auto navbar-nav">
-                <Nav.Link href="#community">커뮤니티</Nav.Link>
+                <Nav.Link onClick={() => navigate("/community")}>
+                  커뮤니티
+                </Nav.Link>
                 <Nav.Link href="#projecthub">프로젝트 허브</Nav.Link>
                 <Nav.Link href="#together">함께해요</Nav.Link>
                 <Nav.Link href="#information">정보게시판</Nav.Link>

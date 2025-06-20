@@ -4,6 +4,7 @@ import { NavigationBar } from "./components/common/NavigationBar";
 import { FooterBar } from "./components/common/FooterBar";
 import { AppRouter } from "./router/Router";
 import { AuthProvider } from "./context/AuthContext";
+import ScrollToTop from "./components/common/ScrollToTop";
 
 function AppContent() {
   const location = useLocation();
@@ -16,6 +17,7 @@ function AppContent() {
 
   return (
     <div className="d-flex flex-column min-vh-100">
+      <ScrollToTop />
       <NavigationBar onlyLogo={hideNavOnPaths.includes(location.pathname)} />
       <main className="flex-fill">
         <AppRouter />
