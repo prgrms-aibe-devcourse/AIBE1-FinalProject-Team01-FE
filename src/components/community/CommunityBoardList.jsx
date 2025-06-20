@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "../../styles/components/community/community.css";
 import { CATEGORY_MAP } from "../../pages/community/communityData";
 import UserInfo from "../common/UserInfo";
@@ -15,33 +15,6 @@ import UserInfo from "../common/UserInfo";
  * @param {CommunityBoardListProps} props
  */
 export const CommunityBoardList = ({ posts, onPostClick }) => {
-  // 북마크
-  const [bookmarkState, setBookmarkState] = useState(() =>
-    posts.reduce((acc, post) => {
-      acc[post.id] = post.bookmarked || false;
-      return acc;
-    }, {})
-  );
-  const [bookmarkCounts, setBookmarkCounts] = useState(() =>
-    posts.reduce((acc, post) => {
-      acc[post.id] = post.bookmarkCount || 0;
-      return acc;
-    }, {})
-  );
-
-  const handleBookmarkClick = (e, post) => {
-    e.stopPropagation(); // 카드 클릭 방지
-    setBookmarkState((prev) => ({
-      ...prev,
-      [post.id]: !prev[post.id],
-    }));
-    setBookmarkCounts((prev) => ({
-      ...prev,
-      [post.id]: prev[post.id] + (bookmarkState[post.id] ? -1 : 1),
-    }));
-    // TODO: 백엔드에 북마크 토글 요청 보내기
-  };
-
   return (
     <div className="d-flex flex-column gap-3">
       {posts.map((post, idx) => (
@@ -64,22 +37,6 @@ export const CommunityBoardList = ({ posts, onPostClick }) => {
               <span className="mx-1">·</span>
               <span className="small">{post.time}</span>
             </div>
-            {/* 북마크 버튼 */}
-            <button
-              className="btn btn-link p-0 ms-2"
-              style={{ fontSize: 22 }}
-              onClick={(e) => handleBookmarkClick(e, post)}
-              aria-label="북마크"
-            >
-              <i
-                className={
-                  bookmarkState[post.id]
-                    ? "bi bi-bookmark-fill text-warning"
-                    : "bi bi-bookmark"
-                }
-              ></i>
-              <span className="ms-1 small">{bookmarkCounts[post.id]}</span>
-            </button>
           </div>
           <div className="d-flex align-items-center gap-2">
             <span className="small">

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLike } from "../../hooks/useLike";
 import { useInput } from "../../hooks/useInput";
+import { isAuthor } from "../../utils/auth";
 
 /**
  * @typedef {Object} CommunityCommentItemProps
@@ -35,7 +36,7 @@ function CommunityCommentItem(props) {
   );
   const depth = props.depth || 1;
   const { user } = props;
-  const isAuthor = user && user.name === props.comment.author;
+  const isMine = isAuthor(user, props.comment.author);
 
   const handleReplySubmit = (e) => {
     e.preventDefault();
@@ -145,7 +146,7 @@ function CommunityCommentItem(props) {
         >
           답글
         </button>
-        {isAuthor && (
+        {isMine && (
           <>
             <button
               className="btn btn-link btn-sm text-secondary ms-2"

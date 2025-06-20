@@ -1,6 +1,9 @@
 import React from "react";
-import { useLike } from "../../hooks/useLike";
+import { useLikeBookmark } from "../../hooks/useLikeBookmark";
 import { useClipboard } from "../../hooks/useClipboard";
+import LikeButton from "../common/LikeButton";
+import BookmarkButton from "../common/BookmarkButton";
+import ShareButton from "../common/ShareButton";
 
 /**
  * @typedef {Object} CommunityTagShareBarProps
@@ -8,7 +11,6 @@ import { useClipboard } from "../../hooks/useClipboard";
  * @property {number} likes
  * @property {boolean} [bookmarked]
  * @property {number} [bookmarkCount]
- * @property {function} [onBookmarkToggle]
  */
 
 /**
@@ -17,12 +19,23 @@ import { useClipboard } from "../../hooks/useClipboard";
  */
 export default function CommunityTagShareBar({
   tags,
-  likes,
-  bookmarked,
-  bookmarkCount,
-  onBookmarkToggle,
+  likes = 0,
+  bookmarked = false,
+  bookmarkCount = 0,
 }) {
-  const { liked, likeCount, toggleLike } = useLike(likes, false);
+  const {
+    liked,
+    likeCount,
+    toggleLike,
+    bookmarked: isBookmarked,
+    bookmarkCount: bmCount,
+    toggleBookmark,
+  } = useLikeBookmark({
+    initialLikeCount: likes,
+    initialLiked: false,
+    initialBookmarkCount: bookmarkCount,
+    initialBookmarked: bookmarked,
+  });
   const { copy } = useClipboard();
 
   const handleShare = () => {
@@ -40,24 +53,13 @@ export default function CommunityTagShareBar({
         ))}
       </div>
       <div className="community-detail-sharebar">
-        {/* TODO: 좋아요/북마크/공유 기능 연동 */}
-        <button className="btn-like" onClick={toggleLike}>
-          <i
-            className={liked ? "bi bi-heart-fill text-danger" : "bi bi-heart"}
-          ></i>{" "}
-          {likeCount}
-        </button>
-        <button className="btn-bookmark" onClick={onBookmarkToggle}>
-          <i
-            className={
-              bookmarked ? "bi bi-bookmark-fill text-warning" : "bi bi-bookmark"
-            }
-          ></i>
-          <span className="ms-1 small">{bookmarkCount}</span>
-        </button>
-        <button className="btn-share" onClick={handleShare}>
-          공유하기
-        </button>
+        <LikeButton liked={liked} count={likeCount} onClick={toggleLike} />
+        <BookmarkButton
+          bookmarked={isBookmarked}
+          count={bmCount}
+          onClick={toggleBookmark}
+        />
+        <ShareButton onClick={handleShare} />
       </div>
     </div>
   );
