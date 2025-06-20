@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { CATEGORY_MAP, CATEGORY_KEYS } from "./communityData";
 import { Button, Form } from "react-bootstrap";
 import { CustomTiptapEditor } from "../../components/editor/CustomTiptapEditor";
@@ -7,40 +7,59 @@ import { TagInput } from "../../components/community/TagInput";
 
 export default function CommunityWritePage() {
   const navigate = useNavigate();
-  const { category = "free" } = useParams();
-  const [selectedCategory, setSelectedCategory] = useState(category);
+  const location = useLocation();
+  const { postToEdit } = location.state || {};
+
+  const [selectedCategory, setSelectedCategory] = useState("free");
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState([]);
   const [content, setContent] = useState("");
 
+  const isEditMode = !!postToEdit;
+
+  useEffect(() => {
+    if (isEditMode) {
+      setSelectedCategory(postToEdit.category);
+      setTitle(postToEdit.title);
+      setTags(postToEdit.tags || []);
+      setContent(postToEdit.content);
+    }
+  }, [isEditMode, postToEdit]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: 실제 글 등록 API 연동
-    // const postData = {
-    //   category: selectedCategory,
-    //   title,
-    //   tags,
-    //   content,
-    // };
-    // const response = await api.post('/community/posts', postData);
-    // if (response.ok) navigate(`/community/${selectedCategory}/${response.data.id}`);
-    alert(
-      `카테고리: ${selectedCategory}\n제목: ${title}\n태그: ${tags.join(
-        ", "
-      )}\n내용: ${content}`
-    );
-    navigate(-1);
+    const postData = {
+      category: selectedCategory,
+      title,
+      tags,
+      content,
+    };
+
+    if (isEditMode) {
+      // TODO: 실제 글 수정 API 연동 (PUT 또는 PATCH)
+      // await api.put(`/community/posts/${postToEdit.id}`, postData);
+      console.log("수정된 게시글 데이터:", { ...postData, id: postToEdit.id });
+      alert("게시글이 수정되었습니다.");
+      navigate(`/community/${postToEdit.category}/${postToEdit.id}`); // 수정된 글로 이동
+    } else {
+      // TODO: 실제 글 등록 API 연동 (POST)
+      // const newPost = await api.post('/community/posts', postData);
+      console.log("작성된 게시글 데이터:", postData);
+      alert("게시글이 등록되었습니다.");
+      navigate(-1); // 이전 페이지로 이동
+    }
   };
 
   return (
     <div className="container py-5" style={{ maxWidth: 800 }}>
-      <h2 className="mb-4">글쓰기</h2>
+      <h2 className="mb-4">{isEditMode ? "글 수정하기" : "글쓰기"}</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>카테고리</Form.Label>
           <Form.Select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
+            disabled={isEditMode}
           >
             {CATEGORY_KEYS.map((key) => (
               <option key={key} value={key}>
@@ -76,7 +95,7 @@ export default function CommunityWritePage() {
             취소
           </Button>
           <Button variant="primary" type="submit">
-            작성 완료
+            {isEditMode ? "수정 완료" : "작성 완료"}
           </Button>
         </div>
       </Form>

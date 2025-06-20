@@ -69,22 +69,27 @@ export default function CommunityPage() {
   return (
     <>
       <HeroSection backgroundImageSrc={heroCommunity} />
-      <div className="container py-4 community-main-container">
-        <CommunityCategoryBar selected={category} onSelect={handleTabSelect} />
-        <CommunitySearchBar
-          keyword={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          onWrite={() => navigate(`/community/${category}/write`)}
-          sort={sort}
-          onSortChange={setSort}
-          onSearch={handleSearch}
-        />
-        <CommunityBoardList
-          posts={filteredPosts}
-          categoryLabel={CATEGORY_MAP[category]}
-          onPostClick={handlePostClick}
-        />
-        <CommunityPagination page={page} total={5} onChange={setPage} />
+      <div className="container py-4">
+        <div className="community-main-container">
+          <CommunityCategoryBar
+            selected={category}
+            onSelect={handleTabSelect}
+          />
+          <CommunitySearchBar
+            keyword={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            onWrite={() => navigate(`/community/${category}/write`)}
+            sort={sort}
+            onSortChange={setSort}
+            onSearch={handleSearch}
+          />
+          <CommunityBoardList
+            posts={filteredPosts}
+            categoryLabel={CATEGORY_MAP[category]}
+            onPostClick={handlePostClick}
+          />
+          <CommunityPagination page={page} total={5} onChange={setPage} />
+        </div>
       </div>
     </>
   );

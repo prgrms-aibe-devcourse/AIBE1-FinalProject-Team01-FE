@@ -33,7 +33,6 @@ export const CustomTiptapEditor = ({ content, onChange, placeholder }) => {
       Placeholder.configure({
         placeholder,
       }),
-      Dropcursor,
     ],
     content: content,
     onUpdate: ({ editor }) => {
