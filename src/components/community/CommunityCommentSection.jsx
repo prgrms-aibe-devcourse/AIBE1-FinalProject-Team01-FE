@@ -20,7 +20,7 @@ function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
-// 답글 추가(반복문, 깊은 복사)
+// 답글 추가(반복문)
 function addReplyIterative(comments, parentId, replyContent) {
   const newComments = deepClone(comments);
   const stack = [];
@@ -45,7 +45,7 @@ function addReplyIterative(comments, parentId, replyContent) {
   return newComments;
 }
 
-// 댓글 삭제(반복문, 깊은 복사)
+// 댓글 삭제(반복문)
 function deleteCommentIterative(comments, commentId) {
   const newComments = deepClone(comments);
   function removeById(arr) {
@@ -59,7 +59,7 @@ function deleteCommentIterative(comments, commentId) {
   return removeById(newComments);
 }
 
-// 댓글 수정(반복문, 깊은 복사)
+// 댓글 수정(반복문)
 function editCommentIterative(comments, commentId, newContent) {
   const newComments = deepClone(comments);
   const stack = [];
