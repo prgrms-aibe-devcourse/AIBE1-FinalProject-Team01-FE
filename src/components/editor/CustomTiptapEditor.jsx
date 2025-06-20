@@ -7,6 +7,7 @@ import { Markdown } from "tiptap-markdown";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
+import Dropcursor from "@tiptap/extension-dropcursor";
 import Toolbar from "./Toolbar";
 
 import "highlight.js/styles/atom-one-dark.css";
@@ -32,12 +33,51 @@ export const CustomTiptapEditor = ({ content, onChange, placeholder }) => {
       Placeholder.configure({
         placeholder,
       }),
+      Dropcursor,
     ],
     content: content,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
+    editorProps: {
+      handleDrop: function (view, event, slice, moved) {
+        event.preventDefault();
+        if (event.dataTransfer?.files?.length > 0) {
+          uploadImages(event.dataTransfer.files);
+          return true;
+        }
+        return false;
+      },
+    },
   });
+
+  const uploadImages = useCallback(
+    (files) => {
+      if (!files || !editor) return;
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!file.type.startsWith("image/")) {
+          continue;
+        }
+
+        // TODO: AWS S3 이미지 업로드 로직 연결
+        // 1. 여기서 서버로 파일(file)을 전송하는 API를 호출합니다.
+        // 2. 서버는 이미지를 S3에 업로드하고, 업로드된 이미지의 URL을 반환합니다.
+        // 3. 반환받은 URL을 아래 `setImage` 함수의 src 값으로 사용합니다.
+
+        // 임시: FileReader를 사용하여 클라이언트에서 즉시 미리보기 제공
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (e.target?.result) {
+            editor.chain().focus().setImage({ src: e.target.result }).run();
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    [editor]
+  );
 
   useEffect(() => {
     if (editor && content && editor.getHTML() !== content) {
@@ -47,21 +87,11 @@ export const CustomTiptapEditor = ({ content, onChange, placeholder }) => {
 
   const handleImageUpload = useCallback(
     (event) => {
-      const files = event.target.files;
-      if (files) {
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            if (e.target?.result) {
-              editor.chain().focus().setImage({ src: e.target.result }).run();
-            }
-          };
-          reader.readAsDataURL(file);
-        }
+      if (event.target.files) {
+        uploadImages(event.target.files);
       }
     },
-    [editor]
+    [uploadImages]
   );
 
   return (
