@@ -1,20 +1,13 @@
-@font-face {
-  font-family: "Pretendard-Regular";
-  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
-    format("woff");
-  font-weight: 400;
-  font-style: normal;
-}
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 
 :root {
-  font-family: "Pretendard-Regular", sans-serif !important;
+  font-family: "Pretendard", sans-serif !important;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
 
-  font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -32,7 +25,7 @@ a:hover {
 body {
   margin: 0;
   min-width: 320px;
-  font-family: "Pretendard-Regular", sans-serif !important;
+  font-family: "Pretendard", sans-serif !important;
 }
 
 h1 {

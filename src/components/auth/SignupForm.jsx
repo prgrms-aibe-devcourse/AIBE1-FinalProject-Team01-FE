@@ -1,6 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/components/auth/auth.css";
+import { useInput } from "../../hooks/useInput";
 
 export const SignupForm = () => {
   const navigate = useNavigate();
@@ -9,9 +10,9 @@ export const SignupForm = () => {
   const termsRef = useRef(null);
   const privacyRef = useRef(null);
 
-  const [pw, setPw] = useState("");
-  const [pwCheck, setPwCheck] = useState("");
-  const [agree, setAgree] = useState({
+  const { value: pw, onChange: onPwChange } = useInput("");
+  const { value: pwCheck, onChange: onPwCheckChange } = useInput("");
+  const [agree, setAgree] = React.useState({
     all: false,
     terms: false,
     privacy: false,
@@ -81,13 +82,12 @@ export const SignupForm = () => {
 
   // input 값이 바뀔 때마다 커스텀 메시지 초기화
   const handlePwChange = (e) => {
-    setPw(e.target.value);
+    onPwChange(e);
     pwRef.current.setCustomValidity("");
-    // 비밀번호 확인도 같이 초기화
     pwCheckRef.current.setCustomValidity("");
   };
   const handlePwCheckChange = (e) => {
-    setPwCheck(e.target.value);
+    onPwCheckChange(e);
     pwCheckRef.current.setCustomValidity("");
   };
 
