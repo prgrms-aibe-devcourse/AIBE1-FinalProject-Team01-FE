@@ -98,7 +98,7 @@ export default function CommunityPage() {
   return (
     <>
       <HeroSection backgroundImageSrc={heroCommunity} />
-      <div className="container py-4">
+      <div className="py-4">
         <div className="community-main-container">
           <CommunityCategoryBar
             selected={category}

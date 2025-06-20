@@ -22,6 +22,19 @@
   min-height: 800px;
   margin-left: auto;
   margin-right: auto;
+  padding: 0 24px;
+}
+
+@media (max-width: 900px) {
+  .community-main-container {
+    padding: 0 8px;
+    min-width: 0;
+  }
+}
+@media (max-width: 600px) {
+  .community-main-container {
+    padding: 0 2px;
+  }
 }
 
 /* --- CommunitySearchBar 커스텀 스타일 --- */
@@ -352,4 +365,28 @@
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.community-board-list-item .fw-bold.fs-5 {
+  display: block;
+  max-width: 600px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .community-board-list-item .d-flex.align-items-center.mb-2.gap-2 {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+  }
+  .community-board-list-item .author-info {
+    margin-left: 0 !important;
+    margin-top: 2px;
+  }
+  .community-board-list-item .fw-bold.fs-5 {
+    max-width: 90vw;
+    font-size: 1.1rem;
+  }
 }
