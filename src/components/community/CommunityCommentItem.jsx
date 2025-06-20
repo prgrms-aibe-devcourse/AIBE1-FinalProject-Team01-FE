@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLike } from "../../hooks/useLike";
+import { useLikeBookmark } from "../../hooks/useLikeBookmark";
 import { useInput } from "../../hooks/useInput";
 import { isAuthor } from "../../utils/auth";
 
@@ -30,10 +30,10 @@ function CommunityCommentItem(props) {
     reset: resetEdit,
     setValue: setEditValue,
   } = useInput(props.comment.content);
-  const { liked, likeCount, toggleLike } = useLike(
-    props.comment.likes,
-    props.comment.liked
-  );
+  const { liked, likeCount, toggleLike } = useLikeBookmark({
+    initialLikeCount: props.comment.likes,
+    initialLiked: props.comment.liked,
+  });
   const depth = props.depth || 1;
   const { user } = props;
   const isMine = isAuthor(user, props.comment.author);

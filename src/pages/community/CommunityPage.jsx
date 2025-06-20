@@ -8,7 +8,7 @@ import { HeroSection } from "../../components/common/HeroSection";
 import heroCommunity from "../../assets/hero-community.png";
 import { CATEGORY_MAP, DUMMY_POSTS } from "./communityData";
 import { Modal, Button } from "react-bootstrap";
-import { useCommunityBoardList } from "../../hooks/useCommunityBoardList";
+import { useCommunityBoardList } from "../../hooks/useFilterSearch";
 
 export default function CommunityPage() {
   const { category = "free" } = useParams();
