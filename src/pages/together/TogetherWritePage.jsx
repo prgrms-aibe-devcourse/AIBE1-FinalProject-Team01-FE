@@ -3,6 +3,10 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Button, Form, Row, Col } from "react-bootstrap";
 import { CustomTiptapEditor } from "../../components/editor/CustomTiptapEditor";
 import { TagInput } from "../../components/community/TagInput";
+import { useImageUpload } from "../../hooks/useImageUpload";
+import { gatheringData, matchData, marketData } from "./togetherData"; // For finding postToEdit
+
+const allData = [...gatheringData, ...matchData, ...marketData];
 
 // 카테고리별 옵션 정의
 const TOGETHER_OPTIONS = {
@@ -26,8 +30,18 @@ const TOGETHER_OPTIONS = {
 export default function TogetherWritePage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { category } = useParams(); // 'gathering', 'match', 'market'
-  const { postToEdit } = location.state || {};
+  const { category, postId } = useParams(); // 'gathering', 'match', 'market'
+  const { state } = location;
+
+  const [postToEdit, setPostToEdit] = useState(state?.postToEdit);
+
+  // If page is accessed directly via URL for editing, find the post data
+  useEffect(() => {
+    if (!postToEdit && postId) {
+      const foundPost = allData.find((p) => p.id === parseInt(postId));
+      setPostToEdit(foundPost);
+    }
+  }, [postId, postToEdit]);
 
   const isEditMode = !!postToEdit;
   const options = TOGETHER_OPTIONS[category] || TOGETHER_OPTIONS.gathering;
@@ -42,6 +56,11 @@ export default function TogetherWritePage() {
   const [timeText, setTimeText] = useState("");
   const [period, setPeriod] = useState("");
   const [content, setContent] = useState("");
+  const [price, setPrice] = useState("");
+
+  const { imageUrls, handleUpload, setImageUrls } = useImageUpload(
+    postToEdit?.images || []
+  );
 
   useEffect(() => {
     if (isEditMode && postToEdit) {
@@ -54,36 +73,43 @@ export default function TogetherWritePage() {
       setTimeText(postToEdit.timeText || "");
       setPeriod(postToEdit.period || "");
       setContent(postToEdit.content);
+      setImageUrls(postToEdit.images || []);
+      setPrice(postToEdit.price || "");
     }
-  }, [isEditMode, postToEdit]);
+  }, [isEditMode, postToEdit, setImageUrls]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const thumbnail = imageUrls.length > 0 ? imageUrls[0] : null;
+
     const postData = {
+      id: postToEdit ? postToEdit.id : Date.now(),
       category,
       title,
       categoryLabel,
       status: category === "market" ? null : status,
       tags,
+      images: imageUrls,
+      thumbnail,
       recruitCount: category === "market" ? null : recruitCount,
-      location: locationText,
+      location: category === "market" ? locationText : locationText,
       timeText: category === "market" ? null : timeText,
       period: category === "market" ? null : period,
+      price: category === "market" ? price : null,
       content,
     };
 
-    if (isEditMode) {
+    if (postToEdit) {
       console.log("수정된 함께해요 게시글:", {
         ...postData,
         id: postToEdit.id,
       });
       alert("게시글이 수정되었습니다.");
-      navigate(`/together/${postToEdit.category}/${postToEdit.id}`);
     } else {
       console.log("작성된 함께해요 게시글:", postData);
       alert("게시글이 등록되었습니다.");
-      navigate(`/together/${category}`);
     }
+    navigate(`/together/${category}`);
   };
 
   const isMarket = category === "market";
@@ -192,6 +218,7 @@ export default function TogetherWritePage() {
           <CustomTiptapEditor
             content={content}
             onChange={setContent}
+            onImageUpload={handleUpload}
             placeholder="프로젝트에 대해 자세하게 설명해주세요..."
           />
         </Form.Group>

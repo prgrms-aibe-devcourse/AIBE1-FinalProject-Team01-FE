@@ -122,8 +122,12 @@ export const marketData = [
     status: "판매중",
     title: "머쓱이 그립톡",
     price: 5000,
-    image: "/src/assets/masseuki.png",
-    content: "<p>머쓱이 얼굴이 그려진 귀여운 그립톡입니다. 미개봉 새상품!</p>",
+    images: [
+      "/src/assets/masseuki.png",
+      "https://attach.lolchess.gg/2023%2F10%2F11%2F1696972326935-1696972326935.png",
+    ],
+    content:
+      "<p>머쓱이 얼굴이 그려진 귀여운 그립톡입니다. 미개봉 새상품!</p><p>측면 사진도 확인하세요.</p>",
     author: "최서적",
     authorProfileImg: "https://via.placeholder.com/40",
     devcourseName: "서적판매",
@@ -148,8 +152,12 @@ export const marketData = [
     status: "판매완료",
     title: "클린코드 책",
     price: 10000,
-    image: "https://via.placeholder.com/400x400.png?text=Clean+Code",
-    content: "<p>클린코드 1권입니다. 상태 아주 좋습니다.</p>",
+    images: [
+      "https://via.placeholder.com/400x400.png?text=Clean+Code+Cover",
+      "https://via.placeholder.com/400x400.png?text=Clean+Code+Page",
+    ],
+    content:
+      "<p>클린코드 1권입니다. 상태 아주 좋습니다.</p><p>내부도 깨끗합니다.</p>",
     author: "박전자",
     authorProfileImg: "https://via.placeholder.com/40",
     devcourseName: "전자제품",
@@ -174,7 +182,7 @@ export const marketData = [
     status: "판매중",
     title: "이펙티브 자바 3/E",
     price: 15000,
-    image: "https://via.placeholder.com/400x400.png?text=Effective+Java",
+    images: ["https://via.placeholder.com/400x400.png?text=Effective+Java"],
     content: "<p>이펙티브 자바 3판입니다. 거의 새 책입니다.</p>",
     author: "김루이지",
     authorProfileImg: "https://via.placeholder.com/40",

@@ -17,6 +17,7 @@ import "../../styles/together/market.css";
  */
 export const MarketBoardDetail = ({ post }) => {
   const navigate = useNavigate();
+  const [mainImage, setMainImage] = useState(post.images?.[0] || null);
 
   const [bookmarked, setBookmarked] = useState(post.bookmarked || false);
   const [bookmarkCount, setBookmarkCount] = useState(post.bookmarkCount || 0);
@@ -45,16 +46,33 @@ export const MarketBoardDetail = ({ post }) => {
 
       <div className="row g-5 mt-3">
         <div className="col-md-5">
-          {post.image && (
-            <img
-              src={post.image}
-              alt={post.title}
-              className="img-fluid rounded market-detail-image"
-            />
+          {post.images && post.images.length > 0 && (
+            <>
+              <img
+                src={mainImage}
+                alt={post.title}
+                className="img-fluid rounded market-detail-image mb-3"
+              />
+              {post.images.length > 1 && (
+                <div className="d-flex flex-wrap gap-2">
+                  {post.images.map((img, index) => (
+                    <img
+                      key={index}
+                      src={img}
+                      alt={`${post.title} thumbnail ${index + 1}`}
+                      className={`rounded market-detail-thumbnail ${
+                        mainImage === img ? "active" : ""
+                      }`}
+                      onClick={() => setMainImage(img)}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
         <div className="col-md-7">
-          <CommunityPostContent post={post} />
+          <CommunityPostContent post={post} stripImages={true} />
         </div>
       </div>
 

@@ -4,7 +4,6 @@ import { TogetherBoardDetail } from "../../components/together/TogetherBoardDeta
 import { MarketBoardDetail } from "../../components/together/MarketBoardDetail";
 import { gatheringData, matchData, marketData } from "./togetherData";
 
-// 모든 함께해요 데이터를 하나로 합침
 const ALL_TOGETHER_POSTS = [...gatheringData, ...matchData, ...marketData];
 
 export const TogetherBoardDetailPage = () => {

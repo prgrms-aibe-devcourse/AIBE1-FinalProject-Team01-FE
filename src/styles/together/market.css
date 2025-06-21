@@ -40,3 +40,20 @@
   width: 100%;
   object-fit: contain;
 }
+
+.market-detail-thumbnail {
+  cursor: pointer;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.market-detail-thumbnail:hover {
+  border-color: #adb5bd;
+}
+
+.market-detail-thumbnail.active {
+  border-color: #0d6efd;
+}
