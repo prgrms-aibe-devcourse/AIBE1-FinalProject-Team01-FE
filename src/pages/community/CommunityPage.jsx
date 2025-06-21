@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { CommunityCategoryBar } from "../../components/community/CommunityCategoryBar";
 import { CommunitySearchBar } from "../../components/community/CommunitySearchBar";
@@ -8,7 +8,14 @@ import { HeroSection } from "../../components/common/HeroSection";
 import heroCommunity from "../../assets/hero-community.png";
 import { CATEGORY_MAP, DUMMY_POSTS } from "./communityData";
 import { Modal, Button } from "react-bootstrap";
-import { useCommunityBoardList } from "../../hooks/useFilterSearch";
+import { useBoardList } from "../../hooks/useBoardList";
+
+// 커뮤니티 카테고리(탭) 목록을 상수로 고정 선언
+const COMMUNITY_TABS = [
+  { key: "free", label: "자유게시판" },
+  { key: "qna", label: "Q&A" },
+  { key: "blog", label: "블로그/회고" },
+];
 
 export default function CommunityPage() {
   const { category = "free" } = useParams();
@@ -24,9 +31,8 @@ export default function CommunityPage() {
     setSort,
     posts,
     totalPages,
-    categoryLabel,
     reset,
-  } = useCommunityBoardList(category);
+  } = useBoardList({ data: DUMMY_POSTS, category });
 
   useEffect(() => {
     reset();
@@ -44,6 +50,7 @@ export default function CommunityPage() {
           <CommunityCategoryBar
             selected={category}
             onSelect={handleTabSelect}
+            tabs={COMMUNITY_TABS}
           />
           <CommunitySearchBar
             keyword={keyword}
@@ -55,7 +62,7 @@ export default function CommunityPage() {
           />
           <CommunityBoardList
             posts={posts}
-            categoryLabel={categoryLabel}
+            categoryLabel={CATEGORY_MAP[category]}
             onPostClick={handlePostClick}
           />
           <CommunityPagination

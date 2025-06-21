@@ -6,9 +6,9 @@ import { isAuthor } from "../../utils/auth";
 
 /**
  * @typedef {Object} CommunityPostInfoProps
- * @property {object} post
- * @property {() => void} onEdit
- * @property {() => void} onDelete
+ * @property {object} post - The post data object.
+ * @property {() => void} onEdit - Function to handle edit action.
+ * @property {() => void} onDelete - Function to handle delete action.
  */
 
 /**
@@ -17,7 +17,8 @@ import { isAuthor } from "../../utils/auth";
  */
 export default function CommunityPostInfo({ post, onEdit, onDelete }) {
   const { user } = useAuth();
-  const isMine = isAuthor(user, post.author);
+  const canEditOrDelete = isAuthor(user, post.authorId);
+
   return (
     <div className="community-detail-info">
       <div className="community-detail-category">
@@ -25,19 +26,16 @@ export default function CommunityPostInfo({ post, onEdit, onDelete }) {
       </div>
       <div className="community-detail-title-row">
         <h2 className="community-detail-title">{post.title}</h2>
-        <div className="community-detail-actions d-flex align-items-center gap-2">
-          {/* 작성자만 보이도록 처리, TODO: 백엔드에서 권한 검증 필요 */}
-          {isMine && (
-            <>
-              <button type="button" onClick={onEdit}>
-                수정
-              </button>
-              <button type="button" onClick={onDelete}>
-                삭제
-              </button>
-            </>
-          )}
-        </div>
+        {canEditOrDelete && (
+          <div className="community-detail-actions d-flex align-items-center gap-2">
+            <button type="button" onClick={onEdit}>
+              수정
+            </button>
+            <button type="button" onClick={onDelete}>
+              삭제
+            </button>
+          </div>
+        )}
       </div>
       <div className="community-detail-meta d-flex justify-content-between align-items-center">
         <UserInfo
