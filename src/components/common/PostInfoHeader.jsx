@@ -1,11 +1,13 @@
 import React from "react";
 import { useAuth } from "../../context/AuthContext";
 import { isAuthor } from "../../utils/auth";
+import UserInfo from "./UserInfo";
 import "../../styles/components/common/PostInfoHeader.css";
 
 /**
  * @typedef {Object} PostInfoHeaderProps
  * @property {object} post - The post data object.
+ * @property {string} [categoryLabel] - The label for the category to display.
  * @property {() => void} onEdit - Function to handle edit action.
  * @property {() => void} onDelete - Function to handle delete action.
  * @property {boolean} [showStatus=true] - Whether to show the status badge.
@@ -17,6 +19,7 @@ import "../../styles/components/common/PostInfoHeader.css";
  */
 export const PostInfoHeader = ({
   post,
+  categoryLabel,
   onEdit,
   onDelete,
   showStatus = true,
@@ -34,6 +37,7 @@ export const PostInfoHeader = ({
 
   return (
     <div className="post-info-header">
+      {categoryLabel && <p className="post-category-label">{categoryLabel}</p>}
       <div className="d-flex justify-content-between align-items-start">
         <div className="flex-grow-1">
           {showStatus && post.status && (
@@ -41,12 +45,18 @@ export const PostInfoHeader = ({
               {post.status}
             </span>
           )}
-          <h1 className="post-info-title mb-2">{post.title}</h1>
-          <div className="d-flex align-items-center text-muted small">
-            <span>{post.author}</span>
-            <span className="mx-2">|</span>
-            <span>{post.date}</span>
-            <span className="ms-auto">조회 {post.views}</span>
+          <h1 className="post-info-title mb-3">{post.title}</h1>
+          <div className="d-flex justify-content-between align-items-center">
+            <UserInfo
+              author={post.author}
+              authorProfileImg={post.authorProfileImg}
+              devcourseName={post.devcourseName}
+            />
+            <div className="d-flex align-items-center text-muted small">
+              <span>{post.date}</span>
+              <span className="mx-2">|</span>
+              <span>조회 {post.views}</span>
+            </div>
           </div>
         </div>
         {canEditOrDelete && (

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/together/market.css";
+import "../../styles/components/together/market.css";
 
 /**
  * @typedef {Object} MarketBoardListProps

@@ -1,6 +1,13 @@
 .post-info-header {
-  padding: 1.5rem 0;
-  border-bottom: 1px solid #dee2e6;
+  padding: 1.5rem 0 0;
+}
+
+.post-category-label {
+  margin-bottom: 0.75rem;
+  color: #6c757d;
+  font-size: 0.9rem;
+  border-left: 3px solid #6c757d;
+  padding-left: 0.5rem;
 }
 
 .post-info-title {

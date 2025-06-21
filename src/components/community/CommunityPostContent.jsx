@@ -12,6 +12,10 @@ import "../../styles/components/community/CommunityPostContent.css";
  * @param {CommunityPostContentProps} props
  */
 export default function CommunityPostContent({ post, stripImages = false }) {
+  if (!post || !post.content) {
+    return null;
+  }
+
   const contentToRender = stripImages
     ? post.content.replace(/<img[^>]*>/g, "")
     : post.content;

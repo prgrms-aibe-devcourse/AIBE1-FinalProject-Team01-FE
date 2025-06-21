@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { MarketPostInfo } from "./MarketPostInfo";
 import CommunityPostContent from "../community/CommunityPostContent";
 import { BoardDetailLayout } from "../common/BoardDetailLayout";
-import "../../styles/together/market.css";
+import "../../styles/components/together/market.css";
 
 /**
  * @typedef {Object} MarketBoardDetailProps

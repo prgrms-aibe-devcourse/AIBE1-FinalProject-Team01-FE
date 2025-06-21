@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { PostInfoHeader } from "../common/PostInfoHeader";
 import CommunityPostContent from "./CommunityPostContent";
 import { BoardDetailLayout } from "../common/BoardDetailLayout";
+import { CATEGORY_MAP } from "../../pages/community/communityData";
 
 /**
  * @typedef {Object} CommunityBoardDetailProps
@@ -34,6 +35,7 @@ export default function CommunityBoardDetail({ post }) {
     <BoardDetailLayout post={post}>
       <PostInfoHeader
         post={post}
+        categoryLabel={CATEGORY_MAP[post.category]}
         onEdit={handleEdit}
         onDelete={handleDelete}
         showStatus={false}

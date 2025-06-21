@@ -1,5 +1,4 @@
 import React from "react";
-import "../../styles/together/together.css";
 import "../../styles/components/community/community.css";
 
 const categoryLabelToSlug = {

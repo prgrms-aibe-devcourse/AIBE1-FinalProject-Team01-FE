@@ -124,7 +124,7 @@ export const marketData = [
     price: 5000,
     images: [
       "/src/assets/masseuki.png",
-      "https://attach.lolchess.gg/2023%2F10%2F11%2F1696972326935-1696972326935.png",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZLlkP9EXGiropFvkyGVSJiQDkC3o8huVh06NIu0s4LHyTy_sTToM9vn2xKF5HwqFDF4A&usqp=CAU",
     ],
     content:
       "<p>머쓱이 얼굴이 그려진 귀여운 그립톡입니다. 미개봉 새상품!</p><p>측면 사진도 확인하세요.</p>",
@@ -152,10 +152,7 @@ export const marketData = [
     status: "판매완료",
     title: "클린코드 책",
     price: 10000,
-    images: [
-      "https://via.placeholder.com/400x400.png?text=Clean+Code+Cover",
-      "https://via.placeholder.com/400x400.png?text=Clean+Code+Page",
-    ],
+    images: ["https://via.placeholder.com/400x400.png?text=Clean+Code+Cover"],
     content:
       "<p>클린코드 1권입니다. 상태 아주 좋습니다.</p><p>내부도 깨끗합니다.</p>",
     author: "박전자",

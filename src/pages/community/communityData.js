@@ -12,7 +12,7 @@ export const DUMMY_POSTS = [
     category: "free",
     title: "요즘 아침에 수업듣기 너무 빡세네요",
     content:
-      '아침에 일어나기 너무 힘들어요... 다들 어떻게 극복하시나요?<p><img src="https://via.placeholder.com/600x200.png?text=Wake+Up!" alt="Tired student"></p><p>특히 9시 수업이 가장 힘든데, 여러분들은 어떤 방법으로 아침 기상을 하시나요? 알람을 여러 개 맞춰놔도 계속 꺼버리게 되네요. 좋은 팁이 있다면 공유 부탁드립니다!</p>',
+      '아침에 일어나기 너무 힘들어요... 다들 어떻게 극복하시나요?<p><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZLlkP9EXGiropFvkyGVSJiQDkC3o8huVh06NIu0s4LHyTy_sTToM9vn2xKF5HwqFDF4A&usqp=CAU" alt="Tired student"></p><p>특히 9시 수업이 가장 힘든데, 여러분들은 어떤 방법으로 아침 기상을 하시나요? </p> <p> <img src="https://t4.ftcdn.net/jpg/02/66/72/41/360_F_266724133_uJj0HlXvsmFltJo5YDOVSG6p4Y8sQiZB.jpg">  </p> <p> 알람을 여러 개 맞춰놔도 계속 꺼버리게 되네요. 좋은 팁이 있다면 공유 부탁드립니다!</p>',
     author: "김루이지",
     authorProfileImg: "https://via.placeholder.com/40",
     devcourseName: "프론트엔드",
@@ -22,7 +22,9 @@ export const DUMMY_POSTS = [
     likes: 24,
     comments: 5,
     views: 157,
-    images: ["https://via.placeholder.com/600x200.png?text=Wake+Up!"],
+    images: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZLlkP9EXGiropFvkyGVSJiQDkC3o8huVh06NIu0s4LHyTy_sTToM9vn2xKF5HwqFDF4A&usqp=CAU",
+    ],
     contentList: null,
     bookmarked: false,
     bookmarkCount: 0,

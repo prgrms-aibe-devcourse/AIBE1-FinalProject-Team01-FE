@@ -1,6 +1,6 @@
 import React from "react";
 import "../../styles/components/community/community.css";
-import "../../styles/together/together.css";
+import "../../styles/components/together/together.css";
 import { useAuth } from "../../context/AuthContext";
 import { isAuthor } from "../../utils/auth";
 import { PostInfoHeader } from "../common/PostInfoHeader";
@@ -32,26 +32,42 @@ export const TogetherPostInfo = ({ post, onEdit, onDelete }) => {
 
   return (
     <>
-      <PostInfoHeader post={post} onEdit={onEdit} onDelete={onDelete} />
-      <div className="py-4">
-        <p>
-          <i className="bi bi-people-fill me-2"></i>
-          <strong>모집인원:</strong> {post.recruitCount}명
-        </p>
-        <p>
-          <i className="bi bi-calendar-check me-2"></i>
-          <strong>기간:</strong> {post.period}
-        </p>
-        <p>
-          <i className="bi bi-clock me-2"></i>
-          <strong>시간:</strong> {post.timeText}
-        </p>
-        <p className="mb-0">
-          <i className="bi bi-geo-alt me-2"></i>
-          <strong>장소:</strong> {post.location}
-        </p>
+      <PostInfoHeader
+        post={post}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        categoryLabel={post.categoryLabel}
+      />
+      <div className="d-flex flex-wrap justify-content-around align-items-center p-3 rounded bg-light">
+        <div className="text-center mx-2 my-2">
+          <h6 className="text-muted mb-1">모집인원</h6>
+          <p className="m-0 fw-bold">
+            <i className="bi bi-people-fill me-1"></i>
+            {post.recruitCount}명
+          </p>
+        </div>
+        <div className="text-center mx-2 my-2">
+          <h6 className="text-muted mb-1">기간</h6>
+          <p className="m-0 fw-bold">
+            <i className="bi bi-calendar-check me-1"></i>
+            {post.period}
+          </p>
+        </div>
+        <div className="text-center mx-2 my-2">
+          <h6 className="text-muted mb-1">시간</h6>
+          <p className="m-0 fw-bold">
+            <i className="bi bi-clock me-1"></i>
+            {post.timeText}
+          </p>
+        </div>
+        <div className="text-center mx-2 my-2">
+          <h6 className="text-muted mb-1">장소</h6>
+          <p className="m-0 fw-bold">
+            <i className="bi bi-geo-alt me-1"></i>
+            {post.location}
+          </p>
+        </div>
       </div>
-      <hr className="mt-0" />
     </>
   );
 };
