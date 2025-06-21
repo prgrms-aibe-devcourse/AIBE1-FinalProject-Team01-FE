@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { TogetherBoardDetail } from "../../components/together/TogetherBoardDetail";
+import { MarketBoardDetail } from "../../components/together/MarketBoardDetail";
 import { gatheringData, matchData, marketData } from "./togetherData";
 
 // 모든 함께해요 데이터를 하나로 합침
@@ -24,6 +25,11 @@ export const TogetherBoardDetailPage = () => {
         </button>
       </div>
     );
+  }
+
+  // 카테고리에 따라 다른 상세 페이지 컴포넌트 렌더링
+  if (category === "market") {
+    return <MarketBoardDetail post={post} />;
   }
 
   return <TogetherBoardDetail post={post} />;

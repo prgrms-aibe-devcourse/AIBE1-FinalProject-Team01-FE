@@ -8,6 +8,7 @@ import heroTogether from "../../assets/hero-together.png";
 import { useBoardList } from "../../hooks/useBoardList";
 import { gatheringData, matchData, marketData } from "./togetherData";
 import { TogetherBoardList } from "../../components/together/TogetherBoardList";
+import { MarketBoardList } from "../../components/together/MarketBoardList";
 import "../../styles/components/community/community.css";
 
 // 함께해요 카테고리(탭) 목록
@@ -70,7 +71,13 @@ export default function TogetherPage() {
             onSortChange={setSort}
             onSearch={search}
           />
-          <TogetherBoardList posts={posts} onPostClick={handlePostClick} />
+
+          {category === "market" ? (
+            <MarketBoardList posts={posts} onPostClick={handlePostClick} />
+          ) : (
+            <TogetherBoardList posts={posts} onPostClick={handlePostClick} />
+          )}
+
           <CommunityPagination
             page={page}
             total={totalPages}
