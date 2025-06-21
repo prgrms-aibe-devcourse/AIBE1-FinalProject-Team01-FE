@@ -49,7 +49,7 @@ export default function TogetherPage() {
   }, [category]);
 
   const handlePostClick = (postId) => {
-    // 상세 페이지 이동 등 구현 필요시 여기에 작성
+    navigate(`/together/${category}/${postId}`);
   };
 
   return (

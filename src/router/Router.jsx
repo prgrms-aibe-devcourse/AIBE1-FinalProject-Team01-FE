@@ -9,6 +9,7 @@ import CommunityPage from "../pages/community/CommunityPage";
 import CommunityWritePage from "../pages/community/CommunityWritePage";
 import CommunityBoardDetailPage from "../pages/community/CommunityBoardDetailPage";
 import TogetherPage from "../pages/together/TogetherPage";
+import { TogetherBoardDetailPage } from "../pages/together/TogetherBoardDetailPage";
 
 export function AppRouter() {
   return (
@@ -33,9 +34,13 @@ export function AppRouter() {
       />
       <Route
         path="/together"
-        element={<Navigate to="/together/gathering" replace />}
+        element={<Navigate to="/together/match" replace />}
       />
       <Route path="/together/:category" element={<TogetherPage />} />
+      <Route
+        path="/together/:category/:postId"
+        element={<TogetherBoardDetailPage />}
+      />
     </Routes>
   );
 }
