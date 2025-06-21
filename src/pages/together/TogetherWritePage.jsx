@@ -163,7 +163,19 @@ export default function TogetherWritePage() {
         </Form.Group>
 
         <Row className="mb-3">
-          {!isMarket && (
+          {isMarket ? (
+            <Form.Group as={Col}>
+              <Form.Label>가격 (원)</Form.Label>
+              <Form.Control
+                type="number"
+                min="0"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="가격을 입력하세요 (숫자만)"
+                required
+              />
+            </Form.Group>
+          ) : (
             <Form.Group as={Col}>
               <Form.Label>모집인원</Form.Label>
               <Form.Control

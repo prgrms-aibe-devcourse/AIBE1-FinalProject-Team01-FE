@@ -26,7 +26,7 @@ const DATA_MAP = {
 };
 
 export default function TogetherPage() {
-  const { category = "match" } = useParams();
+  const { category = "gathering" } = useParams();
   const navigate = useNavigate();
 
   const handleTabSelect = (catKey) => navigate(`/together/${catKey}`);
