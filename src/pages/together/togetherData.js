@@ -2,6 +2,7 @@
 export const gatheringData = [
   {
     id: 1,
+    authorId: 1,
     category: "gathering",
     categoryLabel: "스터디",
     status: "모집중",
@@ -28,6 +29,7 @@ export const gatheringData = [
   },
   {
     id: 2,
+    authorId: 2,
     category: "gathering",
     categoryLabel: "프로젝트",
     status: "모집완료",
@@ -57,6 +59,7 @@ export const gatheringData = [
 export const matchData = [
   {
     id: 1,
+    authorId: 9,
     category: "match",
     categoryLabel: "커피챗",
     status: "매칭가능",
@@ -83,6 +86,7 @@ export const matchData = [
   },
   {
     id: 2,
+    authorId: 10,
     category: "match",
     categoryLabel: "멘토링",
     status: "매칭완료",
@@ -112,6 +116,7 @@ export const matchData = [
 export const marketData = [
   {
     id: 1,
+    authorId: 11,
     category: "market",
     categoryLabel: "중고거래",
     status: null,
@@ -138,6 +143,7 @@ export const marketData = [
   },
   {
     id: 2,
+    authorId: 12,
     category: "market",
     categoryLabel: "중고거래",
     status: null,

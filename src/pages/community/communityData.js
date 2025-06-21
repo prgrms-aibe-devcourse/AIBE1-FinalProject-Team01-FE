@@ -8,6 +8,7 @@ export const CATEGORY_KEYS = Object.keys(CATEGORY_MAP);
 export const DUMMY_POSTS = [
   {
     id: 1,
+    authorId: 1,
     category: "free",
     title: "요즘 아침에 수업듣기 너무 빡세네요",
     content:
@@ -62,6 +63,7 @@ export const DUMMY_POSTS = [
   },
   {
     id: 2,
+    authorId: 2,
     category: "qna",
     title: "React Hook Form vs Formik 비교 분석해봤어요",
     content:
@@ -98,6 +100,7 @@ export const DUMMY_POSTS = [
   },
   {
     id: 3,
+    authorId: 3,
     category: "blog",
     title: "첫 프로젝트 회고: 실패와 성공의 경험담",
     content:

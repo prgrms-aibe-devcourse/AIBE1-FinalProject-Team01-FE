@@ -65,7 +65,7 @@ export default function TogetherPage() {
           <CommunitySearchBar
             keyword={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            onWrite={() => alert("글쓰기 기능은 추후 지원됩니다.")}
+            onWrite={() => navigate(`/together/${category}/write`)}
             sort={sort}
             onSortChange={setSort}
             onSearch={search}

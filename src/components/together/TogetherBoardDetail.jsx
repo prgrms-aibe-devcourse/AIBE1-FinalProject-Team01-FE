@@ -27,12 +27,9 @@ export const TogetherBoardDetail = ({ post }) => {
   };
 
   const handleEdit = () => {
-    console.log("수정할 게시글:", post);
-    // TODO: 함께해요 글쓰기 페이지 경로 확정 후 수정
-    // navigate(`/together/${post.category}/write`, {
-    //   state: { postToEdit: post },
-    // });
-    alert("수정 기능은 현재 지원되지 않습니다.");
+    navigate(`/together/${post.category}/write`, {
+      state: { postToEdit: post },
+    });
   };
 
   const handleDelete = () => {

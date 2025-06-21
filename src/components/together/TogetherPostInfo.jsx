@@ -1,6 +1,8 @@
 import React from "react";
 import "../../styles/components/community/community.css";
 import "../../styles/together/together.css";
+import { useAuth } from "../../context/AuthContext";
+import { isAuthor } from "../../utils/auth";
 
 const categoryLabelToSlug = {
   스터디: "study",
@@ -23,6 +25,8 @@ const categoryLabelToSlug = {
  * @param {TogetherPostInfoProps} props
  */
 export const TogetherPostInfo = ({ post, onEdit, onDelete }) => {
+  const { user } = useAuth();
+  const canEditOrDelete = isAuthor(user, post.authorId);
   const isRecruiting = post.status === "모집중" || post.status === "매칭가능";
 
   return (
@@ -46,10 +50,12 @@ export const TogetherPostInfo = ({ post, onEdit, onDelete }) => {
             </span>
           )}
         </div>
-        <div className="community-detail-actions">
-          <button onClick={onEdit}>수정</button>
-          <button onClick={onDelete}>삭제</button>
-        </div>
+        {canEditOrDelete && (
+          <div className="community-detail-actions">
+            <button onClick={onEdit}>수정</button>
+            <button onClick={onDelete}>삭제</button>
+          </div>
+        )}
       </div>
 
       <h1 className="community-detail-title">{post.title}</h1>

@@ -10,6 +10,7 @@ import CommunityWritePage from "../pages/community/CommunityWritePage";
 import CommunityBoardDetailPage from "../pages/community/CommunityBoardDetailPage";
 import TogetherPage from "../pages/together/TogetherPage";
 import { TogetherBoardDetailPage } from "../pages/together/TogetherBoardDetailPage";
+import TogetherWritePage from "../pages/together/TogetherWritePage";
 
 export function AppRouter() {
   return (
@@ -41,6 +42,7 @@ export function AppRouter() {
         path="/together/:category/:postId"
         element={<TogetherBoardDetailPage />}
       />
+      <Route path="/together/:category/write" element={<TogetherWritePage />} />
     </Routes>
   );
 }
