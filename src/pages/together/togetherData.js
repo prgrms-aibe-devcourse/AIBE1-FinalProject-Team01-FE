@@ -4,6 +4,7 @@ export const gatheringData = [
     id: 1,
     category: "gathering",
     categoryLabel: "스터디",
+    status: "모집중",
     title: "React 스터디 팀원 모집 (주 2회)",
     content:
       "<p>React 18의 새로운 기능들을 함께 공부할 스터디원을 모집합니다. 초급자도 환영!</p>",
@@ -29,6 +30,7 @@ export const gatheringData = [
     id: 2,
     category: "gathering",
     categoryLabel: "프로젝트",
+    status: "모집완료",
     title: "사이드 프로젝트 팀원 구합니다",
     content: "<p>함께 성장할 사이드 프로젝트 팀원을 모집합니다.</p>",
     author: "홍길동",
@@ -57,6 +59,7 @@ export const matchData = [
     id: 1,
     category: "match",
     categoryLabel: "커피챗",
+    status: "매칭가능",
     title: "프론트엔드 개발자 커피챗 구해요",
     content:
       "<p>프론트엔드 개발자와 진로, 취업 관련 커피챗 하실 분 구합니다.</p>",
@@ -82,6 +85,7 @@ export const matchData = [
     id: 2,
     category: "match",
     categoryLabel: "멘토링",
+    status: "매칭완료",
     title: "멘토링: 포트폴리오 첨삭해드립니다",
     content: "<p>포트폴리오 첨삭 및 피드백 멘토링 진행합니다.</p>",
     author: "박민수",
@@ -110,6 +114,7 @@ export const marketData = [
     id: 1,
     category: "market",
     categoryLabel: "중고거래",
+    status: null,
     title: "개발 서적 팝니다 (실사용)",
     content:
       "<p>실사용 개발 서적 저렴하게 판매합니다. 필요하신 분 연락주세요.</p>",
@@ -135,6 +140,7 @@ export const marketData = [
     id: 2,
     category: "market",
     categoryLabel: "중고거래",
+    status: null,
     title: "모니터 중고 판매합니다",
     content: "<p>24인치 모니터 중고로 판매합니다. 직거래만 가능해요.</p>",
     author: "박전자",

@@ -1,4 +1,15 @@
 import React from "react";
+import "../../styles/together/together.css";
+import "../../styles/components/community/community.css";
+
+const categoryLabelToSlug = {
+  스터디: "study",
+  프로젝트: "project",
+  해커톤: "hackathon",
+  커피챗: "coffeechat",
+  멘토링: "mentoring",
+  중고거래: "market",
+};
 
 /**
  * @typedef {Object} TogetherBoardListProps
@@ -22,9 +33,27 @@ export const TogetherBoardList = ({ posts, onPostClick }) => {
         >
           <div className="d-flex align-items-center mb-2 gap-2">
             {/* 카테고리 라벨 */}
-            <span className="badge bg-secondary me-2">
+            <span
+              className={`community-category-label me-1 label-${
+                categoryLabelToSlug[post.categoryLabel] || "default"
+              }`}
+            >
               {post.categoryLabel}
             </span>
+
+            {/* 상태 라벨 */}
+            {post.status && (
+              <span
+                className={`community-category-label me-2 ${
+                  post.status === "모집중" || post.status === "매칭가능"
+                    ? "bg-success"
+                    : "bg-secondary text-white"
+                }`}
+              >
+                {post.status}
+              </span>
+            )}
+
             <span className="fw-bold fs-5">{post.title}</span>
             <div className="author-info ms-auto">
               <span className="author-name">{post.author}</span>
@@ -35,18 +64,41 @@ export const TogetherBoardList = ({ posts, onPostClick }) => {
               <span className="small">{post.time}</span>
             </div>
           </div>
-          <div className="d-flex align-items-center gap-4 mb-2">
-            {post.recruitCount && <span>👥 {post.recruitCount}명</span>}
-            {post.location && <span>📍 {post.location}</span>}
-            {post.timeText && <span>🕒 {post.timeText}</span>}
-            {post.period && <span>⏰ {post.period}</span>}
+
+          {/* 추가 정보 (4등분 그리드, Bootstrap 아이콘) */}
+          <div className="row mb-2 info-grid">
+            {post.recruitCount != null && (
+              <div className="col-md-3">
+                <i className="bi bi-people"></i>
+                <span>{post.recruitCount}명</span>
+              </div>
+            )}
+            {post.location && (
+              <div className="col-md-3">
+                <i className="bi bi-geo-alt"></i>
+                <span>{post.location}</span>
+              </div>
+            )}
+            {post.timeText && (
+              <div className="col-md-3">
+                <i className="bi bi-calendar-check"></i>
+                <span>{post.timeText}</span>
+              </div>
+            )}
+            {post.period && (
+              <div className="col-md-3">
+                <i className="bi bi-calendar-range"></i>
+                <span>{post.period}</span>
+              </div>
+            )}
           </div>
+
           <div className="d-flex align-items-center gap-2">
             <span className="small">
               {post.tags &&
                 post.tags.map((tag, i) => (
                   <span key={i} className="badge bg-light text-dark ms-2 fs-6">
-                    {tag}
+                    #{tag}
                   </span>
                 ))}
             </span>
