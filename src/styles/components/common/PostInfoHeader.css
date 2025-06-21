@@ -1,0 +1,23 @@
+.post-info-header {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.post-info-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.post-info-actions button {
+  background: none;
+  border: none;
+  color: #6c757d;
+  font-size: 0.9rem;
+  padding: 0.25rem 0.5rem;
+  transition: color 0.2s;
+}
+
+.post-info-actions button:hover {
+  color: #212529;
+}

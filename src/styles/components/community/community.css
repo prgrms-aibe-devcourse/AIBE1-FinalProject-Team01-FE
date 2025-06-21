@@ -157,12 +157,9 @@
 
 /* 상세 페이지 컨테이너 */
 .community-detail-container {
-  max-width: 1200px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
-  padding: 40px 32px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
 }
 
 /* 상단 정보 */
@@ -389,4 +386,14 @@
     max-width: 90vw;
     font-size: 1.1rem;
   }
+}
+
+/* 커뮤니티 페이지네이션, 게시글 목록, 댓글 등 */
+.community-board-list {
+  border-top: 2px solid #212529;
+}
+
+.community-detail-tag-share-bar {
+  display: flex;
+  justify-content: space-between;
 }
