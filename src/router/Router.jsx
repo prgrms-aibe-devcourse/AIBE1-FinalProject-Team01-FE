@@ -8,6 +8,9 @@ import FindPasswordPage from "../pages/auth/FindPasswordPage";
 import CommunityPage from "../pages/community/CommunityPage";
 import CommunityWritePage from "../pages/community/CommunityWritePage";
 import CommunityBoardDetailPage from "../pages/community/CommunityBoardDetailPage";
+import TogetherPage from "../pages/together/TogetherPage";
+import { TogetherBoardDetailPage } from "../pages/together/TogetherBoardDetailPage";
+import TogetherWritePage from "../pages/together/TogetherWritePage";
 
 export function AppRouter() {
   return (
@@ -30,6 +33,16 @@ export function AppRouter() {
         path="/community/:category/write"
         element={<CommunityWritePage />}
       />
+      <Route
+        path="/together"
+        element={<Navigate to="/together/match" replace />}
+      />
+      <Route path="/together/:category" element={<TogetherPage />} />
+      <Route
+        path="/together/:category/:postId"
+        element={<TogetherBoardDetailPage />}
+      />
+      <Route path="/together/:category/write" element={<TogetherWritePage />} />
     </Routes>
   );
 }

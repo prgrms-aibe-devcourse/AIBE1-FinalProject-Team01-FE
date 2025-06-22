@@ -1,27 +1,26 @@
 import React from "react";
+import "../../styles/components/community/CommunityPostContent.css";
 
 /**
  * @typedef {Object} CommunityPostContentProps
- * @property {object} post
+ * @property {object} post - The post object.
+ * @property {boolean} [stripImages=false] - If true, removes img tags from the content.
  */
 
 /**
  * 게시글 본문 컴포넌트
  * @param {CommunityPostContentProps} props
  */
-export default function CommunityPostContent({ post }) {
+export default function CommunityPostContent({ post, stripImages = false }) {
+  const contentToRender = stripImages
+    ? post.content.replace(/<img[^>]*>/g, "")
+    : post.content;
+
   return (
     <div className="community-detail-content">
-      {post.image && (
-        <img
-          src={post.image}
-          alt="본문 이미지"
-          className="community-detail-image"
-        />
-      )}
       <div
         className="community-detail-content-body"
-        dangerouslySetInnerHTML={{ __html: post.content }}
+        dangerouslySetInnerHTML={{ __html: contentToRender }}
       />
       {post.contentList && (
         <ul className="community-detail-content-list">

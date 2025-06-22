@@ -8,10 +8,11 @@ export const CATEGORY_KEYS = Object.keys(CATEGORY_MAP);
 export const DUMMY_POSTS = [
   {
     id: 1,
+    authorId: 1,
     category: "free",
     title: "요즘 아침에 수업듣기 너무 빡세네요",
     content:
-      "<p>아침에 일어나기 너무 힘들어요... 다들 어떻게 극복하시나요?</p><p>특히 9시 수업이 가장 힘든데, 여러분들은 어떤 방법으로 아침 기상을 하시나요? 알람을 여러 개 맞춰놔도 계속 꺼버리게 되네요. 좋은 팁이 있다면 공유 부탁드립니다!</p>",
+      '아침에 일어나기 너무 힘들어요... 다들 어떻게 극복하시나요?<p><img src="https://via.placeholder.com/600x200.png?text=Wake+Up!" alt="Tired student"></p><p>특히 9시 수업이 가장 힘든데, 여러분들은 어떤 방법으로 아침 기상을 하시나요? 알람을 여러 개 맞춰놔도 계속 꺼버리게 되네요. 좋은 팁이 있다면 공유 부탁드립니다!</p>',
     author: "김루이지",
     authorProfileImg: "https://via.placeholder.com/40",
     devcourseName: "프론트엔드",
@@ -21,7 +22,7 @@ export const DUMMY_POSTS = [
     likes: 24,
     comments: 5,
     views: 157,
-    image: null,
+    images: ["https://via.placeholder.com/600x200.png?text=Wake+Up!"],
     contentList: null,
     bookmarked: false,
     bookmarkCount: 0,
@@ -62,6 +63,7 @@ export const DUMMY_POSTS = [
   },
   {
     id: 2,
+    authorId: 2,
     category: "qna",
     title: "React Hook Form vs Formik 비교 분석해봤어요",
     content:
@@ -98,6 +100,7 @@ export const DUMMY_POSTS = [
   },
   {
     id: 3,
+    authorId: 3,
     category: "blog",
     title: "첫 프로젝트 회고: 실패와 성공의 경험담",
     content:
