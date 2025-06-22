@@ -49,31 +49,54 @@ export function useBoardList({
     if (categoryFilter) {
       filtered = filtered.filter((item) => categoryFilter(item, category));
     } else {
-      filtered = filtered.filter((item) => item.category === category);
+      if (category === "gathering") {
+        filtered = filtered.filter(
+          (item) =>
+            item.board_type === "gathering" &&
+            ["study", "project", "hackathon"].includes(
+              item.gathering_post?.gathering_type
+            )
+        );
+      } else if (category === "match") {
+        filtered = filtered.filter(
+          (item) =>
+            item.board_type === "gathering" &&
+            ["coffeechat", "mentoring"].includes(
+              item.gathering_post?.gathering_type
+            )
+        );
+      } else if (category === "market") {
+        filtered = filtered.filter((item) => item.board_type === "market");
+      } else {
+        // community 등 기타 게시판
+        filtered = filtered.filter(
+          (item) => item.category === category || item.board_type === category
+        );
+      }
     }
   }
   if (state.searchTerm) {
     filtered = filtered.filter(
       (item) =>
-        item.title?.includes(state.searchTerm) ||
-        item.content?.includes(state.searchTerm)
+        item.title?.toLowerCase().includes(state.searchTerm.toLowerCase()) ||
+        item.content?.toLowerCase().includes(state.searchTerm.toLowerCase())
     );
   }
 
   // 정렬
   let sorted = [...filtered];
   if (state.sort === "최신순") {
-    sorted.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    sorted.sort((a, b) =>
+      (b.created_at || "").localeCompare(a.created_at || "")
+    );
   } else if (state.sort === "조회순") {
-    sorted.sort((a, b) => (b.views || 0) - (a.views || 0));
+    sorted.sort((a, b) => (b.view_count || 0) - (a.view_count || 0));
   } else if (state.sort === "댓글순") {
     sorted.sort(
-      (a, b) =>
-        (b.comments?.length || b.comments || 0) -
-        (a.comments?.length || a.comments || 0)
+      (a, b) => (b.comments?.length || 0) - (a.comments?.length || 0)
     );
   } else if (state.sort === "좋아요순") {
-    sorted.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+    sorted.sort((a, b) => (b.like_count || 0) - (a.like_count || 0));
   }
 
   // 페이지네이션

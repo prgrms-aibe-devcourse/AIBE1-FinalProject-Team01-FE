@@ -90,7 +90,7 @@ export const CommentItem = (props) => {
           <div className="d-flex align-items-center">
             <span className="comment-author-name">{props.comment.author}</span>
             {props.comment.devcourseName && (
-              <span className="comment-author-batch text-primary ms-2">
+              <span className="comment-author-batch text-secondary ms-2">
                 {props.comment.devcourseName}
               </span>
             )}

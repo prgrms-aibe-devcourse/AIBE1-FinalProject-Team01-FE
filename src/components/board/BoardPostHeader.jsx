@@ -24,12 +24,14 @@ export const BoardPostHeader = ({
   onDelete,
   showStatus = true,
 }) => {
-  const { user } = useAuth();
-  const canEditOrDelete = isAuthor(user, post.authorId);
+  const { user: currentUser } = useAuth();
+  const canEditOrDelete = isAuthor(currentUser, post.user_id);
+
+  const status = post.gathering_post?.status || post.market_item?.status;
 
   const getStatusBadgeClass = () => {
-    if (!post.status) return "d-none";
-    if (["모집중", "판매중", "매칭가능"].includes(post.status)) {
+    if (!status) return "d-none";
+    if (["모집중", "판매중", "매칭가능"].includes(status)) {
       return "bg-dark"; // 진행중 상태
     }
     return "bg-secondary"; // 완료 상태
@@ -40,22 +42,18 @@ export const BoardPostHeader = ({
       {categoryLabel && <p className="post-category-label">{categoryLabel}</p>}
       <div className="d-flex justify-content-between align-items-start">
         <div className="flex-grow-1">
-          {showStatus && post.status && (
+          {showStatus && status && (
             <span className={`badge me-2 mb-2 ${getStatusBadgeClass()}`}>
-              {post.status}
+              {status}
             </span>
           )}
           <h1 className="post-info-title mb-3">{post.title}</h1>
           <div className="d-flex justify-content-between align-items-center">
-            <UserInfo
-              author={post.author}
-              authorProfileImg={post.authorProfileImg}
-              devcourseName={post.devcourseName}
-            />
+            <UserInfo user={post.user} />
             <div className="d-flex align-items-center text-muted small">
-              <span>{post.date}</span>
+              <span>{new Date(post.created_at).toLocaleString()}</span>
               <span className="mx-2">|</span>
-              <span>조회 {post.views}</span>
+              <span>조회 {post.view_count}</span>
             </div>
           </div>
         </div>
@@ -69,4 +67,4 @@ export const BoardPostHeader = ({
       <hr />
     </div>
   );
-}; 
+};

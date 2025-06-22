@@ -16,10 +16,13 @@ import "../../styles/components/together/market.css";
  */
 export const MarketBoardDetail = ({ post }) => {
   const navigate = useNavigate();
-  const [mainImage, setMainImage] = useState(post.images?.[0] || null);
+  const { post_images } = post;
+  const [mainImage, setMainImage] = useState(
+    post_images?.[0]?.image_url || null
+  );
 
   const handleEdit = () => {
-    navigate(`/together/${post.category}/write`, {
+    navigate(`/together/${post.board_type}/write`, {
       state: { postToEdit: post },
     });
   };
@@ -28,7 +31,7 @@ export const MarketBoardDetail = ({ post }) => {
     if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
       console.log("삭제할 게시글 ID:", post.id);
       alert("게시글이 삭제되었습니다.");
-      navigate(`/together/${post.category}`);
+      navigate(`/together/${post.board_type}`);
     }
   };
 
@@ -37,24 +40,24 @@ export const MarketBoardDetail = ({ post }) => {
       <MarketPostInfo post={post} onEdit={handleEdit} onDelete={handleDelete} />
       <div className="row g-5 mt-3">
         <div className="col-md-5">
-          {post.images && post.images.length > 0 && (
+          {post_images && post_images.length > 0 && (
             <>
               <img
                 src={mainImage}
                 alt={post.title}
                 className="img-fluid rounded market-detail-image mb-3"
               />
-              {post.images.length > 1 && (
+              {post_images.length > 1 && (
                 <div className="d-flex flex-wrap gap-2">
-                  {post.images.map((img, index) => (
+                  {post_images.map((image, index) => (
                     <img
                       key={index}
-                      src={img}
+                      src={image.image_url}
                       alt={`${post.title} thumbnail ${index + 1}`}
                       className={`rounded market-detail-thumbnail ${
-                        mainImage === img ? "active" : ""
+                        mainImage === image.image_url ? "active" : ""
                       }`}
-                      onClick={() => setMainImage(img)}
+                      onClick={() => setMainImage(image.image_url)}
                     />
                   ))}
                 </div>

@@ -15,9 +15,10 @@ import { BoardPostHeader } from "../board/BoardPostHeader";
  */
 export const TogetherBoardDetail = ({ post }) => {
   const navigate = useNavigate();
+  const { gathering_post } = post;
 
   const handleEdit = () => {
-    navigate(`/together/${post.category}/write`, {
+    navigate(`/together/${post.board_type}/write`, {
       state: { postToEdit: post },
     });
   };
@@ -26,9 +27,13 @@ export const TogetherBoardDetail = ({ post }) => {
     if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
       console.log("삭제할 게시글 ID:", post.id);
       alert("게시글이 삭제되었습니다.");
-      navigate(`/together/${post.category}`);
+      navigate(`/together/${post.board_type}`);
     }
   };
+
+  if (!gathering_post) {
+    return <div>게시글 정보를 불러오는 중입니다...</div>;
+  }
 
   return (
     <BoardDetailLayout post={post}>
@@ -36,35 +41,28 @@ export const TogetherBoardDetail = ({ post }) => {
         post={post}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        categoryLabel={post.categoryLabel}
+        categoryLabel={gathering_post.gathering_type}
       />
       <div className="d-flex flex-wrap justify-content-around align-items-center p-3 my-4 rounded bg-light">
         <div className="text-center mx-2 my-2">
           <h6 className="text-muted mb-1">모집인원</h6>
           <p className="m-0 fw-bold">
             <i className="bi bi-people-fill me-1"></i>
-            {post.recruitCount}명
+            {gathering_post.headCount}명
           </p>
         </div>
         <div className="text-center mx-2 my-2">
           <h6 className="text-muted mb-1">기간</h6>
           <p className="m-0 fw-bold">
             <i className="bi bi-calendar-check me-1"></i>
-            {post.period}
-          </p>
-        </div>
-        <div className="text-center mx-2 my-2">
-          <h6 className="text-muted mb-1">시간</h6>
-          <p className="m-0 fw-bold">
-            <i className="bi bi-clock me-1"></i>
-            {post.timeText}
+            {gathering_post.period}
           </p>
         </div>
         <div className="text-center mx-2 my-2">
           <h6 className="text-muted mb-1">장소</h6>
           <p className="m-0 fw-bold">
             <i className="bi bi-geo-alt me-1"></i>
-            {post.location}
+            {gathering_post.place}
           </p>
         </div>
       </div>

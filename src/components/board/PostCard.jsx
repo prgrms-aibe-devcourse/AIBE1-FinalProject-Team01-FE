@@ -23,24 +23,26 @@ export const PostCard = ({
 }) => {
   const {
     id,
-    status,
     title,
-    author,
-    devcourseName,
-    time,
+    user,
+    created_at,
     tags,
-    likes,
+    like_count,
     comments,
-    views,
+    view_count,
+    gathering_post,
+    market_item,
   } = post;
+
+  const status = gathering_post?.status || market_item?.status;
 
   const commentCount = Array.isArray(comments)
     ? comments.length
     : comments || 0;
 
-  const isActiveStatus = (status) => {
+  const isActiveStatus = (currentStatus) => {
     const activeKeywords = ["모집중", "매칭가능", "판매중"];
-    return activeKeywords.includes(status);
+    return activeKeywords.includes(currentStatus);
   };
 
   return (
@@ -66,12 +68,14 @@ export const PostCard = ({
         )}
         <span className="fw-bold fs-5 text-truncate">{title}</span>
         <div className="author-info ms-auto text-nowrap">
-          <span className="author-name">{author}</span>
-          {devcourseName && (
-            <span className="author-batch ms-2">{devcourseName}</span>
+          <span className="author-name">{user?.nickname}</span>
+          {user?.devcourse_name && (
+            <span className="author-batch ms-2">{user.devcourse_name}</span>
           )}
           <span className="mx-1">·</span>
-          <span className="small">{time}</span>
+          <span className="small">
+            {new Date(created_at).toLocaleDateString()}
+          </span>
         </div>
       </div>
 
@@ -87,13 +91,13 @@ export const PostCard = ({
         </span>
         <span className="ms-auto small d-flex align-items-center gap-3">
           <span>
-            <i className="bi bi-heart"></i> {likes || 0}
+            <i className="bi bi-heart"></i> {like_count || 0}
           </span>
           <span>
             <i className="bi bi-chat"></i> {commentCount}
           </span>
           <span>
-            <i className="bi bi-eye"></i> {views || 0}
+            <i className="bi bi-eye"></i> {view_count || 0}
           </span>
         </span>
       </div>

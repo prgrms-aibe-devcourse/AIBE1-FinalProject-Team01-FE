@@ -67,19 +67,40 @@ export const BoardDetailLayout = ({ post, children }) => {
     // 상태 업데이트 로직 추가 필요
   };
 
+  // 댓글 데이터 변환: user → author, authorProfileImg, devcourseName 등으로 매핑
+  function mapCommentUserFields(comment) {
+    if (!comment.user) return comment;
+    return {
+      ...comment,
+      author: comment.user.nickname,
+      authorProfileImg: comment.user.image_url,
+      devcourseName: comment.user.devcourse_name,
+      authorId: comment.user.id,
+      date: comment.created_at
+        ? new Date(comment.created_at).toLocaleString()
+        : "",
+      likes: comment.like_count,
+      replies: Array.isArray(comment.replies)
+        ? comment.replies.map(mapCommentUserFields)
+        : [],
+    };
+  }
+
+  const mappedComments = comments.map(mapCommentUserFields);
+
   return (
     <div className="community-detail-container">
       {children}
       <BoardTagShareBar
         tags={post.tags}
-        likes={post.likes}
+        likes={post.like_count}
         bookmarked={bookmarked}
         bookmarkCount={bookmarkCount}
         onBookmarkToggle={handleBookmarkClick}
       />
       <CommentSection
         postId={post.id}
-        comments={comments}
+        comments={mappedComments}
         onCommentAdd={handleCommentAdd}
         onReplyAdd={handleReplyAdd}
         onDelete={handleCommentDelete}

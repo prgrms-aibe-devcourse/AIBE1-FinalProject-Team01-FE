@@ -4,20 +4,6 @@ import "../../styles/components/together/together.css";
 import { useAuth } from "../../context/AuthContext";
 import { isAuthor } from "../../utils/auth";
 import { BoardPostHeader } from "../board/BoardPostHeader";
-import { Link } from "react-router-dom";
-import { categoryLabelToSlug } from "../../pages/together/constants";
-
-/**
- * @typedef {Object} Post
- * @property {string} categoryLabel
- * @property {string} status
- * @property {string} title
- * @property {string} period
- * @property {string} timeText
- * @property {string} location
- * @property {number} recruitCount
- * @property {string} authorId
- */
 
 /**
  * @typedef {Object} TogetherPostInfoProps
@@ -31,9 +17,13 @@ import { categoryLabelToSlug } from "../../pages/together/constants";
  * @param {TogetherPostInfoProps} props
  */
 export const TogetherPostInfo = ({ post, onEdit, onDelete }) => {
-  const { user } = useAuth();
-  const canEditOrDelete = isAuthor(user, post.authorId);
-  const isRecruiting = post.status === "모집중" || post.status === "매칭가능";
+  const { user: currentUser } = useAuth();
+  const canEditOrDelete = isAuthor(currentUser, post.user_id);
+  const { gathering_post } = post;
+
+  if (!gathering_post) {
+    return <div>게시글 정보를 불러오는 중입니다...</div>;
+  }
 
   return (
     <>
@@ -41,35 +31,28 @@ export const TogetherPostInfo = ({ post, onEdit, onDelete }) => {
         post={post}
         onEdit={onEdit}
         onDelete={onDelete}
-        categoryLabel={post.categoryLabel}
+        categoryLabel={gathering_post.gathering_type}
       />
-      <div className="d-flex flex-wrap justify-content-around align-items-center p-3 rounded bg-light">
+      <div className="d-flex flex-wrap justify-content-around align-items-center p-3 my-4 rounded bg-light">
         <div className="text-center mx-2 my-2">
           <h6 className="text-muted mb-1">모집인원</h6>
           <p className="m-0 fw-bold">
             <i className="bi bi-people-fill me-1"></i>
-            {post.recruitCount}명
+            {gathering_post.headCount}명
           </p>
         </div>
         <div className="text-center mx-2 my-2">
           <h6 className="text-muted mb-1">기간</h6>
           <p className="m-0 fw-bold">
             <i className="bi bi-calendar-check me-1"></i>
-            {post.period}
-          </p>
-        </div>
-        <div className="text-center mx-2 my-2">
-          <h6 className="text-muted mb-1">시간</h6>
-          <p className="m-0 fw-bold">
-            <i className="bi bi-clock me-1"></i>
-            {post.timeText}
+            {gathering_post.period}
           </p>
         </div>
         <div className="text-center mx-2 my-2">
           <h6 className="text-muted mb-1">장소</h6>
           <p className="m-0 fw-bold">
             <i className="bi bi-geo-alt me-1"></i>
-            {post.location}
+            {gathering_post.place}
           </p>
         </div>
       </div>

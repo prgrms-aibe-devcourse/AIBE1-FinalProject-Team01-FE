@@ -11,9 +11,11 @@ export const TogetherBoardDetailPage = () => {
   const { category, postId } = useParams();
 
   // URL 파라미터와 일치하는 게시글 찾기
-  const post = ALL_TOGETHER_POSTS.find(
-    (p) => p.category === category && String(p.id) === String(postId)
-  );
+  const post = ALL_TOGETHER_POSTS.find((p) => {
+    // URL의 category가 'match'이면 'gathering' board_type에서 찾아야 함
+    const boardType = category === "match" ? "gathering" : category;
+    return p.board_type === boardType && String(p.id) === String(postId);
+  });
 
   if (!post) {
     return (
@@ -26,8 +28,8 @@ export const TogetherBoardDetailPage = () => {
     );
   }
 
-  // 카테고리에 따라 다른 상세 페이지 컴포넌트 렌더링
-  if (category === "market") {
+  // board_type에 따라 다른 상세 페이지 컴포넌트 렌더링
+  if (post.board_type === "market") {
     return <MarketBoardDetail post={post} />;
   }
 
