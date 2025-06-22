@@ -1,14 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { TogetherPostInfo } from "./TogetherPostInfo";
+import { categoryLabelToSlug } from "../../pages/together/constants";
 import "../../styles/components/community/community.css";
-
-const categoryLabelToSlug = {
-  스터디: "study",
-  프로젝트: "project",
-  해커톤: "hackathon",
-  커피챗: "coffeechat",
-  멘토링: "mentoring",
-  중고거래: "market",
-};
 
 /**
  * @typedef {Object} TogetherBoardListProps
@@ -21,6 +15,14 @@ const categoryLabelToSlug = {
  * @param {TogetherBoardListProps} props
  */
 export const TogetherBoardList = ({ posts, onPostClick }) => {
+  if (!posts || posts.length === 0) {
+    return (
+      <div className="d-flex flex-column gap-3">
+        {/* Placeholder for empty posts */}
+      </div>
+    );
+  }
+
   return (
     <div className="d-flex flex-column gap-3">
       {posts.map((post, idx) => (

@@ -4,15 +4,20 @@ import "../../styles/components/together/together.css";
 import { useAuth } from "../../context/AuthContext";
 import { isAuthor } from "../../utils/auth";
 import { PostInfoHeader } from "../common/PostInfoHeader";
+import { Link } from "react-router-dom";
+import { categoryLabelToSlug } from "../../pages/together/constants";
 
-const categoryLabelToSlug = {
-  스터디: "study",
-  프로젝트: "project",
-  해커톤: "hackathon",
-  커피챗: "coffeechat",
-  멘토링: "mentoring",
-  중고거래: "market",
-};
+/**
+ * @typedef {Object} Post
+ * @property {string} categoryLabel
+ * @property {string} status
+ * @property {string} title
+ * @property {string} period
+ * @property {string} timeText
+ * @property {string} location
+ * @property {number} recruitCount
+ * @property {string} authorId
+ */
 
 /**
  * @typedef {Object} TogetherPostInfoProps
