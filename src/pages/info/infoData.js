@@ -1,0 +1,73 @@
+export const reviewPosts = [
+  {
+    id: 1,
+    category: "review",
+    title: "데브코스 풀스택 3기 후기",
+    content: "<p>데브코스 3기 수강생의 생생한 후기입니다!</p>",
+    user: {
+      id: 1,
+      nickname: "김루이지",
+      image_url: "https://via.placeholder.com/40",
+      devcourse_name: "프론트엔드",
+    },
+    created_at: "2025-06-23T10:00:00Z",
+    tags: ["데브코스", "프론트엔드", "후기"],
+    like_count: 5,
+    view_count: 123,
+    comments: [],
+  },
+  {
+    id: 2,
+    category: "review",
+    title: "AI 백엔드 과정 - 새로운 데브코스의 시작",
+    content: "<p>초급자도 환영! AI로 성장하는 과정 후기</p>",
+    user: {
+      id: 2,
+      nickname: "박개발",
+      image_url: "https://via.placeholder.com/40",
+      devcourse_name: "생성형 AI 백엔드",
+    },
+    created_at: "2025-06-23T09:00:00Z",
+    tags: ["생성형 AI 백엔드", "후기"],
+    like_count: 3,
+    view_count: 88,
+    comments: [],
+  },
+];
+
+export const newsPosts = [
+  {
+    id: 101,
+    category: "news",
+    title: "실시간 AI 트렌드 - 2025년 상반기 정리",
+    content: "<p>2025년 상반기 AI 업계 주요 이슈와 트렌드 정리</p>",
+    user: {
+      id: 10,
+      nickname: "관리자",
+      image_url: "https://via.placeholder.com/40",
+      devcourse_name: "관리자",
+    },
+    created_at: "2025-06-22T08:00:00Z",
+    tags: ["AI", "트렌드", "뉴스"],
+    like_count: 0,
+    view_count: 200,
+    comments: [],
+  },
+  {
+    id: 102,
+    category: "news",
+    title: "프론트엔드 개발 동향 - 2025년 최신 소식",
+    content: "<p>React, Vue, Svelte 등 프론트엔드 프레임워크 소식</p>",
+    user: {
+      id: 10,
+      nickname: "관리자",
+      image_url: "https://via.placeholder.com/40",
+      devcourse_name: "관리자",
+    },
+    created_at: "2025-06-21T12:00:00Z",
+    tags: ["프론트엔드", "뉴스"],
+    like_count: 0,
+    view_count: 150,
+    comments: [],
+  },
+];

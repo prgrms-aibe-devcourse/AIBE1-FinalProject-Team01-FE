@@ -11,6 +11,9 @@ import CommunityBoardDetailPage from "../pages/community/CommunityBoardDetailPag
 import TogetherPage from "../pages/together/TogetherPage";
 import { TogetherBoardDetailPage } from "../pages/together/TogetherBoardDetailPage";
 import TogetherWritePage from "../pages/together/TogetherWritePage";
+import InfoPage from "../pages/info/InfoPage";
+import InfoBoardDetailPage from "../pages/info/InfoBoardDetailPage";
+import InfoWritePage from "../pages/info/InfoWritePage";
 
 export function AppRouter() {
   return (
@@ -43,6 +46,10 @@ export function AppRouter() {
         element={<TogetherBoardDetailPage />}
       />
       <Route path="/together/:category/write" element={<TogetherWritePage />} />
+      <Route path="/info" element={<Navigate to="/info/review" replace />} />
+      <Route path="/info/:category" element={<InfoPage />} />
+      <Route path="/info/:category/:postId" element={<InfoBoardDetailPage />} />
+      <Route path="/info/:category/write" element={<InfoWritePage />} />
     </Routes>
   );
 }

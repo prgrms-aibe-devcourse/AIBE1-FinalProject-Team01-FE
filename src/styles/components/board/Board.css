@@ -23,9 +23,15 @@
   font-weight: 700;
 }
 .author-batch {
-  color: var(--primary-color);
-  font-size: 0.9em;
-  font-weight: bold;
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 18px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+  line-height: 1.5;
+  margin-right: 4px;
 }
 
 /* --- Category & Status Labels --- */

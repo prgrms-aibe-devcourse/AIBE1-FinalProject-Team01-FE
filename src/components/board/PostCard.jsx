@@ -78,9 +78,7 @@ export const PostCard = ({
           </span>
         </div>
       </div>
-
       {children}
-
       <div className="d-flex align-items-center gap-2 mt-2">
         <span className="small tags-container">
           {tags?.map((tag, i) => (
