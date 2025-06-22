@@ -2,73 +2,82 @@
   border: 1px solid #ced4da;
   border-radius: 0.375rem;
   padding: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.tags-display {
+.tags-and-input {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
+  width: 100%;
 }
 
-.tag-badge {
-  background-color: #f1f3f5;
-  border: 1px solid #dee2e6;
-  border-radius: 9999px;
+.tag-item {
+  background-color: #e9ecef;
+  color: #495057;
+  border-radius: 1rem;
   padding: 0.25rem 0.75rem;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   font-size: 0.875rem;
-  color: #495057;
 }
 
-.remove-tag-btn {
+.tag-remove-button {
   background: none;
   border: none;
-  font-size: 1.25rem;
-  margin-left: 0.25rem;
-  padding: 0;
-  cursor: pointer;
-  color: #adb5bd;
-  line-height: 1;
-}
-
-.remove-tag-btn:hover {
   color: #495057;
+  cursor: pointer;
+  margin-left: 0.25rem;
+  font-size: 1rem;
+  padding: 0;
+  line-height: 1;
 }
 
 .tag-input {
   border: none;
   outline: none;
-  flex-grow: 1;
-  padding: 0.25rem;
+  flex: 1;
+  min-width: 200px;
+  padding: 0.25rem 0;
   font-size: 1rem;
-  background-color: transparent;
+  background-color: #ffffff;
   color: #212529;
 }
 
 .tag-input::placeholder {
-  color: #6c757d;
+  color: #adb5bd;
 }
 
 .recommended-tags {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e9ecef;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
   align-items: center;
+  gap: 0.5rem;
 }
 
 .recommended-tags-label {
-  font-size: 0.875rem;
   color: #6c757d;
+  font-size: 0.875rem;
   margin-right: 0.5rem;
 }
 
-.tag-badge.recommended {
+.recommended-tag-item {
+  background-color: transparent;
+  border: 1px solid #ced4da;
+  color: #495057;
+  border-radius: 1rem;
+  padding: 0.25rem 0.75rem;
   cursor: pointer;
-  background-color: #ffffff;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
 
-.tag-badge.recommended:hover {
+.recommended-tag-item:hover {
   background-color: #f8f9fa;
+  border-color: #adb5bd;
 }
