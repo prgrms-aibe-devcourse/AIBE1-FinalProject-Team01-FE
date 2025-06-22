@@ -5,7 +5,7 @@ export const hubData = [
     board_type: "hub",
     title: "Amateurs - 데브코스 최종 프로젝트",
     content:
-      "<h1>Amateurs 프로젝트입니다.</h1><p>수강생들의 자유로운 소통과 네트워킹을 위한 커뮤니티 플랫폼입니다. 다양한 주제의 게시판을 통해 지식을 공유하고, 스터디 및 프로젝트 팀원을 모집하며 함께 성장할 수 있습니다.</p>",
+      "<h1>Amateurs 프로젝트입니다.</h1><p>수강생들의 자유로운 소통과 네트워킹을 위한 커뮤니티 플랫폼입니다. 다양한 주제의 게시판을 통해 지식을 공유하고, 스터디 및 프로젝트 팀원을 모집하며 함께 성장할 수 있습니다.</p><p><b>주요 기능:</b></p><ul><li>통합 게시판: 자유, 질문, 스터디 등 다양한 주제</li><li>프로젝트 허브: 팀 프로젝트 쇼케이스 및 멤버 모집</li><li>실시간 채팅: 사용자 간 1:1 및 그룹 채팅</li><li>알림 기능: 새 글, 댓글, 채팅 등 실시간 알림</li></ul><p>이 프로젝트를 통해 저희 팀은 실제 서비스 개발의 A to Z를 경험할 수 있었습니다. 기획부터 디자인, 개발, 배포까지 전 과정을 함께하며 협업 능력과 기술적 깊이를 더할 수 있는 소중한 시간이었습니다.</p>",
     view_count: 1582,
     like_count: 25,
     is_deleted: false,
@@ -16,24 +16,23 @@ export const hubData = [
       {
         id: 1,
         post_id: 1,
-        image_url:
-          "https://via.placeholder.com/800x600.png?text=Main+Project+Image",
+        image_url: "https://picsum.photos/seed/amateurs1/800/600",
       },
       {
         id: 2,
         post_id: 1,
-        image_url: "https://via.placeholder.com/800x600.png?text=Sub+Image+1",
+        image_url: "https://picsum.photos/seed/amateurs2/800/600",
       },
       {
         id: 3,
         post_id: 1,
-        image_url: "https://via.placeholder.com/800x600.png?text=Sub+Image+2",
+        image_url: "https://picsum.photos/seed/amateurs3/800/600",
       },
     ],
     user: {
       id: 1,
       nickname: "김팀장",
-      image_url: "https://via.placeholder.com/40",
+      image_url: "https://picsum.photos/id/11/40/40",
       devcourse_name: "프론트엔드",
       devcourse_batch: "3기",
     },
@@ -56,7 +55,28 @@ export const hubData = [
       ],
     },
     bookmarked: false,
-    comments: [],
+    comments: [
+      {
+        id: 1,
+        user: {
+          id: 5,
+          nickname: "박동료",
+          image_url: "https://picsum.photos/id/51/40/40",
+        },
+        content: "와, 정말 멋진 프로젝트네요! 고생 많으셨습니다.",
+        created_at: "2025-07-20T12:00:00Z",
+      },
+      {
+        id: 2,
+        user: {
+          id: 6,
+          nickname: "최멘토",
+          image_url: "https://picsum.photos/id/61/40/40",
+        },
+        content: "최종 발표 때 인상 깊게 봤습니다. 앞으로가 더 기대됩니다!",
+        created_at: "2025-07-21T09:30:00Z",
+      },
+    ],
   },
   {
     id: 2,
@@ -75,14 +95,13 @@ export const hubData = [
       {
         id: 4,
         post_id: 2,
-        image_url:
-          "https://via.placeholder.com/800x600.png?text=Coco+Project+Image",
+        image_url: "https://picsum.photos/seed/coco/800/600",
       },
     ],
     user: {
       id: 2,
       nickname: "AI마스터",
-      image_url: "https://via.placeholder.com/40",
+      image_url: "https://picsum.photos/id/22/40/40",
       devcourse_name: "생성형 AI 백엔드",
       devcourse_batch: "1기",
     },
@@ -109,7 +128,7 @@ export const hubData = [
     board_type: "hub",
     title: "클라우드 기반 데이터 파이프라인 구축",
     content:
-      "<h1>클라우드 기반 데이터 파이프라인 프로젝트입니다.</h1><p>AWS 서비스를 활용하여 대용량 데이터를 수집, 처리, 분석하는 파이프라인을 구축했습니다. 데이터 시각화 대시보드를 통해 인사이트를 제공합니다.</p>",
+      "<h1>클라우드 기반 데이터 파이프라인 구축입니다.</h1><p>AWS 서비스를 활용하여 대용량 데이터를 수집, 처리, 분석하는 파이프라인을 구축했습니다. 데이터 시각화 대시보드를 통해 인사이트를 제공합니다.</p>",
     view_count: 2100,
     like_count: 42,
     is_deleted: false,
@@ -120,20 +139,18 @@ export const hubData = [
       {
         id: 5,
         post_id: 3,
-        image_url:
-          "https://via.placeholder.com/800x600.png?text=Data+Pipeline+Project",
+        image_url: "https://picsum.photos/seed/datapipe1/800/600",
       },
       {
         id: 6,
         post_id: 3,
-        image_url:
-          "https://via.placeholder.com/800x600.png?text=Dashboard+Screenshot",
+        image_url: "https://picsum.photos/seed/datapipe2/800/600",
       },
     ],
     user: {
       id: 3,
       nickname: "데이터장인",
-      image_url: "https://via.placeholder.com/40",
+      image_url: "https://picsum.photos/id/33/40/40",
       devcourse_name: "클라우드 백엔드",
       devcourse_batch: "2기",
     },
