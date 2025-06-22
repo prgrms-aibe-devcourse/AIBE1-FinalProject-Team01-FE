@@ -27,7 +27,7 @@ export const BoardTagShareBar = ({
 }) => {
   const { liked, likeCount, toggleLike } = useLikeBookmark({
     initialLikeCount: likes,
-    initialLiked: false, // initialLiked는 항상 false로 시작
+    initialLiked: false,
   });
   const { copy } = useClipboard();
 
@@ -37,15 +37,15 @@ export const BoardTagShareBar = ({
   };
 
   return (
-    <div className="community-detail-tagshare">
-      <div className="community-detail-tags">
+    <div className="d-flex justify-content-between align-items-center py-3 my-3">
+      <div className="d-flex flex-wrap gap-2 tags-container">
         {tags.map((tag, idx) => (
-          <span className="community-detail-tag" key={idx}>
-            {tag}
+          <span className="badge bg-light text-dark rounded-pill" key={idx}>
+            #{tag}
           </span>
         ))}
       </div>
-      <div className="community-detail-sharebar">
+      <div className="d-flex align-items-center gap-3">
         <LikeButton liked={liked} count={likeCount} onClick={toggleLike} />
         <BookmarkButton
           bookmarked={initialBookmarked}

@@ -1,4 +1,5 @@
 import React from "react";
+import { useLikeBookmark } from "../../hooks/useLikeBookmark";
 
 /**
  * @typedef {Object} LikeButtonProps
@@ -13,23 +14,16 @@ import React from "react";
  * 좋아요(하트) 버튼 공통 컴포넌트
  * @param {LikeButtonProps} props
  */
-export default function LikeButton({
-  liked,
-  count,
-  onClick,
-  className = "",
-  style = {},
-}) {
+const LikeButton = ({ liked, count, onClick }) => {
   return (
     <button
-      type="button"
-      className={`btn-like ${className}`}
-      style={style}
+      className="btn btn-outline-secondary d-flex align-items-center gap-1"
       onClick={onClick}
-      aria-label="좋아요"
     >
-      <i className={liked ? "bi bi-heart-fill text-danger" : "bi bi-heart"}></i>{" "}
-      {count}
+      <i className={liked ? "bi bi-heart-fill text-danger" : "bi bi-heart"}></i>
+      <span>{count}</span>
     </button>
   );
-}
+};
+
+export default LikeButton;
