@@ -1,6 +1,9 @@
 import React from "react";
 import { PostCard } from "../board/PostCard";
-import { TOGETHER_CATEGORIES } from "../../pages/together/constants";
+import {
+  TOGETHER_CATEGORIES,
+  RECRUITMENT_TYPES,
+} from "../../pages/together/constants";
 
 /**
  * @typedef {Object} TogetherBoardListProps
@@ -16,40 +19,41 @@ export const TogetherBoardList = ({ posts, onPostClick }) => {
   return (
     <div className="d-flex flex-column gap-3">
       {posts.map((post) => {
-        const { gathering_post } = post;
-        if (!gathering_post) return null;
-
-        const categoryKey = gathering_post.gathering_type; // 영문
-        const categoryLabel = TOGETHER_CATEGORIES[categoryKey]; // 한글
-
+        const gathering_post = post.gathering_post;
+        const isMatch =
+          gathering_post.gathering_type === "mentoring" ||
+          gathering_post.gathering_type === "coffeechat";
+        const recruitmentTypeLabel =
+          RECRUITMENT_TYPES[gathering_post.recruitment_type];
         return (
           <PostCard
             key={post.id}
             post={post}
             onClick={onPostClick}
-            categoryLabel={categoryLabel}
-            categoryKey={categoryKey}
+            categoryLabel={TOGETHER_CATEGORIES[gathering_post.gathering_type]}
+            categoryKey={gathering_post.gathering_type}
           >
-            <div className="row mt-2 mb-2 info-grid">
-              {gathering_post.headCount != null && (
+            <div className="row g-2 align-items-center">
+              <div className="col-md-3 col-6">
+                <i className="bi bi-geo-alt"></i> {gathering_post.place}
+              </div>
+              <div className="col-md-3 col-6">
+                <i className="bi bi-calendar"></i> {gathering_post.day}
+              </div>
+              {isMatch ? (
                 <div className="col-md-3 col-6">
-                  <i className="bi bi-people"></i>
-                  <span> {gathering_post.headCount}명</span>
+                  <strong>모집 분야:</strong>{" "}
+                  <span>{recruitmentTypeLabel}</span>
+                </div>
+              ) : (
+                <div className="col-md-3 col-6">
+                  <i className="bi bi-calendar-range"></i>{" "}
+                  {gathering_post.period}
                 </div>
               )}
-              {gathering_post.place && (
-                <div className="col-md-3 col-6">
-                  <i className="bi bi-geo-alt"></i>
-                  <span> {gathering_post.place}</span>
-                </div>
-              )}
-              {gathering_post.period && (
-                <div className="col-md-3 col-6">
-                  <i className="bi bi-calendar-range"></i>
-                  <span> {gathering_post.period}</span>
-                </div>
-              )}
-              {/* `timeText`는 DB 스키마에 없으므로 일단 제거합니다. */}
+              <div className="col-md-3 col-6">
+                <i className="bi bi-people"></i> {gathering_post.headCount}명
+              </div>
             </div>
           </PostCard>
         );

@@ -5,6 +5,7 @@ import { CustomTiptapEditor } from "../../components/editor/CustomTiptapEditor";
 import { TagInput } from "../../components/common/TagInput";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { gatheringData, matchData, marketData } from "./togetherData"; // For finding postToEdit
+import { RECRUITMENT_TYPES } from "./constants";
 
 const allData = [...gatheringData, ...matchData, ...marketData];
 
@@ -57,6 +58,9 @@ export default function TogetherWritePage() {
   const [period, setPeriod] = useState("");
   const [content, setContent] = useState("");
   const [price, setPrice] = useState("");
+  const [recruitmentType, setRecruitmentType] = useState(
+    Object.keys(RECRUITMENT_TYPES)[0]
+  );
 
   const { imageUrls, handleUpload, setImageUrls } = useImageUpload(
     postToEdit?.images || []
@@ -75,6 +79,10 @@ export default function TogetherWritePage() {
       setContent(postToEdit.content);
       setImageUrls(postToEdit.images || []);
       setPrice(postToEdit.price || "");
+      setRecruitmentType(
+        postToEdit.gathering_post?.recruitment_type ||
+          Object.keys(RECRUITMENT_TYPES)[0]
+      );
     }
   }, [isEditMode, postToEdit, setImageUrls]);
 
@@ -97,6 +105,15 @@ export default function TogetherWritePage() {
       period: category === "market" ? null : period,
       price: category === "market" ? price : null,
       content,
+      gathering_post: {
+        gathering_type: category,
+        status,
+        headCount: recruitCount,
+        place: locationText,
+        period,
+        required_skills: null,
+        recruitment_type: category === "match" ? recruitmentType : undefined,
+      },
     };
 
     if (postToEdit) {
@@ -150,6 +167,22 @@ export default function TogetherWritePage() {
             </Form.Group>
           )}
         </Row>
+        {/* 모집 분야: 멘토링/커피챗(match)일 때만 노출 */}
+        {category === "match" && (
+          <Form.Group className="mb-3">
+            <Form.Label>모집 분야</Form.Label>
+            <Form.Select
+              value={recruitmentType}
+              onChange={(e) => setRecruitmentType(e.target.value)}
+            >
+              {Object.entries(RECRUITMENT_TYPES).map(([key, label]) => (
+                <option key={key} value={key}>
+                  {label}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+        )}
 
         <Form.Group className="mb-3">
           <Form.Label>제목</Form.Label>

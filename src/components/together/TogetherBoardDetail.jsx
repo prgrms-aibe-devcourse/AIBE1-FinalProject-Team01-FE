@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { PostContent } from "../common/PostContent";
 import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import { BoardPostHeader } from "../board/BoardPostHeader";
+import { RECRUITMENT_TYPES } from "../../pages/together/constants";
 
 /**
  * @typedef {Object} TogetherBoardDetailProps
@@ -16,6 +17,11 @@ import { BoardPostHeader } from "../board/BoardPostHeader";
 export const TogetherBoardDetail = ({ post }) => {
   const navigate = useNavigate();
   const { gathering_post } = post;
+  const isMatch =
+    gathering_post?.gathering_type === "mentoring" ||
+    gathering_post?.gathering_type === "coffeechat";
+  const recruitmentTypeLabel =
+    RECRUITMENT_TYPES[gathering_post?.recruitment_type];
 
   const handleEdit = () => {
     navigate(`/together/${post.board_type}/write`, {
@@ -52,17 +58,16 @@ export const TogetherBoardDetail = ({ post }) => {
           </p>
         </div>
         <div className="text-center mx-2 my-2">
-          <h6 className="text-muted mb-1">기간</h6>
-          <p className="m-0 fw-bold">
-            <i className="bi bi-calendar-check me-1"></i>
-            {gathering_post.period}
-          </p>
-        </div>
-        <div className="text-center mx-2 my-2">
           <h6 className="text-muted mb-1">장소</h6>
           <p className="m-0 fw-bold">
             <i className="bi bi-geo-alt me-1"></i>
             {gathering_post.place}
+          </p>
+        </div>
+        <div className="text-center mx-2 my-2">
+          <h6 className="text-muted mb-1">모집 분야</h6>
+          <p className="m-0 fw-bold">
+            {isMatch ? recruitmentTypeLabel : gathering_post?.period}
           </p>
         </div>
       </div>
