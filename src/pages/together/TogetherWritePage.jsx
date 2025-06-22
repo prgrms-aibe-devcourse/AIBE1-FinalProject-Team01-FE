@@ -20,7 +20,7 @@ const TOGETHER_OPTIONS = {
   },
   market: {
     labels: ["중고거래"],
-    statuses: [], // 장터는 상태 없음
+    statuses: ["판매중", "판매완료"],
   },
 };
 
@@ -87,7 +87,7 @@ export default function TogetherWritePage() {
       category,
       title,
       categoryLabel,
-      status: category === "market" ? null : status,
+      status,
       tags,
       images: imageUrls,
       thumbnail,
@@ -134,7 +134,7 @@ export default function TogetherWritePage() {
               ))}
             </Form.Select>
           </Form.Group>
-          {!isMarket && options.statuses.length > 0 && (
+          {options.statuses?.length > 0 && (
             <Form.Group as={Col}>
               <Form.Label>상태</Form.Label>
               <Form.Select
