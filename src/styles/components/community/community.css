@@ -75,7 +75,6 @@
   left: 0;
   min-width: 120px;
   background: #fff;
-  border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   z-index: 10;
@@ -161,7 +160,6 @@
 .community-detail-comment-form input {
   flex-grow: 1;
   border-radius: 6px;
-  border: 1px solid #ced4da;
   padding: 0.5rem 0.75rem;
   background-color: #fff !important;
   color: #212529 !important;
@@ -182,8 +180,7 @@
 }
 
 .community-detail-comment-list .community-detail-comment-item {
-  padding: 1rem 0;
-  border-bottom: 1px solid #e9ecef;
+  padding: 1rem;
 }
 
 .community-detail-comment-list .community-detail-comment-item:last-child {
@@ -210,6 +207,9 @@
 .comment-date {
   font-size: 0.85rem;
   color: #6c757d;
+  margin-left: auto;
+  min-width: 120px;
+  text-align: right;
 }
 
 .comment-content {
@@ -233,8 +233,7 @@
 }
 
 .comment-replies {
-  margin-left: calc(36px + 0.75rem);
+  margin-left: 1.5rem;
+  padding-left: 0;
   margin-top: 1rem;
-  padding-left: 1rem;
-  border-left: 2px solid #e9ecef;
 }

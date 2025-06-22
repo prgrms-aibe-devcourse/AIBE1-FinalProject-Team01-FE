@@ -86,8 +86,8 @@ export const CommentItem = (props) => {
           alt="프로필"
           className="comment-author-img"
         />
-        <div className="d-flex justify-content-between align-items-center w-100">
-          <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center w-100">
+          <div className="d-flex align-items-center flex-grow-1">
             <span className="comment-author-name">{props.comment.author}</span>
             {props.comment.devcourseName && (
               <span className="comment-author-batch text-secondary ms-2">
