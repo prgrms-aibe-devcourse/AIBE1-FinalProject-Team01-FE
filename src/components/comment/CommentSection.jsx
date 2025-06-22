@@ -2,38 +2,20 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { CommentItem } from "./CommentItem";
 import { useInput } from "../../hooks/useInput";
 import { useAuth } from "../../context/AuthContext";
+import { createCommentObject } from "../../lib/comment-utils";
 
 /**
  * @typedef {Object} CommentSectionProps
  * @property {string|number} postId
  * @property {Array} comments
- * @property {(content: string) => void} onCommentAdd - Function to handle adding a new comment.
- * @property {(parentId: string, content: string) => void} onReplyAdd - Function to handle adding a reply.
- * @property {(commentId: string) => void} onDelete - Function to handle comment deletion.
- * @property {(commentId: string, newContent: string) => void} onEdit - Function to handle comment editing.
- * @property {(commentId: string) => void} onLikeToggle - Function to handle like toggling.
  */
 
 /**
- * 댓글 전체 컴포넌트
+ * 댓글 전체 컴포넌트 (자체적으로 상태 및 로직 관리)
  * @param {CommentSectionProps} props
  */
-export const CommentSection = (props) => {
-  const {
-    postId,
-    comments: initialComments = [],
-    onCommentAdd,
-    onReplyAdd,
-    onDelete,
-    onEdit,
-    onLikeToggle,
-  } = props;
-
-  const {
-    value: comment,
-    onChange: onCommentChange,
-    reset: resetComment,
-  } = useInput("");
+export const CommentSection = ({ postId, comments: initialComments = [] }) => {
+  const { value, onChange, reset } = useInput("");
   const [comments, setComments] = useState(initialComments);
   const [commentsToShow, setCommentsToShow] = useState(5);
   const loaderRef = useRef(null);
@@ -42,6 +24,39 @@ export const CommentSection = (props) => {
   useEffect(() => {
     setComments(initialComments);
   }, [initialComments]);
+
+  const handleCommentAdd = (e) => {
+    e.preventDefault();
+    if (!value.trim()) return;
+    const newComment = createCommentObject(value, user, postId);
+    setComments((prev) => [newComment, ...prev]);
+    reset();
+  };
+
+  const handleReplyAdd = (parentId, content) => {
+    const newReply = createCommentObject(content, user, postId, parentId);
+    const addReplyIterative = (comments, pId, reply) => {
+      const clonedComments = JSON.parse(JSON.stringify(comments));
+      const stack = [...clonedComments].reverse();
+
+      while (stack.length > 0) {
+        const current = stack.pop();
+
+        if (current.id === pId) {
+          current.replies = [...(current.replies || []), reply];
+          return clonedComments;
+        }
+
+        if (current.replies && current.replies.length > 0) {
+          for (let i = current.replies.length - 1; i >= 0; i--) {
+            stack.push(current.replies[i]);
+          }
+        }
+      }
+      return clonedComments;
+    };
+    setComments((prev) => addReplyIterative(prev, parentId, newReply));
+  };
 
   const handleObserver = useCallback(
     (entries) => {
@@ -61,13 +76,6 @@ export const CommentSection = (props) => {
     return () => observer.disconnect();
   }, [handleObserver, comments.length]);
 
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
-    if (!comment.trim() || !onCommentAdd) return;
-    onCommentAdd(comment);
-    resetComment();
-  };
-
   const sortedComments = comments.slice().sort((a, b) => a.id - b.id);
   const visibleComments = sortedComments.slice(0, commentsToShow);
 
@@ -75,12 +83,12 @@ export const CommentSection = (props) => {
     <div className="community-detail-comments">
       <form
         className="community-detail-comment-form"
-        onSubmit={handleCommentSubmit}
+        onSubmit={handleCommentAdd}
       >
         <input
           type="text"
-          value={comment}
-          onChange={onCommentChange}
+          value={value}
+          onChange={onChange}
           placeholder="댓글을 작성해주세요"
         />
         <button type="submit">댓글 쓰기</button>
@@ -91,10 +99,7 @@ export const CommentSection = (props) => {
             key={c.id}
             comment={c}
             user={user}
-            onReplyAdd={onReplyAdd}
-            onLike={onLikeToggle}
-            onDelete={onDelete}
-            onEdit={onEdit}
+            onReplyAdd={handleReplyAdd}
             depth={1}
           />
         ))}

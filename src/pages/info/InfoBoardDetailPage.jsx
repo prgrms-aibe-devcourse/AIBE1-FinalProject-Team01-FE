@@ -2,12 +2,27 @@ import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { reviewPosts, newsPosts } from "./infoData";
 import InfoBoardDetail from "../../components/info/InfoBoardDetail";
+import { useLikeBookmark } from "../../hooks/useLikeBookmark";
 
 export default function InfoBoardDetailPage() {
   const navigate = useNavigate();
   const { category, postId } = useParams();
   const posts = category === "news" ? newsPosts : reviewPosts;
   const post = posts.find((p) => String(p.id) === String(postId));
+
+  const {
+    liked,
+    likeCount,
+    toggleLike,
+    bookmarked,
+    bookmarkCount,
+    toggleBookmark,
+  } = useLikeBookmark({
+    initialLikeCount: post?.like_count,
+    initialLiked: post?.is_liked,
+    initialBookmarkCount: post?.bookmark_count,
+    initialBookmarked: post?.is_bookmarked,
+  });
 
   if (!post) {
     return (
@@ -32,7 +47,21 @@ export default function InfoBoardDetailPage() {
     }
   };
 
+  const detailPost = {
+    ...post,
+    is_liked: liked,
+    like_count: likeCount,
+    is_bookmarked: bookmarked,
+    bookmark_count: bookmarkCount,
+  };
+
   return (
-    <InfoBoardDetail post={post} onEdit={handleEdit} onDelete={handleDelete} />
+    <InfoBoardDetail
+      post={detailPost}
+      onEdit={handleEdit}
+      onDelete={handleDelete}
+      onLike={toggleLike}
+      onBookmark={toggleBookmark}
+    />
   );
 }

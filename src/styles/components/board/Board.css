@@ -27,11 +27,11 @@
   padding: 5px 14px;
   border-radius: 18px;
   font-size: 0.9rem;
-  font-weight: 700;
-  color: #fff;
+  font-weight: 400;
   flex-shrink: 0;
   line-height: 1.5;
   margin-right: 4px;
+  color: #afafaf;
 }
 
 /* --- Category & Status Labels --- */

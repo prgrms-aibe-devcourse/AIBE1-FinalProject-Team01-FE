@@ -15,6 +15,14 @@ import { isAuthor } from "../../utils/auth";
  */
 
 export const CommentItem = (props) => {
+  const { comment, user: currentUser } = props;
+  const {
+    user: author,
+    created_at,
+    content: initialContent,
+    replies,
+  } = comment;
+
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -27,14 +35,13 @@ export const CommentItem = (props) => {
     value: editContent,
     onChange: onEditChange,
     setValue: setEditValue,
-  } = useInput(props.comment.content);
+  } = useInput(initialContent);
   const { liked, likeCount, toggleLike } = useLikeBookmark({
-    initialLikeCount: props.comment.likes,
-    initialLiked: props.comment.liked,
+    initialLikeCount: props.comment.like_count,
+    initialLiked: props.comment.is_liked,
   });
   const depth = props.depth || 1;
-  const { user } = props;
-  const isMine = isAuthor(user, props.comment.authorId);
+  const isMine = isAuthor(currentUser, author?.id);
 
   const handleReplySubmit = (e) => {
     e.preventDefault();
@@ -54,7 +61,7 @@ export const CommentItem = (props) => {
   };
 
   const handleEditClick = () => {
-    setEditValue(props.comment.content);
+    setEditValue(initialContent);
     setIsEditing(true);
   };
 
@@ -73,29 +80,29 @@ export const CommentItem = (props) => {
     }
   };
 
-  const replies = Array.isArray(props.comment.replies)
-    ? props.comment.replies
-    : [];
+  const commentReplies = Array.isArray(replies) ? replies : [];
   const showRepliesForThis = depth === 1 ? showReplies : true;
 
   return (
     <div className="community-detail-comment-item">
       <div className="comment-author-row">
         <img
-          src={props.comment.authorProfileImg}
+          src={author?.image_url}
           alt="프로필"
           className="comment-author-img"
         />
         <div className="d-flex align-items-center w-100">
           <div className="d-flex align-items-center flex-grow-1">
-            <span className="comment-author-name">{props.comment.author}</span>
-            {props.comment.devcourseName && (
+            <span className="comment-author-name">{author?.nickname}</span>
+            {author?.devcourse_name && (
               <span className="comment-author-batch text-secondary ms-2">
-                {props.comment.devcourseName}
+                {author.devcourse_name}
               </span>
             )}
           </div>
-          <span className="comment-date">{props.comment.date}</span>
+          <span className="comment-date">
+            {new Date(created_at).toLocaleString()}
+          </span>
         </div>
       </div>
       <div className="comment-content">
@@ -122,7 +129,7 @@ export const CommentItem = (props) => {
             </button>
           </div>
         ) : (
-          props.comment.content
+          initialContent
         )}
       </div>
       <div className="comment-actions">
@@ -154,16 +161,16 @@ export const CommentItem = (props) => {
             </button>
           </>
         )}
-        {depth === 1 && replies.length > 0 && !showReplies && (
+        {depth === 1 && commentReplies.length > 0 && !showReplies && (
           <button
             className="btn btn-link btn-sm text-primary ms-2"
             style={{ textDecoration: "underline" }}
             onClick={() => setShowReplies(true)}
           >
-            답글 보기({replies.length})
+            답글 보기({commentReplies.length})
           </button>
         )}
-        {depth === 1 && showReplies && replies.length > 0 && (
+        {depth === 1 && showReplies && commentReplies.length > 0 && (
           <button
             className="btn btn-link btn-sm text-secondary mt-1 ms-2"
             style={{ textDecoration: "underline" }}
@@ -191,16 +198,16 @@ export const CommentItem = (props) => {
           </button>
         </form>
       )}
-      {showRepliesForThis && replies.length > 0 && (
+      {showRepliesForThis && commentReplies.length > 0 && (
         <div className="comment-replies">
-          {replies
+          {commentReplies
             .slice()
             .sort((a, b) => a.id - b.id)
             .map((reply) => (
               <CommentItem
                 key={reply.id}
                 comment={reply}
-                user={user}
+                user={currentUser}
                 onReplyAdd={props.onReplyAdd}
                 onLike={props.onLike}
                 onDelete={props.onDelete}

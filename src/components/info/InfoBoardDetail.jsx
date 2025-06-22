@@ -7,7 +7,13 @@ import { BoardPostHeader } from "../board/BoardPostHeader";
 import { PostContent } from "../common/PostContent";
 import { INFO_CATEGORY_LABELS } from "../../pages/info/constants";
 
-export default function InfoBoardDetail({ post, onEdit, onDelete }) {
+export default function InfoBoardDetail({
+  post,
+  onEdit,
+  onDelete,
+  onLike,
+  onBookmark,
+}) {
   const navigate = useNavigate();
 
   const handleEdit = () => {
@@ -23,7 +29,7 @@ export default function InfoBoardDetail({ post, onEdit, onDelete }) {
   };
 
   return (
-    <BoardDetailLayout post={post}>
+    <BoardDetailLayout post={post} onLike={onLike} onBookmark={onBookmark}>
       <BoardPostHeader
         post={post}
         categoryLabel={INFO_CATEGORY_LABELS[post.category]}

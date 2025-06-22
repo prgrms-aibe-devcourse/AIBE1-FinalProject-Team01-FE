@@ -1,15 +1,30 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import CommunityBoardDetail from "../../components/community/CommunityBoardDetail";
 import { posts } from "./communityData";
+import { useLikeBookmark } from "../../hooks/useLikeBookmark";
 
 export default function CommunityBoardDetailPage() {
-  const navigate = useNavigate();
   const { category, postId } = useParams();
+  const navigate = useNavigate();
 
   const post = posts.find(
     (p) => p.category === category && String(p.id) === String(postId)
   );
+
+  const {
+    liked,
+    likeCount,
+    toggleLike,
+    bookmarked,
+    bookmarkCount,
+    toggleBookmark,
+  } = useLikeBookmark({
+    initialLikeCount: post?.like_count,
+    initialLiked: post?.is_liked,
+    initialBookmarkCount: post?.bookmark_count,
+    initialBookmarked: post?.is_bookmarked,
+  });
 
   if (!post) {
     return (
@@ -22,5 +37,19 @@ export default function CommunityBoardDetailPage() {
     );
   }
 
-  return <CommunityBoardDetail post={post} />;
+  const detailPost = {
+    ...post,
+    is_liked: liked,
+    like_count: likeCount,
+    is_bookmarked: bookmarked,
+    bookmark_count: bookmarkCount,
+  };
+
+  return (
+    <CommunityBoardDetail
+      post={detailPost}
+      onLike={toggleLike}
+      onBookmark={toggleBookmark}
+    />
+  );
 }

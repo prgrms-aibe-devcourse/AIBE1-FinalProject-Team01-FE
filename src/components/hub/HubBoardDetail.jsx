@@ -5,29 +5,39 @@ import { PostContent } from "../common/PostContent";
 import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import "../../styles/components/hub/hub.css";
 
-export const HubBoardDetail = ({ post }) => {
+/**
+ * @typedef {Object} HubBoardDetailProps
+ * @property {object} post
+ * @property {() => void} [onLike]
+ * @property {() => void} [onBookmark]
+ */
+
+/**
+ * 프로젝트 허브 상세 페이지
+ * @param {HubBoardDetailProps} props
+ */
+export const HubBoardDetail = ({ post, onLike, onBookmark }) => {
   const navigate = useNavigate();
-  const { post_images, project } = post;
+  const { post_images } = post;
   const [mainImage, setMainImage] = useState(
     post_images?.[0]?.image_url || null
   );
 
   const handleEdit = () => {
-    navigate(`/hub/write`, { state: { postToEdit: post } }); // 글쓰기 페이지 경로 추후 수정
+    console.log("수정 기능은 현재 비활성화되어 있습니다.");
   };
 
   const handleDelete = () => {
-    if (window.confirm("정말로 이 프로젝트를 삭제하시겠습니까?")) {
-      console.log("삭제할 프로젝트 ID:", post.id);
-      alert("프로젝트가 삭제되었습니다.");
+    if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
+      console.log("삭제할 게시글 ID:", post.id);
+      alert("게시글이 삭제되었습니다.");
       navigate(`/hub`);
     }
   };
 
   return (
-    <BoardDetailLayout post={post}>
+    <BoardDetailLayout post={post} onLike={onLike} onBookmark={onBookmark}>
       <HubPostInfo post={post} onEdit={handleEdit} onDelete={handleDelete} />
-      <hr />
       <div className="row g-5 mt-3">
         <div className="col-md-5">
           {post_images && post_images.length > 0 && (
@@ -56,6 +66,8 @@ export const HubBoardDetail = ({ post }) => {
           )}
         </div>
         <div className="col-md-7">
+          <h4 className="mb-3">프로젝트 소개</h4>
+          <hr />
           <PostContent post={post} stripImages={true} />
         </div>
       </div>

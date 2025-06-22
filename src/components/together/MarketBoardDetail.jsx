@@ -8,13 +8,15 @@ import "../../styles/components/together/market.css";
 /**
  * @typedef {Object} MarketBoardDetailProps
  * @property {object} post
+ * @property {() => void} [onLike]
+ * @property {() => void} [onBookmark]
  */
 
 /**
  * 장터 글 상세 메인 컴포넌트
  * @param {MarketBoardDetailProps} props
  */
-export const MarketBoardDetail = ({ post }) => {
+export const MarketBoardDetail = ({ post, onLike, onBookmark }) => {
   const navigate = useNavigate();
   const { post_images } = post;
   const [mainImage, setMainImage] = useState(
@@ -36,7 +38,7 @@ export const MarketBoardDetail = ({ post }) => {
   };
 
   return (
-    <BoardDetailLayout post={post}>
+    <BoardDetailLayout post={post} onLike={onLike} onBookmark={onBookmark}>
       <MarketPostInfo post={post} onEdit={handleEdit} onDelete={handleDelete} />
       <div className="row g-5 mt-3">
         <div className="col-md-5">

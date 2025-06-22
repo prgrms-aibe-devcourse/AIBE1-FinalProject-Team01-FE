@@ -117,7 +117,7 @@ export const matchData = [
       id: 10,
       nickname: "박민수",
       image_url: "https://via.placeholder.com/40",
-      devcourse_name: "멘토링",
+      devcourse_name: "AI 엔지니어링",
     },
     gathering_post: {
       gathering_type: "mentoring",
@@ -160,7 +160,7 @@ export const marketData = [
       id: 11,
       nickname: "최서적",
       image_url: "https://via.placeholder.com/40",
-      devcourse_name: "서적판매",
+      devcourse_name: "데이터분석",
     },
     market_item: {
       price: 5000,
@@ -192,7 +192,7 @@ export const marketData = [
       id: 12,
       nickname: "박전자",
       image_url: "https://via.placeholder.com/40",
-      devcourse_name: "전자제품",
+      devcourse_name: "클라우드 백엔드",
     },
     market_item: {
       price: 10000,

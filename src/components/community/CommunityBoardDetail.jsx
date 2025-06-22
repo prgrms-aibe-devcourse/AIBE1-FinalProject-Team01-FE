@@ -1,26 +1,23 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import { BoardPostHeader } from "../board/BoardPostHeader";
 import { PostContent } from "../common/PostContent";
-import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import { CATEGORY_MAP } from "../../pages/community/constants";
+import "../../styles/components/community/community.css";
 
 /**
  * @typedef {Object} CommunityBoardDetailProps
  * @property {object} post
+ * @property {function} onLike
+ * @property {function} onBookmark
  */
 
-/**
- * 커뮤니티 글 상세 메인 컴포넌트
- * @param {CommunityBoardDetailProps} props
- */
-export default function CommunityBoardDetail({ post }) {
+export default function CommunityBoardDetail({ post, onLike, onBookmark }) {
   const navigate = useNavigate();
 
   const handleEdit = () => {
-    navigate(`/community/${post.category}/write`, {
-      state: { postToEdit: post },
-    });
+    navigate(`/community/write`, { state: { postToEdit: post } });
   };
 
   const handleDelete = () => {
@@ -32,13 +29,12 @@ export default function CommunityBoardDetail({ post }) {
   };
 
   return (
-    <BoardDetailLayout post={post}>
+    <BoardDetailLayout post={post} onLike={onLike} onBookmark={onBookmark}>
       <BoardPostHeader
         post={post}
-        categoryLabel={CATEGORY_MAP[post.category]}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        showStatus={false}
+        categoryLabel={CATEGORY_MAP[post.category]}
       />
       <PostContent post={post} />
     </BoardDetailLayout>

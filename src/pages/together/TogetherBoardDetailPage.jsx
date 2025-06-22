@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { TogetherBoardDetail } from "../../components/together/TogetherBoardDetail";
 import { MarketBoardDetail } from "../../components/together/MarketBoardDetail";
 import { gatheringData, matchData, marketData } from "./togetherData";
+import { useLikeBookmark } from "../../hooks/useLikeBookmark";
 
 const ALL_TOGETHER_POSTS = [...gatheringData, ...matchData, ...marketData];
 
@@ -17,6 +18,20 @@ export const TogetherBoardDetailPage = () => {
     return p.board_type === boardType && String(p.id) === String(postId);
   });
 
+  const {
+    liked,
+    likeCount,
+    toggleLike,
+    bookmarked,
+    bookmarkCount,
+    toggleBookmark,
+  } = useLikeBookmark({
+    initialLikeCount: post?.like_count,
+    initialLiked: post?.is_liked,
+    initialBookmarkCount: post?.bookmark_count,
+    initialBookmarked: post?.is_bookmarked,
+  });
+
   if (!post) {
     return (
       <div className="container py-5 text-center">
@@ -28,10 +43,30 @@ export const TogetherBoardDetailPage = () => {
     );
   }
 
+  const detailPost = {
+    ...post,
+    is_liked: liked,
+    like_count: likeCount,
+    is_bookmarked: bookmarked,
+    bookmark_count: bookmarkCount,
+  };
+
   // board_type에 따라 다른 상세 페이지 컴포넌트 렌더링
   if (post.board_type === "market") {
-    return <MarketBoardDetail post={post} />;
+    return (
+      <MarketBoardDetail
+        post={detailPost}
+        onLike={toggleLike}
+        onBookmark={toggleBookmark}
+      />
+    );
   }
 
-  return <TogetherBoardDetail post={post} />;
+  return (
+    <TogetherBoardDetail
+      post={detailPost}
+      onLike={toggleLike}
+      onBookmark={toggleBookmark}
+    />
+  );
 };

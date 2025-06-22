@@ -31,13 +31,13 @@ export function useLikeBookmark({
 
   const toggleLike = () => {
     setLiked((prev) => !prev);
-    setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
+    setLikeCount((prev) => (liked ? Math.max(0, prev - 1) : prev + 1));
     // TODO: 백엔드에 좋아요/취소 요청 보내기
   };
 
   const toggleBookmark = () => {
     setBookmarked((prev) => !prev);
-    setBookmarkCount((prev) => (bookmarked ? prev - 1 : prev + 1));
+    setBookmarkCount((prev) => (bookmarked ? Math.max(0, prev - 1) : prev + 1));
     // TODO: 백엔드에 북마크/취소 요청 보내기
   };
 

@@ -1,5 +1,4 @@
 import React from "react";
-import { useLikeBookmark } from "../../hooks/useLikeBookmark";
 import { useClipboard } from "../../hooks/useClipboard";
 import LikeButton from "../common/LikeButton";
 import BookmarkButton from "../common/BookmarkButton";
@@ -7,28 +6,28 @@ import ShareButton from "../common/ShareButton";
 
 /**
  * @typedef {Object} BoardTagShareBarProps
- * @property {string[]} tags
- * @property {number} likes
- * @property {boolean} [bookmarked]
- * @property {number} [bookmarkCount]
+ * @property {string[]} [tags=[]]
+ * @property {number} [likes=0]
+ * @property {boolean} [isLiked=false]
+ * @property {number} [bookmarks=0]
+ * @property {boolean} [isBookmarked=false]
+ * @property {() => void} [onLikeToggle]
  * @property {() => void} [onBookmarkToggle]
  */
 
 /**
- * 태그 및 공유/좋아요/북마크 버튼 컴포넌트
+ * 태그 및 공유/좋아요/북마크 버튼 바 컴포넌트 (상태 없음)
  * @param {BoardTagShareBarProps} props
  */
 export const BoardTagShareBar = ({
   tags = [],
   likes = 0,
-  bookmarked: initialBookmarked = false,
-  bookmarkCount: initialBookmarkCount = 0,
+  isLiked = false,
+  bookmarks = 0,
+  isBookmarked = false,
+  onLikeToggle,
   onBookmarkToggle,
 }) => {
-  const { liked, likeCount, toggleLike } = useLikeBookmark({
-    initialLikeCount: likes,
-    initialLiked: false,
-  });
   const { copy } = useClipboard();
 
   const handleShare = () => {
@@ -46,12 +45,16 @@ export const BoardTagShareBar = ({
         ))}
       </div>
       <div className="d-flex align-items-center gap-3">
-        <LikeButton liked={liked} count={likeCount} onClick={toggleLike} />
-        <BookmarkButton
-          bookmarked={initialBookmarked}
-          count={initialBookmarkCount}
-          onClick={onBookmarkToggle}
-        />
+        {onLikeToggle && (
+          <LikeButton liked={isLiked} count={likes} onClick={onLikeToggle} />
+        )}
+        {onBookmarkToggle && (
+          <BookmarkButton
+            bookmarked={isBookmarked}
+            count={bookmarks}
+            onClick={onBookmarkToggle}
+          />
+        )}
         <ShareButton onClick={handleShare} />
       </div>
     </div>

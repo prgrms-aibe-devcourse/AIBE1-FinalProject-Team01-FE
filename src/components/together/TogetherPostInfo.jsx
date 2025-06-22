@@ -4,6 +4,10 @@ import "../../styles/components/together/together.css";
 import { useAuth } from "../../context/AuthContext";
 import { isAuthor } from "../../utils/auth";
 import { BoardPostHeader } from "../board/BoardPostHeader";
+import {
+  RECRUITMENT_TYPES,
+  TOGETHER_CATEGORIES,
+} from "../../pages/together/constants";
 
 /**
  * @typedef {Object} TogetherPostInfoProps
@@ -21,6 +25,12 @@ export const TogetherPostInfo = ({ post, onEdit, onDelete }) => {
   const canEditOrDelete = isAuthor(currentUser, post.user_id);
   const { gathering_post } = post;
 
+  const isMatch =
+    gathering_post?.gathering_type === "mentoring" ||
+    gathering_post?.gathering_type === "coffeechat";
+  const recruitmentTypeLabel =
+    RECRUITMENT_TYPES[gathering_post?.recruitment_type];
+
   if (!gathering_post) {
     return <div>게시글 정보를 불러오는 중입니다...</div>;
   }
@@ -31,7 +41,7 @@ export const TogetherPostInfo = ({ post, onEdit, onDelete }) => {
         post={post}
         onEdit={onEdit}
         onDelete={onDelete}
-        categoryLabel={gathering_post.gathering_type}
+        categoryLabel={TOGETHER_CATEGORIES[gathering_post.gathering_type]}
       />
       <div className="d-flex flex-wrap justify-content-around align-items-center p-3 my-4 rounded bg-light">
         <div className="text-center mx-2 my-2">
@@ -41,13 +51,22 @@ export const TogetherPostInfo = ({ post, onEdit, onDelete }) => {
             {gathering_post.headCount}명
           </p>
         </div>
-        <div className="text-center mx-2 my-2">
-          <h6 className="text-muted mb-1">기간</h6>
-          <p className="m-0 fw-bold">
-            <i className="bi bi-calendar-check me-1"></i>
-            {gathering_post.period}
-          </p>
-        </div>
+
+        {isMatch ? (
+          <div className="text-center mx-2 my-2">
+            <h6 className="text-muted mb-1">모집 분야</h6>
+            <p className="m-0 fw-bold">{recruitmentTypeLabel}</p>
+          </div>
+        ) : (
+          <div className="text-center mx-2 my-2">
+            <h6 className="text-muted mb-1">기간</h6>
+            <p className="m-0 fw-bold">
+              <i className="bi bi-calendar-check me-1"></i>
+              {gathering_post.period}
+            </p>
+          </div>
+        )}
+
         <div className="text-center mx-2 my-2">
           <h6 className="text-muted mb-1">장소</h6>
           <p className="m-0 fw-bold">

@@ -27,7 +27,12 @@ export const MarketPostInfo = ({ post, onEdit, onDelete }) => {
 
   return (
     <>
-      <BoardPostHeader post={post} onEdit={onEdit} onDelete={onDelete} />
+      <BoardPostHeader
+        post={post}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        categoryLabel="중고거래"
+      />
       <div className="d-flex align-items-center justify-content-around p-3 rounded bg-light">
         <div className="text-center">
           <h6 className="text-muted mb-1">가격</h6>
