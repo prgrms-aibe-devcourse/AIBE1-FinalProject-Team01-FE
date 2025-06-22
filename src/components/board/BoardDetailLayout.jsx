@@ -29,7 +29,43 @@ export const BoardDetailLayout = ({ post, children }) => {
     setComments((prev) => [newComment, ...prev]);
   };
 
-  // ... (다른 핸들러들: onReplyAdd, onDelete, onEdit, onLikeToggle)
+  const handleReplyAdd = (parentId, content) => {
+    const newReply = createDummyComment(content);
+
+    const addReplyToComment = (comments, pId) => {
+      return comments.map((comment) => {
+        if (comment.id === pId) {
+          const newReplies = comment.replies
+            ? [...comment.replies, newReply]
+            : [newReply];
+          return { ...comment, replies: newReplies };
+        }
+        if (comment.replies) {
+          return {
+            ...comment,
+            replies: addReplyToComment(comment.replies, pId),
+          };
+        }
+        return comment;
+      });
+    };
+    setComments((prev) => addReplyToComment(prev, parentId));
+  };
+
+  const handleCommentDelete = (commentId) => {
+    console.log("Delete comment:", commentId);
+    // 상태 업데이트 로직 추가 필요
+  };
+
+  const handleCommentEdit = (commentId, newContent) => {
+    console.log("Edit comment:", commentId, newContent);
+    // 상태 업데이트 로직 추가 필요
+  };
+
+  const handleCommentLike = (commentId) => {
+    console.log("Like comment:", commentId);
+    // 상태 업데이트 로직 추가 필요
+  };
 
   return (
     <div className="community-detail-container">
@@ -45,7 +81,10 @@ export const BoardDetailLayout = ({ post, children }) => {
         postId={post.id}
         comments={comments}
         onCommentAdd={handleCommentAdd}
-        // ... (다른 핸들러 prop들 전달)
+        onReplyAdd={handleReplyAdd}
+        onDelete={handleCommentDelete}
+        onEdit={handleCommentEdit}
+        onLikeToggle={handleCommentLike}
       />
     </div>
   );
