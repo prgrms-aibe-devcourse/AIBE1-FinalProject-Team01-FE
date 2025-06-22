@@ -32,24 +32,39 @@ export const BoardDetailLayout = ({ post, children }) => {
   const handleReplyAdd = (parentId, content) => {
     const newReply = createDummyComment(content);
 
-    const addReplyToComment = (comments, pId) => {
-      return comments.map((comment) => {
-        if (comment.id === pId) {
-          const newReplies = comment.replies
-            ? [...comment.replies, newReply]
+    // 답글 추가
+    function deepCloneComments(comments) {
+      return comments.map((comment) => ({
+        ...comment,
+        replies: comment.replies ? deepCloneComments(comment.replies) : [],
+      }));
+    }
+
+    function addReplyToCommentIterative(comments, pId, newReply) {
+      // 트리 전체 깊은 복사
+      const result = deepCloneComments(comments);
+      const stack = [];
+      for (let i = 0; i < result.length; i++) {
+        stack.push(result[i]);
+      }
+      while (stack.length > 0) {
+        const node = stack.pop();
+        if (node.id === pId) {
+          node.replies = node.replies
+            ? [...node.replies, newReply]
             : [newReply];
-          return { ...comment, replies: newReplies };
+          break;
         }
-        if (comment.replies) {
-          return {
-            ...comment,
-            replies: addReplyToComment(comment.replies, pId),
-          };
+        if (node.replies && node.replies.length > 0) {
+          for (let j = node.replies.length - 1; j >= 0; j--) {
+            stack.push(node.replies[j]);
+          }
         }
-        return comment;
-      });
-    };
-    setComments((prev) => addReplyToComment(prev, parentId));
+      }
+      return result;
+    }
+
+    setComments((prev) => addReplyToCommentIterative(prev, parentId, newReply));
   };
 
   const handleCommentDelete = (commentId) => {
