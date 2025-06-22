@@ -49,7 +49,15 @@ export const BoardPostHeader = ({
           )}
           <h1 className="post-info-title mb-3">{post.title}</h1>
           <div className="d-flex justify-content-between align-items-center">
-            <UserInfo user={post.user} />
+            {post.category === "review" && post.user?.devcourse_name && (
+              <span className="author-name">{post.user.devcourse_name}</span>
+            )}
+            {post.category === "news" && post.user?.nickname && (
+              <span className="author-name">{post.user.nickname}</span>
+            )}
+            {post.category !== "review" && post.category !== "news" && (
+              <UserInfo user={post.user} />
+            )}
             <div className="d-flex align-items-center text-muted small">
               <span>{new Date(post.created_at).toLocaleString()}</span>
               <span className="mx-2">|</span>
