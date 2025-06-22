@@ -10,11 +10,10 @@ import { CATEGORY_MAP, DUMMY_POSTS } from "./communityData";
 import { Modal, Button } from "react-bootstrap";
 import { useBoardList } from "../../hooks/useBoardList";
 
-// 커뮤니티 카테고리(탭) 목록을 상수로 고정 선언
 const COMMUNITY_TABS = [
   { key: "free", label: "자유게시판" },
   { key: "qna", label: "Q&A" },
-  { key: "blog", label: "블로그/회고" },
+  { key: "retrospect", label: "블로그/회고" },
 ];
 
 export default function CommunityPage() {

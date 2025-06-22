@@ -148,7 +148,12 @@
   background: #6c757d;
 }
 .label-qna {
-  background: #2d4053;
+  background-color: var(--primary-light-color);
+  color: var(--primary-color);
+}
+.label-retrospect {
+  background-color: var(--info-light-color);
+  color: var(--info-color);
 }
 .label-blog {
   background: #f7b801;

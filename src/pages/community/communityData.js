@@ -1,7 +1,7 @@
 export const CATEGORY_MAP = {
   free: "자유게시판",
   qna: "Q&A",
-  blog: "블로그/회고",
+  retrospect: "블로그/회고",
 };
 export const CATEGORY_KEYS = Object.keys(CATEGORY_MAP);
 
@@ -103,7 +103,7 @@ export const DUMMY_POSTS = [
   {
     id: 3,
     authorId: 3,
-    category: "blog",
+    category: "retrospect",
     title: "첫 프로젝트 회고: 실패와 성공의 경험담",
     content:
       "<p>리액트 어렵네요... 하지만 포기하지 않고 끝까지 해냈습니다.</p><p>처음에는 정말 막막했는데, 하나씩 배워가면서 조금씩 이해가 되기 시작했어요. 특히 컴포넌트 구조를 잡는 게 가장 어려웠던 것 같습니다.</p>",
