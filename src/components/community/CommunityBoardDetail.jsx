@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { PostInfoHeader } from "../common/PostInfoHeader";
-import CommunityPostContent from "./CommunityPostContent";
-import { BoardDetailLayout } from "../common/BoardDetailLayout";
+import { BoardPostHeader } from "../board/BoardPostHeader";
+import { PostContent } from "../common/PostContent";
+import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import { CATEGORY_MAP } from "../../pages/community/constants";
 
 /**
@@ -33,14 +33,14 @@ export default function CommunityBoardDetail({ post }) {
 
   return (
     <BoardDetailLayout post={post}>
-      <PostInfoHeader
+      <BoardPostHeader
         post={post}
         categoryLabel={CATEGORY_MAP[post.category]}
         onEdit={handleEdit}
         onDelete={handleDelete}
         showStatus={false}
       />
-      <CommunityPostContent post={post} />
+      <PostContent post={post} />
     </BoardDetailLayout>
   );
 }

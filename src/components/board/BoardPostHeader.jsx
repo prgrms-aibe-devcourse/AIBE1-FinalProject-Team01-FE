@@ -1,11 +1,11 @@
 import React from "react";
 import { useAuth } from "../../context/AuthContext";
 import { isAuthor } from "../../utils/auth";
-import UserInfo from "./UserInfo";
+import UserInfo from "../common/UserInfo";
 import "../../styles/components/common/PostInfoHeader.css";
 
 /**
- * @typedef {Object} PostInfoHeaderProps
+ * @typedef {Object} BoardPostHeaderProps
  * @property {object} post - The post data object.
  * @property {string} [categoryLabel] - The label for the category to display.
  * @property {() => void} onEdit - Function to handle edit action.
@@ -15,9 +15,9 @@ import "../../styles/components/common/PostInfoHeader.css";
 
 /**
  * 게시글 상단 정보 공통 컴포넌트
- * @param {PostInfoHeaderProps} props
+ * @param {BoardPostHeaderProps} props
  */
-export const PostInfoHeader = ({
+export const BoardPostHeader = ({
   post,
   categoryLabel,
   onEdit,
@@ -69,4 +69,4 @@ export const PostInfoHeader = ({
       <hr />
     </div>
   );
-};
+}; 

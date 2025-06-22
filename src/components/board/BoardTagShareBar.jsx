@@ -6,35 +6,28 @@ import BookmarkButton from "../common/BookmarkButton";
 import ShareButton from "../common/ShareButton";
 
 /**
- * @typedef {Object} CommunityTagShareBarProps
+ * @typedef {Object} BoardTagShareBarProps
  * @property {string[]} tags
  * @property {number} likes
  * @property {boolean} [bookmarked]
  * @property {number} [bookmarkCount]
+ * @property {() => void} [onBookmarkToggle]
  */
 
 /**
  * 태그 및 공유/좋아요/북마크 버튼 컴포넌트
- * @param {CommunityTagShareBarProps} props
+ * @param {BoardTagShareBarProps} props
  */
-export default function CommunityTagShareBar({
-  tags,
+export const BoardTagShareBar = ({
+  tags = [],
   likes = 0,
-  bookmarked = false,
-  bookmarkCount = 0,
-}) {
-  const {
-    liked,
-    likeCount,
-    toggleLike,
-    bookmarked: isBookmarked,
-    bookmarkCount: bmCount,
-    toggleBookmark,
-  } = useLikeBookmark({
+  bookmarked: initialBookmarked = false,
+  bookmarkCount: initialBookmarkCount = 0,
+  onBookmarkToggle,
+}) => {
+  const { liked, likeCount, toggleLike } = useLikeBookmark({
     initialLikeCount: likes,
-    initialLiked: false,
-    initialBookmarkCount: bookmarkCount,
-    initialBookmarked: bookmarked,
+    initialLiked: false, // initialLiked는 항상 false로 시작
   });
   const { copy } = useClipboard();
 
@@ -55,12 +48,12 @@ export default function CommunityTagShareBar({
       <div className="community-detail-sharebar">
         <LikeButton liked={liked} count={likeCount} onClick={toggleLike} />
         <BookmarkButton
-          bookmarked={isBookmarked}
-          count={bmCount}
-          onClick={toggleBookmark}
+          bookmarked={initialBookmarked}
+          count={initialBookmarkCount}
+          onClick={onBookmarkToggle}
         />
         <ShareButton onClick={handleShare} />
       </div>
     </div>
   );
-}
+};

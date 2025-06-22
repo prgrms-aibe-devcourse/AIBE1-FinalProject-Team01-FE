@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import CommentItem from "./CommentItem";
+import { CommentItem } from "./CommentItem";
 import { useInput } from "../../hooks/useInput";
 import { useAuth } from "../../context/AuthContext";
 

@@ -3,7 +3,7 @@ import "../../styles/components/community/community.css";
 import "../../styles/components/together/together.css";
 import { useAuth } from "../../context/AuthContext";
 import { isAuthor } from "../../utils/auth";
-import { PostInfoHeader } from "../common/PostInfoHeader";
+import { BoardPostHeader } from "../board/BoardPostHeader";
 import { Link } from "react-router-dom";
 import { categoryLabelToSlug } from "../../pages/together/constants";
 
@@ -37,7 +37,7 @@ export const TogetherPostInfo = ({ post, onEdit, onDelete }) => {
 
   return (
     <>
-      <PostInfoHeader
+      <BoardPostHeader
         post={post}
         onEdit={onEdit}
         onDelete={onDelete}

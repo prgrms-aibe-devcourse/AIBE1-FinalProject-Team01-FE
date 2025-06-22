@@ -1,17 +1,17 @@
 import React from "react";
-import "../../styles/components/community/CommunityPostContent.css";
+import "../../styles/components/common/PostContent.css";
 
 /**
- * @typedef {Object} CommunityPostContentProps
+ * @typedef {Object} PostContentProps
  * @property {object} post - The post object.
  * @property {boolean} [stripImages=false] - If true, removes img tags from the content.
  */
 
 /**
  * 게시글 본문 컴포넌트
- * @param {CommunityPostContentProps} props
+ * @param {PostContentProps} props
  */
-export default function CommunityPostContent({ post, stripImages = false }) {
+export const PostContent = ({ post, stripImages = false }) => {
   if (!post || !post.content) {
     return null;
   }
@@ -21,13 +21,13 @@ export default function CommunityPostContent({ post, stripImages = false }) {
     : post.content;
 
   return (
-    <div className="community-detail-content">
+    <div className="post-content">
       <div
-        className="community-detail-content-body"
+        className="post-content-body"
         dangerouslySetInnerHTML={{ __html: contentToRender }}
       />
       {post.contentList && (
-        <ul className="community-detail-content-list">
+        <ul className="post-content-list">
           {post.contentList.map((item, idx) => (
             <li key={idx}>{item}</li>
           ))}
@@ -35,4 +35,4 @@ export default function CommunityPostContent({ post, stripImages = false }) {
       )}
     </div>
   );
-}
+};

@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import CommunityPostContent from "../community/CommunityPostContent";
-import { BoardDetailLayout } from "../common/BoardDetailLayout";
-import { PostInfoHeader } from "../common/PostInfoHeader";
+import { PostContent } from "../common/PostContent";
+import { BoardDetailLayout } from "../board/BoardDetailLayout";
+import { BoardPostHeader } from "../board/BoardPostHeader";
 
 /**
  * @typedef {Object} TogetherBoardDetailProps
@@ -32,7 +32,7 @@ export const TogetherBoardDetail = ({ post }) => {
 
   return (
     <BoardDetailLayout post={post}>
-      <PostInfoHeader
+      <BoardPostHeader
         post={post}
         onEdit={handleEdit}
         onDelete={handleDelete}
@@ -68,7 +68,7 @@ export const TogetherBoardDetail = ({ post }) => {
           </p>
         </div>
       </div>
-      <CommunityPostContent post={post} />
+      <PostContent post={post} />
     </BoardDetailLayout>
   );
 };

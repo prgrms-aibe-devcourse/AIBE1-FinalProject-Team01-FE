@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Button, Form, Row, Col } from "react-bootstrap";
 import { CustomTiptapEditor } from "../../components/editor/CustomTiptapEditor";
-import { TagInput } from "../../components/community/TagInput";
+import { TagInput } from "../../components/common/TagInput";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { gatheringData, matchData, marketData } from "./togetherData"; // For finding postToEdit
 

@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { isAuthor } from "../../utils/auth";
 import "../../styles/components/community/community.css";
-import { PostInfoHeader } from "../common/PostInfoHeader";
+import { BoardPostHeader } from "../board/BoardPostHeader";
 
 /**
  * @typedef {Object} MarketPostInfoProps
@@ -21,12 +22,7 @@ export const MarketPostInfo = ({ post, onEdit, onDelete }) => {
 
   return (
     <>
-      <PostInfoHeader
-        post={post}
-        onEdit={onEdit}
-        onDelete={onDelete}
-        categoryLabel={post.categoryLabel}
-      />
+      <BoardPostHeader post={post} onEdit={onEdit} onDelete={onDelete} />
       <div className="d-flex align-items-center justify-content-around p-3 rounded bg-light">
         <div className="text-center">
           <h6 className="text-muted mb-1">가격</h6>

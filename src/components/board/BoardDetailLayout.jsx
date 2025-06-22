@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import CommunityTagShareBar from "../community/CommunityTagShareBar";
-import CommunityCommentSection from "../community/CommunityCommentSection";
+import { BoardTagShareBar } from "./BoardTagShareBar";
+import { CommentSection } from "../comment/CommentSection";
+import { createDummyComment } from "../../pages/community/communityData";
 
 /**
  * @typedef {Object} BoardDetailLayoutProps
@@ -15,6 +16,7 @@ import CommunityCommentSection from "../community/CommunityCommentSection";
 export const BoardDetailLayout = ({ post, children }) => {
   const [bookmarked, setBookmarked] = useState(post.bookmarked || false);
   const [bookmarkCount, setBookmarkCount] = useState(post.bookmarkCount || 0);
+  const [comments, setComments] = useState(post.comments || []);
 
   const handleBookmarkClick = () => {
     setBookmarked((prev) => !prev);
@@ -22,17 +24,29 @@ export const BoardDetailLayout = ({ post, children }) => {
     // TODO: 백엔드에 북마크 토글 요청 보내기
   };
 
+  const handleCommentAdd = (content) => {
+    const newComment = createDummyComment(content);
+    setComments((prev) => [newComment, ...prev]);
+  };
+
+  // ... (다른 핸들러들: onReplyAdd, onDelete, onEdit, onLikeToggle)
+
   return (
     <div className="community-detail-container">
       {children}
-      <CommunityTagShareBar
+      <BoardTagShareBar
         tags={post.tags}
         likes={post.likes}
         bookmarked={bookmarked}
         bookmarkCount={bookmarkCount}
         onBookmarkToggle={handleBookmarkClick}
       />
-      <CommunityCommentSection postId={post.id} commentList={post.comments} />
+      <CommentSection
+        postId={post.id}
+        comments={comments}
+        onCommentAdd={handleCommentAdd}
+        // ... (다른 핸들러 prop들 전달)
+      />
     </div>
   );
 };

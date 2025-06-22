@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 import { CustomTiptapEditor } from "../../components/editor/CustomTiptapEditor";
-import { TagInput } from "../../components/community/TagInput";
+import { TagInput } from "../../components/common/TagInput";
 import { useImageUpload } from "../../hooks/useImageUpload";
+import { CATEGORY_MAP, CATEGORY_KEYS } from "./constants";
 
 export default function CommunityWritePage() {
   const navigate = useNavigate();

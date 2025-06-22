@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MarketPostInfo } from "./MarketPostInfo";
-import CommunityPostContent from "../community/CommunityPostContent";
-import { BoardDetailLayout } from "../common/BoardDetailLayout";
+import { PostContent } from "../common/PostContent";
+import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import "../../styles/components/together/market.css";
 
 /**
@@ -63,7 +63,7 @@ export const MarketBoardDetail = ({ post }) => {
           )}
         </div>
         <div className="col-md-7">
-          <CommunityPostContent post={post} stripImages={true} />
+          <PostContent post={post} stripImages={true} />
         </div>
       </div>
     </BoardDetailLayout>
