@@ -1,0 +1,158 @@
+export const hubData = [
+  {
+    id: 1,
+    user_id: 1,
+    board_type: "hub",
+    title: "Amateurs - 데브코스 최종 프로젝트",
+    content:
+      "<h1>Amateurs 프로젝트입니다.</h1><p>수강생들의 자유로운 소통과 네트워킹을 위한 커뮤니티 플랫폼입니다. 다양한 주제의 게시판을 통해 지식을 공유하고, 스터디 및 프로젝트 팀원을 모집하며 함께 성장할 수 있습니다.</p>",
+    view_count: 1582,
+    like_count: 25,
+    is_deleted: false,
+    created_at: "2025-07-20T10:00:00Z",
+    updated_at: "2025-07-20T11:30:00Z",
+    tags: ["Java", "SpringBoot", "React", "WebSocket"],
+    post_images: [
+      {
+        id: 1,
+        post_id: 1,
+        image_url:
+          "https://via.placeholder.com/800x600.png?text=Main+Project+Image",
+      },
+      {
+        id: 2,
+        post_id: 1,
+        image_url: "https://via.placeholder.com/800x600.png?text=Sub+Image+1",
+      },
+      {
+        id: 3,
+        post_id: 1,
+        image_url: "https://via.placeholder.com/800x600.png?text=Sub+Image+2",
+      },
+    ],
+    user: {
+      id: 1,
+      nickname: "김팀장",
+      image_url: "https://via.placeholder.com/40",
+      devcourse_name: "프론트엔드",
+      devcourse_batch: "3기",
+    },
+    project: {
+      post_id: 1,
+      started_at: "2025-06-13",
+      ended_at: "2025-07-13",
+      simple_content:
+        "우리 프로젝트를 한 줄로 소개할 수 있어요. 그 대신 진짜 진짜 멋있어야 해요.",
+      devcourse_track: "프론트엔드",
+      devcourse_batch: 3,
+      github_url:
+        "https://github.com/prgrms-aibe-devcourse/AIBE1-FinalProject-Team01-FE",
+      demo_url: "https://amateurs.com",
+      project_members: [
+        { name: "김팀장", role: "CEO & PM & 응원" },
+        { name: "이개발", role: "프론트엔드 개발자" },
+        { name: "박서버", role: "백엔드 개발자" },
+        { name: "최디비", role: "데이터베이스 설계" },
+      ],
+    },
+    bookmarked: false,
+    comments: [],
+  },
+  {
+    id: 2,
+    user_id: 2,
+    board_type: "hub",
+    title: "AI 챗봇 서비스 '코코'",
+    content:
+      "<h1>AI 챗봇 서비스 '코코'입니다.</h1><p>자연어 처리 기술을 활용하여 사용자와 대화하는 AI 챗봇 서비스입니다. 감성 분석 기능을 통해 사용자의 기분을 파악하고 맞춤형 응답을 제공합니다.</p>",
+    view_count: 980,
+    like_count: 18,
+    is_deleted: false,
+    created_at: "2025-07-18T14:00:00Z",
+    updated_at: "2025-07-18T15:00:00Z",
+    tags: ["Python", "TensorFlow", "Flask", "NLP"],
+    post_images: [
+      {
+        id: 4,
+        post_id: 2,
+        image_url:
+          "https://via.placeholder.com/800x600.png?text=Coco+Project+Image",
+      },
+    ],
+    user: {
+      id: 2,
+      nickname: "AI마스터",
+      image_url: "https://via.placeholder.com/40",
+      devcourse_name: "생성형 AI 백엔드",
+      devcourse_batch: "1기",
+    },
+    project: {
+      post_id: 2,
+      started_at: "2025-03-01",
+      ended_at: "2025-05-30",
+      simple_content: "당신의 마음을 이해하는 AI 친구, 코코",
+      devcourse_track: "생성형 AI 백엔드",
+      devcourse_batch: 1,
+      github_url: "https://github.com/coco-project",
+      demo_url: "https://coco-chatbot.com",
+      project_members: [
+        { name: "AI마스터", role: "AI 모델 개발" },
+        { name: "서버왕", role: "백엔드 API 개발" },
+      ],
+    },
+    bookmarked: true,
+    comments: [],
+  },
+  {
+    id: 3,
+    user_id: 3,
+    board_type: "hub",
+    title: "클라우드 기반 데이터 파이프라인 구축",
+    content:
+      "<h1>클라우드 기반 데이터 파이프라인 프로젝트입니다.</h1><p>AWS 서비스를 활용하여 대용량 데이터를 수집, 처리, 분석하는 파이프라인을 구축했습니다. 데이터 시각화 대시보드를 통해 인사이트를 제공합니다.</p>",
+    view_count: 2100,
+    like_count: 42,
+    is_deleted: false,
+    created_at: "2025-07-15T09:00:00Z",
+    updated_at: "2025-07-15T10:00:00Z",
+    tags: ["AWS", "Kafka", "Spark", "DataPipeline"],
+    post_images: [
+      {
+        id: 5,
+        post_id: 3,
+        image_url:
+          "https://via.placeholder.com/800x600.png?text=Data+Pipeline+Project",
+      },
+      {
+        id: 6,
+        post_id: 3,
+        image_url:
+          "https://via.placeholder.com/800x600.png?text=Dashboard+Screenshot",
+      },
+    ],
+    user: {
+      id: 3,
+      nickname: "데이터장인",
+      image_url: "https://via.placeholder.com/40",
+      devcourse_name: "클라우드 백엔드",
+      devcourse_batch: "2기",
+    },
+    project: {
+      post_id: 3,
+      started_at: "2025-04-10",
+      ended_at: "2025-06-10",
+      simple_content: "빅데이터를 가치로 바꾸는 클라우드 파이프라인",
+      devcourse_track: "클라우드 백엔드",
+      devcourse_batch: 2,
+      github_url: "https://github.com/data-pipeline-project",
+      demo_url: null,
+      project_members: [
+        { name: "데이터장인", role: "데이터 엔지니어" },
+        { name: "클라우드고수", role: "인프라 설계" },
+        { name: "시각화맨", role: "프론트엔드 개발" },
+      ],
+    },
+    bookmarked: false,
+    comments: [],
+  },
+];
