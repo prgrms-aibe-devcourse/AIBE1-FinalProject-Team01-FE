@@ -1,4 +1,6 @@
 import React from "react";
+import { Nav } from "react-bootstrap";
+import { CATEGORY_MAP } from "../../pages/community/constants";
 import "../../styles/components/community/community.css";
 
 /**

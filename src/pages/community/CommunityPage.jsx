@@ -6,7 +6,8 @@ import { CommunityBoardList } from "../../components/community/CommunityBoardLis
 import { CommunityPagination } from "../../components/community/CommunityPagination";
 import { HeroSection } from "../../components/common/HeroSection";
 import heroCommunity from "../../assets/hero-community.png";
-import { CATEGORY_MAP, DUMMY_POSTS } from "./communityData";
+import { posts as allPosts } from "./communityData";
+import { CATEGORY_KEYS, CATEGORY_MAP } from "./constants";
 import { Modal, Button } from "react-bootstrap";
 import { useBoardList } from "../../hooks/useBoardList";
 
@@ -31,7 +32,7 @@ export default function CommunityPage() {
     posts,
     totalPages,
     reset,
-  } = useBoardList({ data: DUMMY_POSTS, category });
+  } = useBoardList({ data: allPosts, category });
 
   useEffect(() => {
     reset();

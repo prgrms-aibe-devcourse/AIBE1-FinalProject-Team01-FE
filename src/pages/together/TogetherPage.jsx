@@ -11,6 +11,8 @@ import { TogetherBoardList } from "../../components/together/TogetherBoardList";
 import { MarketBoardList } from "../../components/together/MarketBoardList";
 import "../../styles/components/community/community.css";
 
+const allTogetherPosts = [...gatheringData, ...matchData, ...marketData];
+
 // 함께해요 카테고리(탭) 목록
 const TOGETHER_TABS = [
   { key: "gathering", label: "팀원 구하기" },
@@ -18,19 +20,11 @@ const TOGETHER_TABS = [
   { key: "market", label: "장터" },
 ];
 
-// 카테고리별 데이터 매핑
-const DATA_MAP = {
-  gathering: gatheringData,
-  match: matchData,
-  market: marketData,
-};
-
 export default function TogetherPage() {
   const { category = "gathering" } = useParams();
   const navigate = useNavigate();
 
   const handleTabSelect = (catKey) => navigate(`/together/${catKey}`);
-  const data = DATA_MAP[category] || [];
 
   const {
     keyword,
@@ -43,7 +37,7 @@ export default function TogetherPage() {
     posts,
     totalPages,
     reset,
-  } = useBoardList({ data });
+  } = useBoardList({ data: allTogetherPosts, category });
 
   useEffect(() => {
     reset();

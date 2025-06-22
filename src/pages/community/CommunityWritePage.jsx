@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { CATEGORY_MAP, CATEGORY_KEYS } from "./communityData";
 import { Button, Form } from "react-bootstrap";
 import { CustomTiptapEditor } from "../../components/editor/CustomTiptapEditor";
 import { TagInput } from "../../components/community/TagInput";

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { PostInfoHeader } from "../common/PostInfoHeader";
 import CommunityPostContent from "./CommunityPostContent";
 import { BoardDetailLayout } from "../common/BoardDetailLayout";
-import { CATEGORY_MAP } from "../../pages/community/communityData";
+import { CATEGORY_MAP } from "../../pages/community/constants";
 
 /**
  * @typedef {Object} CommunityBoardDetailProps

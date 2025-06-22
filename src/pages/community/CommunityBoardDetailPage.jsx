@@ -1,13 +1,13 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CommunityBoardDetail from "../../components/community/CommunityBoardDetail";
-import { DUMMY_POSTS } from "./communityData";
+import { posts } from "./communityData";
 
 export default function CommunityBoardDetailPage() {
   const navigate = useNavigate();
   const { category, postId } = useParams();
 
-  const post = DUMMY_POSTS.find(
+  const post = posts.find(
     (p) => p.category === category && String(p.id) === String(postId)
   );
 

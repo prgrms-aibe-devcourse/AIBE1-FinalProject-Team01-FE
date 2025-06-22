@@ -1,11 +1,4 @@
-export const CATEGORY_MAP = {
-  free: "자유게시판",
-  qna: "Q&A",
-  retrospect: "블로그/회고",
-};
-export const CATEGORY_KEYS = Object.keys(CATEGORY_MAP);
-
-export const DUMMY_POSTS = [
+export const posts = [
   {
     id: 1,
     authorId: 1,

@@ -1,6 +1,6 @@
 import React from "react";
 import "../../styles/components/community/community.css";
-import { CATEGORY_MAP } from "../../pages/community/communityData";
+import { CATEGORY_MAP } from "../../pages/community/constants";
 import UserInfo from "../common/UserInfo";
 
 /**
