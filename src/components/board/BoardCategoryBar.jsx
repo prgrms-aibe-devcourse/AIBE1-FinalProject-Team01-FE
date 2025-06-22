@@ -1,20 +1,19 @@
 import React from "react";
 import { Nav } from "react-bootstrap";
-import { CATEGORY_MAP } from "../../pages/community/constants";
 import "../../styles/components/community/community.css";
 
 /**
- * @typedef {Object} CommunityCategoryBarProps
+ * @typedef {Object} BoardCategoryBarProps
  * @property {string} selected
  * @property {(category: string) => void} onSelect
  * @property {Array<{key: string, label: string}>} tabs
  */
 
 /**
- * 커뮤니티/함께해요 카테고리 바 (탭 형식)
- * @param {CommunityCategoryBarProps} props
+ * 게시판 카테고리 바 (탭 형식)
+ * @param {BoardCategoryBarProps} props
  */
-export const CommunityCategoryBar = ({ selected, onSelect, tabs }) => {
+export const BoardCategoryBar = ({ selected, onSelect, tabs }) => {
   return (
     <ul className="community-category-bar nav nav-tabs mb-3">
       {tabs.map((tab) => (

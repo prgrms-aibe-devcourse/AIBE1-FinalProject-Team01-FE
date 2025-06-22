@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CommunityCategoryBar } from "../../components/community/CommunityCategoryBar";
-import { CommunitySearchBar } from "../../components/community/CommunitySearchBar";
+import { BoardCategoryBar } from "../../components/board/BoardCategoryBar";
+import { BoardSearchBar } from "../../components/board/BoardSearchBar";
 import { CommunityBoardList } from "../../components/community/CommunityBoardList";
-import { CommunityPagination } from "../../components/community/CommunityPagination";
+import { BoardPagination } from "../../components/board/BoardPagination";
 import { HeroSection } from "../../components/common/HeroSection";
 import heroCommunity from "../../assets/hero-community.png";
 import { posts as allPosts } from "./communityData";
@@ -47,12 +47,12 @@ export default function CommunityPage() {
       <HeroSection backgroundImageSrc={heroCommunity} />
       <div className="py-4">
         <div className="community-main-container">
-          <CommunityCategoryBar
+          <BoardCategoryBar
             selected={category}
             onSelect={handleTabSelect}
             tabs={COMMUNITY_TABS}
           />
-          <CommunitySearchBar
+          <BoardSearchBar
             keyword={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onWrite={() => navigate(`/community/${category}/write`)}
@@ -65,11 +65,7 @@ export default function CommunityPage() {
             categoryLabel={CATEGORY_MAP[category]}
             onPostClick={handlePostClick}
           />
-          <CommunityPagination
-            page={page}
-            total={totalPages}
-            onChange={setPage}
-          />
+          <BoardPagination page={page} total={totalPages} onChange={setPage} />
         </div>
       </div>
     </>

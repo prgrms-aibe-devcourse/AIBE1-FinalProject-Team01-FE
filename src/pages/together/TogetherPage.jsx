@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CommunityCategoryBar } from "../../components/community/CommunityCategoryBar";
-import { CommunitySearchBar } from "../../components/community/CommunitySearchBar";
-import { CommunityPagination } from "../../components/community/CommunityPagination";
+import { BoardCategoryBar } from "../../components/board/BoardCategoryBar";
+import { BoardSearchBar } from "../../components/board/BoardSearchBar";
+import { BoardPagination } from "../../components/board/BoardPagination";
 import { HeroSection } from "../../components/common/HeroSection";
 import heroTogether from "../../assets/hero-together.png";
 import { useBoardList } from "../../hooks/useBoardList";
@@ -52,12 +52,12 @@ export default function TogetherPage() {
       <HeroSection backgroundImageSrc={heroTogether} />
       <div className="py-4">
         <div className="community-main-container">
-          <CommunityCategoryBar
+          <BoardCategoryBar
             selected={category}
             onSelect={handleTabSelect}
             tabs={TOGETHER_TABS}
           />
-          <CommunitySearchBar
+          <BoardSearchBar
             keyword={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onWrite={() => navigate(`/together/${category}/write`)}
@@ -72,11 +72,7 @@ export default function TogetherPage() {
             <TogetherBoardList posts={posts} onPostClick={handlePostClick} />
           )}
 
-          <CommunityPagination
-            page={page}
-            total={totalPages}
-            onChange={setPage}
-          />
+          <BoardPagination page={page} total={totalPages} onChange={setPage} />
         </div>
       </div>
     </>
