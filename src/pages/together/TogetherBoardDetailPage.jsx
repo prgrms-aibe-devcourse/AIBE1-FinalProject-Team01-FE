@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Container, Spinner, Alert } from "react-bootstrap";
-import { BoardDetailLayout } from "../../components/board/BoardDetailLayout";
 import TogetherBoardDetail from "../../components/together/TogetherBoardDetail";
 import MarketBoardDetail from "../../components/together/MarketBoardDetail";
 import { allTogetherPosts } from "./togetherData";
@@ -45,56 +44,53 @@ function TogetherBoardDetailPage() {
     initialLiked: post?.isLiked ?? false,
     initialBookmarkCount: post?.bookmarkCount ?? 0,
     initialBookmarked: post?.isBookmarked ?? false,
+    postId: post?.postId,
+    boardType: post?.boardType,
   });
 
-  const renderContent = () => {
-    if (loading) {
-      return (
-        <div className="text-center">
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        </div>
-      );
-    }
-    if (error) {
-      return <Alert variant="danger">{error}</Alert>;
-    }
-    if (!post) {
-      return <Alert variant="warning">게시글이 없습니다.</Alert>;
-    }
-    switch (post.boardType) {
-      case "GATHERING":
-      case "MATCH":
-        return (
-          <TogetherBoardDetail
-            post={post}
-            liked={liked}
-            likeCount={likeCount}
-            onLike={toggleLike}
-            bookmarked={bookmarked}
-            bookmarkCount={bookmarkCount}
-            onBookmark={toggleBookmark}
-          />
-        );
-      case "MARKET":
-        return (
-          <MarketBoardDetail
-            post={post}
-            liked={liked}
-            likeCount={likeCount}
-            onLike={toggleLike}
-            bookmarked={bookmarked}
-            bookmarkCount={bookmarkCount}
-            onBookmark={toggleBookmark}
-          />
-        );
-      default:
-        return <Alert variant="warning">알 수 없는 게시판 타입입니다.</Alert>;
-    }
+  if (loading) {
+    return (
+      <Container className="py-5 text-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </Container>
+    );
+  }
+
+  if (error || !post) {
+    return (
+      <Container className="py-5 text-center">
+        <Alert variant="danger">{error || "게시글을 찾을 수 없습니다."}</Alert>
+      </Container>
+    );
+  }
+
+  const detailPost = {
+    ...post,
+    isLiked: liked,
+    likeCount: likeCount,
+    isBookmarked: bookmarked,
+    bookmarkCount: bookmarkCount,
   };
 
-  return <Container className="py-5">{renderContent()}</Container>;
+  return (
+    <Container className="py-5">
+      {post.boardType === "MARKET" ? (
+        <MarketBoardDetail
+          post={detailPost}
+          onLike={toggleLike}
+          onBookmark={toggleBookmark}
+        />
+      ) : (
+        <TogetherBoardDetail
+          post={detailPost}
+          onLike={toggleLike}
+          onBookmark={toggleBookmark}
+        />
+      )}
+    </Container>
+  );
 }
 
 export default TogetherBoardDetailPage;

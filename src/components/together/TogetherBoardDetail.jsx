@@ -6,28 +6,16 @@ import { BoardDetailLayout } from "../board/BoardDetailLayout";
 
 /**
  * @typedef {Object} TogetherBoardDetailProps
- * @property {object} post
- * @property {boolean} [liked]
- * @property {number} [likeCount]
- * @property {function} [onLike]
- * @property {boolean} [bookmarked]
- * @property {number} [bookmarkCount]
- * @property {function} [onBookmark]
+ * @property {object} post - 게시글 정보 (좋아요, 북마크 상태 포함)
+ * @property {function} onLike - 좋아요 토글 핸들러
+ * @property {function} onBookmark - 북마크 토글 핸들러
  */
 
 /**
  * 함께해요 글 상세 메인 컴포넌트
  * @param {TogetherBoardDetailProps} props
  */
-const TogetherBoardDetail = ({
-  post,
-  liked,
-  likeCount,
-  onLike,
-  bookmarked,
-  bookmarkCount,
-  onBookmark,
-}) => {
+const TogetherBoardDetail = ({ post, onLike, onBookmark }) => {
   const navigate = useNavigate();
 
   const handleEdit = () => {
@@ -51,11 +39,11 @@ const TogetherBoardDetail = ({
   return (
     <BoardDetailLayout
       post={post}
-      likeCount={likeCount}
-      isLiked={liked}
+      likeCount={post.likeCount}
+      isLiked={post.isLiked}
       onLike={onLike}
-      bookmarkCount={bookmarkCount}
-      isBookmarked={bookmarked}
+      bookmarkCount={post.bookmarkCount}
+      isBookmarked={post.isBookmarked}
       onBookmark={onBookmark}
       boardTitle="함께해요"
       boardLink="/together"

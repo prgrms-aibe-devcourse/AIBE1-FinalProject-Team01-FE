@@ -1,15 +1,18 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import CommunityBoardDetail from "../../components/community/CommunityBoardDetail";
+import { CommunityBoardDetail } from "../../components/community/CommunityBoardDetail";
 import { posts } from "./communityData";
 import { useLikeBookmark } from "../../hooks/useLikeBookmark";
 
+/**
+ * 커뮤니티 게시글 상세 페이지 컴포넌트
+ */
 export default function CommunityBoardDetailPage() {
-  const { category, postId } = useParams();
+  const { boardType, postId } = useParams();
   const navigate = useNavigate();
 
   const post = posts.find(
-    (p) => p.category === category && String(p.id) === String(postId)
+    (p) => p.boardType === boardType && String(p.postId) === String(postId)
   );
 
   const {
@@ -20,10 +23,10 @@ export default function CommunityBoardDetailPage() {
     bookmarkCount,
     toggleBookmark,
   } = useLikeBookmark({
-    initialLikeCount: post?.like_count,
-    initialLiked: post?.is_liked,
-    initialBookmarkCount: post?.bookmark_count,
-    initialBookmarked: post?.is_bookmarked,
+    initialLikeCount: post?.likeCount,
+    initialLiked: post?.isLiked,
+    initialBookmarkCount: post?.bookmarkCount,
+    initialBookmarked: post?.isBookmarked,
   });
 
   if (!post) {
@@ -39,10 +42,10 @@ export default function CommunityBoardDetailPage() {
 
   const detailPost = {
     ...post,
-    is_liked: liked,
-    like_count: likeCount,
-    is_bookmarked: bookmarked,
-    bookmark_count: bookmarkCount,
+    isLiked: liked,
+    likeCount: likeCount,
+    isBookmarked: bookmarked,
+    bookmarkCount: bookmarkCount,
   };
 
   return (
