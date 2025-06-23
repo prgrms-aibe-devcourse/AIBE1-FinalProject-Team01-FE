@@ -1,5 +1,6 @@
 import React from "react";
 import "../../styles/components/board/Board.css";
+import UserInfo from "../common/UserInfo";
 
 /**
  * @typedef {Object} PostCardProps
@@ -25,7 +26,8 @@ export const PostCard = ({
     postId,
     title,
     nickname,
-    profileImg,
+    profileImageUrl,
+    devcourseName,
     createdAt,
     tags,
     likeCount,
@@ -34,6 +36,17 @@ export const PostCard = ({
     viewCount,
     status,
   } = post;
+
+  // user 정보 구조 통일
+  const user =
+    post.user ||
+    (nickname && profileImageUrl
+      ? {
+          nickname,
+          profileImageUrl,
+          devcourseName,
+        }
+      : null);
 
   // commentCount가 없으면 comments 배열 길이로 계산
   const displayCommentCount =
@@ -71,7 +84,7 @@ export const PostCard = ({
         )}
         <span className="fw-bold fs-5 text-truncate">{title}</span>
         <div className="author-info ms-auto text-nowrap">
-          <span className="author-name">{nickname}</span>
+          <UserInfo user={user} />
           <span className="mx-1">·</span>
           <span className="small">
             {createdAt ? new Date(createdAt).toLocaleDateString() : ""}

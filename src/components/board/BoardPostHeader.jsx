@@ -25,7 +25,15 @@ export const BoardPostHeader = ({
   showStatus = true,
 }) => {
   const { user: currentUser } = useAuth();
-  const canEditOrDelete = isAuthor(currentUser, post.user_id);
+  const user =
+    post.user ||
+    (post.nickname && post.profileImageUrl
+      ? {
+          nickname: post.nickname,
+          profileImageUrl: post.profileImageUrl,
+          devcourseName: post.devcourseName,
+        }
+      : null);
 
   const status = post.gathering_post?.status || post.market_item?.status;
 
@@ -49,26 +57,22 @@ export const BoardPostHeader = ({
           )}
           <h1 className="post-info-title mb-3">{post.title}</h1>
           <div className="d-flex justify-content-between align-items-center">
-            {post.category === "review" && post.user?.devcourse_name && (
-              <span className="author-name">{post.user.devcourse_name}</span>
-            )}
-            {post.category === "news" && post.user?.nickname && (
-              <span className="author-name">{post.user.nickname}</span>
-            )}
-            {post.category !== "review" && post.category !== "news" && (
-              <UserInfo user={post.user} />
-            )}
+            <UserInfo user={user} />
             <div className="d-flex align-items-center text-muted small">
-              <span>{new Date(post.created_at).toLocaleString()}</span>
+              <span>
+                {post.createdAt
+                  ? new Date(post.createdAt).toLocaleString()
+                  : ""}
+              </span>
               <span className="mx-2">|</span>
-              <span>조회 {post.view_count}</span>
+              <span>조회 {post.viewCount ?? 0}</span>
             </div>
           </div>
         </div>
-        {canEditOrDelete && (
+        {(onEdit || onDelete) && (
           <div className="post-info-actions flex-shrink-0 ms-3">
-            <button onClick={onEdit}>수정</button>
-            <button onClick={onDelete}>삭제</button>
+            {onEdit && <button onClick={onEdit}>수정</button>}
+            {onDelete && <button onClick={onDelete}>삭제</button>}
           </div>
         )}
       </div>

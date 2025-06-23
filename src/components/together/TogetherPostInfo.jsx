@@ -1,7 +1,12 @@
 import React from "react";
+import { useAuth } from "../../context/AuthContext";
 import "../../styles/components/community/community.css";
 import "../../styles/components/together/together.css";
 import { BoardPostHeader } from "../board/BoardPostHeader";
+import {
+  GATHERING_TYPE_LABELS,
+  MATCH_TYPE_LABELS,
+} from "../../pages/together/constants";
 
 /**
  * @typedef {Object} TogetherPostInfoProps
@@ -15,6 +20,9 @@ import { BoardPostHeader } from "../board/BoardPostHeader";
  * @param {TogetherPostInfoProps} props
  */
 const TogetherPostInfo = ({ post, onEdit, onDelete }) => {
+  const { user: currentUser } = useAuth();
+  const isMine = currentUser && post && currentUser.userId === post.userId;
+
   if (!post) return <div>게시글 정보를 불러오는 중입니다...</div>;
 
   // GATHERING(스터디/프로젝트)
@@ -23,9 +31,9 @@ const TogetherPostInfo = ({ post, onEdit, onDelete }) => {
       <>
         <BoardPostHeader
           post={post}
-          onEdit={onEdit}
-          onDelete={onDelete}
-          categoryLabel={post.gatheringType}
+          onEdit={isMine ? onEdit : undefined}
+          onDelete={isMine ? onDelete : undefined}
+          categoryLabel={GATHERING_TYPE_LABELS[post.gatheringType]}
         />
         <div className="d-flex flex-wrap justify-content-around align-items-center p-3 my-4 rounded bg-light">
           <div className="text-center mx-2 my-2">
@@ -67,9 +75,9 @@ const TogetherPostInfo = ({ post, onEdit, onDelete }) => {
       <>
         <BoardPostHeader
           post={post}
-          onEdit={onEdit}
-          onDelete={onDelete}
-          categoryLabel={post.matchingType}
+          onEdit={isMine ? onEdit : undefined}
+          onDelete={isMine ? onDelete : undefined}
+          categoryLabel={MATCH_TYPE_LABELS[post.matchingType]}
         />
         <div className="d-flex flex-wrap justify-content-around align-items-center p-3 my-4 rounded bg-light">
           <div className="text-center mx-2 my-2">

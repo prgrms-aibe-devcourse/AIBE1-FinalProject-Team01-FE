@@ -33,7 +33,6 @@ function TogetherBoardDetailPage() {
     }
   }, [postId]);
 
-  // 항상 훅을 호출하고, post가 없을 때도 안전한 초기값을 넘김
   const {
     liked,
     likeCount,
@@ -61,38 +60,38 @@ function TogetherBoardDetailPage() {
     if (error) {
       return <Alert variant="danger">{error}</Alert>;
     }
-    if (post) {
-      switch (post.boardType) {
-        case "GATHERING":
-        case "MATCH":
-          return (
-            <TogetherBoardDetail
-              post={post}
-              liked={liked}
-              likeCount={likeCount}
-              onLike={toggleLike}
-              bookmarked={bookmarked}
-              bookmarkCount={bookmarkCount}
-              onBookmark={toggleBookmark}
-            />
-          );
-        case "MARKET":
-          return (
-            <MarketBoardDetail
-              post={post}
-              liked={liked}
-              likeCount={likeCount}
-              onLike={toggleLike}
-              bookmarked={bookmarked}
-              bookmarkCount={bookmarkCount}
-              onBookmark={toggleBookmark}
-            />
-          );
-        default:
-          return <Alert variant="warning">알 수 없는 게시판 타입입니다.</Alert>;
-      }
+    if (!post) {
+      return <Alert variant="warning">게시글이 없습니다.</Alert>;
     }
-    return null;
+    switch (post.boardType) {
+      case "GATHERING":
+      case "MATCH":
+        return (
+          <TogetherBoardDetail
+            post={post}
+            liked={liked}
+            likeCount={likeCount}
+            onLike={toggleLike}
+            bookmarked={bookmarked}
+            bookmarkCount={bookmarkCount}
+            onBookmark={toggleBookmark}
+          />
+        );
+      case "MARKET":
+        return (
+          <MarketBoardDetail
+            post={post}
+            liked={liked}
+            likeCount={likeCount}
+            onLike={toggleLike}
+            bookmarked={bookmarked}
+            bookmarkCount={bookmarkCount}
+            onBookmark={toggleBookmark}
+          />
+        );
+      default:
+        return <Alert variant="warning">알 수 없는 게시판 타입입니다.</Alert>;
+    }
   };
 
   return <Container className="py-5">{renderContent()}</Container>;
