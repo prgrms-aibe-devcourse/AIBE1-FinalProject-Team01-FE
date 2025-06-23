@@ -4,14 +4,14 @@ import "../../styles/components/community/tag-input.css";
 /**
  * @typedef {Object} TagInputProps
  * @property {string[]} tags
- * @property {(tags: string[]) => void} setTags
+ * @property {(tags: string[]) => void} onTagsChange
  */
 
 /**
  * 해시태그 입력 컴포넌트
  * @param {TagInputProps} props
  */
-export const TagInput = ({ tags, setTags }) => {
+export const TagInput = ({ tags, onTagsChange }) => {
   const [inputValue, setInputValue] = useState("");
   const recommendedTags = [
     "Frontend",
@@ -28,7 +28,7 @@ export const TagInput = ({ tags, setTags }) => {
     const trimmedTag = tag.trim();
     // 중복 및 최대 갯수(10개) 확인
     if (trimmedTag && !tags.includes(trimmedTag) && tags.length < 10) {
-      setTags([...tags, trimmedTag]);
+      onTagsChange([...tags, trimmedTag]);
     }
   };
 
@@ -49,14 +49,14 @@ export const TagInput = ({ tags, setTags }) => {
       e.key === "Backspace" &&
       !inputValue &&
       tags.length > 0 &&
-      e.nativeEvent.isComposing === false // 한글 입력 시 마지막 글자 삭제 방지
+      e.nativeEvent.isComposing === false
     ) {
-      setTags(tags.slice(0, -1));
+      onTagsChange(tags.slice(0, -1));
     }
   };
 
   const handleTagRemove = (tagToRemove) => {
-    setTags(tags.filter((tag) => tag !== tagToRemove));
+    onTagsChange(tags.filter((tag) => tag !== tagToRemove));
   };
 
   const handleRecommendedTagClick = (tag) => {
