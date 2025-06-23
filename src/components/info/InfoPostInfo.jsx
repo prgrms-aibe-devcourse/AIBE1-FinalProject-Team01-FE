@@ -20,7 +20,7 @@ export default function InfoPostInfo({
 }) {
   if (boardType === "REVIEW") {
     return (
-      <span className="author-batch">
+      <span className="author-batch ms-auto text-end">
         {devcourseName} {devcourseBatch}기
       </span>
     );

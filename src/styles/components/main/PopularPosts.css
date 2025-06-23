@@ -135,7 +135,7 @@
 
 .view-more-btn {
   padding: 0.75rem 2rem;
-  border: 0.125rem solid #333;
+  border: 0.1rem solid #bebebe;
   border-radius: 0.5rem;
   background: #fff;
   font-weight: 600;
@@ -149,7 +149,7 @@
 }
 
 .view-more-btn:hover {
-  background: #333;
+  background: #bdc9ff;
   color: #fff;
 }
 

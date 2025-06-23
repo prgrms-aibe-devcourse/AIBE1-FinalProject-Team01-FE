@@ -49,22 +49,24 @@ export const CommunityBoardDetail = ({ post, onLike, onBookmark }) => {
   };
 
   return (
-    <BoardDetailLayout
-      post={post}
-      likeCount={post.likeCount}
-      isLiked={post.isLiked}
-      onLike={() => onLike(post.postId)}
-      bookmarkCount={post.bookmarkCount}
-      isBookmarked={post.isBookmarked}
-      onBookmark={() => onBookmark(post.postId)}
-    >
-      <BoardPostHeader
+    <>
+      <BoardDetailLayout
         post={post}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        categoryLabel={BOARD_TYPE_LABEL[post.boardType]}
-      />
-      <PostContent post={post} />
-    </BoardDetailLayout>
+        likeCount={post.likeCount}
+        isLiked={post.isLiked}
+        onLike={() => onLike(post.postId)}
+        bookmarkCount={post.bookmarkCount}
+        isBookmarked={post.isBookmarked}
+        onBookmark={() => onBookmark(post.postId)}
+      >
+        <BoardPostHeader
+          post={post}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          categoryLabel={BOARD_TYPE_LABEL[post.boardType]}
+        />
+        <PostContent post={post} />
+      </BoardDetailLayout>
+    </>
   );
 };

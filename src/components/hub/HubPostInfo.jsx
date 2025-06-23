@@ -27,47 +27,42 @@ export const HubPostInfo = ({ post, onEdit, onDelete }) => {
   } = post;
 
   return (
-    <div className="p-4 mb-4">
-      <div className="d-flex justify-content-between align-items-start">
-        <div>
-          <p className="badge mb-2">
-            {courseName} {batchNumber}기
-          </p>
-          <h1 className="fw-bold">{title}</h1>
+    <div className="p-1 mt-3">
+      <h1 className="fw-bold">{title}</h1>
+      {canEditOrDelete && (
+        <div className="d-flex gap-2 mt-2">
+          <button className="btn btn-sm btn-outline-secondary" onClick={onEdit}>
+            수정
+          </button>
+          <button className="btn btn-sm btn-outline-danger" onClick={onDelete}>
+            삭제
+          </button>
         </div>
-        {canEditOrDelete && (
-          <div className="d-flex gap-2">
-            <button
-              className="btn btn-sm btn-outline-secondary"
-              onClick={onEdit}
-            >
-              수정
-            </button>
-            <button
-              className="btn btn-sm btn-outline-danger"
-              onClick={onDelete}
-            >
-              삭제
-            </button>
-          </div>
-        )}
-      </div>
-      <div className="d-flex align-items-center text-muted small mt-2">
-        {user?.imageUrl && (
-          <img
-            src={user.imageUrl}
-            alt={user.nickname}
-            className="rounded-circle me-2"
-            width="24"
-            height="24"
-          />
-        )}
-        <span>{user?.nickname}</span>
-        <span className="mx-2">|</span>
-        <span>{createdAt ? new Date(createdAt).toLocaleDateString() : ""}</span>
+      )}
+      <div className="d-flex justify-content-between align-items-center mb-2">
+        <div className="d-flex align-items-center gap-2">
+          {user?.imageUrl && (
+            <img
+              src={user.imageUrl}
+              alt={user.nickname}
+              className="rounded-circle"
+              width="32"
+              height="32"
+            />
+          )}
+          <span className="author-name fw-bold">{user?.nickname}</span>
+          {courseName && <span className="author-batch">{courseName}</span>}
+        </div>
+        <div className="d-flex align-items-center gap-2 text-muted small">
+          <span>
+            {createdAt ? new Date(createdAt).toLocaleDateString() : ""}
+          </span>
+          <span className="mx-1">|</span>
+          <span>조회 {post.viewCount ?? 0}</span>
+        </div>
       </div>
       <hr />
-      <div className="row g-3">
+      <div className="row g-3 bg-light">
         <div className="col-md-6">
           <p>
             <strong>팀원:</strong>
@@ -89,38 +84,39 @@ export const HubPostInfo = ({ post, onEdit, onDelete }) => {
             <strong>기간:</strong> {startedAt} ~ {endedAt}
           </p>
           <p>
-            <strong>기술 스택:</strong>
+            <strong>
+              기술 스택:{" "}
+              {tags?.map((tag, i) => (
+                <span key={i} className="badge bg-dark gap-1">
+                  {tag}
+                </span>
+              ))}
+            </strong>
           </p>
-          <div className="d-flex flex-wrap gap-2">
-            {tags?.map((tag, i) => (
-              <span key={i} className="badge bg-dark">
-                {tag}
-              </span>
-            ))}
+          <div className="d-flex flex-wrap gap-2"></div>
+          <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+            {githubUrl && (
+              <a
+                href={githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-outline-dark"
+              >
+                <i className="bi bi-github"></i> GitHub
+              </a>
+            )}
+            {demoUrl && (
+              <a
+                href={demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary"
+              >
+                <i className="bi bi-globe"></i> Demo
+              </a>
+            )}
           </div>
         </div>
-      </div>
-      <div className="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
-        {githubUrl && (
-          <a
-            href={githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-outline-dark"
-          >
-            <i className="bi bi-github"></i> GitHub
-          </a>
-        )}
-        {demoUrl && (
-          <a
-            href={demoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-primary"
-          >
-            <i className="bi bi-globe"></i> Demo
-          </a>
-        )}
       </div>
     </div>
   );

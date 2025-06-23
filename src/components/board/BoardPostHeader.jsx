@@ -4,6 +4,7 @@ import { isAuthor } from "../../utils/auth";
 import UserInfo from "../common/UserInfo";
 import InfoPostInfo from "../info/InfoPostInfo";
 import "../../styles/components/common/PostInfoHeader.css";
+import { BOARD_TYPE_LABEL } from "../../pages/community/constants";
 
 /**
  * @typedef {Object} BoardPostHeaderProps
@@ -54,45 +55,76 @@ export const BoardPostHeader = ({
 
   const { devcourseName, devcourseBatch, boardType } = post;
 
+  const isInfoBoard = boardType === "REVIEW" || boardType === "NEWS";
+
   return (
     <div className="post-info-header">
-      {categoryLabel && <p className="post-category-label">{categoryLabel}</p>}
-      <div className="d-flex justify-content-between align-items-start">
-        <div className="flex-grow-1">
-          {showStatus && status && (
-            <span className={`badge me-2 mb-2 ${getStatusBadgeClass()}`}>
-              {status}
-            </span>
-          )}
+      {boardType && (
+        <p className="post-category-label">
+          {BOARD_TYPE_LABEL[boardType] || boardType}
+        </p>
+      )}
+      {isInfoBoard ? (
+        <>
           <h1 className="post-info-title mb-3">{post.title}</h1>
-          <div className="d-flex justify-content-between align-items-center">
-            <div className="author-info ms-auto text-nowrap">
-              {devcourseName && devcourseBatch ? (
+          <div className="d-flex justify-content-between align-items-center text-muted small mb-2">
+            <div className="d-flex align-items-center gap-2">
+              {devcourseName && devcourseBatch && (
                 <InfoPostInfo
                   devcourseName={devcourseName}
                   devcourseBatch={devcourseBatch}
                   nickname={user?.nickname}
                   boardType={boardType}
                 />
-              ) : (
-                <UserInfo user={user} />
               )}
-              <span className="mx-1">·</span>
-              <span className="small">
+            </div>
+            <div>
+              <span>
                 {post.createdAt
                   ? new Date(post.createdAt).toLocaleDateString()
                   : ""}
               </span>
+              <span className="mx-1">|</span>
+              <span>조회 {post.viewCount ?? 0}</span>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="d-flex justify-content-between align-items-start">
+          <div className="flex-grow-1">
+            {showStatus && status && (
+              <span className={`badge me-2 mb-2 ${getStatusBadgeClass()}`}>
+                {status}
+              </span>
+            )}
+            <h1 className="post-info-title mb-3">{post.title}</h1>
+            <div className="d-flex w-100 justify-content-between align-items-center mt-2">
+              <div className="d-flex align-items-center gap-2">
+                {user?.profileImageUrl && (
+                  <img
+                    src={user.profileImageUrl}
+                    alt="프로필"
+                    className="author-img"
+                  />
+                )}
+                <span className="author-name fw-bold">{user?.nickname}</span>
+                {devcourseName && (
+                  <span className="author-batch">{devcourseName}</span>
+                )}
+              </div>
+              <div className="d-flex align-items-center gap-2 text-muted small">
+                <span>
+                  {post.createdAt
+                    ? new Date(post.createdAt).toLocaleDateString()
+                    : ""}
+                </span>
+                <span className="mx-1">|</span>
+                <span>조회 {post.viewCount ?? 0}</span>
+              </div>
             </div>
           </div>
         </div>
-        {(onEdit || onDelete) && isMine && (
-          <div className="post-info-actions flex-shrink-0 ms-3">
-            {onEdit && <button onClick={onEdit}>수정</button>}
-            {onDelete && <button onClick={onDelete}>삭제</button>}
-          </div>
-        )}
-      </div>
+      )}
       <hr />
     </div>
   );

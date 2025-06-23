@@ -4,6 +4,7 @@ import { HubPostInfo } from "./HubPostInfo";
 import { PostContent } from "../common/PostContent";
 import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import "../../styles/components/hub/hub.css";
+import { BOARD_TYPE_LABEL } from "../../pages/community/constants";
 
 /**
  * @typedef {Object} HubBoardDetailProps
@@ -55,8 +56,13 @@ export const HubBoardDetail = ({
       isBookmarked={isBookmarked}
       onBookmark={onBookmark}
     >
+      {post.boardType && (
+        <p className="post-category-label mb-2">
+          {BOARD_TYPE_LABEL[post.boardType] || post.boardType}
+        </p>
+      )}
       <HubPostInfo post={post} onEdit={handleEdit} onDelete={handleDelete} />
-      <div className="row g-5 mt-3">
+      <div className="row g-5 mt-1">
         <div className="col-md-5">
           {postImages && postImages.length > 0 && (
             <>

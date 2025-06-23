@@ -3,6 +3,7 @@ import "../../styles/components/main/PopularPosts.css";
 import iconUser from "../../assets/icon-user.png";
 import iconHeart from "../../assets/icon-heart.png";
 import iconComment from "../../assets/icon-comment.png";
+import { useNavigate } from "react-router-dom";
 
 /**
  * @typedef {Object} PopularPostsProps
@@ -38,6 +39,8 @@ export const PopularPosts = () => {
       posts: Array(4).fill(dummyPost),
     },
   ];
+
+  const navigate = useNavigate();
 
   return (
     <section className="popular-posts-section">
@@ -84,7 +87,10 @@ export const PopularPosts = () => {
           </div>
         ))}
       </div>
-      <button className="view-more-btn">
+      <button
+        className="view-more-btn"
+        onClick={() => navigate("/community/FREE")}
+      >
         더 많은 게시글 보기
         <img src={iconComment} alt="arrow" className="icon-action" />
       </button>
