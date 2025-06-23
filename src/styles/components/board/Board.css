@@ -41,7 +41,6 @@
   border-radius: 18px;
   font-size: 0.9rem;
   font-weight: 700;
-  color: #fff;
   flex-shrink: 0;
   line-height: 1.5;
 }
@@ -70,7 +69,7 @@
   background-color: #f0eaff;
   color: #6f42c1;
 }
-.label-coffeechat {
+.label-coffee_chat {
   background-color: #fff3cd;
   color: #856404;
 }

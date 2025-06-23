@@ -62,8 +62,10 @@ const gatheringPosts = [
     postId: 1,
     boardType: "GATHERING",
     title: "React 스터디 팀원 모집 (주 2회)",
-    content:
-      "<p>React 18의 새로운 기능들을 함께 공부할 스터디원을 모집합니다. 초급자도 환영!</p>",
+    content: `<p>React 18의 새로운 기능들을 함께 공부할 스터디원을 모집합니다. 초급자도 환영!</p>
+      <img src="https://picsum.photos/id/1015/600/400" alt="스터디이미지1" style="max-width:100%;height:auto;"/>
+      <img src="https://picsum.photos/id/1016/600/400" alt="스터디이미지2" style="max-width:100%;height:auto;"/>
+      `,
     tags: ["React", "JavaScript", "초보환영"],
     gatheringType: GATHERING_TYPE.STUDY,
     status: GATHERING_STATUS.RECRUITING,
@@ -71,6 +73,18 @@ const gatheringPosts = [
     place: "경기도 화성 동탄",
     period: "3개월",
     schedule: "매주 월, 목 저녁 8시",
+    post_images: [
+      {
+        id: 101,
+        image_url: "https://picsum.photos/id/1015/600/400",
+        post_id: 1,
+      },
+      {
+        id: 102,
+        image_url: "https://picsum.photos/id/1016/600/400",
+        post_id: 1,
+      },
+    ],
     ...commonFields,
     likeCount: 7,
     isLiked: true,
@@ -162,11 +176,28 @@ const marketPosts = [
     postId: 5,
     boardType: "MARKET",
     title: "기계식 키보드(청축) 팝니다",
-    content: "<p>사용감 거의 없는 기계식 키보드 팝니다. 풀박스 보유중</p>",
+    content: `<p>사용감 거의 없는 기계식 키보드 팝니다. 풀박스 보유중</p>
+      <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8" alt="키보드1" style="max-width:100%;height:auto;"/>
+      <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c" alt="키보드2" style="max-width:100%;height:auto;"/>
+    `,
     tags: ["키보드", "기계식", "청축"],
     status: MARKET_STATUS.ON_SALE,
     price: 50000,
     place: "서울시 강남구",
+    post_images: [
+      {
+        id: 1,
+        image_url:
+          "https://images.unsplash.com/photo-1517336714731-489689fd1ca8",
+        post_id: 5,
+      },
+      {
+        id: 2,
+        image_url:
+          "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+        post_id: 5,
+      },
+    ],
     ...commonFields,
     userId: 11,
     likeCount: 4,
@@ -180,11 +211,28 @@ const marketPosts = [
     postId: 6,
     boardType: "MARKET",
     title: "모니터 받침대 거의 새거",
-    content: "<p>구매 후 거의 사용하지 않은 모니터 받침대입니다.</p>",
+    content: `<p>구매 후 거의 사용하지 않은 모니터 받침대입니다.</p>
+      <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308" alt="모니터받침대1" style="max-width:100%;height:auto;"/>
+      <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca" alt="모니터받침대2" style="max-width:100%;height:auto;"/>
+    `,
     tags: ["모니터", "받침대", "모니터암"],
     status: MARKET_STATUS.SOLD_OUT,
     price: 15000,
     place: "온라인",
+    post_images: [
+      {
+        id: 3,
+        image_url:
+          "https://images.unsplash.com/photo-1519125323398-675f0ddb6308",
+        post_id: 6,
+      },
+      {
+        id: 4,
+        image_url:
+          "https://images.unsplash.com/photo-1465101046530-73398c7f28ca",
+        post_id: 6,
+      },
+    ],
     ...commonFields,
     userId: 12,
     isLiked: true,

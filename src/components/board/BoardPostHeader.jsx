@@ -45,6 +45,11 @@ export const BoardPostHeader = ({
     return "bg-secondary"; // 완료 상태
   };
 
+  const isMine = isAuthor(
+    currentUser,
+    post.user?.id || post.userId || post.user_id
+  );
+
   return (
     <div className="post-info-header">
       {categoryLabel && <p className="post-category-label">{categoryLabel}</p>}
@@ -69,7 +74,7 @@ export const BoardPostHeader = ({
             </div>
           </div>
         </div>
-        {(onEdit || onDelete) && (
+        {(onEdit || onDelete) && isMine && (
           <div className="post-info-actions flex-shrink-0 ms-3">
             {onEdit && <button onClick={onEdit}>수정</button>}
             {onDelete && <button onClick={onDelete}>삭제</button>}

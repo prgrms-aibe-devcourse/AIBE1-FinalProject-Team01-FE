@@ -5,6 +5,8 @@ import { PostContent } from "../common/PostContent";
 import { BoardTagShareBar } from "../board/BoardTagShareBar";
 import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import "../../styles/components/together/market.css";
+import { useAuth } from "../../context/AuthContext";
+import { isAuthor } from "../../utils/auth";
 
 /**
  * @typedef {Object} MarketBoardDetailProps
@@ -31,6 +33,11 @@ const MarketBoardDetail = ({
   onBookmark,
 }) => {
   const navigate = useNavigate();
+  const { user: currentUser } = useAuth();
+  const isMine = isAuthor(
+    currentUser,
+    post.user?.id || post.userId || post.user_id
+  );
   const { post_images } = post;
   const [mainImage, setMainImage] = useState(
     post_images?.[0]?.image_url || null
@@ -51,8 +58,22 @@ const MarketBoardDetail = ({
   };
 
   return (
-    <BoardDetailLayout post={post} boardTitle="함께해요" boardLink="/together">
-      <MarketPostInfo post={post} onEdit={handleEdit} onDelete={handleDelete} />
+    <BoardDetailLayout
+      post={post}
+      boardTitle="함께해요"
+      boardLink="/together"
+      likeCount={likeCount}
+      isLiked={liked}
+      onLike={onLike}
+      bookmarkCount={bookmarkCount}
+      isBookmarked={bookmarked}
+      onBookmark={onBookmark}
+    >
+      <MarketPostInfo
+        post={post}
+        onEdit={isMine ? handleEdit : undefined}
+        onDelete={isMine ? handleDelete : undefined}
+      />
       <div className="row g-5 mt-3">
         <div className="col-md-5">
           {post_images && post_images.length > 0 && (
@@ -82,15 +103,6 @@ const MarketBoardDetail = ({
         </div>
         <div className="col-md-7">
           <PostContent post={post} stripImages={true} />
-          <BoardTagShareBar
-            tags={post.tags}
-            likes={likeCount}
-            isLiked={liked}
-            bookmarks={bookmarkCount}
-            isBookmarked={bookmarked}
-            onLikeToggle={onLike}
-            onBookmarkToggle={onBookmark}
-          />
         </div>
       </div>
     </BoardDetailLayout>

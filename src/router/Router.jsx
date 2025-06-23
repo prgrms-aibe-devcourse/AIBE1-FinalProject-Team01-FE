@@ -31,7 +31,7 @@ export function AppRouter() {
       {/* <Route path="/community/:category/write" element={<CommunityWritePage />} /> */}
       <Route
         path="/together"
-        element={<Navigate to="/together/match" replace />}
+        element={<Navigate to="/together/GATHERING" replace />}
       />
       <Route path="/together/:category" element={<TogetherPage />} />
       <Route

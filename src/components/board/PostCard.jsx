@@ -1,6 +1,13 @@
 import React from "react";
 import "../../styles/components/board/Board.css";
 import UserInfo from "../common/UserInfo";
+import {
+  GATHERING_STATUS_LABELS,
+  MATCH_STATUS_LABELS,
+  MARKET_STATUS_LABELS,
+  STATUS_LABELS,
+  STATUS_COLOR_MAP,
+} from "../../pages/together/constants";
 
 /**
  * @typedef {Object} PostCardProps
@@ -10,6 +17,12 @@ import UserInfo from "../common/UserInfo";
  * @property {(id: number | string) => void} [onClick] - Click handler for the card.
  * @property {React.ReactNode} [children] - Additional content specific to the board type.
  */
+
+function getStatusLabelAndColor(status) {
+  const label = STATUS_LABELS[status] || status;
+  const colorClass = STATUS_COLOR_MAP[label] || "bg-secondary text-white";
+  return { label, colorClass };
+}
 
 /**
  * 게시글 목록에 사용되는 공통 카드 레이아웃
@@ -71,17 +84,15 @@ export const PostCard = ({
         <span className={`community-category-label me-1 label-${categoryKey}`}>
           {categoryLabel}
         </span>
-        {status && (
-          <span
-            className={`community-category-label me-2 ${
-              isActiveStatus(status)
-                ? "bg-success text-white"
-                : "bg-secondary text-white"
-            }`}
-          >
-            {status}
-          </span>
-        )}
+        {status &&
+          (() => {
+            const { label, colorClass } = getStatusLabelAndColor(status);
+            return (
+              <span className={`community-category-label me-2 ${colorClass}`}>
+                {label}
+              </span>
+            );
+          })()}
         <span className="fw-bold fs-5 text-truncate">{title}</span>
         <div className="author-info ms-auto text-nowrap">
           <UserInfo user={user} />

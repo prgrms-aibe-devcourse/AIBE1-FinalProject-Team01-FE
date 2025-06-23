@@ -76,6 +76,22 @@ export const MARKET_STATUS_LABELS = {
   [MARKET_STATUS.SOLD_OUT]: "판매완료",
 };
 
+export const STATUS_LABELS = {
+  ...GATHERING_STATUS_LABELS,
+  ...MATCH_STATUS_LABELS,
+  ...MARKET_STATUS_LABELS,
+};
+
+export const STATUS_COLOR_MAP = {
+  모집중: "bg-success text-white",
+  모집완료: "bg-secondary text-white",
+  매칭가능: "bg-primary text-white",
+  매칭완료: "bg-secondary text-white",
+  판매중: "bg-warning text-dark",
+  예약중: "bg-info text-dark",
+  판매완료: "bg-secondary text-white",
+};
+
 // UI 컴포넌트용 상수
 export const BOARD_TABS = [
   { id: "GATHERING", label: "스터디/프로젝트" },

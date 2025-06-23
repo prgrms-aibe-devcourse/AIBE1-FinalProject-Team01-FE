@@ -64,3 +64,11 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.author-img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: inline-block;
+}

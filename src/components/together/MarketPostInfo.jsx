@@ -18,14 +18,18 @@ import { MARKET_STATUS_LABELS } from "../../pages/together/constants";
  * @param {MarketPostInfoProps} props
  */
 const MarketPostInfo = ({ post, onEdit, onDelete }) => {
+  const { user: currentUser } = useAuth();
   if (!post) return <div>게시글 정보를 불러오는 중입니다...</div>;
-
+  const isMine = isAuthor(
+    currentUser,
+    post.user?.id || post.userId || post.user_id
+  );
   return (
     <>
       <BoardPostHeader
         post={post}
-        onEdit={onEdit}
-        onDelete={onDelete}
+        onEdit={isMine ? onEdit : undefined}
+        onDelete={isMine ? onDelete : undefined}
         categoryLabel="중고장터"
       />
       <div className="d-flex align-items-center justify-content-around p-3 rounded bg-light">
