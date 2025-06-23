@@ -1,6 +1,11 @@
-export const CATEGORY_MAP = {
-  free: "자유게시판",
-  qna: "Q&A",
-  retrospect: "블로그/회고",
+export const BOARD_TYPE = {
+  FREE: "FREE",
+  QNA: "QNA",
+  RETROSPECT: "RETROSPECT",
 };
-export const CATEGORY_KEYS = Object.keys(CATEGORY_MAP);
+
+export const BOARD_TYPE_LABEL = {
+  FREE: "자유게시판",
+  QNA: "질문/토론",
+  RETROSPECT: "회고",
+};
