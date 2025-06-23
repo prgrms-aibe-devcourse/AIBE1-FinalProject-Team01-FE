@@ -12,15 +12,24 @@ import { isAuthor } from "../../utils/auth";
  * @property {function} [onEdit]
  * @property {number} [depth]
  * @property {object} user
+ * @property {Array} [allComments]
  */
 
-export const CommentItem = (props) => {
-  const { comment, user: currentUser } = props;
+const CommentItem = (props) => {
+  const { comment, user: currentUser, allComments = [] } = props;
   const {
-    user: author,
-    created_at,
+    id,
+    postId,
+    nickname,
+    profileImageUrl,
+    parentCommentId,
     content: initialContent,
-    replies,
+    replyCount,
+    likeCount,
+    hasLiked,
+    createdAt,
+    updatedAt,
+    userId,
   } = comment;
 
   const [showReplyInput, setShowReplyInput] = useState(false);
@@ -36,18 +45,27 @@ export const CommentItem = (props) => {
     onChange: onEditChange,
     setValue: setEditValue,
   } = useInput(initialContent);
-  const { liked, likeCount, toggleLike } = useLikeBookmark({
-    initialLikeCount: props.comment.like_count,
-    initialLiked: props.comment.is_liked,
+  const {
+    liked,
+    likeCount: likeCountState,
+    toggleLike,
+  } = useLikeBookmark({
+    initialLikeCount: likeCount,
+    initialLiked: hasLiked,
   });
   const depth = props.depth || 1;
-  const isMine = isAuthor(currentUser, author?.id);
+  // 댓글 작성자 판별 (userId 기준)
+  const isMine = currentUser && currentUser.userId === userId;
+
+  // 대댓글 추출 (parentCommentId === 현재 댓글 id)
+  const commentReplies = allComments.filter((c) => c.parentCommentId === id);
+  const showRepliesForThis = depth === 1 ? showReplies : true;
 
   const handleReplySubmit = (e) => {
     e.preventDefault();
     if (!replyContent.trim()) return;
     if (props.onReplyAdd) {
-      props.onReplyAdd(props.comment.id, replyContent);
+      props.onReplyAdd(id, replyContent);
     }
     resetReply();
     setShowReplyInput(false);
@@ -56,7 +74,7 @@ export const CommentItem = (props) => {
   const handleLikeClick = () => {
     toggleLike();
     if (props.onLike) {
-      props.onLike(props.comment.id);
+      props.onLike(id);
     }
   };
 
@@ -67,7 +85,7 @@ export const CommentItem = (props) => {
 
   const handleEditSave = () => {
     if (props.onEdit) {
-      props.onEdit(props.comment.id, editContent);
+      props.onEdit(id, editContent);
     }
     setIsEditing(false);
   };
@@ -75,33 +93,25 @@ export const CommentItem = (props) => {
   const handleDelete = () => {
     if (window.confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
       if (props.onDelete) {
-        props.onDelete(props.comment.id);
+        props.onDelete(id);
       }
     }
   };
-
-  const commentReplies = Array.isArray(replies) ? replies : [];
-  const showRepliesForThis = depth === 1 ? showReplies : true;
 
   return (
     <div className="community-detail-comment-item">
       <div className="comment-author-row">
         <img
-          src={author?.image_url}
+          src={profileImageUrl}
           alt="프로필"
           className="comment-author-img"
         />
         <div className="d-flex align-items-center w-100">
           <div className="d-flex align-items-center flex-grow-1">
-            <span className="comment-author-name">{author?.nickname}</span>
-            {author?.devcourse_name && (
-              <span className="comment-author-batch text-secondary ms-2">
-                {author.devcourse_name}
-              </span>
-            )}
+            <span className="comment-author-name">{nickname}</span>
           </div>
           <span className="comment-date">
-            {new Date(created_at).toLocaleString()}
+            {new Date(createdAt).toLocaleString()}
           </span>
         </div>
       </div>
@@ -137,7 +147,7 @@ export const CommentItem = (props) => {
           <i
             className={liked ? "bi bi-heart-fill text-danger" : "bi bi-heart"}
           ></i>{" "}
-          {likeCount}
+          {likeCountState}
         </button>
         <button
           className="btn-comment-reply"
@@ -213,6 +223,7 @@ export const CommentItem = (props) => {
                 onDelete={props.onDelete}
                 onEdit={props.onEdit}
                 depth={depth + 1}
+                allComments={allComments}
               />
             ))}
         </div>
@@ -220,3 +231,5 @@ export const CommentItem = (props) => {
     </div>
   );
 };
+
+export { CommentItem };

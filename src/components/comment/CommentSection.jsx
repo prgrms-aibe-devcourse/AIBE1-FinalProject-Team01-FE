@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import { CommentItem } from "./CommentItem";
 import { useInput } from "../../hooks/useInput";
 import { useAuth } from "../../context/AuthContext";
-import { createCommentObject } from "../../lib/comment-utils";
+import { useComments } from "../../hooks/useComments";
 
 /**
  * @typedef {Object} CommentSectionProps
@@ -14,48 +14,29 @@ import { createCommentObject } from "../../lib/comment-utils";
  * 댓글 전체 컴포넌트 (자체적으로 상태 및 로직 관리)
  * @param {CommentSectionProps} props
  */
-export const CommentSection = ({ postId, comments: initialComments = [] }) => {
+const CommentSection = ({ postId, comments: initialComments = [] }) => {
   const { value, onChange, reset } = useInput("");
-  const [comments, setComments] = useState(initialComments);
-  const [commentsToShow, setCommentsToShow] = useState(5);
   const loaderRef = useRef(null);
   const { user } = useAuth();
+  const {
+    comments,
+    handleCommentAdd,
+    handleReplyAdd,
+    handleCommentEdit,
+    handleCommentDelete,
+    setComments,
+  } = useComments(initialComments, postId);
+  const [commentsToShow, setCommentsToShow] = React.useState(5);
 
   useEffect(() => {
     setComments(initialComments);
-  }, [initialComments]);
+  }, [initialComments, setComments]);
 
-  const handleCommentAdd = (e) => {
+  const handleAdd = (e) => {
     e.preventDefault();
     if (!value.trim()) return;
-    const newComment = createCommentObject(value, user, postId);
-    setComments((prev) => [newComment, ...prev]);
+    handleCommentAdd(value);
     reset();
-  };
-
-  const handleReplyAdd = (parentId, content) => {
-    const newReply = createCommentObject(content, user, postId, parentId);
-    const addReplyIterative = (comments, pId, reply) => {
-      const clonedComments = JSON.parse(JSON.stringify(comments));
-      const stack = [...clonedComments].reverse();
-
-      while (stack.length > 0) {
-        const current = stack.pop();
-
-        if (current.id === pId) {
-          current.replies = [...(current.replies || []), reply];
-          return clonedComments;
-        }
-
-        if (current.replies && current.replies.length > 0) {
-          for (let i = current.replies.length - 1; i >= 0; i--) {
-            stack.push(current.replies[i]);
-          }
-        }
-      }
-      return clonedComments;
-    };
-    setComments((prev) => addReplyIterative(prev, parentId, newReply));
   };
 
   const handleObserver = useCallback(
@@ -76,15 +57,15 @@ export const CommentSection = ({ postId, comments: initialComments = [] }) => {
     return () => observer.disconnect();
   }, [handleObserver, comments.length]);
 
-  const sortedComments = comments.slice().sort((a, b) => a.id - b.id);
+  const topLevelComments = comments.filter((c) => c.parentCommentId == null);
+  const sortedComments = topLevelComments
+    .slice()
+    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
   const visibleComments = sortedComments.slice(0, commentsToShow);
 
   return (
     <div className="community-detail-comments">
-      <form
-        className="community-detail-comment-form"
-        onSubmit={handleCommentAdd}
-      >
+      <form className="community-detail-comment-form" onSubmit={handleAdd}>
         <input
           type="text"
           value={value}
@@ -100,13 +81,18 @@ export const CommentSection = ({ postId, comments: initialComments = [] }) => {
             comment={c}
             user={user}
             onReplyAdd={handleReplyAdd}
+            onEdit={handleCommentEdit}
+            onDelete={handleCommentDelete}
             depth={1}
+            allComments={comments}
           />
         ))}
-        {commentsToShow < comments.length && (
+        {commentsToShow < topLevelComments.length && (
           <div ref={loaderRef} style={{ height: 32 }} />
         )}
       </div>
     </div>
   );
 };
+
+export default CommentSection;

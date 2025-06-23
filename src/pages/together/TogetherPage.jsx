@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Container, Button, Spinner, Alert } from "react-bootstrap";
 import BoardCategoryBar from "../../components/board/BoardCategoryBar";
-import BoardSearchBar from "../../components/board/BoardSearchBar";
+import { BoardSearchBar } from "../../components/board/BoardSearchBar";
 import TogetherBoardList from "../../components/together/TogetherBoardList";
 import { allTogetherPosts } from "./togetherData";
 import { BOARD_TABS } from "./constants";

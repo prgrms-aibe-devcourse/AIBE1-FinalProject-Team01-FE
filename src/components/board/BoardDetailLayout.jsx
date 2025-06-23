@@ -1,6 +1,6 @@
 import React from "react";
 import { BoardTagShareBar } from "./BoardTagShareBar";
-import { CommentSection } from "../comment/CommentSection";
+import CommentSection from "../comment/CommentSection";
 
 /**
  * @typedef {Object} BoardDetailLayoutProps

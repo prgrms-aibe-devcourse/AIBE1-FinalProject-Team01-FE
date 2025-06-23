@@ -22,23 +22,26 @@ export const PostCard = ({
   children,
 }) => {
   const {
-    id,
+    postId,
     title,
-    user,
-    created_at,
+    nickname,
+    profileImg,
+    createdAt,
     tags,
-    like_count,
+    likeCount,
+    commentCount,
     comments,
-    view_count,
-    gathering_post,
-    market_item,
+    viewCount,
+    status,
   } = post;
 
-  const status = gathering_post?.status || market_item?.status;
-
-  const commentCount = Array.isArray(comments)
-    ? comments.length
-    : comments || 0;
+  // commentCount가 없으면 comments 배열 길이로 계산
+  const displayCommentCount =
+    typeof commentCount === "number"
+      ? commentCount
+      : Array.isArray(comments)
+      ? comments.length
+      : 0;
 
   const isActiveStatus = (currentStatus) => {
     const activeKeywords = ["모집중", "매칭가능", "판매중"];
@@ -49,7 +52,7 @@ export const PostCard = ({
     <div
       className="card p-3 shadow-sm board-list-item"
       style={{ cursor: onClick ? "pointer" : "default" }}
-      onClick={onClick ? () => onClick(id) : undefined}
+      onClick={onClick ? () => onClick(postId) : undefined}
     >
       <div className="d-flex align-items-center mb-2 gap-2">
         <span className={`community-category-label me-1 label-${categoryKey}`}>
@@ -68,13 +71,10 @@ export const PostCard = ({
         )}
         <span className="fw-bold fs-5 text-truncate">{title}</span>
         <div className="author-info ms-auto text-nowrap">
-          <span className="author-name">{user?.nickname}</span>
-          {user?.devcourse_name && (
-            <span className="author-batch ms-2">{user.devcourse_name}</span>
-          )}
+          <span className="author-name">{nickname}</span>
           <span className="mx-1">·</span>
           <span className="small">
-            {new Date(created_at).toLocaleDateString()}
+            {createdAt ? new Date(createdAt).toLocaleDateString() : ""}
           </span>
         </div>
       </div>
@@ -89,13 +89,13 @@ export const PostCard = ({
         </span>
         <span className="ms-auto small d-flex align-items-center gap-3">
           <span>
-            <i className="bi bi-heart"></i> {like_count || 0}
+            <i className="bi bi-heart"></i> {likeCount || 0}
           </span>
           <span>
-            <i className="bi bi-chat"></i> {commentCount}
+            <i className="bi bi-chat"></i> {displayCommentCount}
           </span>
           <span>
-            <i className="bi bi-eye"></i> {view_count || 0}
+            <i className="bi bi-eye"></i> {viewCount || 0}
           </span>
         </span>
       </div>

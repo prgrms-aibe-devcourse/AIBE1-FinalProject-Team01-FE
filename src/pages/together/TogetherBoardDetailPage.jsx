@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Container, Spinner, Alert } from "react-bootstrap";
-import BoardDetailLayout from "../../components/board/BoardDetailLayout";
+import { BoardDetailLayout } from "../../components/board/BoardDetailLayout";
 import TogetherBoardDetail from "../../components/together/TogetherBoardDetail";
 import MarketBoardDetail from "../../components/together/MarketBoardDetail";
 import { allTogetherPosts } from "./togetherData";
@@ -34,15 +34,52 @@ function TogetherBoardDetailPage() {
     }
   }, [postId]);
 
+  // 좋아요/북마크 상태 관리 (post가 준비된 후에만)
+  const likeBookmark = post
+    ? useLikeBookmark({
+        initialLikeCount: post.likeCount,
+        initialLiked: post.isLiked,
+        initialBookmarkCount: post.bookmarkCount,
+        initialBookmarked: post.isBookmarked,
+      })
+    : {
+        liked: false,
+        likeCount: 0,
+        toggleLike: () => {},
+        bookmarked: false,
+        bookmarkCount: 0,
+        toggleBookmark: () => {},
+      };
+
   const renderBoardDetail = () => {
     if (!post) return null;
 
     switch (post.boardType) {
       case "GATHERING":
       case "MATCH":
-        return <TogetherBoardDetail post={post} />;
+        return (
+          <TogetherBoardDetail
+            post={post}
+            liked={likeBookmark.liked}
+            likeCount={likeBookmark.likeCount}
+            onLike={likeBookmark.toggleLike}
+            bookmarked={likeBookmark.bookmarked}
+            bookmarkCount={likeBookmark.bookmarkCount}
+            onBookmark={likeBookmark.toggleBookmark}
+          />
+        );
       case "MARKET":
-        return <MarketBoardDetail post={post} />;
+        return (
+          <MarketBoardDetail
+            post={post}
+            liked={likeBookmark.liked}
+            likeCount={likeBookmark.likeCount}
+            onLike={likeBookmark.toggleLike}
+            bookmarked={likeBookmark.bookmarked}
+            bookmarkCount={likeBookmark.bookmarkCount}
+            onBookmark={likeBookmark.toggleBookmark}
+          />
+        );
       default:
         return <Alert variant="warning">알 수 없는 게시판 타입입니다.</Alert>;
     }

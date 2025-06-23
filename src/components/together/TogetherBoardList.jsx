@@ -1,5 +1,5 @@
 import React from "react";
-import PostCard from "../board/PostCard";
+import { PostCard } from "../board/PostCard";
 import MarketPostInfo from "./MarketPostInfo";
 
 /**
