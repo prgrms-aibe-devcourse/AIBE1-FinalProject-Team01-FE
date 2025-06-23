@@ -2,30 +2,39 @@ import React from "react";
 
 /**
  * @typedef {Object} BoardCategoryBarProps
- * @property {Array<{id: string, label: string}>} tabs
- * @property {string} activeTab
- * @property {(tabId: string) => void} onTabClick
+ * @property {Array<{id?: string, key?: string, label: string}>} tabs
+ * @property {string} [selected]
+ * @property {string} [activeTab]
+ * @property {(tabId: string) => void} [onSelect]
+ * @property {(tabId: string) => void} [onTabClick]
  */
 
 /**
  * 게시판 상단의 카테고리(탭) 바 컴포넌트
  * @param {BoardCategoryBarProps} props
  */
-const BoardCategoryBar = ({ tabs, activeTab, onTabClick }) => {
+export const BoardCategoryBar = (props) => {
+  // 유연하게 props 처리: selected/onSelect/tabs.key 우선, 없으면 activeTab/onTabClick/tabs.id
+  const { tabs, selected, onSelect, activeTab, onTabClick } = props;
   return (
-    <div className="d-flex gap-2 mb-3">
-      {tabs.map((tab) => (
-        <button
-          key={tab.id}
-          className={`btn btn-outline-primary${
-            activeTab === tab.id ? " active" : ""
-          }`}
-          onClick={() => onTabClick(tab.id)}
-        >
-          {tab.label}
-        </button>
-      ))}
-    </div>
+    <ul className="community-category-bar nav nav-tabs mb-3">
+      {tabs.map((tab) => {
+        const tabKey = tab.key || tab.id;
+        const isActive = (selected ?? activeTab) === tabKey;
+        const handleClick = () => (onSelect || onTabClick)?.(tabKey);
+        return (
+          <li className="nav-item" key={tabKey}>
+            <button
+              className={`nav-link${isActive ? " active" : ""}`}
+              onClick={handleClick}
+              type="button"
+            >
+              {tab.label}
+            </button>
+          </li>
+        );
+      })}
+    </ul>
   );
 };
 
