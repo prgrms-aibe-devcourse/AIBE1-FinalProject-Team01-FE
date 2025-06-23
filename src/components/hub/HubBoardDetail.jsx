@@ -10,18 +10,28 @@ import "../../styles/components/hub/hub.css";
  * @property {object} post
  * @property {() => void} [onLike]
  * @property {() => void} [onBookmark]
+ * @property {number} [likeCount]
+ * @property {boolean} [isLiked]
+ * @property {number} [bookmarkCount]
+ * @property {boolean} [isBookmarked]
  */
 
 /**
  * 프로젝트 허브 상세 페이지
  * @param {HubBoardDetailProps} props
  */
-export const HubBoardDetail = ({ post, onLike, onBookmark }) => {
+export const HubBoardDetail = ({
+  post,
+  onLike,
+  onBookmark,
+  likeCount,
+  isLiked,
+  bookmarkCount,
+  isBookmarked,
+}) => {
   const navigate = useNavigate();
-  const { post_images } = post;
-  const [mainImage, setMainImage] = useState(
-    post_images?.[0]?.image_url || null
-  );
+  const { postImages, postId, title } = post;
+  const [mainImage, setMainImage] = useState(postImages?.[0]?.imageUrl || null);
 
   const handleEdit = () => {
     console.log("수정 기능은 현재 비활성화되어 있습니다.");
@@ -29,35 +39,43 @@ export const HubBoardDetail = ({ post, onLike, onBookmark }) => {
 
   const handleDelete = () => {
     if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
-      console.log("삭제할 게시글 ID:", post.id);
+      console.log("삭제할 게시글 ID:", postId);
       alert("게시글이 삭제되었습니다.");
-      navigate(`/hub`);
+      navigate(`/HUB`);
     }
   };
 
   return (
-    <BoardDetailLayout post={post} onLike={onLike} onBookmark={onBookmark}>
+    <BoardDetailLayout
+      post={post}
+      likeCount={likeCount}
+      isLiked={isLiked}
+      onLike={onLike}
+      bookmarkCount={bookmarkCount}
+      isBookmarked={isBookmarked}
+      onBookmark={onBookmark}
+    >
       <HubPostInfo post={post} onEdit={handleEdit} onDelete={handleDelete} />
       <div className="row g-5 mt-3">
         <div className="col-md-5">
-          {post_images && post_images.length > 0 && (
+          {postImages && postImages.length > 0 && (
             <>
               <img
                 src={mainImage}
-                alt={post.title}
+                alt={title}
                 className="img-fluid rounded hub-detail-main-image mb-3"
               />
-              {post_images.length > 1 && (
+              {postImages.length > 1 && (
                 <div className="d-flex flex-wrap gap-2">
-                  {post_images.map((image, index) => (
+                  {postImages.map((image, index) => (
                     <img
                       key={index}
-                      src={image.image_url}
-                      alt={`${post.title} thumbnail ${index + 1}`}
+                      src={image.imageUrl}
+                      alt={`${title} thumbnail ${index + 1}`}
                       className={`rounded hub-detail-thumbnail ${
-                        mainImage === image.image_url ? "active" : ""
+                        mainImage === image.imageUrl ? "active" : ""
                       }`}
-                      onClick={() => setMainImage(image.image_url)}
+                      onClick={() => setMainImage(image.imageUrl)}
                     />
                   ))}
                 </div>

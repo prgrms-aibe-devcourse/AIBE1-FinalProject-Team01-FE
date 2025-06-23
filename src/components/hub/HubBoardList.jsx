@@ -7,34 +7,48 @@ import "../../styles/components/hub/hub.css";
  * @property {Array<Object>} posts
  */
 
-export default function HubBoardList({ posts }) {
+export default function HubBoardList({ posts = [] }) {
   const navigate = useNavigate();
 
   const handleCardClick = (postId) => {
-    navigate(`/hub/${postId}`);
+    navigate(`/HUB/${postId}`);
   };
 
-  if (!posts || posts.length === 0) {
+  if (!Array.isArray(posts) || posts.length === 0) {
     return <p className="text-center my-5">프로젝트가 없습니다.</p>;
   }
 
   return (
     <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
       {posts.map((post) => {
-        const { project, post_images, tags } = post;
-        if (!project) return null;
+        if (!post) return null;
+        const {
+          postId,
+          postImages,
+          tags,
+          courseName,
+          batchNumber,
+          title,
+          simpleContent,
+          projectMembers,
+          startedAt,
+          endedAt,
+          githubUrl,
+          demoUrl,
+          likeCount,
+        } = post;
 
         return (
-          <div key={post.id} className="col">
+          <div key={postId} className="col">
             <div
               className="card h-100 hub-card"
-              onClick={() => handleCardClick(post.id)}
+              onClick={() => handleCardClick(postId)}
             >
               <div className="hub-card-img-wrapper">
-                {post_images && post_images.length > 0 ? (
+                {postImages && postImages.length > 0 ? (
                   <img
-                    src={post_images[0].image_url}
-                    alt={post.title}
+                    src={postImages[0].imageUrl}
+                    alt={title}
                     className="hub-card-img"
                   />
                 ) : (
@@ -43,26 +57,27 @@ export default function HubBoardList({ posts }) {
                   </div>
                 )}
                 <span className="hub-card-likes">
-                  <i className="bi bi-star-fill"></i> {post.like_count || 0}
+                  <i className="bi bi-star-fill"></i> {likeCount || 0}
                 </span>
               </div>
               <div className="card-body d-flex flex-column">
                 <p className="card-text text-primary small fw-bold">
-                  {project.devcourse_track} {project.devcourse_batch}기
+                  {courseName} {batchNumber}기
                 </p>
                 <h5 className="card-title fw-bold text-truncate mt-1">
-                  {post.title}
+                  {title}
                 </h5>
                 <p className="card-text text-muted mt-2 flex-grow-1">
-                  {project.simple_content}
+                  {simpleContent}
                 </p>
                 <p className="card-text small mt-2">
                   <strong>팀원:</strong>{" "}
-                  {project.project_members.map((m) => m.name).join(", ")}
+                  {projectMembers && projectMembers.length > 0
+                    ? projectMembers.map((m) => m.name).join(", ")
+                    : "-"}
                 </p>
                 <p className="card-text small text-muted">
-                  <strong>기간:</strong> {project.started_at} ~{" "}
-                  {project.ended_at}
+                  <strong>기간:</strong> {startedAt} ~ {endedAt}
                 </p>
                 <div className="hub-card-tags mt-auto pt-3">
                   {tags?.map((tag, i) => (
@@ -76,9 +91,9 @@ export default function HubBoardList({ posts }) {
                 </div>
               </div>
               <div className="card-footer hub-card-footer">
-                {project.github_url && (
+                {githubUrl && (
                   <a
-                    href={project.github_url}
+                    href={githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn btn-outline-dark btn-sm"
@@ -87,9 +102,9 @@ export default function HubBoardList({ posts }) {
                     <i className="bi bi-github"></i> GitHub
                   </a>
                 )}
-                {project.demo_url && (
+                {demoUrl && (
                   <a
-                    href={project.demo_url}
+                    href={demoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn btn-dark btn-sm"

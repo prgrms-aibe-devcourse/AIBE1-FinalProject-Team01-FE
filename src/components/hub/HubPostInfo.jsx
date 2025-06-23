@@ -11,17 +11,29 @@ import "../../styles/components/hub/hub.css";
  */
 export const HubPostInfo = ({ post, onEdit, onDelete }) => {
   const { user: currentUser } = useAuth();
-  const canEditOrDelete = isAuthor(currentUser, post.user_id);
-  const { project, user } = post;
+  const canEditOrDelete = isAuthor(currentUser, post.userId);
+  const {
+    courseName,
+    batchNumber,
+    title,
+    user,
+    createdAt,
+    projectMembers,
+    startedAt,
+    endedAt,
+    tags,
+    githubUrl,
+    demoUrl,
+  } = post;
 
   return (
     <div className="p-4 mb-4">
       <div className="d-flex justify-content-between align-items-start">
         <div>
           <p className="badge mb-2">
-            {project.devcourse_track} {project.devcourse_batch}기
+            {courseName} {batchNumber}기
           </p>
-          <h1 className="fw-bold">{post.title}</h1>
+          <h1 className="fw-bold">{title}</h1>
         </div>
         {canEditOrDelete && (
           <div className="d-flex gap-2">
@@ -41,16 +53,18 @@ export const HubPostInfo = ({ post, onEdit, onDelete }) => {
         )}
       </div>
       <div className="d-flex align-items-center text-muted small mt-2">
-        <img
-          src={user.image_url}
-          alt={user.nickname}
-          className="rounded-circle me-2"
-          width="24"
-          height="24"
-        />
-        <span>{user.nickname}</span>
+        {user?.imageUrl && (
+          <img
+            src={user.imageUrl}
+            alt={user.nickname}
+            className="rounded-circle me-2"
+            width="24"
+            height="24"
+          />
+        )}
+        <span>{user?.nickname}</span>
         <span className="mx-2">|</span>
-        <span>{new Date(post.created_at).toLocaleDateString()}</span>
+        <span>{createdAt ? new Date(createdAt).toLocaleDateString() : ""}</span>
       </div>
       <hr />
       <div className="row g-3">
@@ -59,22 +73,26 @@ export const HubPostInfo = ({ post, onEdit, onDelete }) => {
             <strong>팀원:</strong>
           </p>
           <ul>
-            {project.project_members.map((member, i) => (
-              <li key={i}>
-                {member.name} - {member.role}
-              </li>
-            ))}
+            {projectMembers && projectMembers.length > 0 ? (
+              projectMembers.map((member, i) => (
+                <li key={i}>
+                  {member.name} - {member.role}
+                </li>
+              ))
+            ) : (
+              <li>-</li>
+            )}
           </ul>
         </div>
         <div className="col-md-6">
           <p>
-            <strong>기간:</strong> {project.started_at} ~ {project.ended_at}
+            <strong>기간:</strong> {startedAt} ~ {endedAt}
           </p>
           <p>
             <strong>기술 스택:</strong>
           </p>
           <div className="d-flex flex-wrap gap-2">
-            {post.tags.map((tag, i) => (
+            {tags?.map((tag, i) => (
               <span key={i} className="badge bg-dark">
                 {tag}
               </span>
@@ -83,9 +101,9 @@ export const HubPostInfo = ({ post, onEdit, onDelete }) => {
         </div>
       </div>
       <div className="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
-        {project.github_url && (
+        {githubUrl && (
           <a
-            href={project.github_url}
+            href={githubUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-outline-dark"
@@ -93,9 +111,9 @@ export const HubPostInfo = ({ post, onEdit, onDelete }) => {
             <i className="bi bi-github"></i> GitHub
           </a>
         )}
-        {project.demo_url && (
+        {demoUrl && (
           <a
-            href={project.demo_url}
+            href={demoUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary"

@@ -1,31 +1,68 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { HeroSection } from "../../components/common/HeroSection";
 import HubBoardList from "../../components/hub/HubBoardList";
 import { hubData } from "./hubData";
 import { BoardPagination } from "../../components/board/BoardPagination";
+import { HubSearchBar } from "../../components/hub/HubSearchBar";
+import { COURSE_NAMES, BATCH_NUMBERS } from "../../constants/devcourse";
+import { mapHubPost } from "../../utils/hub";
 import heroHub from "../../assets/hero-hub.png";
 import "../../styles/components/community/community.css";
 
+// 추후 허브 게시판 구조에 맞춰  수정 예정
 export default function HubPage() {
-  // TODO: Add filtering logic for course, batch, and keyword
-  const posts = hubData;
+  const [filters, setFilters] = useState({
+    courseName: "",
+    batchNumber: "",
+    keyword: "",
+  });
+
+  // 변환된 데이터 사용
+  const mappedPosts = useMemo(() => hubData.map(mapHubPost), [hubData]);
+
+  const filteredPosts = useMemo(() => {
+    return mappedPosts.filter((post) => {
+      const matchesCourse =
+        !filters.courseName || post.courseName === filters.courseName;
+      const matchesBatch =
+        !filters.batchNumber ||
+        post.batchNumber === Number(filters.batchNumber);
+      const matchesKeyword =
+        !filters.keyword ||
+        post.title.toLowerCase().includes(filters.keyword.toLowerCase()) ||
+        (post.simpleContent &&
+          post.simpleContent
+            .toLowerCase()
+            .includes(filters.keyword.toLowerCase()));
+
+      return matchesCourse && matchesBatch && matchesKeyword;
+    });
+  }, [mappedPosts, filters]);
+
+  const handleFilterChange = (newFilters) => {
+    setFilters((prev) => ({
+      ...prev,
+      ...newFilters,
+    }));
+  };
 
   return (
     <>
-      <HeroSection
-        backgroundImageSrc={heroHub}
-        label="아마추어스"
-        title="프로젝트 허브"
-        description="프로그래머스 데브코스 수강생들의 프로젝트 전시 공간<br/>데브코스 학생들은 어떤 아이디어를 가지고 있을까요?"
-      />
+      <HeroSection backgroundImageSrc={heroHub} />
       <div className="py-4">
         <div className="community-main-container">
-          {/* TODO: Add HubSearchBar component here */}
-          <div className="alert alert-info my-3">
-            코스별/기수별 필터 및 검색 기능이 여기에 추가될 예정입니다.
-          </div>
-          <HubBoardList posts={posts} />
-          <BoardPagination page={1} total={1} onChange={() => {}} />
+          <HubSearchBar
+            courseNames={COURSE_NAMES}
+            batchNumbers={BATCH_NUMBERS}
+            filters={filters}
+            onFilterChange={handleFilterChange}
+          />
+          <HubBoardList posts={filteredPosts} />
+          <BoardPagination
+            page={1}
+            total={Math.ceil(filteredPosts.length / 10)}
+            onChange={() => {}}
+          />
         </div>
       </div>
     </>

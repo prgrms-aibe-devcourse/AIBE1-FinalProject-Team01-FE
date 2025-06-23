@@ -14,8 +14,8 @@ import TogetherWritePage from "../pages/together/TogetherWritePage";
 // import InfoPage from "../pages/info/InfoPage";
 // import InfoBoardDetailPage from "../pages/info/InfoBoardDetailPage";
 // import InfoWritePage from "../pages/info/InfoWritePage";
-// import HubPage from "../pages/hub/HubPage";
-// import HubDetailPage from "../pages/hub/HubDetailPage";
+import HubPage from "../pages/hub/HubPage";
+import HubDetailPage from "../pages/hub/HubDetailPage";
 
 export function AppRouter() {
   return (
@@ -52,8 +52,8 @@ export function AppRouter() {
       {/* <Route path="/info/:category" element={<InfoPage />} /> */}
       {/* <Route path="/info/:category/:postId" element={<InfoBoardDetailPage />} /> */}
       {/* <Route path="/info/:category/write" element={<InfoWritePage />} /> */}
-      {/* <Route path="/hub" element={<HubPage />} /> */}
-      {/* <Route path="/hub/:postId" element={<HubDetailPage />} /> */}
+      <Route path="/HUB" element={<HubPage />} />
+      <Route path="/HUB/:postId" element={<HubDetailPage />} />
     </Routes>
   );
 }
