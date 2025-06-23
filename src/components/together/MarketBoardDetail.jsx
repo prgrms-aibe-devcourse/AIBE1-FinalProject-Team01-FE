@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MarketPostInfo } from "./MarketPostInfo";
+import MarketPostInfo from "./MarketPostInfo";
 import { PostContent } from "../common/PostContent";
 import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import "../../styles/components/together/market.css";
@@ -13,10 +13,10 @@ import "../../styles/components/together/market.css";
  */
 
 /**
- * 장터 글 상세 메인 컴포넌트
+ * 중고장터 글 상세 메인 컴포넌트
  * @param {MarketBoardDetailProps} props
  */
-export const MarketBoardDetail = ({ post, onLike, onBookmark }) => {
+const MarketBoardDetail = ({ post, onLike, onBookmark }) => {
   const navigate = useNavigate();
   const { post_images } = post;
   const [mainImage, setMainImage] = useState(
@@ -24,16 +24,16 @@ export const MarketBoardDetail = ({ post, onLike, onBookmark }) => {
   );
 
   const handleEdit = () => {
-    navigate(`/together/${post.board_type}/write`, {
+    navigate(`/together/${post.boardType.toLowerCase()}/write`, {
       state: { postToEdit: post },
     });
   };
 
   const handleDelete = () => {
     if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
-      console.log("삭제할 게시글 ID:", post.id);
+      console.log("삭제할 게시글 ID:", post.postId);
       alert("게시글이 삭제되었습니다.");
-      navigate(`/together/${post.board_type}`);
+      navigate(`/together/${post.boardType.toLowerCase()}`);
     }
   };
 
@@ -74,3 +74,5 @@ export const MarketBoardDetail = ({ post, onLike, onBookmark }) => {
     </BoardDetailLayout>
   );
 };
+
+export default MarketBoardDetail;
