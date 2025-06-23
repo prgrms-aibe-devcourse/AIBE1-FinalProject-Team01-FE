@@ -1,17 +1,18 @@
 import React from "react";
 import "../../styles/components/community/community.css";
+
 /**
- * @typedef {Object} CommunityPaginationProps
+ * @typedef {Object} BoardPaginationProps
  * @property {number} page
  * @property {number} total
  * @property {(page: number) => void} onChange
  */
 
 /**
- * 커뮤니티 페이지네이션
- * @param {CommunityPaginationProps} props
+ * 게시판 페이지네이션
+ * @param {BoardPaginationProps} props
  */
-export const CommunityPagination = ({ page, total, onChange }) => {
+export const BoardPagination = ({ page, total, onChange }) => {
   const pages = Array.from({ length: total }, (_, i) => i + 1);
   return (
     <nav className="d-flex justify-content-center my-4">

@@ -1,0 +1,73 @@
+/* --- PostCard Common Styles --- */
+
+/* 게시글 목록 아이템 공통 */
+.board-list-item {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.board-list-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.board-list-item .fw-bold.fs-5 {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+/* 작성자 정보 */
+.author-info {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.author-name {
+  font-weight: 700;
+}
+.author-batch {
+  color: var(--primary-color);
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+/* 카테고리 라벨 공통 */
+.community-category-label {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+.label-qna {
+  background-color: var(--primary-light-color);
+  color: var(--primary-color);
+}
+.label-retrospect {
+  background-color: var(--info-light-color);
+  color: var(--info-color);
+}
+/* '함께해요' 카테고리 라벨 */
+.label-study,
+.label-project {
+  background-color: #1abc9c;
+}
+.label-eat {
+  background-color: #e67e22;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 700px) {
+  .board-list-item .d-flex.align-items-center.mb-2.gap-2 {
+    flex-wrap: wrap;
+  }
+  .board-list-item .author-info {
+    order: -1;
+    margin-left: 0 !important;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+  .board-list-item .fw-bold.fs-5 {
+    order: 0;
+    width: 100%;
+  }
+}

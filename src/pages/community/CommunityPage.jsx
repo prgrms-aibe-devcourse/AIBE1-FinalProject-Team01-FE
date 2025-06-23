@@ -1,20 +1,20 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CommunityCategoryBar } from "../../components/community/CommunityCategoryBar";
-import { CommunitySearchBar } from "../../components/community/CommunitySearchBar";
+import { BoardCategoryBar } from "../../components/board/BoardCategoryBar";
+import { BoardSearchBar } from "../../components/board/BoardSearchBar";
 import { CommunityBoardList } from "../../components/community/CommunityBoardList";
-import { CommunityPagination } from "../../components/community/CommunityPagination";
+import { BoardPagination } from "../../components/board/BoardPagination";
 import { HeroSection } from "../../components/common/HeroSection";
 import heroCommunity from "../../assets/hero-community.png";
-import { CATEGORY_MAP, DUMMY_POSTS } from "./communityData";
+import { posts as allPosts } from "./communityData";
+import { CATEGORY_KEYS, CATEGORY_MAP } from "./constants";
 import { Modal, Button } from "react-bootstrap";
 import { useBoardList } from "../../hooks/useBoardList";
 
-// 커뮤니티 카테고리(탭) 목록을 상수로 고정 선언
 const COMMUNITY_TABS = [
   { key: "free", label: "자유게시판" },
   { key: "qna", label: "Q&A" },
-  { key: "blog", label: "블로그/회고" },
+  { key: "retrospect", label: "블로그/회고" },
 ];
 
 export default function CommunityPage() {
@@ -32,7 +32,7 @@ export default function CommunityPage() {
     posts,
     totalPages,
     reset,
-  } = useBoardList({ data: DUMMY_POSTS, category });
+  } = useBoardList({ data: allPosts, category });
 
   useEffect(() => {
     reset();
@@ -47,12 +47,12 @@ export default function CommunityPage() {
       <HeroSection backgroundImageSrc={heroCommunity} />
       <div className="py-4">
         <div className="community-main-container">
-          <CommunityCategoryBar
+          <BoardCategoryBar
             selected={category}
             onSelect={handleTabSelect}
             tabs={COMMUNITY_TABS}
           />
-          <CommunitySearchBar
+          <BoardSearchBar
             keyword={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onWrite={() => navigate(`/community/${category}/write`)}
@@ -65,11 +65,7 @@ export default function CommunityPage() {
             categoryLabel={CATEGORY_MAP[category]}
             onPostClick={handlePostClick}
           />
-          <CommunityPagination
-            page={page}
-            total={totalPages}
-            onChange={setPage}
-          />
+          <BoardPagination page={page} total={totalPages} onChange={setPage} />
         </div>
       </div>
     </>

@@ -20,14 +20,11 @@ export default function ShareButton({
 }) {
   return (
     <button
-      type="button"
-      className={`btn-share ${className}`}
-      style={style}
+      className="btn btn-outline-secondary d-flex align-items-center gap-1"
       onClick={onClick}
-      aria-label="공유하기"
     >
       <i className="bi bi-share"></i>
-      <span className="ms-1">{children}</span>
+      <span>{children}</span>
     </button>
   );
 }

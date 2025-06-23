@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { CATEGORY_MAP, CATEGORY_KEYS } from "./communityData";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 import { CustomTiptapEditor } from "../../components/editor/CustomTiptapEditor";
-import { TagInput } from "../../components/community/TagInput";
+import { TagInput } from "../../components/common/TagInput";
+import { useImageUpload } from "../../hooks/useImageUpload";
+import { CATEGORY_MAP, CATEGORY_KEYS } from "./constants";
 
 export default function CommunityWritePage() {
   const navigate = useNavigate();
@@ -17,36 +18,41 @@ export default function CommunityWritePage() {
 
   const isEditMode = !!postToEdit;
 
+  const { imageUrls, handleUpload, setImageUrls } = useImageUpload(
+    postToEdit?.images || []
+  );
+
   useEffect(() => {
-    if (isEditMode) {
+    if (isEditMode && postToEdit) {
       setSelectedCategory(postToEdit.category);
       setTitle(postToEdit.title);
       setTags(postToEdit.tags || []);
       setContent(postToEdit.content);
+      setImageUrls(postToEdit.images || []);
     }
-  }, [isEditMode, postToEdit]);
+  }, [isEditMode, postToEdit, setImageUrls]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const thumbnail = imageUrls.length > 0 ? imageUrls[0] : null;
+
     const postData = {
       category: selectedCategory,
       title,
       tags,
       content,
+      images: imageUrls,
+      thumbnail,
     };
 
     if (isEditMode) {
-      // TODO: 실제 글 수정 API 연동 (PUT 또는 PATCH)
-      // await api.put(`/community/posts/${postToEdit.id}`, postData);
       console.log("수정된 게시글 데이터:", { ...postData, id: postToEdit.id });
       alert("게시글이 수정되었습니다.");
-      navigate(`/community/${postToEdit.category}/${postToEdit.id}`); // 수정된 글로 이동
+      navigate(`/community/${postToEdit.category}/${postToEdit.id}`);
     } else {
-      // TODO: 실제 글 등록 API 연동 (POST)
-      // const newPost = await api.post('/community/posts', postData);
       console.log("작성된 게시글 데이터:", postData);
       alert("게시글이 등록되었습니다.");
-      navigate(-1); // 이전 페이지로 이동
+      navigate(`/community/${selectedCategory}`);
     }
   };
 
@@ -86,7 +92,8 @@ export default function CommunityWritePage() {
           <Form.Label>내용</Form.Label>
           <CustomTiptapEditor
             content={content}
-            onChange={(newContent) => setContent(newContent)}
+            onChange={setContent}
+            onImageUpload={handleUpload}
             placeholder="내용을 입력하세요..."
           />
         </Form.Group>

@@ -48,7 +48,6 @@ export const CustomTiptapEditor = ({
       Placeholder.configure({
         placeholder,
       }),
-      Dropcursor,
     ],
     content: content,
     onUpdate: ({ editor }) => {
@@ -58,16 +57,20 @@ export const CustomTiptapEditor = ({
       handleDrop: function (view, event, slice, moved) {
         event.preventDefault();
 
-        // onImageUpload prop이 존재하고, 드롭된 것이 파일일 경우 처리
         if (onImageUpload && event.dataTransfer?.files?.length > 0) {
-          onImageUpload(event.dataTransfer.files).then((urls) => {
-            if (urls && urls.length > 0 && editor) {
-              urls.forEach((url) => {
-                editor.chain().focus().setImage({ src: url }).run();
-              });
-            }
-          });
-          return true; // 이벤트 처리 완료
+          onImageUpload(event.dataTransfer.files)
+            .then((urls) => {
+              if (urls && urls.length > 0 && editor) {
+                urls.forEach((url) => {
+                  editor.chain().focus().setImage({ src: url }).run();
+                });
+              }
+            })
+            .catch((error) => {
+              console.error("Image upload on drop failed:", error);
+              alert("이미지 업로드에 실패했습니다.");
+            });
+          return true;
         }
         return false;
       },
@@ -84,16 +87,25 @@ export const CustomTiptapEditor = ({
   const handleToolbarImageUpload = useCallback(
     async (event) => {
       if (event.target.files && onImageUpload && editor) {
-        const urls = await onImageUpload(event.target.files);
-        if (urls && urls.length > 0) {
-          urls.forEach((url) => {
-            editor.chain().focus().setImage({ src: url }).run();
-          });
+        try {
+          const urls = await onImageUpload(event.target.files);
+          if (urls && urls.length > 0) {
+            urls.forEach((url) => {
+              editor.chain().focus().setImage({ src: url }).run();
+            });
+          }
+        } catch (error) {
+          console.error("Image upload failed:", error);
+          alert("이미지 업로드에 실패했습니다.");
         }
       }
     },
     [onImageUpload, editor]
   );
+
+  const triggerFileUpload = () => {
+    // ... existing code ...
+  };
 
   return (
     <div className="border rounded">

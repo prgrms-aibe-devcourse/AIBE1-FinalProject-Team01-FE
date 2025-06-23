@@ -4,18 +4,17 @@ import { useInput } from "../../hooks/useInput";
 import { isAuthor } from "../../utils/auth";
 
 /**
- * @typedef {Object} CommunityCommentItemProps
+ * @typedef {Object} CommentItemProps
  * @property {object} comment
  * @property {function} [onReplyAdd]
  * @property {function} [onLike]
  * @property {function} [onDelete]
  * @property {function} [onEdit]
- * @property {boolean} [liked]
  * @property {number} [depth]
  * @property {object} user
  */
 
-function CommunityCommentItem(props) {
+export const CommentItem = (props) => {
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -27,7 +26,6 @@ function CommunityCommentItem(props) {
   const {
     value: editContent,
     onChange: onEditChange,
-    reset: resetEdit,
     setValue: setEditValue,
   } = useInput(props.comment.content);
   const { liked, likeCount, toggleLike } = useLikeBookmark({
@@ -36,7 +34,7 @@ function CommunityCommentItem(props) {
   });
   const depth = props.depth || 1;
   const { user } = props;
-  const isMine = isAuthor(user, props.comment.author);
+  const isMine = isAuthor(user, props.comment.authorId);
 
   const handleReplySubmit = (e) => {
     e.preventDefault();
@@ -48,39 +46,33 @@ function CommunityCommentItem(props) {
     setShowReplyInput(false);
   };
 
-  // 좋아요 버튼 클릭 핸들러
   const handleLikeClick = () => {
     toggleLike();
     if (props.onLike) {
       props.onLike(props.comment.id);
-      // TODO: 백엔드에 좋아요/취소 요청 보내기
     }
   };
 
-  // 수정 버튼 클릭 시
   const handleEditClick = () => {
     setEditValue(props.comment.content);
     setIsEditing(true);
   };
 
-  // 수정 저장
   const handleEditSave = () => {
     if (props.onEdit) {
       props.onEdit(props.comment.id, editContent);
-      // TODO: 백엔드에 수정 요청 보내기
     }
     setIsEditing(false);
   };
 
-  // 삭제
   const handleDelete = () => {
-    if (props.onDelete) {
-      props.onDelete(props.comment.id);
-      // TODO: 백엔드에 삭제 요청 보내기
+    if (window.confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
+      if (props.onDelete) {
+        props.onDelete(props.comment.id);
+      }
     }
   };
 
-  // 답글(대댓글) 렌더링 로직
   const replies = Array.isArray(props.comment.replies)
     ? props.comment.replies
     : [];
@@ -94,11 +86,11 @@ function CommunityCommentItem(props) {
           alt="프로필"
           className="comment-author-img"
         />
-        <div className="d-flex justify-content-between align-items-center w-100">
-          <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center w-100">
+          <div className="d-flex align-items-center flex-grow-1">
             <span className="comment-author-name">{props.comment.author}</span>
             {props.comment.devcourseName && (
-              <span className="comment-author-batch text-primary ms-2">
+              <span className="comment-author-batch text-secondary ms-2">
                 {props.comment.devcourseName}
               </span>
             )}
@@ -108,7 +100,7 @@ function CommunityCommentItem(props) {
       </div>
       <div className="comment-content">
         {isEditing ? (
-          <>
+          <div className="d-flex align-items-center">
             <input
               type="text"
               className="form-control me-2"
@@ -117,18 +109,18 @@ function CommunityCommentItem(props) {
               autoFocus
             />
             <button
-              className="btn btn-primary btn-sm me-2"
+              className="btn btn-primary btn-sm me-2 flex-shrink-0"
               onClick={handleEditSave}
             >
               저장
             </button>
             <button
-              className="btn btn-secondary btn-sm"
+              className="btn btn-secondary btn-sm flex-shrink-0"
               onClick={() => setIsEditing(false)}
             >
               취소
             </button>
-          </>
+          </div>
         ) : (
           props.comment.content
         )}
@@ -162,7 +154,6 @@ function CommunityCommentItem(props) {
             </button>
           </>
         )}
-        {/* 답글 보기/숨기기 버튼은 depth=1(최상위 댓글)에서만 노출 */}
         {depth === 1 && replies.length > 0 && !showReplies && (
           <button
             className="btn btn-link btn-sm text-primary ms-2"
@@ -182,7 +173,6 @@ function CommunityCommentItem(props) {
           </button>
         )}
       </div>
-      {/* 답글 입력창 */}
       {showReplyInput && (
         <form
           className="comment-reply-form d-flex mt-2"
@@ -201,14 +191,13 @@ function CommunityCommentItem(props) {
           </button>
         </form>
       )}
-      {/* 대댓글 */}
       {showRepliesForThis && replies.length > 0 && (
         <div className="comment-replies">
           {replies
             .slice()
             .sort((a, b) => a.id - b.id)
             .map((reply) => (
-              <CommunityCommentItem
+              <CommentItem
                 key={reply.id}
                 comment={reply}
                 user={user}
@@ -223,6 +212,4 @@ function CommunityCommentItem(props) {
       )}
     </div>
   );
-}
-
-export default CommunityCommentItem;
+};

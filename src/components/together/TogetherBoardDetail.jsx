@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { TogetherPostInfo } from "./TogetherPostInfo";
-import CommunityPostContent from "../community/CommunityPostContent";
-import CommunityTagShareBar from "../community/CommunityTagShareBar";
-import CommunityCommentSection from "../community/CommunityCommentSection";
+import { PostContent } from "../common/PostContent";
+import { BoardDetailLayout } from "../board/BoardDetailLayout";
+import { BoardPostHeader } from "../board/BoardPostHeader";
+import { RECRUITMENT_TYPES } from "../../pages/together/constants";
 
 /**
  * @typedef {Object} TogetherBoardDetailProps
@@ -16,18 +16,15 @@ import CommunityCommentSection from "../community/CommunityCommentSection";
  */
 export const TogetherBoardDetail = ({ post }) => {
   const navigate = useNavigate();
-
-  // 북마크 상태 관리
-  const [bookmarked, setBookmarked] = useState(post.bookmarked || false);
-  const [bookmarkCount, setBookmarkCount] = useState(post.bookmarkCount || 0);
-  const handleBookmarkClick = () => {
-    setBookmarked((prev) => !prev);
-    setBookmarkCount((prev) => prev + (bookmarked ? -1 : 1));
-    // TODO: 백엔드에 북마크 토글 요청
-  };
+  const { gathering_post } = post;
+  const isMatch =
+    gathering_post?.gathering_type === "mentoring" ||
+    gathering_post?.gathering_type === "coffeechat";
+  const recruitmentTypeLabel =
+    RECRUITMENT_TYPES[gathering_post?.recruitment_type];
 
   const handleEdit = () => {
-    navigate(`/together/${post.category}/write`, {
+    navigate(`/together/${post.board_type}/write`, {
       state: { postToEdit: post },
     });
   };
@@ -35,28 +32,46 @@ export const TogetherBoardDetail = ({ post }) => {
   const handleDelete = () => {
     if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
       console.log("삭제할 게시글 ID:", post.id);
-      // TODO: 실제 삭제 API 호출
       alert("게시글이 삭제되었습니다.");
-      navigate(`/together/${post.category}`);
+      navigate(`/together/${post.board_type}`);
     }
   };
 
+  if (!gathering_post) {
+    return <div>게시글 정보를 불러오는 중입니다...</div>;
+  }
+
   return (
-    <div className="community-detail-container">
-      <TogetherPostInfo
+    <BoardDetailLayout post={post}>
+      <BoardPostHeader
         post={post}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        categoryLabel={gathering_post.gathering_type}
       />
-      <CommunityPostContent post={post} />
-      <CommunityTagShareBar
-        tags={post.tags}
-        likes={post.likes}
-        bookmarked={bookmarked}
-        bookmarkCount={bookmarkCount}
-        onBookmarkToggle={handleBookmarkClick}
-      />
-      <CommunityCommentSection postId={post.id} commentList={post.comments} />
-    </div>
+      <div className="d-flex flex-wrap justify-content-around align-items-center p-3 my-4 rounded bg-light">
+        <div className="text-center mx-2 my-2">
+          <h6 className="text-muted mb-1">모집인원</h6>
+          <p className="m-0 fw-bold">
+            <i className="bi bi-people-fill me-1"></i>
+            {gathering_post.headCount}명
+          </p>
+        </div>
+        <div className="text-center mx-2 my-2">
+          <h6 className="text-muted mb-1">장소</h6>
+          <p className="m-0 fw-bold">
+            <i className="bi bi-geo-alt me-1"></i>
+            {gathering_post.place}
+          </p>
+        </div>
+        <div className="text-center mx-2 my-2">
+          <h6 className="text-muted mb-1">모집 분야</h6>
+          <p className="m-0 fw-bold">
+            {isMatch ? recruitmentTypeLabel : gathering_post?.period}
+          </p>
+        </div>
+      </div>
+      <PostContent post={post} />
+    </BoardDetailLayout>
   );
 };
