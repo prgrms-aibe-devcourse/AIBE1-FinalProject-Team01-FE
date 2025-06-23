@@ -47,7 +47,7 @@ const exampleComments = [
     parentCommentId: null,
     content: "저도 참여하고 싶어요!",
     replyCount: 1,
-    likeCount: 0,
+    likeCount: 1,
     hasLiked: true,
     createdAt: "2025-06-13T16:00:00Z",
     updatedAt: "2025-06-13T16:00:00Z",

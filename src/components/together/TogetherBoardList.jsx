@@ -1,6 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { PostCard } from "../board/PostCard";
-import MarketPostInfo from "./MarketPostInfo";
+import {
+  GATHERING_TYPE_LABELS,
+  MATCH_TYPE_LABELS,
+} from "../../pages/together/constants";
 
 /**
  * @typedef {Object} TogetherBoardListProps
@@ -8,10 +12,16 @@ import MarketPostInfo from "./MarketPostInfo";
  */
 
 /**
- * 함께해요 게시글 리스트 (스터디/프로젝트, 커피챗/멘토링, 중고장터)
+ * 함께해요 게시글 리스트 (스터디/프로젝트, 커피챗/멘토링)
  * @param {TogetherBoardListProps} props
  */
 const TogetherBoardList = ({ posts }) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = (post) => {
+    navigate(`/together/${post.boardType.toLowerCase()}/${post.postId}`);
+  };
+
   if (!posts || posts.length === 0) {
     return <div className="text-center py-5">게시글이 없습니다.</div>;
   }
@@ -19,12 +29,23 @@ const TogetherBoardList = ({ posts }) => {
   return (
     <div className="d-flex flex-column gap-3">
       {posts.map((post) => {
-        if (post.boardType === "MARKET") {
-          // 별도 : 갤러리용
-          return <MarketPostInfo key={post.postId} post={post} />;
-        }
-        // 공통 : postCard
-        return <PostCard key={post.postId} post={post} />;
+        const categoryLabel =
+          post.boardType === "GATHERING"
+            ? GATHERING_TYPE_LABELS[post.gatheringType]
+            : MATCH_TYPE_LABELS[post.matchingType];
+
+        return (
+          <PostCard
+            key={post.postId}
+            post={post}
+            categoryLabel={categoryLabel}
+            categoryKey={
+              post.gatheringType?.toLowerCase() ||
+              post.matchingType?.toLowerCase()
+            }
+            onClick={() => handleCardClick(post)}
+          />
+        );
       })}
     </div>
   );

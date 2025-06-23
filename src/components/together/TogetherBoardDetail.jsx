@@ -1,9 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { PostContent } from "../common/PostContent";
-import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import TogetherPostInfo from "./TogetherPostInfo";
-import { BoardTagShareBar } from "../board/BoardTagShareBar";
+import { BoardDetailLayout } from "../board/BoardDetailLayout";
 
 /**
  * @typedef {Object} TogetherBoardDetailProps
@@ -50,22 +49,23 @@ const TogetherBoardDetail = ({
   }
 
   return (
-    <BoardDetailLayout post={post}>
+    <BoardDetailLayout
+      post={post}
+      likeCount={likeCount}
+      isLiked={liked}
+      onLike={onLike}
+      bookmarkCount={bookmarkCount}
+      isBookmarked={bookmarked}
+      onBookmark={onBookmark}
+      boardTitle="함께해요"
+      boardLink="/together"
+    >
       <TogetherPostInfo
         post={post}
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
       <PostContent post={post} />
-      <BoardTagShareBar
-        tags={post.tags}
-        likes={likeCount}
-        isLiked={liked}
-        bookmarks={bookmarkCount}
-        isBookmarked={bookmarked}
-        onLikeToggle={onLike}
-        onBookmarkToggle={onBookmark}
-      />
     </BoardDetailLayout>
   );
 };

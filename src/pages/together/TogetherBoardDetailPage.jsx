@@ -15,7 +15,6 @@ function TogetherBoardDetailPage() {
 
   useEffect(() => {
     // TODO: API 연동
-
     try {
       setLoading(true);
       const currentPost = allTogetherPosts.find(
@@ -34,56 +33,20 @@ function TogetherBoardDetailPage() {
     }
   }, [postId]);
 
-  // 좋아요/북마크 상태 관리 (post가 준비된 후에만)
-  const likeBookmark = post
-    ? useLikeBookmark({
-        initialLikeCount: post.likeCount,
-        initialLiked: post.isLiked,
-        initialBookmarkCount: post.bookmarkCount,
-        initialBookmarked: post.isBookmarked,
-      })
-    : {
-        liked: false,
-        likeCount: 0,
-        toggleLike: () => {},
-        bookmarked: false,
-        bookmarkCount: 0,
-        toggleBookmark: () => {},
-      };
-
-  const renderBoardDetail = () => {
-    if (!post) return null;
-
-    switch (post.boardType) {
-      case "GATHERING":
-      case "MATCH":
-        return (
-          <TogetherBoardDetail
-            post={post}
-            liked={likeBookmark.liked}
-            likeCount={likeBookmark.likeCount}
-            onLike={likeBookmark.toggleLike}
-            bookmarked={likeBookmark.bookmarked}
-            bookmarkCount={likeBookmark.bookmarkCount}
-            onBookmark={likeBookmark.toggleBookmark}
-          />
-        );
-      case "MARKET":
-        return (
-          <MarketBoardDetail
-            post={post}
-            liked={likeBookmark.liked}
-            likeCount={likeBookmark.likeCount}
-            onLike={likeBookmark.toggleLike}
-            bookmarked={likeBookmark.bookmarked}
-            bookmarkCount={likeBookmark.bookmarkCount}
-            onBookmark={likeBookmark.toggleBookmark}
-          />
-        );
-      default:
-        return <Alert variant="warning">알 수 없는 게시판 타입입니다.</Alert>;
-    }
-  };
+  // 항상 훅을 호출하고, post가 없을 때도 안전한 초기값을 넘김
+  const {
+    liked,
+    likeCount,
+    toggleLike,
+    bookmarked,
+    bookmarkCount,
+    toggleBookmark,
+  } = useLikeBookmark({
+    initialLikeCount: post?.likeCount ?? 0,
+    initialLiked: post?.isLiked ?? false,
+    initialBookmarkCount: post?.bookmarkCount ?? 0,
+    initialBookmarked: post?.isBookmarked ?? false,
+  });
 
   const renderContent = () => {
     if (loading) {
@@ -99,15 +62,35 @@ function TogetherBoardDetailPage() {
       return <Alert variant="danger">{error}</Alert>;
     }
     if (post) {
-      return (
-        <BoardDetailLayout
-          post={post}
-          boardTitle="함께해요"
-          boardLink="/together"
-        >
-          {renderBoardDetail()}
-        </BoardDetailLayout>
-      );
+      switch (post.boardType) {
+        case "GATHERING":
+        case "MATCH":
+          return (
+            <TogetherBoardDetail
+              post={post}
+              liked={liked}
+              likeCount={likeCount}
+              onLike={toggleLike}
+              bookmarked={bookmarked}
+              bookmarkCount={bookmarkCount}
+              onBookmark={toggleBookmark}
+            />
+          );
+        case "MARKET":
+          return (
+            <MarketBoardDetail
+              post={post}
+              liked={liked}
+              likeCount={likeCount}
+              onLike={toggleLike}
+              bookmarked={bookmarked}
+              bookmarkCount={bookmarkCount}
+              onBookmark={toggleBookmark}
+            />
+          );
+        default:
+          return <Alert variant="warning">알 수 없는 게시판 타입입니다.</Alert>;
+      }
     }
     return null;
   };

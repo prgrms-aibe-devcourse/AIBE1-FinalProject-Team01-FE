@@ -1,56 +1,30 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Container, Button, Spinner, Alert } from "react-bootstrap";
+import { useEffect } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { Container, Button, Alert } from "react-bootstrap";
 import BoardCategoryBar from "../../components/board/BoardCategoryBar";
 import { BoardSearchBar } from "../../components/board/BoardSearchBar";
 import TogetherBoardList from "../../components/together/TogetherBoardList";
+import MarketBoardList from "../../components/together/MarketBoardList";
 import { allTogetherPosts } from "./togetherData";
 import { BOARD_TABS } from "./constants";
 
 function TogetherPage() {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState("all");
+  const { category = "GATHERING" } = useParams(); // URL 파라미터, 기본값 GATHERING
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    // TODO: API 연동
-    try {
-      setLoading(true);
-      setPosts(allTogetherPosts);
-      setError(null);
-    } catch (err) {
-      setError("게시글을 불러오는 데 실패했습니다.");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
+  // URL 파라미터에 따라 탭 이동
   const handleTabClick = (tabId) => {
-    setActiveTab(tabId);
+    navigate(`/together/${tabId}`);
   };
 
-  const filteredPosts = posts.filter((post) => {
-    // 탭 필터링
-    if (activeTab !== "all" && post.boardType !== activeTab) {
-      return false;
-    }
-    return true;
-  });
+  // 현재 카테고리에 맞는 게시글 필터링
+  const filteredPosts = allTogetherPosts.filter(
+    (post) => post.boardType === category
+  );
 
   const renderContent = () => {
-    if (loading) {
-      return (
-        <div className="text-center">
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        </div>
-      );
-    }
-    if (error) {
-      return <Alert variant="danger">{error}</Alert>;
+    if (category === "MARKET") {
+      return <MarketBoardList posts={filteredPosts} />;
     }
     return <TogetherBoardList posts={filteredPosts} />;
   };
@@ -59,14 +33,18 @@ function TogetherPage() {
     <Container className="py-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>함께해요</h2>
-        <Button as={Link} to="/together/write" variant="primary">
+        <Button
+          as={Link}
+          to={`/together/${category.toLowerCase()}/write`}
+          variant="primary"
+        >
           글쓰기
         </Button>
       </div>
 
       <BoardCategoryBar
         tabs={BOARD_TABS}
-        activeTab={activeTab}
+        activeTab={category}
         onTabClick={handleTabClick}
       />
 

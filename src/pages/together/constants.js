@@ -78,7 +78,6 @@ export const MARKET_STATUS_LABELS = {
 
 // UI 컴포넌트용 상수
 export const BOARD_TABS = [
-  { id: "all", label: "전체" },
   { id: "GATHERING", label: "스터디/프로젝트" },
   { id: "MATCH", label: "커피챗/멘토링" },
   { id: "MARKET", label: "중고장터" },

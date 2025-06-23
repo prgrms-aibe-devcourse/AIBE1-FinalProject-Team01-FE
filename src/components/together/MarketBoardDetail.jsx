@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MarketPostInfo from "./MarketPostInfo";
 import { PostContent } from "../common/PostContent";
-import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import { BoardTagShareBar } from "../board/BoardTagShareBar";
+import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import "../../styles/components/together/market.css";
 
 /**
@@ -51,7 +51,7 @@ const MarketBoardDetail = ({
   };
 
   return (
-    <BoardDetailLayout post={post}>
+    <BoardDetailLayout post={post} boardTitle="함께해요" boardLink="/together">
       <MarketPostInfo post={post} onEdit={handleEdit} onDelete={handleDelete} />
       <div className="row g-5 mt-3">
         <div className="col-md-5">
