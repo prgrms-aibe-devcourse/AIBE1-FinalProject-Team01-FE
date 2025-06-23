@@ -1,16 +1,65 @@
-export const TOGETHER_CATEGORIES = {
-  study: "스터디",
-  project: "프로젝트",
-  hackathon: "해커톤",
-  coffeechat: "커피챗",
-  mentoring: "멘토링",
-  market: "중고거래",
+// enum
+export const GATHERING_TYPE = {
+  STUDY: "STUDY",
+  PROJECT: "PROJECT",
 };
 
-export const RECRUITMENT_TYPES = {
-  frontend: "프론트엔드",
-  backend: "백엔드",
-  designer: "디자이너",
-  planner: "기획자",
-  etc: "기타",
+export const MATCH_TYPE = {
+  COFFEE_CHAT: "COFFEE_CHAT",
+  MENTORING: "MENTORING",
+};
+
+export const RECRUITMENT_TYPE = {
+  FRONTEND: "FRONTEND",
+  BACKEND: "BACKEND",
+  AI: "AI",
+  DATA: "DATA",
+  DESIGN: "DESIGN",
+  PM: "PM",
+};
+
+export const GATHERING_STATUS = {
+  RECRUITING: "RECRUITING",
+  COMPLETED: "COMPLETED",
+};
+
+export const MATCH_STATUS = {
+  AVAILABLE: "AVAILABLE",
+  COMPLETED: "COMPLETED",
+};
+
+// UI 표시 이름
+export const GATHERING_TYPE_LABELS = {
+  [GATHERING_TYPE.STUDY]: "스터디",
+  [GATHERING_TYPE.PROJECT]: "프로젝트",
+};
+
+export const MATCH_TYPE_LABELS = {
+  [MATCH_TYPE.COFFEE_CHAT]: "커피챗",
+  [MATCH_TYPE.MENTORING]: "멘토링",
+};
+
+export const TOGETHER_TYPE_LABELS = {
+  ...GATHERING_TYPE_LABELS,
+  ...MATCH_TYPE_LABELS,
+};
+
+export const RECRUITMENT_TYPE_LABELS = {
+  ALL: "전체", // FE에서만 사용용
+  [RECRUITMENT_TYPE.FRONTEND]: "프론트엔드",
+  [RECRUITMENT_TYPE.BACKEND]: "백엔드",
+  [RECRUITMENT_TYPE.AI]: "AI",
+  [RECRUITMENT_TYPE.DATA]: "데이터",
+  [RECRUITMENT_TYPE.DESIGN]: "디자인",
+  [RECRUITMENT_TYPE.PM]: "기획",
+};
+
+export const GATHERING_STATUS_LABELS = {
+  [GATHERING_STATUS.RECRUITING]: "모집중",
+  [GATHERING_STATUS.COMPLETED]: "모집완료",
+};
+
+export const MATCH_STATUS_LABELS = {
+  [MATCH_STATUS.AVAILABLE]: "매칭가능",
+  [MATCH_STATUS.COMPLETED]: "매칭완료",
 };

@@ -66,8 +66,6 @@ export const HubBoardDetail = ({ post, onLike, onBookmark }) => {
           )}
         </div>
         <div className="col-md-7">
-          <h4 className="mb-3">프로젝트 소개</h4>
-          <hr />
           <PostContent post={post} stripImages={true} />
         </div>
       </div>
