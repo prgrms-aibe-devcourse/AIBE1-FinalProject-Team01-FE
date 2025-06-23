@@ -1,80 +1,80 @@
-import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { BoardCategoryBar } from "../../components/board/BoardCategoryBar";
-import { BoardSearchBar } from "../../components/board/BoardSearchBar";
-import { BoardPagination } from "../../components/board/BoardPagination";
-import { HeroSection } from "../../components/common/HeroSection";
-import heroTogether from "../../assets/hero-together.png";
-import { useBoardList } from "../../hooks/useBoardList";
-import { gatheringData, matchData, marketData } from "./togetherData";
-import { TogetherBoardList } from "../../components/together/TogetherBoardList";
-import { MarketBoardList } from "../../components/together/MarketBoardList";
-import "../../styles/components/community/community.css";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Container, Button, Spinner, Alert } from "react-bootstrap";
+import BoardCategoryBar from "../../components/board/BoardCategoryBar";
+import BoardSearchBar from "../../components/board/BoardSearchBar";
+import TogetherBoardList from "../../components/together/TogetherBoardList";
+import { allTogetherPosts } from "./togetherData";
+import { BOARD_TABS } from "./constants";
 
-const allTogetherPosts = [...gatheringData, ...matchData, ...marketData];
-
-// 함께해요 카테고리(탭) 목록
-const TOGETHER_TABS = [
-  { key: "gathering", label: "팀원 구하기" },
-  { key: "match", label: "커피챗/멘토링" },
-  { key: "market", label: "장터" },
-];
-
-export default function TogetherPage() {
-  const { category = "gathering" } = useParams();
-  const navigate = useNavigate();
-
-  const handleTabSelect = (catKey) => navigate(`/together/${catKey}`);
-
-  const {
-    keyword,
-    setKeyword,
-    search,
-    page,
-    setPage,
-    sort,
-    setSort,
-    posts,
-    totalPages,
-    reset,
-  } = useBoardList({ data: allTogetherPosts, category });
+function TogetherPage() {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState("all");
 
   useEffect(() => {
-    reset();
-  }, [category]);
+    // TODO: API 연동
+    try {
+      setLoading(true);
+      setPosts(allTogetherPosts);
+      setError(null);
+    } catch (err) {
+      setError("게시글을 불러오는 데 실패했습니다.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  const handlePostClick = (postId) => {
-    navigate(`/together/${category}/${postId}`);
+  const handleTabClick = (tabId) => {
+    setActiveTab(tabId);
+  };
+
+  const filteredPosts = posts.filter((post) => {
+    // 탭 필터링
+    if (activeTab !== "all" && post.boardType !== activeTab) {
+      return false;
+    }
+    return true;
+  });
+
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <div className="text-center">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
+      );
+    }
+    if (error) {
+      return <Alert variant="danger">{error}</Alert>;
+    }
+    return <TogetherBoardList posts={filteredPosts} />;
   };
 
   return (
-    <>
-      <HeroSection backgroundImageSrc={heroTogether} />
-      <div className="py-4">
-        <div className="community-main-container">
-          <BoardCategoryBar
-            selected={category}
-            onSelect={handleTabSelect}
-            tabs={TOGETHER_TABS}
-          />
-          <BoardSearchBar
-            keyword={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            onWrite={() => navigate(`/together/${category}/write`)}
-            sort={sort}
-            onSortChange={setSort}
-            onSearch={search}
-          />
-
-          {category === "market" ? (
-            <MarketBoardList posts={posts} onPostClick={handlePostClick} />
-          ) : (
-            <TogetherBoardList posts={posts} onPostClick={handlePostClick} />
-          )}
-
-          <BoardPagination page={page} total={totalPages} onChange={setPage} />
-        </div>
+    <Container className="py-5">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2>함께해요</h2>
+        <Button as={Link} to="/together/write" variant="primary">
+          글쓰기
+        </Button>
       </div>
-    </>
+
+      <BoardCategoryBar
+        tabs={BOARD_TABS}
+        activeTab={activeTab}
+        onTabClick={handleTabClick}
+      />
+
+      <BoardSearchBar />
+
+      <div className="mt-4">{renderContent()}</div>
+    </Container>
   );
 }
+
+export default TogetherPage;

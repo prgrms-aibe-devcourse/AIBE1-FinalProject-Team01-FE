@@ -1,32 +1,32 @@
 import React from "react";
-import { Nav } from "react-bootstrap";
-import "../../styles/components/community/community.css";
 
 /**
  * @typedef {Object} BoardCategoryBarProps
- * @property {string} selected
- * @property {(category: string) => void} onSelect
- * @property {Array<{key: string, label: string}>} tabs
+ * @property {Array<{id: string, label: string}>} tabs
+ * @property {string} activeTab
+ * @property {(tabId: string) => void} onTabClick
  */
 
 /**
- * 게시판 카테고리 바 (탭 형식)
+ * 게시판 상단의 카테고리(탭) 바 컴포넌트
  * @param {BoardCategoryBarProps} props
  */
-export const BoardCategoryBar = ({ selected, onSelect, tabs }) => {
+const BoardCategoryBar = ({ tabs, activeTab, onTabClick }) => {
   return (
-    <ul className="community-category-bar nav nav-tabs mb-3">
+    <div className="d-flex gap-2 mb-3">
       {tabs.map((tab) => (
-        <li className="nav-item" key={tab.key}>
-          <button
-            className={`nav-link${selected === tab.key ? " active" : ""}`}
-            onClick={() => onSelect(tab.key)}
-            type="button"
-          >
-            {tab.label}
-          </button>
-        </li>
+        <button
+          key={tab.id}
+          className={`btn btn-outline-primary${
+            activeTab === tab.id ? " active" : ""
+          }`}
+          onClick={() => onTabClick(tab.id)}
+        >
+          {tab.label}
+        </button>
       ))}
-    </ul>
+    </div>
   );
 };
+
+export default BoardCategoryBar;

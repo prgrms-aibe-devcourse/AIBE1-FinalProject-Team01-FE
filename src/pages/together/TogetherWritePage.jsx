@@ -1,282 +1,308 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { Button, Form, Row, Col } from "react-bootstrap";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Container, Form, Button, Row, Col, Alert } from "react-bootstrap";
 import { CustomTiptapEditor } from "../../components/editor/CustomTiptapEditor";
 import { TagInput } from "../../components/common/TagInput";
-import { useImageUpload } from "../../hooks/useImageUpload";
-import { gatheringData, matchData, marketData } from "./togetherData"; // For finding postToEdit
-import { RECRUITMENT_TYPES } from "./constants";
+import { TOGETHER_CATEGORIES } from "./constants";
 
-const allData = [...gatheringData, ...matchData, ...marketData];
-
-// 카테고리별 옵션 정의
-const TOGETHER_OPTIONS = {
-  gathering: {
-    labels: ["스터디", "프로젝트", "해커톤"],
-    statuses: ["모집중", "모집완료"],
-  },
-  match: {
-    labels: ["커피챗", "멘토링"],
-    statuses: ["매칭가능", "매칭완료"],
-  },
-  market: {
-    labels: ["중고거래"],
-    statuses: ["판매중", "판매완료"],
-  },
-};
-
-/**
- * 함께해요 글쓰기/수정 페이지
- */
-export default function TogetherWritePage() {
+function TogetherWritePage() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { category, postId } = useParams(); // 'gathering', 'match', 'market'
-  const { state } = location;
+  const [error, setError] = useState(null);
 
-  const [postToEdit, setPostToEdit] = useState(state?.postToEdit);
-
-  // If page is accessed directly via URL for editing, find the post data
-  useEffect(() => {
-    if (!postToEdit && postId) {
-      const foundPost = allData.find((p) => p.id === parseInt(postId));
-      setPostToEdit(foundPost);
-    }
-  }, [postId, postToEdit]);
-
-  const isEditMode = !!postToEdit;
-  const options = TOGETHER_OPTIONS[category] || TOGETHER_OPTIONS.gathering;
-
-  // Form State
+  // 공통 필드
   const [title, setTitle] = useState("");
-  const [categoryLabel, setCategoryLabel] = useState(options.labels[0]);
-  const [status, setStatus] = useState(options.statuses[0] || null);
-  const [tags, setTags] = useState([]);
-  const [recruitCount, setRecruitCount] = useState(1);
-  const [locationText, setLocationText] = useState("");
-  const [timeText, setTimeText] = useState("");
-  const [period, setPeriod] = useState("");
   const [content, setContent] = useState("");
-  const [price, setPrice] = useState("");
-  const [recruitmentType, setRecruitmentType] = useState(
-    Object.keys(RECRUITMENT_TYPES)[0]
-  );
+  const [tags, setTags] = useState([]);
 
-  const { imageUrls, handleUpload, setImageUrls } = useImageUpload(
-    postToEdit?.images || []
-  );
+  // 카테고리 선택
+  const [mainCategory, setMainCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
 
-  useEffect(() => {
-    if (isEditMode && postToEdit) {
-      setTitle(postToEdit.title);
-      setCategoryLabel(postToEdit.categoryLabel);
-      setStatus(postToEdit.status);
-      setTags(postToEdit.tags || []);
-      setRecruitCount(postToEdit.recruitCount || 1);
-      setLocationText(postToEdit.location || "");
-      setTimeText(postToEdit.timeText || "");
-      setPeriod(postToEdit.period || "");
-      setContent(postToEdit.content);
-      setImageUrls(postToEdit.images || []);
-      setPrice(postToEdit.price || "");
-      setRecruitmentType(
-        postToEdit.gathering_post?.recruitment_type ||
-          Object.keys(RECRUITMENT_TYPES)[0]
-      );
-    }
-  }, [isEditMode, postToEdit, setImageUrls]);
+  // boardType에 따른 동적 필드
+  const [headCount, setHeadCount] = useState("");
+  const [period, setPeriod] = useState("");
+  const [place, setPlace] = useState("");
+  const [schedule, setSchedule] = useState(""); // Gathering
+  const [expertiseArea, setExpertiseArea] = useState(""); // Match
+  const [price, setPrice] = useState(""); // Market
+
+  const handleMainCategoryChange = (e) => {
+    const value = e.target.value;
+    setMainCategory(value);
+    setSubCategory(""); // 메인 카테고리 변경 시 서브 카테고리 초기화
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const thumbnail = imageUrls.length > 0 ? imageUrls[0] : null;
 
-    const postData = {
-      id: postToEdit ? postToEdit.id : Date.now(),
-      category,
+    if (!mainCategory) {
+      setError("메인 카테고리를 선택해주세요.");
+      return;
+    }
+    const selectedMain = TOGETHER_CATEGORIES.find(
+      (c) => c.value === mainCategory
+    );
+    if (selectedMain && selectedMain.subCategories.length > 0 && !subCategory) {
+      setError("세부 유형을 선택해주세요.");
+      return;
+    }
+
+    // TODO: API 연동
+
+    let postData = {
+      boardType: mainCategory,
       title,
-      categoryLabel,
-      status,
-      tags,
-      images: imageUrls,
-      thumbnail,
-      recruitCount: category === "market" ? null : recruitCount,
-      location: category === "market" ? locationText : locationText,
-      timeText: category === "market" ? null : timeText,
-      period: category === "market" ? null : period,
-      price: category === "market" ? price : null,
       content,
-      gathering_post: {
-        gathering_type: category,
-        status,
-        headCount: recruitCount,
-        place: locationText,
-        period,
-        required_skills: null,
-        recruitment_type: category === "match" ? recruitmentType : undefined,
-      },
+      tags: tags.join(","), 
     };
 
-    if (postToEdit) {
-      console.log("수정된 함께해요 게시글:", {
-        ...postData,
-        id: postToEdit.id,
-      });
-      alert("게시글이 수정되었습니다.");
-    } else {
-      console.log("작성된 함께해요 게시글:", postData);
-      alert("게시글이 등록되었습니다.");
+    switch (mainCategory) {
+      case "GATHERING":
+        postData = {
+          ...postData,
+          gatheringType: subCategory,
+          headCount: parseInt(headCount, 10) || 0,
+          period,
+          place,
+          schedule
+        };
+        // BE의 GatheringPostRequestDTO 참고
+        break;
+      case "MATCH":
+        postData = {
+          ...postData,
+          matchingType: subCategory,
+          expertiseArea,
+        };
+        // BE의 MatchPostRequestDTO 참고
+        break;
+      case "MARKET":
+        postData = {
+          ...postData,
+          price: parseInt(price, 10) || 0,
+          place,
+        };
+        // BE의 MarketPostRequestDTO 참고
+        break;
+      default:
+        setError("알 수 없는 카테고리입니다.");
+        return;
     }
-    navigate(`/together/${category}`);
+
+    console.log("Submitting Post Data: ", postData);
+    setError(null);
+    alert("게시글이 성공적으로 등록되었습니다.");
+    navigate("/together");
   };
 
-  const isMarket = category === "market";
+  const renderDynamicFields = () => {
+    const selectedMainCategory = TOGETHER_CATEGORIES.find(
+      (c) => c.value === mainCategory
+    );
 
-  return (
-    <div className="container py-5" style={{ maxWidth: 800 }}>
-      <h2 className="mb-4">
-        {isEditMode ? "함께해요 글 수정" : "함께해요 글쓰기"}
-      </h2>
-      <Form onSubmit={handleSubmit}>
-        <Row className="mb-3">
-          <Form.Group as={Col}>
-            <Form.Label>구분</Form.Label>
-            <Form.Select
-              value={categoryLabel}
-              onChange={(e) => setCategoryLabel(e.target.value)}
-            >
-              {options.labels.map((label) => (
-                <option key={label} value={label}>
-                  {label}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
-          {options.statuses?.length > 0 && (
-            <Form.Group as={Col}>
-              <Form.Label>상태</Form.Label>
+    return (
+      <>
+        {/* 서브 카테고리 */}
+        {selectedMainCategory?.subCategories.length > 0 && (
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm={2}>
+              세부 유형
+            </Form.Label>
+            <Col sm={10}>
               <Form.Select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
+                value={subCategory}
+                onChange={(e) => setSubCategory(e.target.value)}
+                required
               >
-                {options.statuses.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
+                <option value="">세부 유형을 선택하세요</option>
+                {selectedMainCategory.subCategories.map((sub) => (
+                  <option key={sub.value} value={sub.value}>
+                    {sub.label}
                   </option>
                 ))}
               </Form.Select>
+            </Col>
+          </Form.Group>
+        )}
+
+        {/* Gathering 필드 */}
+        {mainCategory === "GATHERING" && (
+          <>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm={2}>
+                모집 인원
+              </Form.Label>
+              <Col sm={10}>
+                <Form.Control
+                  type="number"
+                  placeholder="모집 인원 수를 입력하세요"
+                  value={headCount}
+                  onChange={(e) => setHeadCount(e.target.value)}
+                />
+              </Col>
             </Form.Group>
-          )}
-        </Row>
-        {/* 모집 분야: 멘토링/커피챗(match)일 때만 노출 */}
-        {category === "match" && (
-          <Form.Group className="mb-3">
-            <Form.Label>모집 분야</Form.Label>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm={2}>
+                진행 기간
+              </Form.Label>
+              <Col sm={10}>
+                <Form.Control
+                  type="text"
+                  placeholder="예: 3개월"
+                  value={period}
+                  onChange={(e) => setPeriod(e.target.value)}
+                />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm={2}>
+                진행 장소
+              </Form.Label>
+              <Col sm={10}>
+                <Form.Control
+                  type="text"
+                  placeholder="온라인 또는 오프라인 장소"
+                  value={place}
+                  onChange={(e) => setPlace(e.target.value)}
+                />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm={2}>
+                일정
+              </Form.Label>
+              <Col sm={10}>
+                <Form.Control
+                  type="text"
+                  placeholder="예: 매주 월, 목 저녁 8시"
+                  value={schedule}
+                  onChange={(e) => setSchedule(e.target.value)}
+                />
+              </Col>
+            </Form.Group>
+          </>
+        )}
+
+        {/* Match 필드 */}
+        {mainCategory === "MATCH" && (
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm={2}>
+              전문 분야
+            </Form.Label>
+            <Col sm={10}>
+              <Form.Control
+                type="text"
+                placeholder="어떤 분야의 전문가이신가요?"
+                value={expertiseArea}
+                onChange={(e) => setExpertiseArea(e.target.value)}
+              />
+            </Col>
+          </Form.Group>
+        )}
+
+        {/* Market 필드 */}
+        {mainCategory === "MARKET" && (
+          <>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm={2}>
+                가격
+              </Form.Label>
+              <Col sm={10}>
+                <Form.Control
+                  type="number"
+                  placeholder="판매 가격(원)"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm={2}>
+                거래 희망 장소
+              </Form.Label>
+              <Col sm={10}>
+                <Form.Control
+                  type="text"
+                  placeholder="거래를 원하는 장소를 입력하세요"
+                  value={place}
+                  onChange={(e) => setPlace(e.target.value)}
+                />
+              </Col>
+            </Form.Group>
+          </>
+        )}
+      </>
+    );
+  };
+
+  return (
+    <Container className="py-5" style={{ maxWidth: "800px" }}>
+      <h2>함께해요 글쓰기</h2>
+      <hr />
+      <Form onSubmit={handleSubmit}>
+        {error && <Alert variant="danger">{error}</Alert>}
+
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm={2}>
+            카테고리
+          </Form.Label>
+          <Col sm={10}>
             <Form.Select
-              value={recruitmentType}
-              onChange={(e) => setRecruitmentType(e.target.value)}
+              value={mainCategory}
+              onChange={handleMainCategoryChange}
+              required
             >
-              {Object.entries(RECRUITMENT_TYPES).map(([key, label]) => (
-                <option key={key} value={key}>
-                  {label}
+              <option value="">카테고리를 선택하세요</option>
+              {TOGETHER_CATEGORIES.map((cat) => (
+                <option key={cat.value} value={cat.value}>
+                  {cat.label}
                 </option>
               ))}
             </Form.Select>
-          </Form.Group>
-        )}
+          </Col>
+        </Form.Group>
+
+        {renderDynamicFields()}
+
+        <hr />
 
         <Form.Group className="mb-3">
-          <Form.Label>제목</Form.Label>
           <Form.Control
             type="text"
+            placeholder="제목을 입력하세요"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="제목을 입력하세요"
             required
+            size="lg"
           />
         </Form.Group>
 
-        <Row className="mb-3">
-          {isMarket ? (
-            <Form.Group as={Col}>
-              <Form.Label>가격 (원)</Form.Label>
-              <Form.Control
-                type="number"
-                min="0"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                placeholder="가격을 입력하세요 (숫자만)"
-                required
-              />
-            </Form.Group>
-          ) : (
-            <Form.Group as={Col}>
-              <Form.Label>모집인원</Form.Label>
-              <Form.Control
-                type="number"
-                min="1"
-                value={recruitCount}
-                onChange={(e) => setRecruitCount(Number(e.target.value))}
-              />
-            </Form.Group>
-          )}
-          <Form.Group as={Col}>
-            <Form.Label>장소</Form.Label>
-            <Form.Control
-              type="text"
-              value={locationText}
-              onChange={(e) => setLocationText(e.target.value)}
-              placeholder="온라인, 오프라인 장소 등"
-            />
-          </Form.Group>
-        </Row>
-
-        {!isMarket && (
-          <Row className="mb-3">
-            <Form.Group as={Col}>
-              <Form.Label>시간</Form.Label>
-              <Form.Control
-                type="text"
-                value={timeText}
-                onChange={(e) => setTimeText(e.target.value)}
-                placeholder="예: 매주 화, 목 오후 7시"
-              />
-            </Form.Group>
-            <Form.Group as={Col}>
-              <Form.Label>기간</Form.Label>
-              <Form.Control
-                type="text"
-                value={period}
-                onChange={(e) => setPeriod(e.target.value)}
-                placeholder="예: 2025.01.01 ~ 2025.03.01"
-              />
-            </Form.Group>
-          </Row>
-        )}
-
         <Form.Group className="mb-3">
-          <Form.Label>태그</Form.Label>
-          <TagInput tags={tags} setTags={setTags} />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>내용</Form.Label>
           <CustomTiptapEditor
             content={content}
-            onChange={setContent}
-            onImageUpload={handleUpload}
-            placeholder="프로젝트에 대해 자세하게 설명해주세요..."
+            onUpdate={({ editor }) => setContent(editor.getHTML())}
           />
         </Form.Group>
 
-        <div className="d-flex gap-2 justify-content-end mt-4">
-          <Button variant="secondary" onClick={() => navigate(-1)}>
+        <Form.Group className="mb-3">
+          <TagInput tags={tags} onTagsChange={setTags} />
+        </Form.Group>
+
+        <div className="d-flex justify-content-end">
+          <Button
+            variant="secondary"
+            className="me-2"
+            onClick={() => navigate(-1)}
+          >
             취소
           </Button>
           <Button variant="primary" type="submit">
-            {isEditMode ? "수정 완료" : "작성 완료"}
+            등록
           </Button>
         </div>
       </Form>
-    </div>
+    </Container>
   );
 }
+
+export default TogetherWritePage;
