@@ -39,7 +39,7 @@ export const NavigationBar = ({ onlyLogo }) => {
                 <Nav.Link onClick={() => navigate("/together")}>
                   함께해요
                 </Nav.Link>
-                <Nav.Link onClick={() => navigate("/info")}>
+                <Nav.Link onClick={() => navigate("/info/REVIEW")}>
                   정보게시판
                 </Nav.Link>
               </Nav>

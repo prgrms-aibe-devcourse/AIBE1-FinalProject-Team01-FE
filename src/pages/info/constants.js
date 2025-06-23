@@ -1,11 +1,11 @@
 export const INFO_TABS = [
-  { key: "review", label: "데브코스 후기" },
-  { key: "news", label: "IT 뉴스" },
+  { key: "REVIEW", label: "데브코스 후기" },
+  { key: "NEWS", label: "IT 뉴스" },
 ];
 
 export const INFO_CATEGORY_LABELS = {
-  review: "데브코스 후기",
-  news: "IT 뉴스",
+  REVIEW: "데브코스 후기",
+  NEWS: "IT 뉴스",
 };
 
 // 데브코스명별 라벨 색상 (푸른 계열 6개)

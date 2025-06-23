@@ -11,9 +11,9 @@ import CommunityBoardDetailPage from "../pages/community/CommunityBoardDetailPag
 import TogetherPage from "../pages/together/TogetherPage";
 import TogetherBoardDetailPage from "../pages/together/TogetherBoardDetailPage";
 import TogetherWritePage from "../pages/together/TogetherWritePage";
-// import InfoPage from "../pages/info/InfoPage";
-// import InfoBoardDetailPage from "../pages/info/InfoBoardDetailPage";
-// import InfoWritePage from "../pages/info/InfoWritePage";
+import InfoPage from "../pages/info/InfoPage";
+import InfoBoardDetailPage from "../pages/info/InfoBoardDetailPage";
+import InfoWritePage from "../pages/info/InfoWritePage";
 import HubPage from "../pages/hub/HubPage";
 import HubDetailPage from "../pages/hub/HubDetailPage";
 
@@ -48,10 +48,13 @@ export function AppRouter() {
         element={<TogetherBoardDetailPage />}
       />
       <Route path="/together/:category/write" element={<TogetherWritePage />} />
-      {/* <Route path="/info" element={<Navigate to="/info/review" replace />} /> */}
-      {/* <Route path="/info/:category" element={<InfoPage />} /> */}
-      {/* <Route path="/info/:category/:postId" element={<InfoBoardDetailPage />} /> */}
-      {/* <Route path="/info/:category/write" element={<InfoWritePage />} /> */}
+      <Route path="/info" element={<Navigate to="/info/REVIEW" replace />} />
+      <Route path="/info/:boardType" element={<InfoPage />} />
+      <Route
+        path="/info/:boardType/:postId"
+        element={<InfoBoardDetailPage />}
+      />
+      <Route path="/info/:boardType/write" element={<InfoWritePage />} />
       <Route path="/HUB" element={<HubPage />} />
       <Route path="/HUB/:postId" element={<HubDetailPage />} />
     </Routes>

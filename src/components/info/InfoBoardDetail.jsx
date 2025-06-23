@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import { BoardPostHeader } from "../board/BoardPostHeader";
 import { PostContent } from "../common/PostContent";
-import { INFO_CATEGORY_LABELS } from "../../pages/info/constants";
 
 export default function InfoBoardDetail({
   post,
@@ -18,24 +17,36 @@ export default function InfoBoardDetail({
 
   const handleEdit = () => {
     if (onEdit) return onEdit();
-    navigate(`/info/review/write`, { state: { postToEdit: post } });
+    navigate(`/info/REVIEW/write`, { state: { postToEdit: post } });
   };
   const handleDelete = () => {
     if (onDelete) return onDelete();
     if (window.confirm("정말로 이 후기를 삭제하시겠습니까?")) {
       alert("후기가 삭제되었습니다.");
-      navigate(`/info/review`);
+      navigate(`/info/REVIEW`);
     }
   };
 
   return (
-    <BoardDetailLayout post={post} onLike={onLike} onBookmark={onBookmark}>
+    <BoardDetailLayout
+      post={post}
+      likeCount={post.likeCount}
+      isLiked={post.isLiked}
+      bookmarkCount={post.bookmarkCount}
+      isBookmarked={post.isBookmarked}
+      onLike={onLike}
+      onBookmark={onBookmark}
+    >
       <BoardPostHeader
-        post={post}
-        categoryLabel={INFO_CATEGORY_LABELS[post.category]}
+        post={{
+          ...post,
+          nickname: undefined,
+        }}
+        devcourseName={post.devcourseName}
+        devcourseBatch={post.devcourseBatch}
+        boardType={post.boardType?.toUpperCase?.() || "REVIEW"}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        showStatus={false}
       />
       <PostContent post={post} />
     </BoardDetailLayout>

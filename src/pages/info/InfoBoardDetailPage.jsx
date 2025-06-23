@@ -6,9 +6,10 @@ import { useLikeBookmark } from "../../hooks/useLikeBookmark";
 
 export default function InfoBoardDetailPage() {
   const navigate = useNavigate();
-  const { category, postId } = useParams();
-  const posts = category === "news" ? newsPosts : reviewPosts;
-  const post = posts.find((p) => String(p.id) === String(postId));
+  let { boardType, postId } = useParams();
+  boardType = boardType.toUpperCase();
+  const posts = boardType === "NEWS" ? newsPosts : reviewPosts;
+  const post = posts.find((p) => String(p.postId) === String(postId));
 
   const {
     liked,
@@ -18,10 +19,10 @@ export default function InfoBoardDetailPage() {
     bookmarkCount,
     toggleBookmark,
   } = useLikeBookmark({
-    initialLikeCount: post?.like_count,
-    initialLiked: post?.is_liked,
-    initialBookmarkCount: post?.bookmark_count,
-    initialBookmarked: post?.is_bookmarked,
+    initialLikeCount: post?.likeCount || 0,
+    initialLiked: post?.isLiked || false,
+    initialBookmarkCount: post?.bookmarkCount || 0,
+    initialBookmarked: post?.isBookmarked || false,
   });
 
   if (!post) {
@@ -36,28 +37,26 @@ export default function InfoBoardDetailPage() {
   }
 
   const handleEdit = () => {
-    navigate(`/info/review/write`, { state: { postToEdit: post } });
+    navigate(`/info/${boardType}/write`, { state: { postToEdit: post } });
   };
   const handleDelete = () => {
-    if (window.confirm("정말로 이 후기를 삭제하시겠습니까?")) {
-      const idx = reviewPosts.findIndex((p) => p.id === post.id);
-      if (idx !== -1) reviewPosts.splice(idx, 1);
-      alert("후기가 삭제되었습니다.");
-      navigate(`/info/review`);
+    if (window.confirm("정말로 이 글을 삭제하시겠습니까?")) {
+      const idx = posts.findIndex((p) => p.postId === post.postId);
+      if (idx !== -1) posts.splice(idx, 1);
+      alert("글이 삭제되었습니다.");
+      navigate(`/info/${boardType}`);
     }
-  };
-
-  const detailPost = {
-    ...post,
-    is_liked: liked,
-    like_count: likeCount,
-    is_bookmarked: bookmarked,
-    bookmark_count: bookmarkCount,
   };
 
   return (
     <InfoBoardDetail
-      post={detailPost}
+      post={{
+        ...post,
+        isLiked: liked,
+        likeCount: likeCount,
+        isBookmarked: bookmarked,
+        bookmarkCount: bookmarkCount,
+      }}
       onEdit={handleEdit}
       onDelete={handleDelete}
       onLike={toggleLike}

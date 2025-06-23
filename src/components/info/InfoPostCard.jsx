@@ -1,14 +1,16 @@
 import React from "react";
 import "../../styles/components/board/Board.css";
 import "../../styles/components/community/community.css";
+import "../../styles/components/info/info.css";
 import { DEVCOURSE_LABEL_COLORS } from "../../pages/info/constants";
+import InfoPostInfo from "./InfoPostInfo";
 
 /**
  * @typedef {Object} InfoPostCardProps
  * @property {object} post - The post object.
- * @property {string} categoryLabel - 카테고리 라벨(후기/뉴스)
- * @property {string} categoryKey - 카테고리 키(review/news)
- * @property {(id: number | string) => void} [onClick] - 카드 클릭 핸들러
+ * @property {(postId: number | string) => void} [onClick] - 카드 클릭 핸들러
+ * @property {string} [categoryLabel] - 카테고리 라벨(뱃지)
+ * @property {string} [categoryKey] - 카테고리 키(색상용)
  */
 
 /**
@@ -17,69 +19,97 @@ import { DEVCOURSE_LABEL_COLORS } from "../../pages/info/constants";
  */
 export default function InfoPostCard({
   post,
+  onClick,
   categoryLabel,
   categoryKey,
-  onClick,
 }) {
   const {
-    id,
+    postId,
     title,
-    user,
-    created_at,
+    devcourseName,
+    devcourseBatch,
+    createdAt,
     tags,
-    like_count,
-    comments,
-    view_count,
+    likeCount,
+    viewCount,
+    nickname,
+    boardType,
+    commentCount,
   } = post;
 
-  const commentCount = Array.isArray(comments)
-    ? comments.length
-    : comments || 0;
+  // devcourseName 뱃지 색상
+  const badgeStyle =
+    categoryKey && DEVCOURSE_LABEL_COLORS[categoryKey]
+      ? DEVCOURSE_LABEL_COLORS[categoryKey]
+      : {};
+
+  const displayCommentCount =
+    typeof commentCount === "number" ? commentCount : 0;
 
   return (
     <div
       className="card p-3 shadow-sm board-list-item"
       style={{ cursor: onClick ? "pointer" : "default" }}
-      onClick={onClick ? () => onClick(id) : undefined}
+      onClick={onClick ? () => onClick(postId) : undefined}
     >
-      <div className="d-flex align-items-center mb-2 gap-2">
-        {categoryKey === "review" && user?.devcourse_name && (
-          <span
-            className="author-batch me-2"
-            style={
-              DEVCOURSE_LABEL_COLORS[user.devcourse_name] || {
-                background: "#4F8FFF",
-                color: "#fff",
-              }
-            }
-          >
-            {user.devcourse_name}
-          </span>
-        )}
-        <span className="fw-bold fs-5 text-truncate flex-grow-1">{title}</span>
-        <span className="ms-auto small text-nowrap">
-          {new Date(created_at).toLocaleDateString()}
-        </span>
-      </div>
-      <div className="d-flex align-items-center gap-2 mt-2">
-        <span className="small tags-container">
-          {tags?.map((tag, i) => (
-            <span key={i} className="badge bg-light text-dark ms-1">
-              #{tag}
+      {post.postImages && post.postImages.length > 0 && (
+        <img
+          src={post.postImages[0].imageUrl}
+          alt={title}
+          className="card-img-top"
+          style={{ objectFit: "cover", maxHeight: 180 }}
+        />
+      )}
+      <div className="card-body">
+        <div className="d-flex align-items-center mb-2 gap-2">
+          {/* REVIEW만 devcourseName 뱃지 */}
+          {categoryLabel && (
+            <span
+              className={`community-category-label me-1`}
+              style={{
+                background: badgeStyle.background,
+                color: badgeStyle.color,
+              }}
+            >
+              {categoryLabel}
             </span>
-          ))}
-        </span>
-        <span className="ms-auto small d-flex align-items-center gap-3">
-          <span>
-            <i className="bi bi-heart"></i> {like_count || 0}
-          </span>
-          <span>
-            <i className="bi bi-chat"></i> {commentCount}
-          </span>
-          <span>
-            <i className="bi bi-eye"></i> {view_count || 0}
-          </span>
-        </span>
+          )}
+          <h5 className="card-title fw-bold fs-5 text-truncate mb-0">
+            {title}
+          </h5>
+          <div className="author-info ms-auto text-nowrap">
+            <InfoPostInfo
+              devcourseName={devcourseName}
+              devcourseBatch={devcourseBatch}
+              nickname={nickname}
+              boardType={boardType}
+            />
+            <span className="mx-1">·</span>
+            <span className="small">
+              {createdAt ? new Date(createdAt).toLocaleDateString() : ""}
+            </span>
+          </div>
+        </div>
+        <div className="d-flex align-items-center justify-content-between mt-2">
+          <div className="d-flex flex-wrap gap-1 tags-container mb-0">
+            {tags?.map((tag, i) => (
+              <span key={i} className="tag-badge">
+                {tag}
+              </span>
+            ))}
+          </div>
+          <div className="d-flex gap-3 small text-muted align-items-center">
+            <span>
+              <i className="bi bi-heart"></i> {likeCount || 0}
+            </span>
+            <span>
+              <i className="bi bi-chat"></i> {displayCommentCount}
+            </span>
+            <span>
+              <i className="bi bi-eye"></i> {viewCount || 0}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );

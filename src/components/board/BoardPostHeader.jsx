@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth } from "../../context/AuthContext";
 import { isAuthor } from "../../utils/auth";
 import UserInfo from "../common/UserInfo";
+import InfoPostInfo from "../info/InfoPostInfo";
 import "../../styles/components/common/PostInfoHeader.css";
 
 /**
@@ -32,6 +33,7 @@ export const BoardPostHeader = ({
           nickname: post.nickname,
           profileImageUrl: post.profileImageUrl,
           devcourseName: post.devcourseName,
+          devcourseBatch: post.devcourseBatch,
         }
       : null);
 
@@ -50,6 +52,8 @@ export const BoardPostHeader = ({
     post.user?.id || post.userId || post.user_id
   );
 
+  const { devcourseName, devcourseBatch, boardType } = post;
+
   return (
     <div className="post-info-header">
       {categoryLabel && <p className="post-category-label">{categoryLabel}</p>}
@@ -62,15 +66,23 @@ export const BoardPostHeader = ({
           )}
           <h1 className="post-info-title mb-3">{post.title}</h1>
           <div className="d-flex justify-content-between align-items-center">
-            <UserInfo user={user} />
-            <div className="d-flex align-items-center text-muted small">
-              <span>
+            <div className="author-info ms-auto text-nowrap">
+              {devcourseName && devcourseBatch ? (
+                <InfoPostInfo
+                  devcourseName={devcourseName}
+                  devcourseBatch={devcourseBatch}
+                  nickname={user?.nickname}
+                  boardType={boardType}
+                />
+              ) : (
+                <UserInfo user={user} />
+              )}
+              <span className="mx-1">·</span>
+              <span className="small">
                 {post.createdAt
-                  ? new Date(post.createdAt).toLocaleString()
+                  ? new Date(post.createdAt).toLocaleDateString()
                   : ""}
               </span>
-              <span className="mx-2">|</span>
-              <span>조회 {post.viewCount ?? 0}</span>
             </div>
           </div>
         </div>

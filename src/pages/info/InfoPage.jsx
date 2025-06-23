@@ -1,8 +1,9 @@
 import "../../styles/components/board/Board.css";
 import "../../styles/components/community/community.css";
+import "../../styles/components/info/info.css";
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { INFO_TABS, INFO_CATEGORY_LABELS } from "./constants";
+import { INFO_TABS } from "./constants";
 import { reviewPosts, newsPosts } from "./infoData";
 import InfoBoardList from "../../components/info/InfoBoardList";
 import { BoardCategoryBar } from "../../components/board/BoardCategoryBar";
@@ -15,12 +16,11 @@ import { useBoardList } from "../../hooks/useBoardList";
 const allInfoPosts = [...reviewPosts, ...newsPosts];
 
 export default function InfoPage() {
-  const { category = "review" } = useParams();
+  let { boardType = "REVIEW" } = useParams();
   const navigate = useNavigate();
 
-  const handleTabSelect = (catKey) => navigate(`/info/${catKey}`);
+  const handleTabSelect = (tabKey) => navigate(`/info/${tabKey}`);
 
-  // useBoardList 훅을 info 데이터에 맞게 사용
   const {
     keyword,
     setKeyword,
@@ -32,17 +32,17 @@ export default function InfoPage() {
     posts,
     totalPages,
     reset,
-  } = useBoardList({ data: allInfoPosts, category });
+  } = useBoardList({ data: allInfoPosts, boardType });
 
   useEffect(() => {
     reset();
-  }, [category]);
+  }, [boardType]);
 
   const handlePostClick = (postId) => {
-    navigate(`/info/${category}/${postId}`);
+    navigate(`/info/${boardType}/${postId}`);
   };
 
-  const handleWrite = () => navigate(`/info/${category}/write`);
+  const handleWrite = () => navigate(`/info/${boardType}/write`);
 
   return (
     <>
@@ -50,23 +50,19 @@ export default function InfoPage() {
       <div className="py-4">
         <div className="community-main-container">
           <BoardCategoryBar
-            selected={category}
+            selected={boardType}
             onSelect={handleTabSelect}
             tabs={INFO_TABS}
           />
           <BoardSearchBar
             keyword={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            onWrite={category === "review" ? handleWrite : undefined}
+            onWrite={boardType === "REVIEW" ? handleWrite : undefined}
             sort={sort}
             onSortChange={setSort}
             onSearch={search}
           />
-          <InfoBoardList
-            posts={posts}
-            category={category}
-            onPostClick={handlePostClick}
-          />
+          <InfoBoardList posts={posts} onPostClick={handlePostClick} />
           <BoardPagination page={page} total={totalPages} onChange={setPage} />
         </div>
       </div>

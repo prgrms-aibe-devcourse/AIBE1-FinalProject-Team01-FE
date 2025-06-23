@@ -6,7 +6,8 @@ import "../../styles/components/board/Board.css";
 import "../../styles/components/community/community.css";
 
 export default function InfoWritePage() {
-  const { category = "review" } = useParams();
+  let { boardType = "REVIEW" } = useParams();
+  boardType = boardType.toUpperCase();
   const navigate = useNavigate();
   const location = useLocation();
   const { postToEdit } = location.state || {};
@@ -24,7 +25,7 @@ export default function InfoWritePage() {
     }
   }, [isEditMode, postToEdit]);
 
-  if (category === "news") {
+  if (boardType === "NEWS") {
     return (
       <div className="container py-5 text-center">
         <h2>IT 뉴스는 관리자만 작성할 수 있습니다.</h2>
@@ -38,7 +39,7 @@ export default function InfoWritePage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isEditMode) {
-      const idx = reviewPosts.findIndex((p) => p.id === postToEdit.id);
+      const idx = reviewPosts.findIndex((p) => p.postId === postToEdit.postId);
       if (idx !== -1) {
         reviewPosts[idx] = {
           ...reviewPosts[idx],
@@ -48,27 +49,11 @@ export default function InfoWritePage() {
         };
       }
       alert("후기가 수정되었습니다.");
-      navigate(`/info/review/${postToEdit.id}`);
+      navigate(`/info/${boardType}/${postToEdit.postId}`);
     } else {
-      reviewPosts.unshift({
-        id: Date.now(),
-        category: "review",
-        title,
-        content: `<p>${content}</p>`,
-        user: {
-          id: 1,
-          nickname: "김루이지",
-          image_url: "https://via.placeholder.com/40",
-          devcourse_name: "프론트엔드",
-        },
-        created_at: new Date().toISOString(),
-        tags,
-        like_count: 0,
-        view_count: 0,
-        comments: [],
-      });
+      // TODO : API
       alert("후기가 등록되었습니다.");
-      navigate(`/info/review`);
+      navigate(`/info/${boardType}`);
     }
   };
 
