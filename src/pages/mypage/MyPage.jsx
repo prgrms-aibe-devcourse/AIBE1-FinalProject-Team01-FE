@@ -17,6 +17,7 @@ import ChangePasswordPage from "./ChangePasswordPage";
 import WithdrawPage from "./WithdrawPage";
 import { CommunityBoardList } from "../../components/community/CommunityBoardList";
 import { useNavigate } from "react-router-dom";
+import { getPostDetailUrl } from "../../utils/board";
 
 /**
  * 마이페이지 메인
@@ -39,9 +40,8 @@ export default function MyPage() {
   };
   const handleCancel = () => setEditMode(false);
 
-  // 게시글 클릭 시 상세 페이지로 이동
-  const handlePostClick = (postId, boardType) => {
-    navigate(`/community/${boardType}/${postId}`);
+  const handlePostClick = (post) => {
+    navigate(getPostDetailUrl(post));
   };
 
   const DETAIL = {
@@ -62,30 +62,15 @@ export default function MyPage() {
       <ChangePasswordPage onSave={() => setActiveMenu("account")} />
     ),
     posts: (
-      <CommunityBoardList
-        posts={DUMMY_POSTS}
-        onPostClick={(postId) => {
-          const post = DUMMY_POSTS.find((p) => p.postId === postId);
-          if (post) handlePostClick(postId, post.boardType);
-        }}
-      />
+      <CommunityBoardList posts={DUMMY_POSTS} onPostClick={handlePostClick} />
     ), // 작성글
     likes: (
-      <CommunityBoardList
-        posts={DUMMY_LIKES}
-        onPostClick={(postId) => {
-          const post = DUMMY_LIKES.find((p) => p.postId === postId);
-          if (post) handlePostClick(postId, post.boardType);
-        }}
-      />
+      <CommunityBoardList posts={DUMMY_LIKES} onPostClick={handlePostClick} />
     ), // 좋아요
     bookmarks: (
       <CommunityBoardList
         posts={DUMMY_BOOKMARKS}
-        onPostClick={(postId) => {
-          const post = DUMMY_BOOKMARKS.find((p) => p.postId === postId);
-          if (post) handlePostClick(postId, post.boardType);
-        }}
+        onPostClick={handlePostClick}
       />
     ), // 북마크
     withdraw: <WithdrawPage />, // 회원 탈퇴
@@ -93,19 +78,17 @@ export default function MyPage() {
 
   return (
     <div className="d-flex flex-column min-vh-100">
-      <main className="container my-5">
-        <div className="row">
-          <div className="col-md-3 mb-4">
-            <MyPageSidebar
-              activeMenu={activeMenu}
-              onMenuChange={(menu) => {
-                setActiveMenu(menu);
-                setEditMode(false);
-              }}
-            />
-          </div>
-          <div className="col-md-9">{DETAIL[activeMenu]}</div>
+      <main className="mypage-main-container my-5">
+        <div className="mypage-sidebar-col mb-4">
+          <MyPageSidebar
+            activeMenu={activeMenu}
+            onMenuChange={(menu) => {
+              setActiveMenu(menu);
+              setEditMode(false);
+            }}
+          />
         </div>
+        <div className="mypage-content-col">{DETAIL[activeMenu]}</div>
       </main>
     </div>
   );
