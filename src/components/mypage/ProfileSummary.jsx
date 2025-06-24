@@ -7,6 +7,7 @@ import React from "react";
  * @property {string} [email]
  * @property {string[]} [topics]
  * @property {function} [onEdit]
+ * @property {function} [onChangePassword]
  */
 
 /**
@@ -19,14 +20,23 @@ export const ProfileSummary = ({
   email = "amateur01@email.com",
   topics = ["Frontend", "AI/CC"],
   onEdit,
+  onChangePassword,
 }) => {
   return (
     <div className="card p-4 mb-4 shadow-sm">
       <div className="d-flex justify-content-between align-items-center mb-2">
         <h5 className="mb-0">회원 정보</h5>
-        <button className="btn btn-outline-primary btn-sm" onClick={onEdit}>
-          정보 수정
-        </button>
+        <div className="d-flex gap-2">
+          <button className="btn btn-outline-primary btn-sm" onClick={onEdit}>
+            정보 수정
+          </button>
+          <button
+            className="btn btn-outline-secondary btn-sm"
+            onClick={onChangePassword}
+          >
+            비밀번호 변경
+          </button>
+        </div>
       </div>
       <div className="mb-2">
         <strong>이름</strong>: {name}

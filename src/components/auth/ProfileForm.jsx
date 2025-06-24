@@ -47,31 +47,16 @@ export const ProfileForm = ({
     }
     setChecking(true);
     setNicknameCheck({ checked: false, message: "" });
-    try {
-      // TODO: 닉네임 중복 확인 API
-      // const res = await fetch(`/api/check-nickname?nickname=${encodeURIComponent(nickname)}`);
-      // const data = await res.json();
-      // if (data.exists) {
-      //   setNicknameCheck({ checked: false, message: "이미 사용 중인 닉네임입니다." });
-      // } else {
-      //   setNicknameCheck({ checked: true, message: "사용 가능한 닉네임입니다." });
-      // }
-      // 임시 더미 로직 (닉네임이 'admin'이면 중복)
-      if (nickname === "admin") {
-        setNicknameCheck({
-          checked: false,
-          message: "이미 사용 중인 닉네임입니다.",
-        });
-      } else {
-        setNicknameCheck({
-          checked: true,
-          message: "사용 가능한 닉네임입니다.",
-        });
-      }
-    } catch (err) {
+    // TODO: 실제 API 연동
+    if (nickname === "admin") {
       setNicknameCheck({
         checked: false,
-        message: "중복 확인 중 오류가 발생했습니다.",
+        message: "이미 사용 중인 닉네임입니다.",
+      });
+    } else {
+      setNicknameCheck({
+        checked: true,
+        message: "사용 가능한 닉네임입니다.",
       });
     }
     setChecking(false);

@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/components/auth/auth.css";
 import { useInput } from "../../hooks/useInput";
+import { isValidPassword, arePasswordsEqual } from "../../utils/auth";
 
 export const SignupForm = () => {
   const navigate = useNavigate();
@@ -17,10 +18,6 @@ export const SignupForm = () => {
     terms: false,
     privacy: false,
   });
-
-  // 비밀번호 규칙 체크 함수
-  const isValidPassword = (pw) =>
-    pw.length >= 6 && /[a-zA-Z]/.test(pw) && /[0-9]/.test(pw);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -50,7 +47,7 @@ export const SignupForm = () => {
     }
 
     // 비밀번호 일치 검증
-    if (pw !== pwCheck) {
+    if (!arePasswordsEqual(pw, pwCheck)) {
       pwCheckRef.current.setCustomValidity("비밀번호가 일치하지 않습니다.");
       pwCheckRef.current.reportValidity();
       return;
@@ -76,7 +73,6 @@ export const SignupForm = () => {
 
     // TODO: 회원가입 API 연동
 
-    // 모든 검증 통과 시
     navigate("/signup/profile");
   };
 

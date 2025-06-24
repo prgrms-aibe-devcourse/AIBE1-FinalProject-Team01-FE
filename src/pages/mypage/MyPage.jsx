@@ -13,6 +13,10 @@ import {
   DUMMY_BOOKMARKS,
 } from "./mypageData";
 import { MYPAGE_MENU } from "./constants";
+import ChangePasswordPage from "./ChangePasswordPage";
+import WithdrawPage from "./WithdrawPage";
+import { CommunityBoardList } from "../../components/community/CommunityBoardList";
+import { useNavigate } from "react-router-dom";
 
 /**
  * 마이페이지 메인
@@ -26,6 +30,7 @@ const TAB_LIST = [
 export default function MyPage() {
   const [activeMenu, setActiveMenu] = useState("account");
   const [editMode, setEditMode] = useState(false);
+  const navigate = useNavigate();
 
   const handleEdit = () => setEditMode(true);
   const handleSave = () => {
@@ -33,6 +38,11 @@ export default function MyPage() {
     alert("저장되었습니다.");
   };
   const handleCancel = () => setEditMode(false);
+
+  // 게시글 클릭 시 상세 페이지로 이동
+  const handlePostClick = (postId, boardType) => {
+    navigate(`/community/${boardType}/${postId}`);
+  };
 
   const DETAIL = {
     account: editMode ? (
@@ -42,12 +52,43 @@ export default function MyPage() {
         onCancel={handleCancel}
       />
     ) : (
-      <ProfileSummary {...DUMMY_PROFILE} onEdit={handleEdit} />
+      <ProfileSummary
+        {...DUMMY_PROFILE}
+        onEdit={handleEdit}
+        onChangePassword={() => setActiveMenu("changePassword")}
+      />
     ),
-    posts: <PostList type="posts" data={DUMMY_POSTS} />, // 작성글
-    likes: <PostList type="likes" data={DUMMY_LIKES} />, // 좋아요
-    bookmarks: <PostList type="bookmarks" data={DUMMY_BOOKMARKS} />, // 북마크
-    withdraw: <div className="card p-4">회원 탈퇴 페이지 준비중</div>,
+    changePassword: (
+      <ChangePasswordPage onSave={() => setActiveMenu("account")} />
+    ),
+    posts: (
+      <CommunityBoardList
+        posts={DUMMY_POSTS}
+        onPostClick={(postId) => {
+          const post = DUMMY_POSTS.find((p) => p.postId === postId);
+          if (post) handlePostClick(postId, post.boardType);
+        }}
+      />
+    ), // 작성글
+    likes: (
+      <CommunityBoardList
+        posts={DUMMY_LIKES}
+        onPostClick={(postId) => {
+          const post = DUMMY_LIKES.find((p) => p.postId === postId);
+          if (post) handlePostClick(postId, post.boardType);
+        }}
+      />
+    ), // 좋아요
+    bookmarks: (
+      <CommunityBoardList
+        posts={DUMMY_BOOKMARKS}
+        onPostClick={(postId) => {
+          const post = DUMMY_BOOKMARKS.find((p) => p.postId === postId);
+          if (post) handlePostClick(postId, post.boardType);
+        }}
+      />
+    ), // 북마크
+    withdraw: <WithdrawPage />, // 회원 탈퇴
   };
 
   return (
