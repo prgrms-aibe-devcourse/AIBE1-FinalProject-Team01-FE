@@ -1,19 +1,12 @@
 import React from "react";
 import { ListGroup } from "react-bootstrap";
+import { MYPAGE_MENU } from "../../pages/mypage/constants";
 
 /**
  * @typedef {Object} MyPageSidebarProps
  * @property {string} activeMenu
  * @property {function} onMenuChange
  */
-
-const MENU = [
-  { key: "account", label: "계정 관리" },
-  { key: "posts", label: "작성한 글" },
-  { key: "likes", label: "좋아요" },
-  { key: "bookmarks", label: "북마크" },
-  { key: "withdraw", label: "회원 탈퇴" },
-];
 
 /**
  * 마이페이지 사이드바

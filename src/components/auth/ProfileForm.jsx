@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import "../../styles/components/auth/auth.css";
+import { INTEREST_TOPICS } from "../../constants/topics";
 
 /**
  * @typedef {Object} ProfileFormProps
@@ -13,23 +14,6 @@ import "../../styles/components/auth/auth.css";
  * @property {string} [title]
  * @property {string} [desc]
  */
-
-const INTEREST_TOPICS = [
-  "Frontend",
-  "Backend",
-  "DevOps",
-  "AI/CC",
-  "Algorithm",
-  "Android",
-  "iOS",
-  "게임개발",
-  "LLM",
-  "WEB",
-  "Data Science",
-  "DB",
-  "Build&Sec",
-  "Design",
-];
 
 /**
  * @param {ProfileFormProps} props
