@@ -25,7 +25,12 @@ const CustomCodeBlockLowlight = CodeBlockLowlight.extend({
   },
 });
 
-export const CustomTiptapEditor = ({ content, onChange, placeholder }) => {
+export const CustomTiptapEditor = ({
+  content,
+  onChange,
+  placeholder,
+  onImageUpload, // 이미지 업로드 핸들러를 prop으로 받음
+}) => {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -51,8 +56,20 @@ export const CustomTiptapEditor = ({ content, onChange, placeholder }) => {
     editorProps: {
       handleDrop: function (view, event, slice, moved) {
         event.preventDefault();
-        if (event.dataTransfer?.files?.length > 0) {
-          uploadImages(event.dataTransfer.files);
+
+        if (onImageUpload && event.dataTransfer?.files?.length > 0) {
+          onImageUpload(event.dataTransfer.files)
+            .then((urls) => {
+              if (urls && urls.length > 0 && editor) {
+                urls.forEach((url) => {
+                  editor.chain().focus().setImage({ src: url }).run();
+                });
+              }
+            })
+            .catch((error) => {
+              console.error("Image upload on drop failed:", error);
+              alert("이미지 업로드에 실패했습니다.");
+            });
           return true;
         }
         return false;
@@ -60,52 +77,39 @@ export const CustomTiptapEditor = ({ content, onChange, placeholder }) => {
     },
   });
 
-  const uploadImages = useCallback(
-    (files) => {
-      if (!files || !editor) return;
-
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        if (!file.type.startsWith("image/")) {
-          continue;
-        }
-
-        // TODO: AWS S3 이미지 업로드 로직 연결
-        // 1. 여기서 서버로 파일(file)을 전송하는 API를 호출합니다.
-        // 2. 서버는 이미지를 S3에 업로드하고, 업로드된 이미지의 URL을 반환합니다.
-        // 3. 반환받은 URL을 아래 `setImage` 함수의 src 값으로 사용합니다.
-
-        // 임시: FileReader를 사용하여 클라이언트에서 즉시 미리보기 제공
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          if (e.target?.result) {
-            editor.chain().focus().setImage({ src: e.target.result }).run();
-          }
-        };
-        reader.readAsDataURL(file);
-      }
-    },
-    [editor]
-  );
-
   useEffect(() => {
     if (editor && content && editor.getHTML() !== content) {
       editor.commands.setContent(content);
     }
   }, [content, editor]);
 
-  const handleImageUpload = useCallback(
-    (event) => {
-      if (event.target.files) {
-        uploadImages(event.target.files);
+  // 툴바의 이미지 버튼을 통해 업로드하는 경우
+  const handleToolbarImageUpload = useCallback(
+    async (event) => {
+      if (event.target.files && onImageUpload && editor) {
+        try {
+          const urls = await onImageUpload(event.target.files);
+          if (urls && urls.length > 0) {
+            urls.forEach((url) => {
+              editor.chain().focus().setImage({ src: url }).run();
+            });
+          }
+        } catch (error) {
+          console.error("Image upload failed:", error);
+          alert("이미지 업로드에 실패했습니다.");
+        }
       }
     },
-    [uploadImages]
+    [onImageUpload, editor]
   );
+
+  const triggerFileUpload = () => {
+    // ... existing code ...
+  };
 
   return (
     <div className="border rounded">
-      <Toolbar editor={editor} handleImageUpload={handleImageUpload} />
+      <Toolbar editor={editor} handleImageUpload={handleToolbarImageUpload} />
       <EditorContent editor={editor} />
     </div>
   );

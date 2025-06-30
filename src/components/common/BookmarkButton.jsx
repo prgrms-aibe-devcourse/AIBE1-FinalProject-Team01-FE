@@ -22,18 +22,11 @@ export default function BookmarkButton({
 }) {
   return (
     <button
-      type="button"
-      className={`btn-bookmark ${className}`}
-      style={style}
+      className="btn btn-outline-secondary d-flex align-items-center gap-1"
       onClick={onClick}
-      aria-label="북마크"
     >
-      <i
-        className={
-          bookmarked ? "bi bi-bookmark-fill text-warning" : "bi bi-bookmark"
-        }
-      ></i>
-      <span className="ms-1 small">{count}</span>
+      <i className={bookmarked ? "bi bi-bookmark-fill" : "bi bi-bookmark"}></i>
+      <span>{count}</span>
     </button>
   );
 }

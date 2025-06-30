@@ -1,52 +1,55 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { CATEGORY_MAP, CATEGORY_KEYS } from "./communityData";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 import { CustomTiptapEditor } from "../../components/editor/CustomTiptapEditor";
-import { TagInput } from "../../components/community/TagInput";
+import { TagInput } from "../../components/common/TagInput";
+import { useImageUpload } from "../../hooks/useImageUpload";
+import { BOARD_TYPE, BOARD_TYPE_LABEL } from "./constants";
 
 export default function CommunityWritePage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { postToEdit } = location.state || {};
 
-  const [selectedCategory, setSelectedCategory] = useState("free");
+  const [selectedBoardType, setSelectedBoardType] = useState(BOARD_TYPE.FREE);
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState([]);
   const [content, setContent] = useState("");
 
   const isEditMode = !!postToEdit;
 
+  const { imageUrls, handleUpload, setImageUrls } = useImageUpload(
+    postToEdit?.images || []
+  );
+
   useEffect(() => {
-    if (isEditMode) {
-      setSelectedCategory(postToEdit.category);
+    if (isEditMode && postToEdit) {
+      setSelectedBoardType(postToEdit.boardType);
       setTitle(postToEdit.title);
       setTags(postToEdit.tags || []);
       setContent(postToEdit.content);
+      setImageUrls(postToEdit.images || []);
     }
-  }, [isEditMode, postToEdit]);
+  }, [isEditMode, postToEdit, setImageUrls]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const postData = {
-      category: selectedCategory,
+      boardType: selectedBoardType,
       title,
       tags,
       content,
+      images: imageUrls,
     };
 
     if (isEditMode) {
-      // TODO: 실제 글 수정 API 연동 (PUT 또는 PATCH)
-      // await api.put(`/community/posts/${postToEdit.id}`, postData);
       console.log("수정된 게시글 데이터:", { ...postData, id: postToEdit.id });
       alert("게시글이 수정되었습니다.");
-      navigate(`/community/${postToEdit.category}/${postToEdit.id}`); // 수정된 글로 이동
+      navigate(`/community/${postToEdit.boardType}/${postToEdit.id}`);
     } else {
-      // TODO: 실제 글 등록 API 연동 (POST)
-      // const newPost = await api.post('/community/posts', postData);
       console.log("작성된 게시글 데이터:", postData);
       alert("게시글이 등록되었습니다.");
-      navigate(-1); // 이전 페이지로 이동
+      navigate(`/community/${selectedBoardType}`);
     }
   };
 
@@ -55,15 +58,15 @@ export default function CommunityWritePage() {
       <h2 className="mb-4">{isEditMode ? "글 수정하기" : "글쓰기"}</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>카테고리</Form.Label>
+          <Form.Label>게시판</Form.Label>
           <Form.Select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
+            value={selectedBoardType}
+            onChange={(e) => setSelectedBoardType(e.target.value)}
             disabled={isEditMode}
           >
-            {CATEGORY_KEYS.map((key) => (
-              <option key={key} value={key}>
-                {CATEGORY_MAP[key]}
+            {Object.keys(BOARD_TYPE).map((key) => (
+              <option key={key} value={BOARD_TYPE[key]}>
+                {BOARD_TYPE_LABEL[BOARD_TYPE[key]]}
               </option>
             ))}
           </Form.Select>
@@ -80,13 +83,14 @@ export default function CommunityWritePage() {
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>태그 (최대 10개)</Form.Label>
-          <TagInput tags={tags} setTags={setTags} />
+          <TagInput tags={tags} onTagsChange={setTags} />
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>내용</Form.Label>
           <CustomTiptapEditor
             content={content}
-            onChange={(newContent) => setContent(newContent)}
+            onChange={setContent}
+            onImageUpload={handleUpload}
             placeholder="내용을 입력하세요..."
           />
         </Form.Group>

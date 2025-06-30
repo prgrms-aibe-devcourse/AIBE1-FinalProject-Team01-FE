@@ -4,18 +4,34 @@ import { useInput } from "../../hooks/useInput";
 import { isAuthor } from "../../utils/auth";
 
 /**
- * @typedef {Object} CommunityCommentItemProps
+ * @typedef {Object} CommentItemProps
  * @property {object} comment
  * @property {function} [onReplyAdd]
  * @property {function} [onLike]
  * @property {function} [onDelete]
  * @property {function} [onEdit]
- * @property {boolean} [liked]
  * @property {number} [depth]
  * @property {object} user
+ * @property {Array} [allComments]
  */
 
-function CommunityCommentItem(props) {
+const CommentItem = (props) => {
+  const { comment, user: currentUser, allComments = [] } = props;
+  const {
+    id,
+    postId,
+    nickname,
+    profileImageUrl,
+    parentCommentId,
+    content: initialContent,
+    replyCount,
+    likeCount,
+    hasLiked,
+    createdAt,
+    updatedAt,
+    userId,
+  } = comment;
+
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -27,88 +43,81 @@ function CommunityCommentItem(props) {
   const {
     value: editContent,
     onChange: onEditChange,
-    reset: resetEdit,
     setValue: setEditValue,
-  } = useInput(props.comment.content);
-  const { liked, likeCount, toggleLike } = useLikeBookmark({
-    initialLikeCount: props.comment.likes,
-    initialLiked: props.comment.liked,
+  } = useInput(initialContent);
+  const {
+    liked,
+    likeCount: likeCountState,
+    toggleLike,
+  } = useLikeBookmark({
+    initialLikeCount: likeCount,
+    initialLiked: hasLiked,
   });
   const depth = props.depth || 1;
-  const { user } = props;
-  const isMine = isAuthor(user, props.comment.author);
+  // 댓글 작성자 판별 (userId 기준)
+  const isMine = currentUser && currentUser.userId === userId;
+
+  // 대댓글 추출 (parentCommentId === 현재 댓글 id)
+  const commentReplies = allComments.filter((c) => c.parentCommentId === id);
+  const showRepliesForThis = depth === 1 ? showReplies : true;
 
   const handleReplySubmit = (e) => {
     e.preventDefault();
     if (!replyContent.trim()) return;
     if (props.onReplyAdd) {
-      props.onReplyAdd(props.comment.id, replyContent);
+      props.onReplyAdd(id, replyContent);
     }
     resetReply();
     setShowReplyInput(false);
   };
 
-  // 좋아요 버튼 클릭 핸들러
   const handleLikeClick = () => {
     toggleLike();
     if (props.onLike) {
-      props.onLike(props.comment.id);
-      // TODO: 백엔드에 좋아요/취소 요청 보내기
+      props.onLike(id);
     }
   };
 
-  // 수정 버튼 클릭 시
   const handleEditClick = () => {
-    setEditValue(props.comment.content);
+    setEditValue(initialContent);
     setIsEditing(true);
   };
 
-  // 수정 저장
   const handleEditSave = () => {
     if (props.onEdit) {
-      props.onEdit(props.comment.id, editContent);
-      // TODO: 백엔드에 수정 요청 보내기
+      props.onEdit(id, editContent);
     }
     setIsEditing(false);
   };
 
-  // 삭제
   const handleDelete = () => {
-    if (props.onDelete) {
-      props.onDelete(props.comment.id);
-      // TODO: 백엔드에 삭제 요청 보내기
+    if (window.confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
+      if (props.onDelete) {
+        props.onDelete(id);
+      }
     }
   };
-
-  // 답글(대댓글) 렌더링 로직
-  const replies = Array.isArray(props.comment.replies)
-    ? props.comment.replies
-    : [];
-  const showRepliesForThis = depth === 1 ? showReplies : true;
 
   return (
     <div className="community-detail-comment-item">
       <div className="comment-author-row">
         <img
-          src={props.comment.authorProfileImg}
+          src={profileImageUrl}
           alt="프로필"
           className="comment-author-img"
         />
-        <div className="d-flex justify-content-between align-items-center w-100">
-          <div className="d-flex align-items-center">
-            <span className="comment-author-name">{props.comment.author}</span>
-            {props.comment.devcourseName && (
-              <span className="comment-author-batch text-primary ms-2">
-                {props.comment.devcourseName}
-              </span>
-            )}
+        <div className="d-flex align-items-center w-100">
+          <div className="d-flex align-items-center flex-grow-1">
+            <span className="comment-author-name">{nickname}</span>
           </div>
-          <span className="comment-date">{props.comment.date}</span>
+          <span className="comment-date">
+            {new Date(createdAt).toLocaleString()}
+          </span>
         </div>
       </div>
       <div className="comment-content">
         {isEditing ? (
-          <>
+          <div className="d-flex align-items-center">
             <input
               type="text"
               className="form-control me-2"
@@ -117,20 +126,20 @@ function CommunityCommentItem(props) {
               autoFocus
             />
             <button
-              className="btn btn-primary btn-sm me-2"
+              className="btn btn-primary btn-sm me-2 flex-shrink-0"
               onClick={handleEditSave}
             >
               저장
             </button>
             <button
-              className="btn btn-secondary btn-sm"
+              className="btn btn-secondary btn-sm flex-shrink-0"
               onClick={() => setIsEditing(false)}
             >
               취소
             </button>
-          </>
+          </div>
         ) : (
-          props.comment.content
+          initialContent
         )}
       </div>
       <div className="comment-actions">
@@ -138,7 +147,7 @@ function CommunityCommentItem(props) {
           <i
             className={liked ? "bi bi-heart-fill text-danger" : "bi bi-heart"}
           ></i>{" "}
-          {likeCount}
+          {likeCountState}
         </button>
         <button
           className="btn-comment-reply"
@@ -162,17 +171,16 @@ function CommunityCommentItem(props) {
             </button>
           </>
         )}
-        {/* 답글 보기/숨기기 버튼은 depth=1(최상위 댓글)에서만 노출 */}
-        {depth === 1 && replies.length > 0 && !showReplies && (
+        {depth === 1 && commentReplies.length > 0 && !showReplies && (
           <button
             className="btn btn-link btn-sm text-primary ms-2"
             style={{ textDecoration: "underline" }}
             onClick={() => setShowReplies(true)}
           >
-            답글 보기({replies.length})
+            답글 보기({commentReplies.length})
           </button>
         )}
-        {depth === 1 && showReplies && replies.length > 0 && (
+        {depth === 1 && showReplies && commentReplies.length > 0 && (
           <button
             className="btn btn-link btn-sm text-secondary mt-1 ms-2"
             style={{ textDecoration: "underline" }}
@@ -182,7 +190,6 @@ function CommunityCommentItem(props) {
           </button>
         )}
       </div>
-      {/* 답글 입력창 */}
       {showReplyInput && (
         <form
           className="comment-reply-form d-flex mt-2"
@@ -201,28 +208,28 @@ function CommunityCommentItem(props) {
           </button>
         </form>
       )}
-      {/* 대댓글 */}
-      {showRepliesForThis && replies.length > 0 && (
+      {showRepliesForThis && commentReplies.length > 0 && (
         <div className="comment-replies">
-          {replies
+          {commentReplies
             .slice()
             .sort((a, b) => a.id - b.id)
             .map((reply) => (
-              <CommunityCommentItem
+              <CommentItem
                 key={reply.id}
                 comment={reply}
-                user={user}
+                user={currentUser}
                 onReplyAdd={props.onReplyAdd}
                 onLike={props.onLike}
                 onDelete={props.onDelete}
                 onEdit={props.onEdit}
                 depth={depth + 1}
+                allComments={allComments}
               />
             ))}
         </div>
       )}
     </div>
   );
-}
+};
 
-export default CommunityCommentItem;
+export { CommentItem };

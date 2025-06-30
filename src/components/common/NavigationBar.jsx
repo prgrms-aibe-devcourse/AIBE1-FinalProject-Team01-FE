@@ -5,6 +5,29 @@ import { useAuth } from "../../context/AuthContext";
 import { Bell, ChatDots, PersonCircle } from "react-bootstrap-icons";
 import "../../styles/components/common/NavigationBar.css";
 
+// 개발자용 임시 로그인 버튼
+const DevLoginButton = () => {
+  const { login, isLoggedIn } = useAuth();
+  if (isLoggedIn) return null;
+  return (
+    <Button
+      variant="outline-secondary"
+      size="sm"
+      style={{ marginLeft: 8 }}
+      onClick={() =>
+        login({
+          name: "홍길동",
+          email: "test@example.com",
+          nickname: "amateur01",
+          topics: ["Frontend", "AI/CC"],
+        })
+      }
+    >
+      Dev 로그인
+    </Button>
+  );
+};
+
 export const NavigationBar = ({ onlyLogo }) => {
   const navigate = useNavigate();
   const { isLoggedIn, logout, user } = useAuth();
@@ -33,9 +56,15 @@ export const NavigationBar = ({ onlyLogo }) => {
                 <Nav.Link onClick={() => navigate("/community")}>
                   커뮤니티
                 </Nav.Link>
-                <Nav.Link href="#projecthub">프로젝트 허브</Nav.Link>
-                <Nav.Link href="#together">함께해요</Nav.Link>
-                <Nav.Link href="#information">정보게시판</Nav.Link>
+                <Nav.Link onClick={() => navigate("/HUB")}>
+                  프로젝트 허브
+                </Nav.Link>
+                <Nav.Link onClick={() => navigate("/together")}>
+                  함께해요
+                </Nav.Link>
+                <Nav.Link onClick={() => navigate("/info/REVIEW")}>
+                  정보게시판
+                </Nav.Link>
               </Nav>
 
               {isLoggedIn ? (
@@ -44,6 +73,7 @@ export const NavigationBar = ({ onlyLogo }) => {
                   <ChatDots style={{ fontSize: "20px", cursor: "pointer" }} />
                   <PersonCircle
                     style={{ fontSize: "20px", cursor: "pointer" }}
+                    onClick={() => navigate("/mypage")}
                   />
                   <span
                     style={{ fontWeight: 500, marginLeft: 4, marginRight: 8 }}
@@ -74,6 +104,7 @@ export const NavigationBar = ({ onlyLogo }) => {
                   >
                     회원가입
                   </Button>
+                  <DevLoginButton />
                 </div>
               )}
             </Navbar.Collapse>

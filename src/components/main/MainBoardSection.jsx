@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { MainBoardCard } from "./MainBoardCard";
 import "../../styles/components/main/MainBoards.css";
 import { Container } from "react-bootstrap";
@@ -12,48 +13,46 @@ import { Container } from "react-bootstrap";
  * @param {MainBoardSectionProps} props
  */
 export const MainBoardSection = () => {
+  const navigate = useNavigate();
   const boardData = [
     {
       title: "자유 게시판",
       description:
         "개발과 관련된 다양한 주제로 자유롭게 소통해요<br/>잡담, 정보 공유, 회고까지 모두 환영합니다",
-      icon: "/src/assets/icon-image.png", // 임시 아이콘 경로 (필요시 수정)
-      onClick: () => console.log("자유 게시판 클릭"),
+      icon: "/src/assets/maincards/1.png",
+      onClick: () => navigate("/community/FREE"),
     },
     {
-      title: "질문 및 토론",
-      description:
-        "공부 중 궁금한 내용을 물어보고 토론해요<br/>으쓱이의 답변도 받을 수 있어요",
-      icon: "/src/assets/icon-image.png", // 임시 아이콘 경로 (필요시 수정)
-      onClick: () => console.log("질문 및 토론 클릭"),
+      title: "함께해요",
+      description: "프로젝트 팀원 구인부터 수강생들과 멘토링 매칭까지!",
+      icon: "/src/assets/maincards/2.png",
+      onClick: () => navigate("/together/GATHERING"),
     },
     {
-      title: "프로젝트 허브",
-      description:
-        "데브코스 중 진행한 프로젝트가 모여있어요<br/>수강생들의 완성도 높은 아이디어를 확인해 보세요",
-      icon: "/src/assets/icon-image.png", // 임시 아이콘 경로 (필요시 수정)
-      onClick: () => console.log("프로젝트 허브 클릭"),
+      title: "IT 정보",
+      description: "데브코스 수강 후기보고 프로그래머스 데브코스 수강생 되기",
+      icon: "/src/assets/maincards/3.png",
+      onClick: () => navigate("/info/REVIEW"),
     },
     {
-      title: "자유 게시판",
+      title: "DM",
       description:
-        "개발과 관련된 다양한 주제로 자유롭게 소통해요<br/>잡담, 정보 공유, 회고까지 모두 환영합니다",
-      icon: "/src/assets/icon-image.png", // 임시 아이콘 경로 (필요시 수정)
-      onClick: () => console.log("자유 게시판 클릭"),
-    },
-    {
-      title: "질문 및 토론",
-      description:
-        "공부 중 궁금한 내용을 물어보고 토론해요<br/>으쓱이의 답변도 받을 수 있어요",
-      icon: "/src/assets/icon-image.png", // 임시 아이콘 경로 (필요시 수정)
-      onClick: () => console.log("질문 및 토론 클릭"),
+        "수강생들과의 끈끈한 연결을 위한 DM. DM으로 다양한 수강생들을 만나보세요",
+      icon: "/src/assets/maincards/4.png",
+      onClick: () => navigate("/community/FREE"),
     },
     {
       title: "프로젝트 허브",
       description:
         "데브코스 중 진행한 프로젝트가 모여있어요<br/>수강생들의 완성도 높은 아이디어를 확인해 보세요",
-      icon: "/src/assets/icon-image.png", // 임시 아이콘 경로 (필요시 수정)
-      onClick: () => console.log("프로젝트 허브 클릭"),
+      icon: "/src/assets/maincards/5.png",
+      onClick: () => navigate("/HUB"),
+    },
+    {
+      title: "중고 거래",
+      description: "안 쓰는 서적부터 기계까지, IT 관련 제품들을 사고 팔아요",
+      icon: "/src/assets/maincards/6.png",
+      onClick: () => navigate("/together/MARKET"),
     },
   ];
 

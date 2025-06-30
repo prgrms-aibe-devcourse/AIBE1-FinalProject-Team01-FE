@@ -7,6 +7,8 @@ import { useState } from "react";
  * @param {boolean} [options.initialLiked] - 초기 좋아요 여부
  * @param {number} [options.initialBookmarkCount] - 초기 북마크 수
  * @param {boolean} [options.initialBookmarked] - 초기 북마크 여부
+ * @param {string | number} [options.postId] - 게시글 ID
+ * @param {string} [options.boardType] - 게시판 타입 (COMMUNITY, GATHERING, MARKET 등)
  * @returns {{
  *   liked: boolean,
  *   likeCount: number,
@@ -21,6 +23,8 @@ export function useLikeBookmark({
   initialLiked = false,
   initialBookmarkCount = 0,
   initialBookmarked = false,
+  postId,
+  boardType,
 } = {}) {
   // 좋아요
   const [liked, setLiked] = useState(initialLiked);
@@ -29,16 +33,32 @@ export function useLikeBookmark({
   const [bookmarked, setBookmarked] = useState(initialBookmarked);
   const [bookmarkCount, setBookmarkCount] = useState(initialBookmarkCount);
 
-  const toggleLike = () => {
-    setLiked((prev) => !prev);
-    setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
-    // TODO: 백엔드에 좋아요/취소 요청 보내기
+  const toggleLike = async () => {
+    try {
+      // TODO: 백엔드 API 연동
+      // liked가 true면 DELETE
+      // liked가 false면 POST
+
+      setLiked((prev) => !prev);
+      setLikeCount((prev) => (liked ? Math.max(0, prev - 1) : prev + 1));
+    } catch (error) {
+      console.error("Error toggling like:", error);
+    }
   };
 
-  const toggleBookmark = () => {
-    setBookmarked((prev) => !prev);
-    setBookmarkCount((prev) => (bookmarked ? prev - 1 : prev + 1));
-    // TODO: 백엔드에 북마크/취소 요청 보내기
+  const toggleBookmark = async () => {
+    try {
+      // TODO: 백엔드 API 연동
+      // bookmarked가 true면 DELETE
+      // bookmarked가 false면 POST
+
+      setBookmarked((prev) => !prev);
+      setBookmarkCount((prev) =>
+        bookmarked ? Math.max(0, prev - 1) : prev + 1
+      );
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+    }
   };
 
   return {

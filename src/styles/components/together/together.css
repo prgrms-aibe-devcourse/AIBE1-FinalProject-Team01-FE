@@ -1,0 +1,41 @@
+.info-grid {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.info-grid .col-md-3,
+.info-grid .col-6 {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.5rem;
+}
+
+/* 함께해요 카테고리 라벨 색상 (커뮤니티와 통일) */
+.label-study {
+  background-color: #0d6efd; /* bootstrap blue */
+  color: white !important;
+}
+.label-project {
+  background-color: #6f42c1; /* bootstrap indigo */
+  color: white !important;
+}
+.label-hackathon {
+  background-color: #fd7e14; /* bootstrap orange */
+  color: white !important;
+}
+.label-coffeechat {
+  background-color: #17a2b8; /* bootstrap info */
+  color: white !important;
+}
+.label-mentoring {
+  background-color: #20c997; /* bootstrap teal */
+  color: white !important;
+}
+.label-market {
+  background-color: #6c757d; /* bootstrap secondary */
+  color: white !important;
+}

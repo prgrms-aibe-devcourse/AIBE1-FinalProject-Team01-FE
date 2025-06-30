@@ -9,3 +9,13 @@ export function isAuthor(user, author) {
   if (typeof author === "object" && author.id) return user.id === author.id;
   return user.id === author;
 }
+
+// 비밀번호 유효성 검사: 6자 이상, 알파벳+숫자 포함
+export function isValidPassword(pw) {
+  return pw.length >= 6 && /[a-zA-Z]/.test(pw) && /[0-9]/.test(pw);
+}
+
+// 비밀번호 일치 검사
+export function arePasswordsEqual(pw, pwCheck) {
+  return pw === pwCheck;
+}

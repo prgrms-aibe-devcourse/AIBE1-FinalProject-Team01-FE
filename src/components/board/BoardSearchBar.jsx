@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "../../styles/components/community/community.css";
+
 /**
- * @typedef {Object} CommunitySearchBarProps
+ * @typedef {Object} BoardSearchBarProps
  * @property {string} keyword
  * @property {(e: React.ChangeEvent<HTMLInputElement>) => void} onChange
  * @property {() => void} onWrite
@@ -11,10 +12,10 @@ import "../../styles/components/community/community.css";
  */
 
 /**
- * 커뮤니티 검색/글쓰기 바
- * @param {CommunitySearchBarProps} props
+ * 게시판 검색/글쓰기 바
+ * @param {BoardSearchBarProps} props
  */
-export const CommunitySearchBar = ({
+export const BoardSearchBar = ({
   keyword,
   onChange,
   onWrite,
@@ -76,12 +77,14 @@ export const CommunitySearchBar = ({
             onKeyDown={handleInputKeyDown}
           />
         </div>
-        <button
-          className="community-write-btn d-flex align-items-center gap-1"
-          onClick={onWrite}
-        >
-          <span>글쓰기</span>
-        </button>
+        {onWrite && (
+          <button
+            className="community-write-btn d-flex align-items-center gap-1"
+            onClick={onWrite}
+          >
+            <span>글쓰기</span>
+          </button>
+        )}
       </div>
     </div>
   );
