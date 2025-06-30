@@ -62,14 +62,15 @@ export default function MyPage() {
       <ChangePasswordPage onSave={() => setActiveMenu("account")} />
     ),
     posts: (
-      <CommunityBoardList posts={DUMMY_POSTS} onPostClick={handlePostClick} />
+      <PostList type="posts" data={DUMMY_POSTS} onPostClick={handlePostClick} />
     ), // 작성글
     likes: (
-      <CommunityBoardList posts={DUMMY_LIKES} onPostClick={handlePostClick} />
+      <PostList type="likes" data={DUMMY_LIKES} onPostClick={handlePostClick} />
     ), // 좋아요
     bookmarks: (
-      <CommunityBoardList
-        posts={DUMMY_BOOKMARKS}
+      <PostList
+        type="bookmarks"
+        data={DUMMY_BOOKMARKS}
         onPostClick={handlePostClick}
       />
     ), // 북마크
