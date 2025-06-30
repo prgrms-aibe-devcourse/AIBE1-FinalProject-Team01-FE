@@ -16,10 +16,6 @@ export const PostContent = ({ post, stripImages = false }) => {
     return null;
   }
 
-  const contentToRender = stripImages
-    ? post.content.replace(/<img[^>]*>/g, "")
-    : post.content;
-
   return (
     <div className="post-content">
       <div
