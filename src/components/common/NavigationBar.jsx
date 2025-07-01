@@ -70,7 +70,10 @@ export const NavigationBar = ({ onlyLogo }) => {
               {isLoggedIn ? (
                 <div className="d-flex gap-3 align-items-center">
                   <Bell style={{ fontSize: "20px", cursor: "pointer" }} />
-                  <ChatDots style={{ fontSize: "20px", cursor: "pointer" }} />
+                  <ChatDots
+                    style={{ fontSize: "20px", cursor: "pointer" }}
+                    onClick={() => navigate("/dm")}
+                  />
                   <PersonCircle
                     style={{ fontSize: "20px", cursor: "pointer" }}
                     onClick={() => navigate("/mypage")}
