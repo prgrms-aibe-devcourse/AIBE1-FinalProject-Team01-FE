@@ -2,9 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import { InputGroup, FormControl, Button } from "react-bootstrap";
 import { Send, Camera } from "react-bootstrap-icons";
 import { useInput } from "../../hooks/useInput";
+import { useWebSocket } from "../../hooks/useWebSocket";
 import { DMMessageList } from "./DMMessageList";
-import { dummyChatData, dummyMessages } from "./dmData";
 import chatDefaultImage from "../../assets/chat-default-image.png";
+import { useAuth } from "../../context/AuthContext";
+import { getDMMessages } from "../../services/dmApi";
 
 /**
  * @typedef {Object} DMChatAreaProps
@@ -16,22 +18,117 @@ import chatDefaultImage from "../../assets/chat-default-image.png";
  * @param {DMChatAreaProps} props
  */
 export const DMChatArea = ({ selectedChatId }) => {
+  const { user } = useAuth();
   const {
     value: messageText,
     onChange: onMessageChange,
     reset: resetMessage,
   } = useInput("");
-  const [messages, setMessages] = useState(dummyMessages);
+  const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
   const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false);
-
-  const selectedChat = selectedChatId
-    ? dummyChatData.find((chat) => chat.id === selectedChatId)
-    : null;
+  const [roomData, setRoomData] = useState(null);
+  const [chatPartner, setChatPartner] = useState(null);
 
   const chatMessages = selectedChatId
     ? messages.filter((msg) => msg.chatId === selectedChatId)
     : [];
+
+  // 현재 사용자 ID (AuthContext에서 가져오거나 기본값 사용)
+  const currentUserId = user?.id || 1;
+
+  // 방 입장 처리
+  useEffect(() => {
+    if (selectedChatId) {
+      handleEnterRoom();
+    } else {
+      // 채팅방 선택 해제 시 상태 초기화
+      setMessages([]);
+      setRoomData(null);
+      setChatPartner(null);
+    }
+  }, [selectedChatId, currentUserId]);
+
+  const handleEnterRoom = async () => {
+    if (!selectedChatId) {
+      return;
+    }
+
+    try {
+      // 메시지 목록 불러오기 (새로운 API 스펙)
+      const messageResponse = await getDMMessages(
+        selectedChatId,
+        currentUserId,
+        0,
+        50,
+        "ASC"
+      );
+
+      // 서버에서 받은 메시지를 클라이언트 형식으로 변환
+      const formattedMessages = messageResponse.messages.map((msg, index) => ({
+        id: `server-${msg.id || index}`,
+        chatId: selectedChatId,
+        senderId: msg.senderId,
+        text: msg.content,
+        timestamp: new Date(msg.sentAt).toLocaleTimeString("ko-KR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        isMe: msg.senderId === currentUserId,
+        senderNickname: msg.senderNickname,
+      }));
+
+      // 채팅 상대방 정보 설정 (첫 번째 메시지의 상대방 정보 활용)
+      if (formattedMessages.length > 0) {
+        const otherMessage = formattedMessages.find((msg) => !msg.isMe);
+        if (otherMessage) {
+          setChatPartner({
+            id: otherMessage.senderId,
+            nickname: otherMessage.senderNickname,
+          });
+        }
+      }
+
+      // 해당 채팅방의 메시지만 업데이트
+      setMessages((prev) => [
+        ...prev.filter((msg) => msg.chatId !== selectedChatId), // 다른 방 메시지는 유지
+        ...formattedMessages, // 서버 메시지
+      ]);
+
+      setShouldScrollToBottom(true);
+    } catch (error) {
+      console.error(`❌ 채팅방 ${selectedChatId} 입장 실패:`, error);
+      // 서버 연결 실패 시 빈 메시지 목록
+      setMessages((prev) =>
+        prev.filter((msg) => msg.chatId !== selectedChatId)
+      );
+    }
+  };
+
+  // 웹소켓 메시지 수신 처리
+  const handleMessageReceived = (messageData) => {
+    const newMessage = {
+      id: `ws-${Date.now()}-${Math.random()}`, // 웹소켓 메시지 구분을 위한 prefix
+      chatId: selectedChatId,
+      senderId: messageData.senderId,
+      text: messageData.content,
+      timestamp: new Date(messageData.timestamp).toLocaleTimeString("ko-KR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      isMe: messageData.senderId === currentUserId,
+    };
+
+    setMessages((prev) => [...prev, newMessage]);
+    setShouldScrollToBottom(true);
+  };
+
+  // 웹소켓 훅 사용
+  const { isConnected, sendMessage: sendWebSocketMessage } = useWebSocket(
+    selectedChatId,
+    handleMessageReceived,
+    currentUserId
+  );
 
   useEffect(() => {
     if (shouldScrollToBottom) {
@@ -47,10 +144,11 @@ export const DMChatArea = ({ selectedChatId }) => {
   const handleSendMessage = () => {
     if (!messageText.trim() || !selectedChatId) return;
 
+    // 메시지 객체 생성
     const newMessage = {
-      id: Date.now().toString(),
+      id: `local-${Date.now()}-${Math.random()}`, // 로컬 메시지 구분을 위한 prefix
       chatId: selectedChatId,
-      senderId: "current-user",
+      senderId: currentUserId,
       text: messageText.trim(),
       timestamp: new Date().toLocaleTimeString("ko-KR", {
         hour: "2-digit",
@@ -59,15 +157,60 @@ export const DMChatArea = ({ selectedChatId }) => {
       isMe: true,
     };
 
-    setMessages((prev) => [...prev, newMessage]);
-    setShouldScrollToBottom(true);
-    resetMessage();
+    // 웹소켓이 연결되어 있으면 웹소켓으로만 전송 (수신 시 UI 업데이트)
+    if (isConnected) {
+      const success = sendWebSocketMessage(messageText.trim());
+      if (success) {
+        resetMessage();
+        // 웹소켓 전송 성공 시에는 로컬 메시지를 추가하지 않음 (서버에서 받은 메시지로 처리)
+      } else {
+        console.error("❌ 웹소켓 메시지 전송 실패");
+        // 전송 실패 시 로컬에라도 추가
+        setMessages((prev) => [...prev, newMessage]);
+        setShouldScrollToBottom(true);
+        resetMessage();
+      }
+    } else {
+      // 웹소켓이 연결되지 않은 경우 로컬에만 추가 (더미 모드)
+      setMessages((prev) => [...prev, newMessage]);
+      setShouldScrollToBottom(true);
+      resetMessage();
+    }
   };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
+    }
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    const newMessage = {
+      id: `suggestion-${Date.now()}-${Math.random()}`,
+      chatId: selectedChatId,
+      senderId: currentUserId,
+      text: suggestion,
+      timestamp: new Date().toLocaleTimeString("ko-KR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      isMe: true,
+    };
+
+    if (isConnected) {
+      const success = sendWebSocketMessage(suggestion);
+      if (success) {
+        // 웹소켓 전송 성공 시에는 로컬 메시지를 추가하지 않음
+      } else {
+        // 전송 실패 시 로컬에라도 추가
+        setMessages((prev) => [...prev, newMessage]);
+        setShouldScrollToBottom(true);
+      }
+    } else {
+      // 웹소켓 연결 안됨 - 로컬에만 추가
+      setMessages((prev) => [...prev, newMessage]);
+      setShouldScrollToBottom(true);
     }
   };
 
@@ -93,14 +236,24 @@ export const DMChatArea = ({ selectedChatId }) => {
         <div className="dm-chat-user-info">
           <div className="dm-chat-avatar">
             <img
-              src={selectedChat?.profileImage || chatDefaultImage}
-              alt={selectedChat?.nickname}
+              src={chatPartner?.profileImage || chatDefaultImage}
+              alt={chatPartner?.nickname || "채팅 상대"}
               className="dm-avatar-img"
             />
           </div>
           <div>
-            <div className="dm-chat-user-name">{selectedChat?.nickname}</div>
-            <div className="dm-chat-user-status">생성형 AI 백엔드 1기</div>
+            <div className="dm-chat-user-name">
+              {chatPartner?.nickname ||
+                roomData?.participantName ||
+                "채팅 상대"}
+            </div>
+            <div className="dm-chat-user-status">
+              {chatPartner?.devcourse || "생성형 AI 백엔드 1기"}
+              {isConnected && <span style={{ color: "green" }}> • 연결됨</span>}
+              {!isConnected && (
+                <span style={{ color: "orange" }}> • 연결 중...</span>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -132,11 +285,25 @@ export const DMChatArea = ({ selectedChatId }) => {
         </InputGroup>
 
         <div className="dm-suggested-messages">
-          <button className="dm-suggestion-btn">
-            안녕하세요 DM창을 이용해 어려지니까? 지금 모르고 있는 것 같아서
+          <button
+            className="dm-suggestion-btn"
+            onClick={() =>
+              handleSuggestionClick(
+                "안녕하세요! 혹시 시간 되실 때 도움을 요청드려도 될까요?"
+              )
+            }
+          >
+            안녕하세요! 혹시 시간 되실 때 도움을 요청드려도 될까요?
           </button>
-          <button className="dm-suggestion-btn">
-            내일이 감자어쳐 어려지니까?
+          <button
+            className="dm-suggestion-btn"
+            onClick={() =>
+              handleSuggestionClick(
+                "프로젝트 관련해서 질문이 있는데 괜찮으실까요?"
+              )
+            }
+          >
+            프로젝트 관련해서 질문이 있는데 괜찮으실까요?
           </button>
         </div>
       </div>
