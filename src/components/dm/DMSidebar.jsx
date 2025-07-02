@@ -44,33 +44,98 @@ export const DMSidebar = ({
   // 서버 데이터가 로드되면 처리 (한 번만)
   useEffect(() => {
     if (!loading && !hasProcessedRooms) {
-      if (serverRooms && serverRooms.length > 0) {
-        // 서버 데이터를 클라이언트 형식으로 변환 (새로운 API 스펙)
-        const formattedServerRooms = serverRooms.map((room, index) => ({
-          id: room.roomId || `server-${index}`,
-          nickname: `사용자 ${room.otherUserId}`, // 상대방 사용자 ID 기반 닉네임
-          lastMessage:
-            room.lastMessage || room.content || "새로운 대화를 시작해보세요", // content 필드도 확인
-          timestamp: room.sentAt
-            ? new Date(room.sentAt).toLocaleTimeString("ko-KR", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })
-            : room.createdAt
-            ? new Date(room.createdAt).toLocaleTimeString("ko-KR", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })
-            : "방금", // API 응답의 sentAt 또는 createdAt 필드 사용
-          profileImage: null, // API에서 프로필 이미지 정보가 없음
-          unreadCount: 0, // API에서 읽지 않은 메시지 수 정보가 없음
-          otherUserId: room.otherUserId, // 상대방 사용자 ID 저장
-        }));
+      // 더미 데이터 사용 (API 연결 준비는 완료)
+      const dummyRooms = [
+        {
+          roomId: "room-1",
+          otherUserId: 2,
+          otherUserNickname: "김개발",
+          otherUserProfileImage: null,
+          lastMessage: "안녕하세요! 도움이 필요해서 연락드렸어요",
+          sentAt: new Date(Date.now() - 5 * 60 * 1000).toISOString(), // 5분 전
+        },
+        {
+          roomId: "room-2",
+          otherUserId: 3,
+          otherUserNickname: "박코딩",
+          otherUserProfileImage: null,
+          lastMessage: "프로젝트 관련해서 궁금한 게 있는데요",
+          sentAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2시간 전
+        },
+        {
+          roomId: "room-3",
+          otherUserId: 4,
+          otherUserNickname: "이백엔드",
+          otherUserProfileImage: null,
+          lastMessage: "네, 좋은 아이디어인 것 같아요!",
+          sentAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // 1일 전
+        },
+        {
+          roomId: "room-4",
+          otherUserId: 5,
+          otherUserNickname: "최프론트",
+          otherUserProfileImage: null,
+          lastMessage: "감사합니다! 덕분에 해결되었어요 😊",
+          sentAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3일 전
+        },
+        {
+          roomId: "room-5",
+          otherUserId: 6,
+          otherUserNickname: "정데이터",
+          otherUserProfileImage: null,
+          lastMessage: "내일 스터디 몇 시에 할까요?",
+          sentAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), // 5일 전
+        },
+      ];
 
-        setChatList(formattedServerRooms);
-      } else {
-        setChatList([]);
-      }
+      // 실제 API 호출은 주석 처리 (연결 준비는 완료)
+      // if (serverRooms && serverRooms.length > 0) {
+      //   console.log("🔍 DMSidebar에서 받은 서버 데이터:", serverRooms);
+      //   const formattedServerRooms = serverRooms.map((room, index) => { ... });
+      //   setChatList(formattedServerRooms);
+      // }
+
+      console.log("🔍 더미 데이터 사용 중");
+
+      // 더미 데이터를 클라이언트 형식으로 변환
+      const formattedDummyRooms = dummyRooms.map((room, index) => {
+        // lastMessage 처리
+        let displayLastMessage = "새로운 대화를 시작해보세요";
+        if (room.lastMessage && room.lastMessage.trim() !== "") {
+          displayLastMessage = room.lastMessage;
+        }
+
+        // timestamp 처리
+        let displayTimestamp = "방금";
+        if (room.sentAt) {
+          try {
+            displayTimestamp = new Date(room.sentAt).toLocaleTimeString(
+              "ko-KR",
+              {
+                hour: "2-digit",
+                minute: "2-digit",
+              }
+            );
+          } catch (error) {
+            console.error("시간 변환 오류:", error);
+            displayTimestamp = "방금";
+          }
+        }
+
+        const formatted = {
+          id: room.roomId,
+          nickname: room.otherUserNickname || `사용자 ${room.otherUserId}`,
+          lastMessage: displayLastMessage,
+          timestamp: displayTimestamp,
+          profileImage: room.otherUserProfileImage || null,
+          unreadCount: 0,
+          otherUserId: room.otherUserId,
+        };
+
+        return formatted;
+      });
+
+      setChatList(formattedDummyRooms);
       setHasProcessedRooms(true);
     }
   }, [serverRooms, loading, hasProcessedRooms]);
@@ -102,20 +167,16 @@ export const DMSidebar = ({
   };
 
   const handleCreateRoom = async () => {
-    if (!newChatUserId.trim() || !newChatUserNickname.trim()) {
-      alert("사용자 ID와 닉네임을 모두 입력해주세요.");
+    if (!newChatUserId.trim()) {
+      alert("상대방 사용자 ID를 입력해주세요.");
       return;
     }
 
     try {
       setCreating(true);
 
-      const participantMap = {
-        [currentUserId]: user?.nickname || `사용자${currentUserId}`,
-        [newChatUserId]: newChatUserNickname,
-      };
-
-      const newRoom = await createDMRoom(participantMap);
+      // 새로운 API 스펙: partnerId만 전달
+      const newRoom = await createDMRoom(parseInt(newChatUserId));
 
       // 모달 닫기 및 입력값 초기화
       setShowCreateModal(false);
@@ -143,17 +204,6 @@ export const DMSidebar = ({
   return (
     <>
       <div className="dm-sidebar">
-        <div className="dm-sidebar-header">
-          <h5 className="dm-sidebar-title">DM</h5>
-          <button
-            className="dm-edit-btn"
-            onClick={() => setShowCreateModal(true)}
-            title="새 채팅방 만들기"
-          >
-            <Plus size={16} />
-          </button>
-        </div>
-
         <div className="dm-search-section">
           <InputGroup className="dm-search-input-group">
             <InputGroup.Text className="dm-search-icon">
@@ -165,6 +215,13 @@ export const DMSidebar = ({
               onChange={onSearchChange}
               className="dm-search-input"
             />
+            <button
+              className="dm-create-btn"
+              onClick={() => setShowCreateModal(true)}
+              title="새 채팅방 만들기"
+            >
+              <Plus size={16} />
+            </button>
           </InputGroup>
         </div>
 
@@ -218,15 +275,9 @@ export const DMSidebar = ({
                 value={newChatUserId}
                 onChange={(e) => setNewChatUserId(e.target.value)}
               />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>상대방 닉네임</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="상대방의 닉네임을 입력하세요"
-                value={newChatUserNickname}
-                onChange={(e) => setNewChatUserNickname(e.target.value)}
-              />
+              <Form.Text className="text-muted">
+                상대방의 사용자 ID를 입력하면 자동으로 채팅방이 생성됩니다.
+              </Form.Text>
             </Form.Group>
           </Form>
         </Modal.Body>
@@ -237,9 +288,7 @@ export const DMSidebar = ({
           <Button
             variant="primary"
             onClick={handleCreateRoom}
-            disabled={
-              creating || !newChatUserId.trim() || !newChatUserNickname.trim()
-            }
+            disabled={creating || !newChatUserId.trim()}
           >
             {creating ? "생성 중..." : "채팅방 생성"}
           </Button>

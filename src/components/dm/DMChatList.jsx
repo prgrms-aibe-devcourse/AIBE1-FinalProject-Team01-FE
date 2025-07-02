@@ -30,6 +30,24 @@ export const DMChatList = ({
     );
   }
 
+  // 더미 마지막 메시지 매핑
+  const getDummyLastMessage = (nickname) => {
+    switch (nickname) {
+      case "김개발":
+        return "안녕하세요! 도움이 필요해서 연락드렸어요";
+      case "박코딩":
+        return "프로젝트 관련해서 궁금한 게 있는데요";
+      case "이백엔드":
+        return "네, 좋은 아이디어인 것 같아요!";
+      case "최프론트":
+        return "감사합니다! 덕분에 해결되었어요 😊";
+      case "정데이터":
+        return "내일 스터디 몇 시에 할까요?";
+      default:
+        return "새로운 대화를 시작해보세요";
+    }
+  };
+
   return (
     <ListGroup variant="flush" className="dm-chat-list">
       {chats.map((chat) => (
@@ -52,7 +70,9 @@ export const DMChatList = ({
               <div className="dm-chat-header">
                 <span className="dm-chat-nickname">{chat.nickname}</span>
               </div>
-              <div className="dm-chat-preview">{chat.lastMessage}</div>
+              <div className="dm-chat-preview">
+                {getDummyLastMessage(chat.nickname)}
+              </div>
             </div>
             <div className="dm-chat-right">
               <span className="dm-chat-time">{chat.timestamp}</span>

@@ -76,22 +76,19 @@ export const getDMMessages = async (
 };
 
 /**
- * 채팅방 생성
- * @param {Object} participantMap - 참가자 맵 (ID: 닉네임)
+ * 채팅방 생성 (새로운 API 스펙)
+ * @param {number} partnerId - 채팅 상대방 사용자 ID
  * @returns {Promise<Object>} 생성된 방 정보
  */
-export const createDMRoom = async (participantMap) => {
+export const createDMRoom = async (partnerId) => {
   try {
-    console.log(`🏗️ DM 방 생성 시도:`, participantMap);
+    console.log(`🏗️ DM 방 생성 시도 (상대방 ID: ${partnerId})`);
 
-    const response = await fetch(`${BASE_URL}/dm`, {
+    const response = await fetch(`${BASE_URL}/dm/${partnerId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        participantMap,
-      }),
     });
 
     if (!response.ok) {
