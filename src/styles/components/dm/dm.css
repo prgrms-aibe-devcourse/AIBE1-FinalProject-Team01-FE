@@ -17,10 +17,12 @@
 .dm-sidebar-col {
   padding-right: 12px;
   border-right: 1px solid #e9ecf3;
+  border-left: 1px solid #e9ecf3; /* 왼쪽에도 구분선 추가 */
 }
 
 .dm-chat-col {
   padding-left: 12px;
+  border-right: 1px solid #e9ecf3; /* 오른쪽에 구분선 추가 */
 }
 
 /* DM 사이드바 스타일 */
@@ -59,7 +61,7 @@
 
 /* 검색 섹션 */
 .dm-search-section {
-  padding: 20px 0 16px; /* 상단 패딩을 20px로 증가 */
+  padding: 20px 0 0; /* 상단 패딩을 20px로 증가 */
 }
 
 .dm-search-input-group {
@@ -106,7 +108,7 @@
 .dm-chat-list-container {
   flex: 1;
   overflow-y: auto;
-  padding-top: 8px;
+  /* padding-top: 8px; */
 }
 
 /* DM 채팅 리스트 - Bootstrap 완전 재정의 */
@@ -258,29 +260,18 @@
   font-weight: 600 !important;
   color: #2d4053 !important;
   font-size: 0.95rem !important;
-  line-height: 1 !important;
+  line-height: 1.2 !important;
   margin: 0 !important;
   padding: 0 !important;
-  transform: none !important;
-  text-decoration: none !important;
 }
 
 .dm-chat-item:hover .dm-chat-preview,
 .dm-chat-item.active .dm-chat-preview {
   font-size: 0.85rem !important;
   color: #666 !important;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   line-height: 1.3 !important;
   margin: 0 !important;
   padding: 0 !important;
-  max-width: 100% !important;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  height: auto !important;
-  min-height: 16px !important;
 }
 
 .dm-chat-item:hover .dm-chat-time,
@@ -290,20 +281,21 @@
   line-height: 1 !important;
   margin: 0 !important;
   padding: 0 !important;
-  transform: none !important;
-  text-decoration: none !important;
-  opacity: 0 !important; /* 호버 시 시간 숨김 */
+  opacity: 0 !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
 }
 
 .dm-chat-item:hover .dm-chat-info,
 .dm-chat-item.active .dm-chat-info {
-  transform: none !important;
+  /* 레이아웃 변화 없음 - 기본 스타일 그대로 유지 */
 }
 
 .dm-chat-item:hover .dm-chat-right,
 .dm-chat-item.active .dm-chat-right {
-  gap: 5px !important;
-  transform: none !important;
+  /* 레이아웃 변화 없음 - 기본 스타일 그대로 유지 */
 }
 
 .dm-chat-item-content {
@@ -453,24 +445,20 @@
   opacity: 0;
 }
 
-/* 빈 상태 */
-.dm-empty-state {
+/* 메시지 없음 상태 */
+.dm-no-messages {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 400px; /* 최소 높이 보장 */
   padding: 60px 20px;
-  text-align: center;
 }
 
-.dm-empty-icon {
-  font-size: 3rem;
-  margin-bottom: 16px;
-}
-
-.dm-empty-text {
+.dm-no-messages-text {
   color: #6c757d;
   font-size: 1rem;
+  text-align: center;
 }
 
 /* 채팅 영역 스타일 */
@@ -617,19 +605,6 @@
   font-size: 0.75rem;
   color: #6c757d;
   margin-top: 4px;
-}
-
-/* 메시지 없음 상태 */
-.dm-no-messages {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-}
-
-.dm-no-messages-text {
-  color: #6c757d;
-  font-size: 1rem;
 }
 
 /* 입력 영역 */
