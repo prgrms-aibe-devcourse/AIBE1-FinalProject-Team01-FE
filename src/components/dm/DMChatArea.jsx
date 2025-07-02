@@ -26,6 +26,7 @@ export const DMChatArea = ({ selectedChatId }) => {
   } = useInput("");
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false);
   const [roomData, setRoomData] = useState(null);
   const [chatPartner, setChatPartner] = useState(null);
@@ -107,15 +108,22 @@ export const DMChatArea = ({ selectedChatId }) => {
 
   // 웹소켓 메시지 수신 처리
   const handleMessageReceived = (messageData) => {
+    console.log("📥 DMChatArea에서 받은 메시지:", messageData);
+
     const newMessage = {
       id: `ws-${Date.now()}-${Math.random()}`, // 웹소켓 메시지 구분을 위한 prefix
       chatId: selectedChatId,
       senderId: messageData.senderId,
       text: messageData.content,
-      timestamp: new Date(messageData.timestamp).toLocaleTimeString("ko-KR", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
+      timestamp: messageData.timestamp
+        ? new Date(messageData.timestamp).toLocaleTimeString("ko-KR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : new Date().toLocaleTimeString("ko-KR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
       isMe: messageData.senderId === currentUserId,
     };
 
@@ -138,7 +146,11 @@ export const DMChatArea = ({ selectedChatId }) => {
   }, [shouldScrollToBottom]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // 메시지 컨테이너를 직접 스크롤
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
+    }
   };
 
   const handleSendMessage = () => {
@@ -182,35 +194,6 @@ export const DMChatArea = ({ selectedChatId }) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
-    }
-  };
-
-  const handleSuggestionClick = (suggestion) => {
-    const newMessage = {
-      id: `suggestion-${Date.now()}-${Math.random()}`,
-      chatId: selectedChatId,
-      senderId: currentUserId,
-      text: suggestion,
-      timestamp: new Date().toLocaleTimeString("ko-KR", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      isMe: true,
-    };
-
-    if (isConnected) {
-      const success = sendWebSocketMessage(suggestion);
-      if (success) {
-        // 웹소켓 전송 성공 시에는 로컬 메시지를 추가하지 않음
-      } else {
-        // 전송 실패 시 로컬에라도 추가
-        setMessages((prev) => [...prev, newMessage]);
-        setShouldScrollToBottom(true);
-      }
-    } else {
-      // 웹소켓 연결 안됨 - 로컬에만 추가
-      setMessages((prev) => [...prev, newMessage]);
-      setShouldScrollToBottom(true);
     }
   };
 
@@ -258,7 +241,7 @@ export const DMChatArea = ({ selectedChatId }) => {
         </div>
       </div>
 
-      <div className="dm-messages-container">
+      <div className="dm-messages-container" ref={messagesContainerRef}>
         <DMMessageList messages={chatMessages} />
         <div ref={messagesEndRef} />
       </div>
@@ -283,29 +266,6 @@ export const DMChatArea = ({ selectedChatId }) => {
             <Send size={16} />
           </Button>
         </InputGroup>
-
-        <div className="dm-suggested-messages">
-          <button
-            className="dm-suggestion-btn"
-            onClick={() =>
-              handleSuggestionClick(
-                "안녕하세요! 혹시 시간 되실 때 도움을 요청드려도 될까요?"
-              )
-            }
-          >
-            안녕하세요! 혹시 시간 되실 때 도움을 요청드려도 될까요?
-          </button>
-          <button
-            className="dm-suggestion-btn"
-            onClick={() =>
-              handleSuggestionClick(
-                "프로젝트 관련해서 질문이 있는데 괜찮으실까요?"
-              )
-            }
-          >
-            프로젝트 관련해서 질문이 있는데 괜찮으실까요?
-          </button>
-        </div>
       </div>
     </div>
   );

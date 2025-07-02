@@ -130,11 +130,11 @@
 }
 
 .dm-chat-list .list-group-item:not(:last-child) {
-  border-bottom: none !important;
+  border-bottom: 1px solid #e9ecf3 !important; /* 구분선 추가 */
 }
 
 .dm-chat-list .list-group-item:last-child {
-  border-bottom: none !important;
+  border-bottom: 1px solid #e9ecf3 !important; /* 마지막 아이템에도 구분선 추가 */
   border-radius: 0 !important;
 }
 
@@ -144,6 +144,7 @@
 
 .dm-chat-item {
   border: none !important;
+  border-bottom: 1px solid #e9ecf3 !important; /* 구분선 추가 */
   padding: 12px 12px !important;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -171,15 +172,14 @@
 }
 
 .dm-chat-item:last-child {
-  border-bottom: none !important;
+  border-bottom: 1px solid #e9ecf3 !important; /* 마지막 아이템에도 구분선 유지 */
 }
 
 /* 단순한 색상 변경만 - 모든 속성 고정 */
 .dm-chat-item:hover {
   background-color: #f8f9fa !important;
-  /* padding: 12px 12px !important; */
+  border-bottom: 1px solid #e9ecf3 !important; /* 호버 시에도 구분선 유지 */
   margin: 0 !important;
-  border: none !important;
   font-size: inherit !important;
   line-height: inherit !important;
   font-weight: inherit !important;
@@ -205,10 +205,9 @@
 .list-group-item.active {
   background-color: #d0d0d0 !important;
   border-color: #d0d0d0 !important;
+  border-bottom: 1px solid #e9ecf3 !important; /* 활성 상태에서도 구분선 유지 */
   color: #2d4053 !important;
-  /* padding: 12px 12px !important; */
   margin: 0 !important;
-  border: none !important;
   font-size: inherit !important;
   line-height: inherit !important;
   font-weight: inherit !important;
@@ -229,7 +228,7 @@
 /* 마지막 항목도 동일한 높이 */
 .dm-chat-item:last-child:hover,
 .dm-chat-item.active:last-child {
-  border-bottom: none !important;
+  border-bottom: 1px solid #e9ecf3 !important; /* 마지막 아이템 구분선 유지 */
   min-height: 74px !important;
   max-height: 74px !important;
   height: 74px !important;
@@ -268,11 +267,11 @@
   padding: 0 !important;
   transform: none !important;
   text-decoration: none !important;
+  opacity: 0 !important; /* 호버 시 시간 숨김 */
 }
 
 .dm-chat-item:hover .dm-chat-info,
 .dm-chat-item.active .dm-chat-info {
-  /* gap: 5px !important; */
   transform: none !important;
 }
 
@@ -288,8 +287,8 @@
   gap: 12px;
   position: relative;
   width: 100%;
-  min-height: 50px;
-  justify-content: center;
+  height: 100%; /* 전체 높이 사용 */
+  justify-content: flex-start; /* 좌측 정렬로 변경 */
   padding: 12px;
 }
 
@@ -327,10 +326,11 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 5px;
+  justify-content: center; /* 세로 중앙 정렬 */
+  gap: 6px; /* 닉네임과 미리보기 사이 간격 증가 */
   margin-left: 12px;
   margin-right: 80px;
+  height: 100%; /* 전체 높이 사용 */
 }
 
 .dm-chat-header {
@@ -338,27 +338,27 @@
   justify-content: space-between;
   align-items: center;
   margin: 0;
-  padding-bottom: 0 !important;
+  padding: 0; /* 패딩 제거 */
 }
 
 .dm-chat-right {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 5px;
+  align-items: center; /* 수평 중앙 정렬 */
+  justify-content: center; /* 세로 중앙 정렬 */
+  gap: 0; /* 간격 제거로 휴지통과 시간이 같은 위치에 오도록 */
   position: absolute;
   right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 0; /* 상단부터 시작 */
+  height: 100%; /* 부모 아이템의 전체 높이 사용 */
   width: 60px;
-  justify-content: center;
 }
 
 .dm-chat-nickname {
   font-weight: 600;
   color: #2d4053;
   font-size: 0.95rem;
-  line-height: 1;
+  line-height: 1.2; /* 줄간격 조정 */
   margin: 0;
   padding: 0;
 }
@@ -369,8 +369,13 @@
   flex-shrink: 0;
   margin: 0;
   padding: 0;
-  line-height: 1;
-  transition: none;
+  line-height: 1; /* 줄간격 최소화로 정확한 중앙 정렬 */
+  opacity: 1; /* 기본적으로 보임 */
+  text-align: center; /* 중앙 정렬 */
+  position: absolute; /* 절대 위치로 정확한 위치 제어 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 완전한 중앙 정렬 */
 }
 
 .dm-chat-preview {
@@ -379,7 +384,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 1;
+  line-height: 1.2; /* 줄간격 조정 */
   margin: 0;
   padding: 0;
 }
@@ -389,29 +394,32 @@
   border: none;
   color: #999;
   cursor: pointer;
-  padding: 4px;
-  opacity: 0;
+  padding: 0; /* 패딩 제거로 시간과 정확히 같은 위치에 */
+  opacity: 0; /* 기본적으로 숨김 */
   margin: 0;
   line-height: 1;
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
+  font-size: 0.75rem; /* 시간과 같은 폰트 크기 */
   z-index: 2;
+  text-align: center; /* 중앙 정렬 */
+  width: auto; /* 너비 자동 조정 */
+  height: auto; /* 높이 자동 조정 */
+  position: absolute; /* 절대 위치로 시간과 정확히 같은 자리에 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 완전한 중앙 정렬 */
 }
 
 .dm-chat-item:hover .dm-delete-btn {
-  opacity: 1;
+  opacity: 1; /* 호버 시 삭제 버튼 표시 */
 }
 
 .dm-delete-btn:hover {
   color: #dc3545;
 }
 
-/* 호버 시 시간 숨기기 - 애니메이션 없이 즉시 */
+/* 호버 시 시간 숨기고 삭제 버튼 표시 */
 .dm-chat-item:hover .dm-chat-time {
   opacity: 0;
-  transition: none;
 }
 
 /* 빈 상태 */
@@ -437,13 +445,17 @@
 /* 채팅 영역 스타일 */
 .dm-chat-area {
   height: 100%;
+  max-height: calc(100vh - 200px); /* 헤더 영역을 제외한 높이 */
   display: flex;
   flex-direction: column;
+  min-height: 0; /* flexbox에서 overflow 동작을 위해 필요 */
+  overflow: hidden; /* 전체 영역의 오버플로우 방지 */
 }
 
 .dm-chat-header {
   padding: 20px 0 16px;
   border-bottom: 1px solid #e9ecf3;
+  flex-shrink: 0; /* 헤더 크기 고정 */
 }
 
 .dm-chat-user-info {
@@ -467,13 +479,40 @@
 .dm-messages-container {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 20px 0;
+  min-height: 0; /* flexbox에서 overflow 동작을 위해 필요 */
+  max-height: calc(100vh - 300px); /* 헤더와 입력영역을 제외한 고정 높이 */
+  position: relative; /* 스크롤 위치 고정 */
+  /* 스크롤바 스타일링 */
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+/* 웹킷 브라우저용 스크롤바 스타일 */
+.dm-messages-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dm-messages-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dm-messages-container::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
+}
+
+.dm-messages-container::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
 }
 
 .dm-messages-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-height: min-content; /* 내용에 맞는 최소 높이 */
+  width: 100%;
 }
 
 .dm-message {
@@ -564,10 +603,12 @@
 .dm-input-container {
   padding: 16px 0 0;
   border-top: 1px solid #e9ecf3;
+  flex-shrink: 0; /* 입력 영역 크기 고정 */
+  background-color: white; /* 배경색 명시 */
 }
 
 .dm-message-input-group {
-  margin-bottom: 12px;
+  margin-bottom: 0; /* 추천 메시지 제거로 여백 제거 */
 }
 
 .dm-message-input {
@@ -604,66 +645,36 @@
   opacity: 0.5;
 }
 
-/* 추천 메시지 */
-.dm-suggested-messages {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.dm-suggestion-btn {
-  background: #f8f9fa;
-  border: 1px solid #e9ecf3;
-  border-radius: 20px;
-  padding: 10px 16px;
-  font-size: 0.85rem;
-  color: #666;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
-
-.dm-suggestion-btn:hover {
-  background: #e9ecf3;
-  border-color: #d6dbe7;
-}
-
-.dm-suggestion-btn:first-child {
-  max-width: 300px;
-}
-
 /* 웰컴 영역 */
 .dm-welcome-area {
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #f8f9fa;
+  min-height: 400px; /* 최소 높이 보장 */
 }
 
 .dm-welcome-content {
   text-align: center;
-  max-width: 400px;
-  padding: 40px 20px;
+  max-width: 500px;
+  padding: 60px 20px;
 }
 
 .dm-welcome-icon {
-  font-size: 4rem;
-  margin-bottom: 24px;
+  font-size: 5rem;
+  margin-bottom: 32px;
 }
 
 .dm-welcome-title {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
   color: #2d4053;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .dm-welcome-subtitle {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: #6c757d;
   line-height: 1.6;
 }
@@ -685,6 +696,10 @@
   .dm-chat-col {
     padding-left: 0;
   }
+
+  .dm-messages-container {
+    max-height: calc(100vh - 250px); /* 모바일에서 높이 조정 */
+  }
 }
 
 @media (max-width: 600px) {
@@ -696,11 +711,11 @@
     max-width: 85%;
   }
 
-  .dm-suggested-messages {
-    flex-direction: column;
+  .dm-chat-area {
+    max-height: calc(100vh - 150px); /* 작은 화면에서 높이 조정 */
   }
 
-  .dm-suggestion-btn {
-    text-align: left;
+  .dm-messages-container {
+    max-height: calc(100vh - 200px); /* 작은 화면에서 메시지 영역 높이 조정 */
   }
 }

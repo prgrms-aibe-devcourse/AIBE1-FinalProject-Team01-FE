@@ -49,8 +49,19 @@ export const DMSidebar = ({
         const formattedServerRooms = serverRooms.map((room, index) => ({
           id: room.roomId || `server-${index}`,
           nickname: `사용자 ${room.otherUserId}`, // 상대방 사용자 ID 기반 닉네임
-          lastMessage: room.lastMessage || "새로운 대화를 시작해보세요",
-          time: "00:00", // API에서 시간 정보가 없으므로 기본값
+          lastMessage:
+            room.lastMessage || room.content || "새로운 대화를 시작해보세요", // content 필드도 확인
+          timestamp: room.sentAt
+            ? new Date(room.sentAt).toLocaleTimeString("ko-KR", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            : room.createdAt
+            ? new Date(room.createdAt).toLocaleTimeString("ko-KR", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            : "방금", // API 응답의 sentAt 또는 createdAt 필드 사용
           profileImage: null, // API에서 프로필 이미지 정보가 없음
           unreadCount: 0, // API에서 읽지 않은 메시지 수 정보가 없음
           otherUserId: room.otherUserId, // 상대방 사용자 ID 저장
