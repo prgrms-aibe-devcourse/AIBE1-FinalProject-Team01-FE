@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/components/main/PopularPosts.css";
 import iconUser from "../../assets/icon-user.png";
 import iconHeart from "../../assets/icon-heart.png";
@@ -31,12 +31,15 @@ const formatDate = (dateString) => {
 export const PopularPosts = () => {
   const [posts, setPosts] = useState([]);
   const [type, setType] = useState("popular");
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const navigate = useNavigate();
 
-  // AuthContext 사용 시
-  // const { token } = useContext(AuthContext);
-  // localStorage 사용 시
-  const token = localStorage.getItem("token");
+  useEffect(() => {
+    // storage 이벤트로 다른 탭에서 로그인해도 반영
+    const handleStorage = () => setToken(localStorage.getItem("token"));
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
 
   // API 호출 함수
   const fetchRecommendedPosts = async (limit = 10) => {

@@ -20,19 +20,20 @@ const DevLoginButtons = () => {
       <Button
         variant="outline-secondary"
         size="sm"
-        onClick={
-          () =>
-            login(
-              {
-                id: 1, // userId 1
-                name: "홍길동",
-                email: "test@example.com",
-                nickname: "amateur01",
-                topics: ["Frontend", "AI/CC"],
-              },
-              devToken
-            ) // .env의 토큰 사용
-        }
+        onClick={() => {
+          login(
+            {
+              id: 9,
+              name: "김테스트",
+              email: "aitest4@test.com",
+              nickname: "amateur01",
+              topics: ["Frontend", "AI/CC"],
+            },
+            devToken
+          );
+          localStorage.setItem("token", devToken);
+          window.location.href = "/"; // 메인으로 이동 + 새로고침
+        }}
       >
         Dev Login1
       </Button>
