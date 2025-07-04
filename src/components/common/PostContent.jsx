@@ -20,7 +20,7 @@ export const PostContent = ({ post, stripImages = false }) => {
     <div className="post-content">
       <div
         className="post-content-body"
-        dangerouslySetInnerHTML={{ __html: contentToRender }}
+        dangerouslySetInnerHTML={{ __html: post.content }}
       />
       {post.contentList && (
         <ul className="post-content-list">
