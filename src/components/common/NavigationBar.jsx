@@ -5,26 +5,43 @@ import { useAuth } from "../../context/AuthContext";
 import { Bell, ChatDots, PersonCircle } from "react-bootstrap-icons";
 import "../../styles/components/common/NavigationBar.css";
 
-// 개발자용 임시 로그인 버튼
-const DevLoginButton = () => {
+// 개발자용 임시 로그인 버튼들
+const DevLoginButtons = () => {
   const { login, isLoggedIn } = useAuth();
   if (isLoggedIn) return null;
   return (
-    <Button
-      variant="outline-secondary"
-      size="sm"
-      style={{ marginLeft: 8 }}
-      onClick={() =>
-        login({
-          name: "홍길동",
-          email: "test@example.com",
-          nickname: "amateur01",
-          topics: ["Frontend", "AI/CC"],
-        })
-      }
-    >
-      Dev 로그인
-    </Button>
+    <div className="d-flex gap-2">
+      <Button
+        variant="outline-secondary"
+        size="sm"
+        onClick={() =>
+          login({
+            id: 1, // userId 1
+            name: "홍길동",
+            email: "test@example.com",
+            nickname: "amateur01",
+            topics: ["Frontend", "AI/CC"],
+          })
+        }
+      >
+        Dev Login1
+      </Button>
+      <Button
+        variant="outline-info"
+        size="sm"
+        onClick={() =>
+          login({
+            id: 2, // userId 2
+            name: "김철수",
+            email: "test2@example.com",
+            nickname: "amateur02",
+            topics: ["Backend", "DevOps"],
+          })
+        }
+      >
+        Dev Login2
+      </Button>
+    </div>
   );
 };
 
@@ -70,7 +87,10 @@ export const NavigationBar = ({ onlyLogo }) => {
               {isLoggedIn ? (
                 <div className="d-flex gap-3 align-items-center">
                   <Bell style={{ fontSize: "20px", cursor: "pointer" }} />
-                  <ChatDots style={{ fontSize: "20px", cursor: "pointer" }} />
+                  <ChatDots
+                    style={{ fontSize: "20px", cursor: "pointer" }}
+                    onClick={() => navigate("/dm")}
+                  />
                   <PersonCircle
                     style={{ fontSize: "20px", cursor: "pointer" }}
                     onClick={() => navigate("/mypage")}
@@ -104,7 +124,7 @@ export const NavigationBar = ({ onlyLogo }) => {
                   >
                     회원가입
                   </Button>
-                  <DevLoginButton />
+                  <DevLoginButtons />
                 </div>
               )}
             </Navbar.Collapse>

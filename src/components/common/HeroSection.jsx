@@ -19,7 +19,7 @@ export const HeroSection = ({ backgroundImageSrc, children }) => {
         backgroundSize: "cover",
         backgroundPosition: "center",
         width: "100%",
-        minHeight: "240px",
+        height: "400px",
       }}
     >
       {children}

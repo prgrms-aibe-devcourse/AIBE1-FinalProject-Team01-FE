@@ -17,6 +17,7 @@ import InfoWritePage from "../pages/info/InfoWritePage";
 import HubPage from "../pages/hub/HubPage";
 import HubDetailPage from "../pages/hub/HubDetailPage";
 import MyPage from "../pages/mypage/MyPage";
+import DMPage from "../pages/dm/DMPage";
 
 export function AppRouter() {
   return (
@@ -26,6 +27,7 @@ export function AppRouter() {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/signup/profile" element={<ProfileSetupPage />} />
       <Route path="/find-account" element={<FindPasswordPage />} />
+      <Route path="/dm" element={<DMPage />} />
       <Route
         path="/community"
         element={<Navigate to="/community/FREE" replace />}
