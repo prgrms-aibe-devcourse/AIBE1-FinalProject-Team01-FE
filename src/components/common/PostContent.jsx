@@ -4,14 +4,13 @@ import "../../styles/components/common/PostContent.css";
 /**
  * @typedef {Object} PostContentProps
  * @property {object} post - The post object.
- * @property {boolean} [stripImages=false] - If true, removes img tags from the content.
  */
 
 /**
  * 게시글 본문 컴포넌트
  * @param {PostContentProps} props
  */
-export const PostContent = ({ post, stripImages = false }) => {
+export const PostContent = ({ post }) => {
   if (!post || !post.content) {
     return null;
   }
@@ -20,7 +19,7 @@ export const PostContent = ({ post, stripImages = false }) => {
     <div className="post-content">
       <div
         className="post-content-body"
-        dangerouslySetInnerHTML={{ __html: contentToRender }}
+        dangerouslySetInnerHTML={{ __html: post.content }}
       />
       {post.contentList && (
         <ul className="post-content-list">
