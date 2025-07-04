@@ -112,6 +112,7 @@ export const BoardDetailLayout = ({ post, children }) => {
         bookmarked={bookmarked}
         bookmarkCount={bookmarkCount}
         onBookmarkToggle={handleBookmarkClick}
+        postId={post.id}
       />
       <CommentSection
         postId={post.id}
