@@ -1,77 +1,61 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { PostContent } from "../common/PostContent";
+import TogetherPostInfo from "./TogetherPostInfo";
 import { BoardDetailLayout } from "../board/BoardDetailLayout";
-import { BoardPostHeader } from "../board/BoardPostHeader";
-import { RECRUITMENT_TYPES } from "../../pages/together/constants";
 
 /**
  * @typedef {Object} TogetherBoardDetailProps
- * @property {object} post
+ * @property {object} post - 게시글 정보 (좋아요, 북마크 상태 포함)
+ * @property {function} onLike - 좋아요 토글 핸들러
+ * @property {function} onBookmark - 북마크 토글 핸들러
  */
 
 /**
  * 함께해요 글 상세 메인 컴포넌트
  * @param {TogetherBoardDetailProps} props
  */
-export const TogetherBoardDetail = ({ post }) => {
+const TogetherBoardDetail = ({ post, onLike, onBookmark }) => {
   const navigate = useNavigate();
-  const { gathering_post } = post;
-  const isMatch =
-    gathering_post?.gathering_type === "mentoring" ||
-    gathering_post?.gathering_type === "coffeechat";
-  const recruitmentTypeLabel =
-    RECRUITMENT_TYPES[gathering_post?.recruitment_type];
 
   const handleEdit = () => {
-    navigate(`/together/${post.board_type}/write`, {
+    navigate(`/together/${post.boardType.toLowerCase()}/write`, {
       state: { postToEdit: post },
     });
   };
 
   const handleDelete = () => {
     if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
-      console.log("삭제할 게시글 ID:", post.id);
+      console.log("삭제할 게시글 ID:", post.postId);
       alert("게시글이 삭제되었습니다.");
-      navigate(`/together/${post.board_type}`);
+      navigate(`/together/${post.boardType.toLowerCase()}`);
     }
   };
 
-  if (!gathering_post) {
+  if (!post) {
     return <div>게시글 정보를 불러오는 중입니다...</div>;
   }
 
   return (
-    <BoardDetailLayout post={post}>
-      <BoardPostHeader
+    <BoardDetailLayout
+      post={post}
+      likeCount={post.likeCount}
+      isLiked={post.isLiked}
+      onLike={onLike}
+      bookmarkCount={post.bookmarkCount}
+      isBookmarked={post.isBookmarked}
+      onBookmark={onBookmark}
+      boardTitle="함께해요"
+      boardLink="/together"
+    >
+      <TogetherPostInfo
         post={post}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        categoryLabel={gathering_post.gathering_type}
       />
-      <div className="d-flex flex-wrap justify-content-around align-items-center p-3 my-4 rounded bg-light">
-        <div className="text-center mx-2 my-2">
-          <h6 className="text-muted mb-1">모집인원</h6>
-          <p className="m-0 fw-bold">
-            <i className="bi bi-people-fill me-1"></i>
-            {gathering_post.headCount}명
-          </p>
-        </div>
-        <div className="text-center mx-2 my-2">
-          <h6 className="text-muted mb-1">장소</h6>
-          <p className="m-0 fw-bold">
-            <i className="bi bi-geo-alt me-1"></i>
-            {gathering_post.place}
-          </p>
-        </div>
-        <div className="text-center mx-2 my-2">
-          <h6 className="text-muted mb-1">모집 분야</h6>
-          <p className="m-0 fw-bold">
-            {isMatch ? recruitmentTypeLabel : gathering_post?.period}
-          </p>
-        </div>
-      </div>
       <PostContent post={post} />
     </BoardDetailLayout>
   );
 };
+
+export default TogetherBoardDetail;

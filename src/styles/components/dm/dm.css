@@ -1,0 +1,732 @@
+/* DM 페이지 메인 컨테이너 */
+.dm-main-container {
+  max-width: 1200px;
+  width: 100%;
+  min-height: calc(100vh - 120px); /* 푸터까지 활용하도록 높이 증가 */
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 24px;
+}
+
+.dm-content-row {
+  height: 100%;
+  min-height: calc(100vh - 120px); /* Row도 전체 높이 활용 */
+  margin: 0;
+}
+
+.dm-sidebar-col {
+  padding-right: 12px;
+  border-right: 1px solid #e9ecf3;
+  border-left: 1px solid #e9ecf3; /* 왼쪽에도 구분선 추가 */
+}
+
+.dm-chat-col {
+  padding-left: 12px;
+  border-right: 1px solid #e9ecf3; /* 오른쪽에 구분선 추가 */
+}
+
+/* DM 사이드바 스타일 */
+.dm-sidebar {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dm-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 16px;
+}
+
+.dm-sidebar-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d4053;
+  margin: 0;
+}
+
+.dm-edit-btn {
+  background: none;
+  border: none;
+  color: #6c757d;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.dm-edit-btn:hover {
+  color: #2d4053;
+}
+
+/* 검색 섹션 */
+.dm-search-section {
+  padding: 20px 0 0; /* 상단 패딩을 20px로 증가 */
+}
+
+.dm-search-input-group {
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.dm-search-icon {
+  background: #f8f9fa;
+  border: 1px solid #d6dbe7;
+  border-right: none;
+  color: #6c757d;
+}
+
+.dm-search-input {
+  border: 1px solid #d6dbe7;
+  border-left: none;
+  border-right: none;
+  font-size: 0.9rem;
+}
+
+.dm-search-input:focus {
+  border-color: #2d4053;
+  box-shadow: none;
+}
+
+.dm-create-btn {
+  background: #f8f9fa;
+  border: 1px solid #d6dbe7;
+  border-left: none;
+  color: #6c757d;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dm-create-btn:hover {
+  background: #e9ecef;
+  color: #2d4053;
+}
+
+/* 채팅 리스트 컨테이너 */
+.dm-chat-list-container {
+  flex: 1;
+  overflow-y: auto;
+  /* padding-top: 8px; */
+}
+
+/* DM 채팅 리스트 - Bootstrap 완전 재정의 */
+.dm-chat-list {
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  list-style: none !important;
+}
+
+.dm-chat-list .list-group-item {
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  vertical-align: baseline !important;
+  text-align: left !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  font-weight: inherit !important;
+  position: relative !important;
+  display: block !important;
+}
+
+.dm-chat-list .list-group-item:first-child {
+  border-top: none !important;
+  border-radius: 0 !important;
+}
+
+.dm-chat-list .list-group-item:not(:last-child) {
+  border-bottom: 1px solid #e9ecf3 !important; /* 구분선 추가 */
+}
+
+.dm-chat-list .list-group-item:last-child {
+  border-bottom: 1px solid #e9ecf3 !important; /* 마지막 아이템에도 구분선 추가 */
+  border-radius: 0 !important;
+}
+
+.dm-chat-item * {
+  border: none !important;
+}
+
+.dm-chat-item {
+  border: none !important;
+  border-bottom: 1px solid #e9ecf3 !important; /* 구분선 추가 */
+  padding: 12px 12px !important;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  background-color: transparent !important;
+  display: flex !important;
+  align-items: center !important;
+  min-height: 84px !important; /* 높이를 84px로 증가 */
+  max-height: 84px !important;
+  height: 84px !important;
+  position: relative !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  margin: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  font-weight: inherit !important;
+  vertical-align: baseline !important;
+  text-align: left !important;
+}
+
+.dm-chat-item:last-child {
+  border-bottom: 1px solid #e9ecf3 !important; /* 마지막 아이템에도 구분선 유지 */
+}
+
+/* 단순한 색상 변경만 - 모든 속성 고정 */
+.dm-chat-item:hover {
+  background-color: #f8f9fa !important;
+  border-bottom: 1px solid #e9ecf3 !important; /* 호버 시에도 구분선 유지 */
+  margin: 0 !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  font-weight: inherit !important;
+  transform: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  border-radius: 0 !important;
+  vertical-align: baseline !important;
+  text-align: left !important;
+  min-height: 84px !important;
+  max-height: 84px !important;
+  height: 84px !important;
+}
+
+.dm-chat-item.active,
+.dm-chat-item.active:focus,
+.dm-chat-item.active:hover,
+.dm-chat-list .dm-chat-item.active,
+.list-group-item.active {
+  background-color: #d0d0d0 !important;
+  border-color: #d0d0d0 !important;
+  border-bottom: 1px solid #e9ecf3 !important; /* 활성 상태에서도 구분선 유지 */
+  color: #2d4053 !important;
+  margin: 0 !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  font-weight: inherit !important;
+  transform: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  text-decoration: none !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  border-radius: 0 !important;
+  vertical-align: baseline !important;
+  text-align: left !important;
+  min-height: 84px !important;
+  max-height: 84px !important;
+  height: 84px !important;
+}
+
+/* 마지막 항목도 동일한 높이 */
+.dm-chat-item:last-child:hover,
+.dm-chat-item.active:last-child {
+  border-bottom: 1px solid #e9ecf3 !important; /* 마지막 아이템 구분선 유지 */
+  min-height: 84px !important;
+  max-height: 84px !important;
+  height: 84px !important;
+}
+
+/* 내부 요소들도 완전 고정 */
+.dm-chat-item:hover .dm-chat-nickname,
+.dm-chat-item.active .dm-chat-nickname {
+  font-weight: 600 !important;
+  color: #2d4053 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.dm-chat-item:hover .dm-chat-preview,
+.dm-chat-item.active .dm-chat-preview {
+  font-size: 0.85rem !important;
+  color: #666 !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.dm-chat-item:hover .dm-chat-time,
+.dm-chat-item.active .dm-chat-time {
+  font-size: 0.75rem !important;
+  color: #999 !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+.dm-chat-item:hover .dm-chat-info,
+.dm-chat-item.active .dm-chat-info {
+  /* 레이아웃 변화 없음 - 기본 스타일 그대로 유지 */
+}
+
+.dm-chat-item:hover .dm-chat-right,
+.dm-chat-item.active .dm-chat-right {
+  /* 레이아웃 변화 없음 - 기본 스타일 그대로 유지 */
+}
+
+.dm-chat-item-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  width: 100%;
+  height: 100%; /* 전체 높이 사용 */
+  justify-content: flex-start; /* 좌측 정렬로 변경 */
+  padding: 12px;
+}
+
+.dm-chat-avatar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 프로필 이미지를 세로 중앙에 위치 */
+  align-self: center;
+}
+
+.dm-avatar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dm-avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e9ecf3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #2d4053;
+  font-size: 1rem;
+}
+
+.dm-chat-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 다시 중앙 정렬로 변경 */
+  gap: 4px; /* 닉네임과 미리보기 사이 간격 조정 */
+  margin-left: 12px;
+  margin-right: 80px;
+  height: 100%; /* 전체 높이 사용 */
+}
+
+.dm-chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 0 !important; /* 패딩 제거 */
+}
+
+.dm-chat-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 수평 중앙 정렬 */
+  justify-content: center; /* 세로 중앙 정렬 */
+  gap: 0; /* 간격 제거로 휴지통과 시간이 같은 위치에 오도록 */
+  position: absolute;
+  right: 12px;
+  top: 0; /* 상단부터 시작 */
+  height: 100%; /* 부모 아이템의 전체 높이 사용 */
+  width: 60px;
+}
+
+.dm-chat-nickname {
+  font-weight: 600;
+  color: #2d4053;
+  font-size: 0.95rem;
+  line-height: 1.2; /* 줄간격 조정 */
+  margin: 0;
+  padding: 0;
+}
+
+.dm-chat-time {
+  font-size: 0.75rem;
+  color: #999;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  line-height: 1; /* 줄간격 최소화로 정확한 중앙 정렬 */
+  opacity: 1; /* 기본적으로 보임 */
+  text-align: center; /* 중앙 정렬 */
+  position: absolute; /* 절대 위치로 정확한 위치 제어 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 완전한 중앙 정렬 */
+}
+
+.dm-chat-preview {
+  font-size: 0.85rem !important;
+  color: #666 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  max-width: 100% !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  min-height: 16px !important;
+}
+
+.dm-delete-btn {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  padding: 0; /* 패딩 제거로 시간과 정확히 같은 위치에 */
+  opacity: 0; /* 기본적으로 숨김 */
+  margin: 0;
+  line-height: 1;
+  font-size: 0.75rem; /* 시간과 같은 폰트 크기 */
+  z-index: 2;
+  text-align: center; /* 중앙 정렬 */
+  width: auto; /* 너비 자동 조정 */
+  height: auto; /* 높이 자동 조정 */
+  position: absolute; /* 절대 위치로 시간과 정확히 같은 자리에 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 완전한 중앙 정렬 */
+}
+
+.dm-chat-item:hover .dm-delete-btn {
+  opacity: 1; /* 호버 시 삭제 버튼 표시 */
+}
+
+.dm-delete-btn:hover {
+  color: #dc3545;
+}
+
+/* 호버 시 시간 숨기고 삭제 버튼 표시 */
+.dm-chat-item:hover .dm-chat-time {
+  opacity: 0;
+}
+
+/* 메시지 없음 상태 */
+.dm-no-messages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 400px; /* 최소 높이 보장 */
+  padding: 60px 20px;
+}
+
+.dm-no-messages-text {
+  color: #6c757d;
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* 채팅 영역 스타일 */
+.dm-chat-area {
+  height: 100%;
+  max-height: calc(100vh - 120px); /* 푸터까지 늘림 (헤더 영역만 제외) */
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* flexbox에서 overflow 동작을 위해 필요 */
+  overflow: hidden; /* 전체 영역의 오버플로우 방지 */
+}
+
+.dm-chat-header {
+  padding: 20px 0 16px;
+  border-bottom: 1px solid #e9ecf3;
+  flex-shrink: 0; /* 헤더 크기 고정 */
+}
+
+.dm-chat-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dm-chat-user-name {
+  font-weight: 600;
+  color: #2d4053;
+  font-size: 1.1rem;
+}
+
+.dm-chat-user-status {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+/* 메시지 컨테이너 */
+.dm-messages-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 0;
+  min-height: 0; /* flexbox에서 overflow 동작을 위해 필요 */
+  max-height: calc(
+    100vh - 250px
+  ); /* 헤더와 입력영역을 제외한 고정 높이, 더 크게 조정 */
+  position: relative; /* 스크롤 위치 고정 */
+  /* 스크롤바 스타일링 */
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+/* 웹킷 브라우저용 스크롤바 스타일 */
+.dm-messages-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dm-messages-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dm-messages-container::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
+}
+
+.dm-messages-container::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
+}
+
+.dm-messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: min-content; /* 내용에 맞는 최소 높이 */
+  width: 100%;
+}
+
+.dm-message {
+  display: flex;
+  gap: 8px;
+}
+
+.dm-message-mine {
+  justify-content: flex-end;
+}
+
+.dm-message-other {
+  justify-content: flex-start;
+}
+
+.dm-message-avatar {
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.dm-message-avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dm-message-avatar .dm-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  font-size: 0.85rem;
+}
+
+.dm-message-content {
+  max-width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dm-message-mine .dm-message-content {
+  align-items: flex-end;
+}
+
+.dm-message-other .dm-message-content {
+  align-items: flex-start;
+}
+
+.dm-message-bubble {
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.dm-message-mine .dm-message-bubble {
+  background-color: #2d4053;
+  color: white;
+  border-bottom-right-radius: 6px;
+}
+
+.dm-message-other .dm-message-bubble {
+  background-color: #f1f3f4;
+  color: #2d4053;
+  border-bottom-left-radius: 6px;
+}
+
+.dm-message-time {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-top: 4px;
+}
+
+/* 입력 영역 */
+.dm-input-container {
+  padding: 16px 0 0;
+  border-top: 1px solid #e9ecf3;
+  flex-shrink: 0; /* 입력 영역 크기 고정 */
+  background-color: white; /* 배경색 명시 */
+}
+
+.dm-message-input-group {
+  margin-bottom: 0; /* 추천 메시지 제거로 여백 제거 */
+}
+
+.dm-message-input {
+  border: 1px solid #d6dbe7;
+  border-radius: 24px;
+  padding: 12px 20px;
+  resize: none;
+  font-size: 0.9rem;
+  min-height: 44px;
+  outline: none !important; /* 포커스 시 파란 outline 제거 */
+  box-shadow: none !important; /* 포커스 시 그림자 제거 */
+}
+
+.dm-message-input:focus {
+  border-color: #2d4053;
+  box-shadow: none !important; /* 포커스 시 파란 박스 제거 */
+  outline: none !important; /* 포커스 시 outline 제거 */
+}
+
+.dm-send-btn {
+  background-color: #2d4053;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dm-send-btn:hover:not(:disabled) {
+  background-color: #1b2838;
+}
+
+.dm-send-btn:disabled {
+  background-color: #6c757d;
+  opacity: 0.5;
+}
+
+/* 웰컴 영역 */
+.dm-welcome-area {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  min-height: 400px; /* 최소 높이 보장 */
+}
+
+.dm-welcome-content {
+  text-align: center;
+  max-width: 500px;
+  padding: 60px 20px;
+}
+
+.dm-welcome-icon {
+  font-size: 5rem;
+  margin-bottom: 32px;
+}
+
+.dm-welcome-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2d4053;
+  margin-bottom: 24px;
+}
+
+.dm-welcome-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  line-height: 1.6;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 900px) {
+  .dm-main-container {
+    padding: 0 8px;
+    min-width: 0;
+  }
+
+  .dm-sidebar-col {
+    border-right: none;
+    border-bottom: 1px solid #e9ecf3;
+    padding-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .dm-chat-col {
+    padding-left: 0;
+  }
+
+  .dm-messages-container {
+    max-height: calc(100vh - 250px); /* 모바일에서 높이 조정 */
+  }
+}
+
+@media (max-width: 600px) {
+  .dm-main-container {
+    padding: 0 2px;
+  }
+
+  .dm-message-content {
+    max-width: 85%;
+  }
+
+  .dm-chat-area {
+    max-height: calc(100vh - 150px); /* 작은 화면에서 높이 조정 */
+  }
+
+  .dm-messages-container {
+    max-height: calc(100vh - 200px); /* 작은 화면에서 메시지 영역 높이 조정 */
+  }
+}

@@ -1,0 +1,51 @@
+/* info 게시판 전용 스타일 (community/board 스타일과 유사하게 적용) */
+
+.info-main-container {
+  max-width: 1200px;
+  width: 100%;
+  min-height: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 24px;
+}
+
+@media (max-width: 900px) {
+  .info-main-container {
+    padding: 0 8px;
+    min-width: 0;
+  }
+}
+@media (max-width: 600px) {
+  .info-main-container {
+    padding: 0 2px;
+  }
+}
+
+.info-post-card {
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  background: #fff;
+  transition: box-shadow 0.2s;
+}
+.info-post-card:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border-color: #bdbdbd;
+}
+
+.info-post-card .card-title {
+  font-size: 1.15rem;
+}
+
+.info-post-card .badge {
+  font-size: 0.95em;
+  font-weight: 500;
+}
+
+.tag-badge {
+  background: #f1f3f5;
+  color: #1a1b1d;
+  border: 1px solid #dee2e6;
+  font-size: 0.85em;
+  border-radius: 0.5em;
+  padding: 0.2em 0.7em;
+}

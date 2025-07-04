@@ -34,6 +34,7 @@ export const LoginForm = () => {
     // TODO : 추후 백엔드 인증 로직 추가
     // 더미 user 정보
     login({
+      id: 2, // userId 추가 (Dev 로그인과 구분하기 위해 2로 설정)
       name: "홍길동",
       email: email,
       avatar: "/assets/user-icon.png",

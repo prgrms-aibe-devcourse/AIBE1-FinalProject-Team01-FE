@@ -1,47 +1,43 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import { CommentItem } from "./CommentItem";
 import { useInput } from "../../hooks/useInput";
 import { useAuth } from "../../context/AuthContext";
+import { useComments } from "../../hooks/useComments";
 
 /**
  * @typedef {Object} CommentSectionProps
  * @property {string|number} postId
  * @property {Array} comments
- * @property {(content: string) => void} onCommentAdd - Function to handle adding a new comment.
- * @property {(parentId: string, content: string) => void} onReplyAdd - Function to handle adding a reply.
- * @property {(commentId: string) => void} onDelete - Function to handle comment deletion.
- * @property {(commentId: string, newContent: string) => void} onEdit - Function to handle comment editing.
- * @property {(commentId: string) => void} onLikeToggle - Function to handle like toggling.
  */
 
 /**
- * 댓글 전체 컴포넌트
+ * 댓글 전체 컴포넌트 (자체적으로 상태 및 로직 관리)
  * @param {CommentSectionProps} props
  */
-export const CommentSection = (props) => {
-  const {
-    postId,
-    comments: initialComments = [],
-    onCommentAdd,
-    onReplyAdd,
-    onDelete,
-    onEdit,
-    onLikeToggle,
-  } = props;
-
-  const {
-    value: comment,
-    onChange: onCommentChange,
-    reset: resetComment,
-  } = useInput("");
-  const [comments, setComments] = useState(initialComments);
-  const [commentsToShow, setCommentsToShow] = useState(5);
+const CommentSection = ({ postId, comments: initialComments = [] }) => {
+  const { value, onChange, reset } = useInput("");
   const loaderRef = useRef(null);
   const { user } = useAuth();
+  const {
+    comments,
+    handleCommentAdd,
+    handleReplyAdd,
+    handleCommentEdit,
+    handleCommentDelete,
+    setComments,
+  } = useComments(initialComments, postId);
+  const [commentsToShow, setCommentsToShow] = React.useState(5);
 
   useEffect(() => {
     setComments(initialComments);
-  }, [initialComments]);
+  }, [initialComments, setComments]);
+
+  const handleAdd = (e) => {
+    e.preventDefault();
+    if (!value.trim()) return;
+    handleCommentAdd(value);
+    reset();
+  };
 
   const handleObserver = useCallback(
     (entries) => {
@@ -61,26 +57,19 @@ export const CommentSection = (props) => {
     return () => observer.disconnect();
   }, [handleObserver, comments.length]);
 
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
-    if (!comment.trim() || !onCommentAdd) return;
-    onCommentAdd(comment);
-    resetComment();
-  };
-
-  const sortedComments = comments.slice().sort((a, b) => a.id - b.id);
+  const topLevelComments = comments.filter((c) => c.parentCommentId == null);
+  const sortedComments = topLevelComments
+    .slice()
+    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
   const visibleComments = sortedComments.slice(0, commentsToShow);
 
   return (
     <div className="community-detail-comments">
-      <form
-        className="community-detail-comment-form"
-        onSubmit={handleCommentSubmit}
-      >
+      <form className="community-detail-comment-form" onSubmit={handleAdd}>
         <input
           type="text"
-          value={comment}
-          onChange={onCommentChange}
+          value={value}
+          onChange={onChange}
           placeholder="댓글을 작성해주세요"
         />
         <button type="submit">댓글 쓰기</button>
@@ -91,17 +80,19 @@ export const CommentSection = (props) => {
             key={c.id}
             comment={c}
             user={user}
-            onReplyAdd={onReplyAdd}
-            onLike={onLikeToggle}
-            onDelete={onDelete}
-            onEdit={onEdit}
+            onReplyAdd={handleReplyAdd}
+            onEdit={handleCommentEdit}
+            onDelete={handleCommentDelete}
             depth={1}
+            allComments={comments}
           />
         ))}
-        {commentsToShow < comments.length && (
+        {commentsToShow < topLevelComments.length && (
           <div ref={loaderRef} style={{ height: 32 }} />
         )}
       </div>
     </div>
   );
 };
+
+export default CommentSection;

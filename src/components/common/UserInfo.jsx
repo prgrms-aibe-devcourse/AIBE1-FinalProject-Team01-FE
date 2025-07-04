@@ -15,13 +15,13 @@ export default function UserInfo({ user, className = "" }) {
     return null;
   }
 
-  const { nickname, image_url, devcourse_name } = user;
+  const { nickname, profileImageUrl, devcourseName } = user;
 
   return (
     <div className={`user-info d-flex align-items-center gap-2 ${className}`}>
-      <img src={image_url} alt="프로필" className="author-img" />
+      <img src={profileImageUrl} alt="프로필" className="author-img" />
       <span className="author-name">{nickname}</span>
-      {devcourse_name && <span className="author-batch">{devcourse_name}</span>}
+      {devcourseName && <span className="author-batch">{devcourseName}</span>}
     </div>
   );
 }

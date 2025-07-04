@@ -7,16 +7,6 @@ const uploadFileToServer = async (file) => {
   console.log(`Uploading ${file.name} to server...`);
   await new Promise((resolve) => setTimeout(resolve, 500)); // 네트워크 지연 흉내
 
-  // fetch를 사용한 실제 API 호출 예시:
-  // const formData = new FormData();
-  // formData.append('image', file);
-  // const response = await fetch('/api/images/upload', { method: 'POST', body: formData });
-  // if (!response.ok) throw new Error('Image upload failed');
-  // const data = await response.json();
-  // return data.imageUrl;
-
-  // 현재는 FileReader를 사용하여 임시 데이터 URL을 생성하여 반환합니다.
-  // 백엔드 연동 시 이 부분을 실제 API 호출 결과(URL)로 교체해야 합니다.
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {

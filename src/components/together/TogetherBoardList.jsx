@@ -1,63 +1,54 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { PostCard } from "../board/PostCard";
 import {
-  TOGETHER_CATEGORIES,
-  RECRUITMENT_TYPES,
+  GATHERING_TYPE_LABELS,
+  MATCH_TYPE_LABELS,
 } from "../../pages/together/constants";
 
 /**
  * @typedef {Object} TogetherBoardListProps
  * @property {Array<Object>} posts
- * @property {(id: string | number) => void} [onPostClick]
  */
 
 /**
- * 함께해요 게시글 리스트 (스터디, 프로젝트, 커피챗, 멘토링)
+ * 함께해요 게시글 리스트 (스터디/프로젝트, 커피챗/멘토링)
  * @param {TogetherBoardListProps} props
  */
-export const TogetherBoardList = ({ posts, onPostClick }) => {
+const TogetherBoardList = ({ posts }) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = (post) => {
+    navigate(`/together/${post.boardType.toLowerCase()}/${post.postId}`);
+  };
+
+  if (!posts || posts.length === 0) {
+    return <div className="text-center py-5">게시글이 없습니다.</div>;
+  }
+
   return (
     <div className="d-flex flex-column gap-3">
       {posts.map((post) => {
-        const gathering_post = post.gathering_post;
-        const isMatch =
-          gathering_post.gathering_type === "mentoring" ||
-          gathering_post.gathering_type === "coffeechat";
-        const recruitmentTypeLabel =
-          RECRUITMENT_TYPES[gathering_post.recruitment_type];
+        const categoryLabel =
+          post.boardType === "GATHERING"
+            ? GATHERING_TYPE_LABELS[post.gatheringType]
+            : MATCH_TYPE_LABELS[post.matchingType];
+
         return (
           <PostCard
-            key={post.id}
+            key={post.postId}
             post={post}
-            onClick={onPostClick}
-            categoryLabel={TOGETHER_CATEGORIES[gathering_post.gathering_type]}
-            categoryKey={gathering_post.gathering_type}
-          >
-            <div className="row g-2 align-items-center">
-              <div className="col-md-3 col-6">
-                <i className="bi bi-geo-alt"></i> {gathering_post.place}
-              </div>
-              <div className="col-md-3 col-6">
-                <i className="bi bi-calendar"></i> {gathering_post.day}
-              </div>
-              {isMatch ? (
-                <div className="col-md-3 col-6">
-                  <strong>모집 분야:</strong>{" "}
-                  <span>{recruitmentTypeLabel}</span>
-                </div>
-              ) : (
-                <div className="col-md-3 col-6">
-                  <i className="bi bi-calendar-range"></i>{" "}
-                  {gathering_post.period}
-                </div>
-              )}
-              <div className="col-md-3 col-6">
-                <i className="bi bi-people"></i> {gathering_post.headCount}명
-              </div>
-            </div>
-          </PostCard>
+            categoryLabel={categoryLabel}
+            categoryKey={
+              post.gatheringType?.toLowerCase() ||
+              post.matchingType?.toLowerCase()
+            }
+            onClick={() => handleCardClick(post)}
+          />
         );
       })}
     </div>
   );
 };
+
+export default TogetherBoardList;

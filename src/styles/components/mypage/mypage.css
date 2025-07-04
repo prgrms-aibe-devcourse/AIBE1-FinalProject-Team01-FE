@@ -1,0 +1,99 @@
+/* 마이페이지 공통 스타일 */
+
+.mypage-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  padding: 32px;
+  margin-bottom: 24px;
+}
+
+.mypage-sidebar {
+  background: #fafbfc;
+  border-radius: 16px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.03);
+  padding: 24px 0;
+}
+.mypage-sidebar .active {
+  background: #e3f0ff;
+  color: #1976d2;
+  font-weight: bold;
+}
+.mypage-sidebar .sidebar-section {
+  font-weight: bold;
+  color: #222;
+  font-size: 1.08rem;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mypage-sidebar .sidebar-item {
+  padding-left: 22px;
+  font-size: 1rem;
+}
+.mypage-sidebar .sidebar-item.active {
+  background: #e3f0ff;
+  color: #1976d2;
+  font-weight: bold;
+}
+.mypage-sidebar .sidebar-item.text-danger {
+  color: #e74c3c !important;
+}
+
+.mypage-profile-img {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: #ffe07a;
+  object-fit: cover;
+  margin-bottom: 12px;
+}
+
+.mypage-badge {
+  color: #22b573;
+  font-size: 15px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.mypage-btn {
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 8px 24px;
+}
+
+.mypage-section-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 18px;
+}
+
+.mypage-label {
+  color: #888;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.mypage-empty {
+  text-align: center;
+  color: #bbb;
+  padding: 48px 0;
+}
+
+.mypage-main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  gap: 40px; /* 사이드바와 내용 사이 여백 */
+}
+.mypage-sidebar-col {
+  width: 220px;
+  min-width: 180px;
+  flex-shrink: 0;
+}
+.mypage-content-col {
+  flex: 1 1 0%;
+  min-width: 940px;
+}

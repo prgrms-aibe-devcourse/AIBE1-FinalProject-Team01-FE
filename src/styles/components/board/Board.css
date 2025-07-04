@@ -23,9 +23,15 @@
   font-weight: 700;
 }
 .author-batch {
-  color: var(--primary-color);
-  font-size: 0.9em;
-  font-weight: bold;
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 18px;
+  font-size: 0.9rem;
+  font-weight: 400;
+  flex-shrink: 0;
+  line-height: 1.5;
+  margin-right: 4px;
+  color: #afafaf;
 }
 
 /* --- Category & Status Labels --- */
@@ -35,44 +41,43 @@
   border-radius: 18px;
   font-size: 0.9rem;
   font-weight: 700;
-  color: #fff;
   flex-shrink: 0;
   line-height: 1.5;
 }
 
 /* Community Labels */
-.label-qna {
+.label-QNA {
   background-color: #e7f3ff;
   color: #007bff;
 }
-.label-retrospect {
+.label-RETROSPECT {
   background-color: #e8f7f4;
   color: #17a2b8;
 }
-.label-free {
+.label-FREE {
   background-color: #f8f9fa;
   color: #495057;
   border: 1px solid #dee2e6;
 }
 
 /* Together Labels */
-.label-study {
+.label-STUDY {
   background-color: #e7f3ff;
   color: #007bff;
 }
-.label-project {
+.label-PROJECT {
   background-color: #f0eaff;
   color: #6f42c1;
 }
-.label-coffeechat {
+.label-COFFEE_CHAT {
   background-color: #fff3cd;
   color: #856404;
 }
-.label-mentoring {
+.label-MENTORING {
   background-color: #d4edda;
   color: #155724;
 }
-.label-market {
+.label-MARKET {
   background-color: #d6d8db;
   color: #383d41;
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { MARKET_STATUS_LABELS } from "../../pages/together/constants";
 import "../../styles/components/together/market.css";
 
 /**
@@ -8,10 +9,10 @@ import "../../styles/components/together/market.css";
  */
 
 /**
- * 함께해요-장터 탭의 카드형 게시글 리스트
+ * 중고장터 카드형 게시글 리스트
  * @param {MarketBoardListProps} props
  */
-export const MarketBoardList = ({ posts }) => {
+const MarketBoardList = ({ posts }) => {
   const navigate = useNavigate();
 
   const handleCardClick = (postId) => {
@@ -25,20 +26,27 @@ export const MarketBoardList = ({ posts }) => {
   return (
     <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
       {posts.map((post) => {
-        const { market_item, post_images, user } = post;
-        if (!market_item) return null;
-
+        // 최신 구조: post.price, post.status, post.place, post.nickname, post.profileImg, post.postId, post.title, post_images 등
+        const {
+          post_images,
+          nickname,
+          profileImg,
+          postId,
+          title,
+          price,
+          status,
+        } = post;
         return (
-          <div key={post.id} className="col">
+          <div key={postId} className="col">
             <div
               className="card h-100 market-card"
-              onClick={() => handleCardClick(post.id)}
+              onClick={() => handleCardClick(postId)}
             >
               <div className="market-card-img-wrapper">
                 {post_images && post_images.length > 0 ? (
                   <img
                     src={post_images[0].image_url}
-                    alt={post.title}
+                    alt={title}
                     className="market-card-img"
                   />
                 ) : (
@@ -48,20 +56,28 @@ export const MarketBoardList = ({ posts }) => {
                 )}
                 <span
                   className={`badge market-status-badge ${
-                    market_item.status === "판매중" ? "bg-dark" : "bg-secondary"
+                    status === "ON_SALE" ? "bg-dark" : "bg-secondary"
                   }`}
                 >
-                  {market_item.status}
+                  {MARKET_STATUS_LABELS[status]}
                 </span>
               </div>
               <div className="card-body">
-                <h5 className="card-title text-truncate">{post.title}</h5>
-                <p className="card-text fw-bold">
-                  {market_item.price?.toLocaleString()}원
-                </p>
-                <p className="card-text text-muted small text-truncate">
-                  {user?.nickname || "판매자"}
-                </p>
+                <h5 className="card-title text-truncate">{title}</h5>
+                <p className="card-text fw-bold">{price?.toLocaleString()}원</p>
+                <div className="d-flex align-items-center gap-2">
+                  {profileImg && (
+                    <img
+                      src={profileImg}
+                      alt={nickname}
+                      className="rounded-circle"
+                      style={{ width: 24, height: 24 }}
+                    />
+                  )}
+                  <span className="card-text text-muted small text-truncate">
+                    {nickname || "판매자"}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -70,3 +86,5 @@ export const MarketBoardList = ({ posts }) => {
     </div>
   );
 };
+
+export default MarketBoardList;

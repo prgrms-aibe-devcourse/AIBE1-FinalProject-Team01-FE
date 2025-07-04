@@ -1,30 +1,24 @@
-import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { BoardCategoryBar } from "../../components/board/BoardCategoryBar";
+import React from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import BoardCategoryBar from "../../components/board/BoardCategoryBar";
 import { BoardSearchBar } from "../../components/board/BoardSearchBar";
-import { BoardPagination } from "../../components/board/BoardPagination";
+import TogetherBoardList from "../../components/together/TogetherBoardList";
+import MarketBoardList from "../../components/together/MarketBoardList";
+import { allTogetherPosts } from "./togetherData";
+import { BOARD_TABS } from "./constants";
 import { HeroSection } from "../../components/common/HeroSection";
-import heroTogether from "../../assets/hero-together.png";
+import heroTogetherImg from "../../assets/hero-together.png";
+import { useAuth } from "../../context/AuthContext";
+import { BoardPagination } from "../../components/board/BoardPagination";
 import { useBoardList } from "../../hooks/useBoardList";
-import { gatheringData, matchData, marketData } from "./togetherData";
-import { TogetherBoardList } from "../../components/together/TogetherBoardList";
-import { MarketBoardList } from "../../components/together/MarketBoardList";
-import "../../styles/components/community/community.css";
 
-const allTogetherPosts = [...gatheringData, ...matchData, ...marketData];
-
-// 함께해요 카테고리(탭) 목록
-const TOGETHER_TABS = [
-  { key: "gathering", label: "팀원 구하기" },
-  { key: "match", label: "커피챗/멘토링" },
-  { key: "market", label: "장터" },
-];
-
-export default function TogetherPage() {
-  const { category = "gathering" } = useParams();
+/**
+ * 투게더 메인 페이지 컴포넌트
+ */
+function TogetherPage() {
+  const { category = "GATHERING" } = useParams();
   const navigate = useNavigate();
-
-  const handleTabSelect = (catKey) => navigate(`/together/${catKey}`);
+  const { isLoggedIn } = useAuth();
 
   const {
     keyword,
@@ -34,47 +28,56 @@ export default function TogetherPage() {
     setPage,
     sort,
     setSort,
-    posts,
+    posts: pagedPosts,
     totalPages,
     reset,
-  } = useBoardList({ data: allTogetherPosts, category });
+  } = useBoardList({
+    data: allTogetherPosts,
+    boardType: category,
+  });
 
-  useEffect(() => {
+  // URL 파라미터에 따라 탭 이동
+  const handleTabClick = (tabId) => {
+    navigate(`/together/${tabId}`);
     reset();
-  }, [category]);
+  };
 
-  const handlePostClick = (postId) => {
-    navigate(`/together/${category}/${postId}`);
+  const renderContent = () => {
+    if (category === "MARKET") {
+      return <MarketBoardList posts={pagedPosts} />;
+    }
+    return <TogetherBoardList posts={pagedPosts} />;
   };
 
   return (
     <>
-      <HeroSection backgroundImageSrc={heroTogether} />
+      <HeroSection backgroundImageSrc={heroTogetherImg} />
       <div className="py-4">
         <div className="community-main-container">
           <BoardCategoryBar
-            selected={category}
-            onSelect={handleTabSelect}
-            tabs={TOGETHER_TABS}
+            tabs={BOARD_TABS}
+            activeTab={category}
+            onTabClick={handleTabClick}
           />
+
           <BoardSearchBar
             keyword={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            onWrite={() => navigate(`/together/${category}/write`)}
             sort={sort}
             onSortChange={setSort}
             onSearch={search}
+            // TODO: 수강생만 글쓰기 가능하도록 수정 필요
+            onWrite={() =>
+              navigate(`/together/${category.toLowerCase()}/write`)
+            }
           />
 
-          {category === "market" ? (
-            <MarketBoardList posts={posts} onPostClick={handlePostClick} />
-          ) : (
-            <TogetherBoardList posts={posts} onPostClick={handlePostClick} />
-          )}
-
+          <div className="mt-4">{renderContent()}</div>
           <BoardPagination page={page} total={totalPages} onChange={setPage} />
         </div>
       </div>
     </>
   );
 }
+
+export default TogetherPage;

@@ -41,7 +41,7 @@
 
 .community-cards-section {
   width: 90rem;
-  height: 43.25rem;
+  height: 40rem;
   padding-left: 6.5rem;
   padding-right: 6.5rem;
   background: #fbfbfd;
@@ -151,4 +151,26 @@
   font-weight: 500;
   line-height: 1.5rem;
   word-wrap: break-word;
+}
+
+.main-board-card {
+  border-radius: 12px;
+  overflow: hidden;
+  width: 400px;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-board-card-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  display: block;
+}
+
+.main-board-section {
+  font-family: "Pretendard", sans-serif;
 }

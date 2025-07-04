@@ -77,12 +77,14 @@ export const BoardSearchBar = ({
             onKeyDown={handleInputKeyDown}
           />
         </div>
-        <button
-          className="community-write-btn d-flex align-items-center gap-1"
-          onClick={onWrite}
-        >
-          <span>글쓰기</span>
-        </button>
+        {onWrite && (
+          <button
+            className="community-write-btn d-flex align-items-center gap-1"
+            onClick={onWrite}
+          >
+            <span>글쓰기</span>
+          </button>
+        )}
       </div>
     </div>
   );

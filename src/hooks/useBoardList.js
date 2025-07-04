@@ -30,51 +30,29 @@ function reducer(state, action) {
  * 게시판 리스트/검색/정렬/페이지네이션 커스텀 훅 (공통)
  * @param {Object} params
  * @param {Array} params.data - 전체 게시글 데이터
- * @param {string} [params.category] - 카테고리(필터링용)
- * @param {function} [params.categoryFilter] - 카테고리 필터 함수(옵션)
+ * @param {string} [params.boardType] - 게시판 타입(필터링용)
+ * @param {function} [params.customFilter] - 커스텀 필터 함수(옵션)
  * @param {number} [params.pageSize]
  * @returns 상태/핸들러/필터링된 posts/totalPages 등
  */
 export function useBoardList({
   data,
-  category,
-  categoryFilter,
+  boardType,
+  customFilter,
   pageSize = DEFAULT_PAGE_SIZE,
 }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // 카테고리/검색 필터링
+  // 게시판 타입/검색 필터링
   let filtered = data;
-  if (category && category !== "전체") {
-    if (categoryFilter) {
-      filtered = filtered.filter((item) => categoryFilter(item, category));
+  if (boardType) {
+    if (customFilter) {
+      filtered = filtered.filter((item) => customFilter(item, boardType));
     } else {
-      if (category === "gathering") {
-        filtered = filtered.filter(
-          (item) =>
-            item.board_type === "gathering" &&
-            ["study", "project", "hackathon"].includes(
-              item.gathering_post?.gathering_type
-            )
-        );
-      } else if (category === "match") {
-        filtered = filtered.filter(
-          (item) =>
-            item.board_type === "gathering" &&
-            ["coffeechat", "mentoring"].includes(
-              item.gathering_post?.gathering_type
-            )
-        );
-      } else if (category === "market") {
-        filtered = filtered.filter((item) => item.board_type === "market");
-      } else {
-        // community 등 기타 게시판
-        filtered = filtered.filter(
-          (item) => item.category === category || item.board_type === category
-        );
-      }
+      filtered = filtered.filter((item) => item.boardType === boardType);
     }
   }
+
   if (state.searchTerm) {
     filtered = filtered.filter(
       (item) =>
@@ -86,17 +64,13 @@ export function useBoardList({
   // 정렬
   let sorted = [...filtered];
   if (state.sort === "최신순") {
-    sorted.sort((a, b) =>
-      (b.created_at || "").localeCompare(a.created_at || "")
-    );
+    sorted.sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
   } else if (state.sort === "조회순") {
-    sorted.sort((a, b) => (b.view_count || 0) - (a.view_count || 0));
+    sorted.sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
   } else if (state.sort === "댓글순") {
-    sorted.sort(
-      (a, b) => (b.comments?.length || 0) - (a.comments?.length || 0)
-    );
+    sorted.sort((a, b) => (b.commentCount || 0) - (a.commentCount || 0));
   } else if (state.sort === "좋아요순") {
-    sorted.sort((a, b) => (b.like_count || 0) - (a.like_count || 0));
+    sorted.sort((a, b) => (b.likeCount || 0) - (a.likeCount || 0));
   }
 
   // 페이지네이션

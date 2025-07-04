@@ -1,43 +1,79 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MarketPostInfo } from "./MarketPostInfo";
+import MarketPostInfo from "./MarketPostInfo";
 import { PostContent } from "../common/PostContent";
+import { BoardTagShareBar } from "../board/BoardTagShareBar";
 import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import "../../styles/components/together/market.css";
+import { useAuth } from "../../context/AuthContext";
+import { isAuthor } from "../../utils/auth";
 
 /**
  * @typedef {Object} MarketBoardDetailProps
  * @property {object} post
+ * @property {boolean} [liked]
+ * @property {number} [likeCount]
+ * @property {function} [onLike]
+ * @property {boolean} [bookmarked]
+ * @property {number} [bookmarkCount]
+ * @property {function} [onBookmark]
  */
 
 /**
- * 장터 글 상세 메인 컴포넌트
+ * 중고장터 글 상세 메인 컴포넌트
  * @param {MarketBoardDetailProps} props
  */
-export const MarketBoardDetail = ({ post }) => {
+const MarketBoardDetail = ({
+  post,
+  liked,
+  likeCount,
+  onLike,
+  bookmarked,
+  bookmarkCount,
+  onBookmark,
+}) => {
   const navigate = useNavigate();
+  const { user: currentUser } = useAuth();
+  const isMine = isAuthor(
+    currentUser,
+    post.user?.id || post.userId || post.user_id
+  );
   const { post_images } = post;
   const [mainImage, setMainImage] = useState(
     post_images?.[0]?.image_url || null
   );
 
   const handleEdit = () => {
-    navigate(`/together/${post.board_type}/write`, {
+    navigate(`/together/${post.boardType.toLowerCase()}/write`, {
       state: { postToEdit: post },
     });
   };
 
   const handleDelete = () => {
     if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
-      console.log("삭제할 게시글 ID:", post.id);
+      console.log("삭제할 게시글 ID:", post.postId);
       alert("게시글이 삭제되었습니다.");
-      navigate(`/together/${post.board_type}`);
+      navigate(`/together/${post.boardType.toLowerCase()}`);
     }
   };
 
   return (
-    <BoardDetailLayout post={post}>
-      <MarketPostInfo post={post} onEdit={handleEdit} onDelete={handleDelete} />
+    <BoardDetailLayout
+      post={post}
+      boardTitle="함께해요"
+      boardLink="/together"
+      likeCount={likeCount}
+      isLiked={liked}
+      onLike={onLike}
+      bookmarkCount={bookmarkCount}
+      isBookmarked={bookmarked}
+      onBookmark={onBookmark}
+    >
+      <MarketPostInfo
+        post={post}
+        onEdit={isMine ? handleEdit : undefined}
+        onDelete={isMine ? handleDelete : undefined}
+      />
       <div className="row g-5 mt-3">
         <div className="col-md-5">
           {post_images && post_images.length > 0 && (
@@ -72,3 +108,5 @@ export const MarketBoardDetail = ({ post }) => {
     </BoardDetailLayout>
   );
 };
+
+export default MarketBoardDetail;

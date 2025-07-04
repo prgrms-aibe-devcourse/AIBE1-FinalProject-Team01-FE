@@ -1,5 +1,5 @@
 .post-info-header {
-  padding: 1.5rem 0 0;
+  padding: 1rem 0 0;
 }
 
 .post-category-label {
@@ -13,7 +13,6 @@
 .post-info-title {
   font-size: 1.75rem;
   font-weight: 600;
-  margin-bottom: 0.75rem;
 }
 
 .post-info-actions button {

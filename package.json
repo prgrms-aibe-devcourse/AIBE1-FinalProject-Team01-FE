@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.12",
+    "@stomp/stompjs": "^7.1.1",
     "@tiptap/extension-code-block-lowlight": "^2.14.1",
     "@tiptap/extension-dropcursor": "^2.14.1",
     "@tiptap/extension-highlight": "^2.14.1",
@@ -27,6 +28,7 @@
     "@tiptap/pm": "^2.14.1",
     "@tiptap/react": "^2.14.1",
     "@tiptap/starter-kit": "^2.14.1",
+    "axios": "^1.10.0",
     "bootstrap": "^5.3.7",
     "lowlight": "^3.3.0",
     "react": "^19.1.0",
@@ -35,6 +37,7 @@
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.6.2",
+    "sockjs-client": "^1.6.1",
     "tiptap-markdown": "^0.8.10"
   },
   "devDependencies": {
