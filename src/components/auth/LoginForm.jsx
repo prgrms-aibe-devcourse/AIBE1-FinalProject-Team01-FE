@@ -1,21 +1,23 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import kakaoLoginImg from "../../assets/kakao_login_medium_narrow.png";
 import githubLoginImg from "../../assets/github_login.png";
 import "../../styles/components/auth/auth.css";
 import { useInput } from "../../hooks/useInput";
+import apiClient, { loginUser, tokenManager } from "../../services/api";
 
 export const LoginForm = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const emailRef = useRef(null);
   const pwRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { value: email, onChange: onEmailChange } = useInput("");
   const { value: pw, onChange: onPwChange } = useInput("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
       emailRef.current.setCustomValidity("이메일을 입력해 주세요.");
@@ -31,15 +33,34 @@ export const LoginForm = () => {
     } else {
       pwRef.current.setCustomValidity("");
     }
-    // TODO : 추후 백엔드 인증 로직 추가
-    // 더미 user 정보
-    login({
-      id: 2, // userId 추가 (Dev 로그인과 구분하기 위해 2로 설정)
-      name: "홍길동",
-      email: email,
-      avatar: "/assets/user-icon.png",
-    });
-    navigate("/");
+
+    setIsLoading(true);
+    try {
+      const loginResponse = await loginUser({ email, password: pw });
+
+      tokenManager.setToken(loginResponse.accessToken);
+
+      const userResponse = await apiClient.get("/api/v1/users/me");
+
+      login(
+        {
+          id: userResponse.data.userId,
+          name: userResponse.data.name,
+          email: userResponse.data.email,
+          avatar: userResponse.data.imageUrl || "/assets/user-icon.png",
+          nickname: userResponse.data.nickname,
+        },
+        loginResponse.accessToken
+      );
+
+      navigate("/");
+    } catch (error) {
+      console.error("로그인 실패: ", error);
+      pwRef.current.setCustomValidity(error.message);
+      pwRef.current.reportValidity();
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -66,8 +87,12 @@ export const LoginForm = () => {
             required
           />
         </div>
-        <button type="submit" className="loginpage-figma-login-btn">
-          로그인하기
+        <button
+          type="submit"
+          className="loginpage-figma-login-btn"
+          disabled={isLoading}
+        >
+          {isLoading ? "로그인 중..." : "로그인하기"}
         </button>
       </form>
       <button
