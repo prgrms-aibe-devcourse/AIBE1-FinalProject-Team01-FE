@@ -38,9 +38,11 @@ export const LoginForm = () => {
     try {
       const loginResponse = await loginUser({ email, password: pw });
 
-      tokenManager.setToken(loginResponse.accessToken);
-
-      const userResponse = await apiClient.get("/api/v1/users/me");
+      const userResponse = await apiClient.get("/api/v1/users/me", {
+        headers: {
+          Authorization: `Bearer ${loginResponse.accessToken}`,
+        },
+      });
 
       login(
         {
