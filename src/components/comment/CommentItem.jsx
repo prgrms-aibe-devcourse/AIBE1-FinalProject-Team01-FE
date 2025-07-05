@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { useLikeBookmark } from "../../hooks/useLikeBookmark";
 import { useInput } from "../../hooks/useInput";
 import { isAuthor } from "../../utils/auth";
+import ReportModal from "../common/ReportModal";
+import {submitReport} from "../../services/reportApi.js";
+
 
 /**
  * @typedef {Object} CommentItemProps
@@ -35,6 +38,8 @@ const CommentItem = (props) => {
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+
   const {
     value: replyContent,
     onChange: onReplyChange,
@@ -98,137 +103,171 @@ const CommentItem = (props) => {
     }
   };
 
+  const handleReport = () => {
+    setShowReportModal(true);
+  };
+
+  const handleReportSubmit = async (reportData) => {
+    try {
+      console.log("CommentItem - 받은 reportData:", reportData);
+      console.log("CommentItem - reportData.reportTarget:", reportData.reportTarget);
+
+      const result = await submitReport(reportData);
+
+      console.log("댓글 신고 성공:", result);
+    } catch (error) {
+      console.error("댓글 신고 오류:", error);
+
+      throw error;
+    }
+  };
   return (
-    <div className="community-detail-comment-item">
-      <div className="comment-author-row">
-        <img
-          src={profileImageUrl}
-          alt="프로필"
-          className="comment-author-img"
-        />
-        <div className="d-flex align-items-center w-100">
-          <div className="d-flex align-items-center flex-grow-1">
-            <span className="comment-author-name">{nickname}</span>
-          </div>
-          <span className="comment-date">
+      <div className="community-detail-comment-item">
+        <div className="comment-author-row">
+          <img
+              src={profileImageUrl}
+              alt="프로필"
+              className="comment-author-img"
+          />
+          <div className="d-flex align-items-center w-100">
+            <div className="d-flex align-items-center flex-grow-1">
+              <span className="comment-author-name">{nickname}</span>
+            </div>
+            <span className="comment-date">
             {new Date(createdAt).toLocaleString()}
           </span>
-        </div>
-      </div>
-      <div className="comment-content">
-        {isEditing ? (
-          <div className="d-flex align-items-center">
-            <input
-              type="text"
-              className="form-control me-2"
-              value={editContent}
-              onChange={onEditChange}
-              autoFocus
-            />
-            <button
-              className="btn btn-primary btn-sm me-2 flex-shrink-0"
-              onClick={handleEditSave}
-            >
-              저장
-            </button>
-            <button
-              className="btn btn-secondary btn-sm flex-shrink-0"
-              onClick={() => setIsEditing(false)}
-            >
-              취소
-            </button>
+            {!isMine && (
+                <button
+                    className="btn btn-link btn-sm text-secondary ms-2 p-0"
+                    onClick={handleReport}
+                    style={{ fontSize: '13px', opacity: 0.7 }}
+                >
+                  <i className="bi bi-flag"></i> 신고
+                </button>
+            )}
           </div>
-        ) : (
-          initialContent
-        )}
-      </div>
-      <div className="comment-actions">
-        <button className="btn-comment-like" onClick={handleLikeClick}>
-          <i
-            className={liked ? "bi bi-heart-fill text-danger" : "bi bi-heart"}
-          ></i>{" "}
-          {likeCountState}
-        </button>
-        <button
-          className="btn-comment-reply"
-          onClick={() => setShowReplyInput((v) => !v)}
-        >
-          답글
-        </button>
-        {isMine && (
-          <>
-            <button
-              className="btn btn-link btn-sm text-secondary ms-2"
-              onClick={handleEditClick}
-            >
-              수정
-            </button>
-            <button
-              className="btn btn-link btn-sm text-danger ms-1"
-              onClick={handleDelete}
-            >
-              삭제
-            </button>
-          </>
-        )}
-        {depth === 1 && commentReplies.length > 0 && !showReplies && (
-          <button
-            className="btn btn-link btn-sm text-primary ms-2"
-            style={{ textDecoration: "underline" }}
-            onClick={() => setShowReplies(true)}
-          >
-            답글 보기({commentReplies.length})
-          </button>
-        )}
-        {depth === 1 && showReplies && commentReplies.length > 0 && (
-          <button
-            className="btn btn-link btn-sm text-secondary mt-1 ms-2"
-            style={{ textDecoration: "underline" }}
-            onClick={() => setShowReplies(false)}
-          >
-            답글 숨기기
-          </button>
-        )}
-      </div>
-      {showReplyInput && (
-        <form
-          className="comment-reply-form d-flex mt-2"
-          onSubmit={handleReplySubmit}
-        >
-          <input
-            type="text"
-            className="form-control me-2"
-            value={replyContent}
-            onChange={onReplyChange}
-            placeholder="답글을 입력하세요"
-            autoFocus
-          />
-          <button type="submit" className="btn btn-primary btn-sm">
-            등록
-          </button>
-        </form>
-      )}
-      {showRepliesForThis && commentReplies.length > 0 && (
-        <div className="comment-replies">
-          {commentReplies
-            .slice()
-            .sort((a, b) => a.id - b.id)
-            .map((reply) => (
-              <CommentItem
-                key={reply.id}
-                comment={reply}
-                user={currentUser}
-                onReplyAdd={props.onReplyAdd}
-                onLike={props.onLike}
-                onDelete={props.onDelete}
-                onEdit={props.onEdit}
-                depth={depth + 1}
-                allComments={allComments}
-              />
-            ))}
         </div>
-      )}
-    </div>
+        <div className="comment-content">
+          {isEditing ? (
+              <div className="d-flex align-items-center">
+                <input
+                    type="text"
+                    className="form-control me-2"
+                    value={editContent}
+                    onChange={onEditChange}
+                    autoFocus
+                />
+                <button
+                    className="btn btn-primary btn-sm me-2 flex-shrink-0"
+                    onClick={handleEditSave}
+                >
+                  저장
+                </button>
+                <button
+                    className="btn btn-secondary btn-sm flex-shrink-0"
+                    onClick={() => setIsEditing(false)}
+                >
+                  취소
+                </button>
+              </div>
+          ) : (
+              initialContent
+          )}
+        </div>
+        <div className="comment-actions">
+          <button className="btn-comment-like" onClick={handleLikeClick}>
+            <i
+                className={liked ? "bi bi-heart-fill text-danger" : "bi bi-heart"}
+            ></i>{" "}
+            {likeCountState}
+          </button>
+          <button
+              className="btn-comment-reply"
+              onClick={() => setShowReplyInput((v) => !v)}
+          >
+            답글
+          </button>
+          {isMine && (
+              <>
+                <button
+                    className="btn btn-link btn-sm text-secondary ms-2"
+                    onClick={handleEditClick}
+                >
+                  수정
+                </button>
+                <button
+                    className="btn btn-link btn-sm text-danger ms-1"
+                    onClick={handleDelete}
+                >
+                  삭제
+                </button>
+              </>
+          )}
+          {depth === 1 && commentReplies.length > 0 && !showReplies && (
+              <button
+                  className="btn btn-link btn-sm text-primary ms-2"
+                  style={{ textDecoration: "underline" }}
+                  onClick={() => setShowReplies(true)}
+              >
+                답글 보기({commentReplies.length})
+              </button>
+          )}
+          {depth === 1 && showReplies && commentReplies.length > 0 && (
+              <button
+                  className="btn btn-link btn-sm text-secondary mt-1 ms-2"
+                  style={{ textDecoration: "underline" }}
+                  onClick={() => setShowReplies(false)}
+              >
+                답글 숨기기
+              </button>
+          )}
+        </div>
+        {showReplyInput && (
+            <form
+                className="comment-reply-form d-flex mt-2"
+                onSubmit={handleReplySubmit}
+            >
+              <input
+                  type="text"
+                  className="form-control me-2"
+                  value={replyContent}
+                  onChange={onReplyChange}
+                  placeholder="답글을 입력하세요"
+                  autoFocus
+              />
+              <button type="submit" className="btn btn-primary btn-sm">
+                등록
+              </button>
+            </form>
+        )}
+        {showRepliesForThis && commentReplies.length > 0 && (
+            <div className="comment-replies">
+              {commentReplies
+                  .slice()
+                  .sort((a, b) => a.id - b.id)
+                  .map((reply) => (
+                      <CommentItem
+                          key={reply.id}
+                          comment={reply}
+                          user={currentUser}
+                          onReplyAdd={props.onReplyAdd}
+                          onLike={props.onLike}
+                          onDelete={props.onDelete}
+                          onEdit={props.onEdit}
+                          depth={depth + 1}
+                          allComments={allComments}
+                      />
+                  ))}
+            </div>
+        )}
+        <ReportModal
+            show={showReportModal}
+            onHide={() => setShowReportModal(false)}
+            targetId={id}
+            reportTarget="COMMENT"
+            onSubmit={handleReportSubmit}
+        />
+      </div>
   );
 };
 
