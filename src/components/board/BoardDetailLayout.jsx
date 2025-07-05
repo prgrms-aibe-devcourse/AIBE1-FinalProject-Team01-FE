@@ -27,6 +27,7 @@ export const BoardDetailLayout = ({
   bookmarkCount,
   isBookmarked,
   onBookmark,
+
 }) => {
   return (
     <div className="community-detail-container">
@@ -39,6 +40,7 @@ export const BoardDetailLayout = ({
         isBookmarked={isBookmarked}
         onLikeToggle={onLike}
         onBookmarkToggle={onBookmark}
+        postId={post.postId}
       />
       <CommentSection postId={post.postId} comments={post.comments || []} />
     </div>
