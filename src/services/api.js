@@ -8,6 +8,7 @@ const API_BASE_URL =
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
@@ -48,6 +49,7 @@ const tokenManager = {
       const currentTime = Date.now() / 1000;
       return payload.exp > currentTime;
     } catch (error) {
+      console.warn("토큰 검증 실패:", error);
       return false;
     }
   },
