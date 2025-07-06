@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/components/hub/hub.css";
+import { formatDate } from "../../utils/date";
 
 /**
  * @typedef {Object} HubBoardListProps
@@ -10,8 +11,8 @@ import "../../styles/components/hub/hub.css";
 export default function HubBoardList({ posts = [] }) {
   const navigate = useNavigate();
 
-  const handleCardClick = (postId) => {
-    navigate(`/HUB/${postId}`);
+  const handleCardClick = (projectId) => {
+    navigate(`/hub/${projectId}`);
   };
 
   if (!Array.isArray(posts) || posts.length === 0) {
@@ -23,8 +24,9 @@ export default function HubBoardList({ posts = [] }) {
       {posts.map((post) => {
         if (!post) return null;
         const {
+          projectId,
           postId,
-          postImages,
+          thumbnailImageUrl,
           tags,
           courseName,
           batchNumber,
@@ -42,20 +44,14 @@ export default function HubBoardList({ posts = [] }) {
           <div key={postId} className="col">
             <div
               className="card h-100 hub-card"
-              onClick={() => handleCardClick(postId)}
+              onClick={() => handleCardClick(projectId)}
             >
               <div className="hub-card-img-wrapper">
-                {postImages && postImages.length > 0 ? (
-                  <img
-                    src={postImages[0].imageUrl}
-                    alt={title}
-                    className="hub-card-img"
-                  />
-                ) : (
-                  <div className="d-flex justify-content-center align-items-center h-100 bg-light text-secondary">
-                    <span>No Image</span>
-                  </div>
-                )}
+                <img
+                  src={thumbnailImageUrl}
+                  alt={title}
+                  className="hub-card-img"
+                />
                 <span className="hub-card-likes">
                   <i className="bi bi-star-fill"></i> {likeCount || 0}
                 </span>
@@ -73,11 +69,11 @@ export default function HubBoardList({ posts = [] }) {
                 <p className="card-text small mt-2">
                   <strong>팀원:</strong>{" "}
                   {projectMembers && projectMembers.length > 0
-                    ? projectMembers.map((m) => m.name).join(", ")
+                    ? projectMembers.map((m) => m.name || m).join(", ")
                     : "-"}
                 </p>
                 <p className="card-text small text-muted">
-                  <strong>기간:</strong> {startedAt} ~ {endedAt}
+                  <strong>기간:</strong> {formatDate(startedAt)} ~ {formatDate(endedAt)}
                 </p>
                 <div className="hub-card-tags mt-auto pt-3">
                   {tags?.map((tag, i) => (

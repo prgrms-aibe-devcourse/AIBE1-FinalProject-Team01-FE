@@ -1,17 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { HubBoardDetail } from "../../components/hub/HubBoardDetail";
-import { hubData } from "./hubData";
 import { useLikeBookmark } from "../../hooks/useLikeBookmark";
-import { mapHubPost } from "../../utils/hub";
+import { mapApiResponseToHubPost } from "../../utils/hub";
+import { getPostById } from "../../services/hubApi";
 import "../../styles/components/community/community.css";
 
 export default function HubDetailPage() {
-  const { postId } = useParams();
+  const { projectId } = useParams();
   const navigate = useNavigate();
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const rawPost = hubData.find((p) => String(p.postId) === String(postId));
-  const post = rawPost ? mapHubPost(rawPost) : undefined;
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        setLoading(true);
+        const response = await getPostById(projectId);
+
+        // utils 함수를 사용하여 API 응답을 프론트엔드 형식으로 변환
+        const mappedPost = mapApiResponseToHubPost(response);
+
+        setPost(mappedPost);
+        setError(null);
+      } catch (err) {
+        console.error("프로젝트 상세 정보를 가져오는 데 실패했습니다.", err);
+        setError("프로젝트를 찾을 수 없습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (projectId) {
+      fetchPost();
+    }
+  }, [projectId]);
 
   const {
     liked,
@@ -27,10 +51,21 @@ export default function HubDetailPage() {
     initialBookmarked: post?.isBookmarked || false,
   });
 
-  if (!post) {
+  if (loading) {
     return (
       <div className="container py-5 text-center">
-        <h2>프로젝트를 찾을 수 없습니다.</h2>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">로딩 중...</span>
+        </div>
+        <p className="mt-3">프로젝트 정보를 불러오는 중...</p>
+      </div>
+    );
+  }
+
+  if (error || !post) {
+    return (
+      <div className="container py-5 text-center">
+        <h2>{error || "프로젝트를 찾을 수 없습니다."}</h2>
         <button
           className="btn btn-primary mt-3"
           onClick={() => navigate(-1)}

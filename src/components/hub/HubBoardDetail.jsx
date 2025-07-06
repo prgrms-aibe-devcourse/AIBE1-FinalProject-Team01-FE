@@ -31,7 +31,7 @@ export const HubBoardDetail = ({
   isBookmarked,
 }) => {
   const navigate = useNavigate();
-  const { postImages, postId, title } = post;
+  const { postImages, projectId, title } = post;
   const [mainImage, setMainImage] = useState(postImages?.[0]?.imageUrl || null);
 
   const handleEdit = () => {
@@ -40,9 +40,9 @@ export const HubBoardDetail = ({
 
   const handleDelete = () => {
     if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
-      console.log("삭제할 게시글 ID:", postId);
+      console.log("삭제할 게시글 ID:", projectId);
       alert("게시글이 삭제되었습니다.");
-      navigate(`/HUB`);
+      navigate(`/hub`);
     }
   };
 

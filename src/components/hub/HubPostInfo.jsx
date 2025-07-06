@@ -12,6 +12,14 @@ import "../../styles/components/hub/hub.css";
 export const HubPostInfo = ({ post, onEdit, onDelete }) => {
   const { user: currentUser } = useAuth();
   const canEditOrDelete = isAuthor(currentUser, post.userId);
+  
+  // 날짜 포맷팅 함수
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR');
+  };
+
   const {
     courseName,
     batchNumber,
@@ -71,7 +79,7 @@ export const HubPostInfo = ({ post, onEdit, onDelete }) => {
             {projectMembers && projectMembers.length > 0 ? (
               projectMembers.map((member, i) => (
                 <li key={i}>
-                  {member.name} - {member.role}
+                  {typeof member === 'string' ? member : `${member.name}${member.role ? ` - ${member.role}` : ''}`}
                 </li>
               ))
             ) : (
@@ -81,7 +89,7 @@ export const HubPostInfo = ({ post, onEdit, onDelete }) => {
         </div>
         <div className="col-md-6">
           <p>
-            <strong>기간:</strong> {startedAt} ~ {endedAt}
+            <strong>기간:</strong> {formatDate(startedAt)} ~ {formatDate(endedAt)}
           </p>
           <p>
             <strong>

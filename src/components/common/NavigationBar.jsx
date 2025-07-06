@@ -119,7 +119,7 @@ export const NavigationBar = ({ onlyLogo }) => {
                 <Nav.Link onClick={() => navigate("/community")}>
                   커뮤니티
                 </Nav.Link>
-                <Nav.Link onClick={() => navigate("/HUB")}>
+                <Nav.Link onClick={() => navigate("/hub")}>
                   프로젝트 허브
                 </Nav.Link>
                 <Nav.Link onClick={() => navigate("/together")}>

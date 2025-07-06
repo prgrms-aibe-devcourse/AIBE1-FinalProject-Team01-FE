@@ -58,8 +58,8 @@ export function AppRouter() {
         element={<InfoBoardDetailPage />}
       />
       <Route path="/info/:boardType/write" element={<InfoWritePage />} />
-      <Route path="/HUB" element={<HubPage />} />
-      <Route path="/HUB/:postId" element={<HubDetailPage />} />
+      <Route path="/hub" element={<HubPage />} />
+      <Route path="/hub/:projectId" element={<HubDetailPage />} />
       <Route path="/mypage" element={<MyPage />} />
     </Routes>
   );

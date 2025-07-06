@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, InputGroup, Button } from "react-bootstrap";
 import "../../styles/components/hub/hub.css";
 
@@ -6,8 +6,7 @@ import "../../styles/components/hub/hub.css";
  * @typedef {Object} HubSearchBarProps
  * @property {string[]} courseNames
  * @property {number[]} batchNumbers
- * @property {{ courseName: string, batchNumber: string, keyword: string }} filters
- * @property {(newFilters: object) => void} onFilterChange
+ * @property {(filters: object) => void} onSearch
  */
 
 /**
@@ -17,19 +16,28 @@ import "../../styles/components/hub/hub.css";
 export const HubSearchBar = ({
   courseNames,
   batchNumbers,
-  filters,
-  onFilterChange,
+  onSearch,
 }) => {
-  // 드롭다운/검색어 입력 시 바로 필터링
+  // 내부 상태로 필터 관리
+  const [filters, setFilters] = useState({
+    courseName: "",
+    batchNumber: "",
+    keyword: "",
+  });
+
+  // 입력값 변경 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target;
-    onFilterChange({ [name]: value });
+    setFilters(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  // 엔터 또는 버튼 클릭 시에도 필터링
+  // 검색 실행
   const handleSubmit = (e) => {
     e.preventDefault();
-    onFilterChange({ ...filters });
+    onSearch(filters);
   };
 
   return (
