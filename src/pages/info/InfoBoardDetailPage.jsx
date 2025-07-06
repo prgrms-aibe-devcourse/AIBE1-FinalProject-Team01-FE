@@ -1,16 +1,85 @@
-import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { reviewPosts, newsPosts } from "./infoData";
-import InfoBoardDetail from "../../components/info/InfoBoardDetail";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { InfoBoardDetail } from "../../components/info/InfoBoardDetail";
 import { useLikeBookmark } from "../../hooks/useLikeBookmark";
+import { getInfoPost } from "../../services/infoApi.js";
 
+/**
+ * Info 게시글 상세 페이지 컴포넌트
+ */
 export default function InfoBoardDetailPage() {
+  const { boardType, itId } = useParams();
   const navigate = useNavigate();
-  let { boardType, postId } = useParams();
-  boardType = boardType.toUpperCase();
-  const posts = boardType === "NEWS" ? newsPosts : reviewPosts;
-  const post = posts.find((p) => String(p.postId) === String(postId));
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // 게시글 데이터 로드
+  useEffect(() => {
+    const loadPost = async () => {
+      try {
+        setLoading(true);
+        const postData = await getInfoPost(boardType, itId);
+        setPost(postData);
+      } catch (err) {
+        console.error("게시글 로드 실패:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (boardType && itId) {
+      loadPost();
+    }
+  }, [boardType, itId]);
+
+  // 로딩 상태
+  if (loading) {
+    return (
+        <div className="container py-5 text-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">로딩 중...</span>
+          </div>
+          <p className="mt-2">게시글을 불러오는 중입니다...</p>
+        </div>
+    );
+  }
+
+  // 에러 상태
+  if (error) {
+    return (
+        <div className="container py-5 text-center">
+          <h2>오류가 발생했습니다</h2>
+          <p>{error}</p>
+          <button className="btn btn-primary mt-3" onClick={() => navigate(-1)}>
+            돌아가기
+          </button>
+        </div>
+    );
+  }
+
+  // 게시글이 없는 경우
+  if (!post) {
+    return (
+        <div className="container py-5 text-center">
+          <h2>게시글을 찾을 수 없습니다.</h2>
+          <button className="btn btn-primary mt-3" onClick={() => navigate(-1)}>
+            돌아가기
+          </button>
+        </div>
+    );
+  }
+
+  // 게시글이 있을 때만 렌더링하는 컴포넌트
+  return <InfoDetailContent post={post} />;
+}
+
+/**
+ * 실제 상세 내용을 렌더링하는 컴포넌트 (post가 확실히 있을 때만 사용)
+ */
+function InfoDetailContent({ post }) {
+  // Hook은 여기서 안전하게 호출됩니다
   const {
     liked,
     likeCount,
@@ -19,48 +88,25 @@ export default function InfoBoardDetailPage() {
     bookmarkCount,
     toggleBookmark,
   } = useLikeBookmark({
-    initialLikeCount: post?.likeCount || 0,
-    initialLiked: post?.isLiked || false,
-    initialBookmarkCount: post?.bookmarkCount || 0,
-    initialBookmarked: post?.isBookmarked || false,
+    initialLikeCount: post.likeCount || 0,
+    initialLiked: post.isLiked || false,
+    initialBookmarkCount: post.bookmarkCount || 0,
+    initialBookmarked: post.isBookmarked || false,
   });
 
-  if (!post) {
-    return (
-      <div className="container py-5 text-center">
-        <h2>게시글을 찾을 수 없습니다.</h2>
-        <button className="btn btn-primary mt-3" onClick={() => navigate(-1)}>
-          돌아가기
-        </button>
-      </div>
-    );
-  }
-
-  const handleEdit = () => {
-    navigate(`/info/${boardType}/write`, { state: { postToEdit: post } });
-  };
-  const handleDelete = () => {
-    if (window.confirm("정말로 이 글을 삭제하시겠습니까?")) {
-      const idx = posts.findIndex((p) => p.postId === post.postId);
-      if (idx !== -1) posts.splice(idx, 1);
-      alert("글이 삭제되었습니다.");
-      navigate(`/info/${boardType}`);
-    }
+  const detailPost = {
+    ...post,
+    isLiked: liked,
+    likeCount: likeCount,
+    isBookmarked: bookmarked,
+    bookmarkCount: bookmarkCount,
   };
 
   return (
-    <InfoBoardDetail
-      post={{
-        ...post,
-        isLiked: liked,
-        likeCount: likeCount,
-        isBookmarked: bookmarked,
-        bookmarkCount: bookmarkCount,
-      }}
-      onEdit={handleEdit}
-      onDelete={handleDelete}
-      onLike={toggleLike}
-      onBookmark={toggleBookmark}
-    />
+      <InfoBoardDetail
+          post={detailPost}
+          onLike={toggleLike}
+          onBookmark={toggleBookmark}
+      />
   );
 }
