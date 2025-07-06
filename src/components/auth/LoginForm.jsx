@@ -7,31 +7,51 @@ import "../../styles/components/auth/auth.css";
 import { useInput } from "../../hooks/useInput";
 import apiClient, { loginUser, tokenManager } from "../../services/api";
 
+const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const validateLoginPassword = (password) => {
+  return password && password.length >= 1;
+};
+
 export const LoginForm = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const emailRef = useRef(null);
   const pwRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
   const { value: email, onChange: onEmailChange } = useInput("");
   const { value: pw, onChange: onPwChange } = useInput("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoginError("");
+
+    emailRef.current.setCustomValidity("");
+    pwRef.current.setCustomValidity("");
+
     if (!email) {
       emailRef.current.setCustomValidity("이메일을 입력해 주세요.");
       emailRef.current.reportValidity();
       return;
-    } else {
-      emailRef.current.setCustomValidity("");
+    } else if (!validateEmail(email)) {
+      emailRef.current.setCustomValidity("유효한 이메일 형식이 아닙니다.");
+      emailRef.current.reportValidity();
+      return;
     }
+
     if (!pw) {
       pwRef.current.setCustomValidity("비밀번호를 입력해 주세요.");
       pwRef.current.reportValidity();
       return;
-    } else {
-      pwRef.current.setCustomValidity("");
+    } else if (!validateLoginPassword(pw)) {
+      pwRef.current.setCustomValidity("비밀번호를 입력해 주세요.");
+      pwRef.current.reportValidity();
+      return;
     }
 
     setIsLoading(true);
@@ -58,8 +78,9 @@ export const LoginForm = () => {
       navigate("/");
     } catch (error) {
       console.error("로그인 실패: ", error);
-      pwRef.current.setCustomValidity(error.message);
-      pwRef.current.reportValidity();
+      const safeErrorMessage =
+        "이메일 또는 비밀번호가 올바르지 않습니다. 다시 시도해주세요.";
+      setLoginError(safeErrorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -68,7 +89,24 @@ export const LoginForm = () => {
   return (
     <div className="loginpage-figma-card">
       <div className="loginpage-figma-card-title">아마추어스 로그인</div>
-      <form className="loginpage-figma-form" onSubmit={handleSubmit}>
+
+      {loginError && (
+        <div
+          style={{
+            color: "#ff4757",
+            backgroundColor: "#fff5f5",
+            padding: "10px",
+            borderRadius: "4px",
+            marginBottom: "10px",
+            fontSize: "14px",
+            border: "1px solid #ffebee",
+          }}
+        >
+          {loginError}
+        </div>
+      )}
+
+      <form className="loginpage-figma-form" onSubmit={handleSubmit} noValidate>
         <div className="loginpage-figma-input-group">
           <input
             type="email"
