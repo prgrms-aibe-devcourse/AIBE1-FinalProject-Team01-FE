@@ -105,9 +105,9 @@ export const PostCard = ({
       {children}
       <div className="d-flex align-items-center gap-2 mt-2">
         <span className="small tags-container">
-          {tags?.map((tag, i) => (
-            <span key={i} className="badge bg-light text-dark ms-1">
-              #{tag}
+          {tags?.split(',').map((tag, i) => (
+              <span key={i} className="badge bg-light text-dark ms-1">
+              #{tag.trim()}
             </span>
           ))}
         </span>

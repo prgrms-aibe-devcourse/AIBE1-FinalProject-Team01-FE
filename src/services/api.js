@@ -56,6 +56,13 @@ const tokenManager = {
 // 명시적으로 export
 export { tokenManager };
 
+const redirectToLogin = () => {
+  const currentUrl = window.location.pathname + window.location.search;
+  const encodedRedirectUrl = encodeURIComponent(currentUrl);
+
+  window.location.href = `/login?redirectUrl=${encodedRedirectUrl}`;
+};
+
 // 요청 인터셉터 - JWT 토큰 자동 추가
 apiClient.interceptors.request.use(
   (config) => {
@@ -81,7 +88,7 @@ apiClient.interceptors.response.use(
       tokenManager.removeToken();
       // 개발 모드에서는 자동 리다이렉트 하지 않음
       console.warn("인증 토큰이 만료되었습니다.");
-      // window.location.href = "/login"; // 주석 처리
+      redirectToLogin();
     }
     return Promise.reject(error);
   }

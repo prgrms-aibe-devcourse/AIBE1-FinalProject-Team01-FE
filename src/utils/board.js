@@ -14,5 +14,5 @@ export function getPostDetailUrl(post) {
   ) {
     return `/together/${post.boardType}/${post.postId}`;
   }
-  return `/community/${post.boardType}/${post.postId}`;
+  return `/community/${post.boardType}/${post.communityId}`;
 }

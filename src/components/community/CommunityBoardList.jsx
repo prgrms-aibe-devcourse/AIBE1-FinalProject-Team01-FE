@@ -28,9 +28,9 @@ export const CommunityBoardList = ({ posts, onPostClick }) => {
     <div className="d-flex flex-column gap-3">
       {posts.map((post) => (
         <PostCard
-          key={post.postId}
+          key={post.communityId}
           post={post}
-          onClick={() => onPostClick?.(post.postId)}
+          onClick={() => onPostClick?.(post.communityId)}
           categoryLabel={BOARD_TYPE_LABEL[post.boardType] || post.boardType}
           categoryKey={post.boardType}
         />
