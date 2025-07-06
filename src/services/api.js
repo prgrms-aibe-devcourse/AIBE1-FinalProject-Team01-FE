@@ -14,29 +14,29 @@ export const apiClient = axios.create({
   },
 });
 
-// JWT 토큰 관리
-const TOKEN_KEY = "amateurs_token";
-
 // 토큰 관리자 객체
 const tokenManager = {
-  // 토큰 저장
-  setToken: (token) => {
-    localStorage.setItem(TOKEN_KEY, token);
-  },
-
   // 토큰 조회
   getToken: () => {
-    return localStorage.getItem(TOKEN_KEY);
+    const cookies = document.cookie.split(";");
+    const accessTokenCookie = cookies.find((cookie) =>
+      cookie.trim().startsWith("accessToken=")
+    );
+    return accessTokenCookie ? accessTokenCookie.split("=")[1] : null;
   },
 
   // 토큰 제거
   removeToken: () => {
-    localStorage.removeItem(TOKEN_KEY);
+    // TODO: 로그아웃 API 구현후 변경예정
+    document.cookie =
+      "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=localhost";
+    document.cookie =
+      "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=localhost";
   },
 
   // 토큰 유효성 검사 (간단한 형태)
   isTokenValid: () => {
-    const token = localStorage.getItem(TOKEN_KEY);
+    const token = tokenManager.getToken();
     if (!token) return false;
 
     // 개발용 더미 토큰이거나 .env의 토큰인 경우 항상 유효하다고 처리

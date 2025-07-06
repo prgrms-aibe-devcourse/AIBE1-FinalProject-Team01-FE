@@ -4,6 +4,8 @@ import iconUser from "../../assets/icon-user.png";
 import iconHeart from "../../assets/icon-heart.png";
 import iconComment from "../../assets/icon-comment.png";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { tokenManager } from "../../services/api";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -32,11 +34,12 @@ export const PopularPosts = () => {
   const [posts, setPosts] = useState([]);
   const [type, setType] = useState("popular");
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
   // AuthContext 사용 시
   // const { token } = useContext(AuthContext);
-  // localStorage 사용 시
-  const token = localStorage.getItem("token");
+  // 쿠키 사용 시
+  const token = isLoggedIn ? tokenManager.getToken() : null;
 
   // API 호출 함수
   const fetchRecommendedPosts = async (limit = 10) => {
