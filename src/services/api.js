@@ -100,9 +100,19 @@ export const loginUser = async (credentials) => {
     });
     return response.data;
   } catch (error) {
-    // 에러 메시지 처리
-    const errorMessage =
-      error.response?.data?.message || "로그인에 실패했습니다.";
+    console.error("로그인 API 에러:", error);
+
+    // HTTP 상태 코드에 따른 안전한 에러 메시지
+    let errorMessage =
+      "이메일 또는 비밀번호가 올바르지 않습니다. 다시 시도해주세요.";
+
+    if (error.response?.status >= 500) {
+      errorMessage =
+        "서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도해주세요.";
+    } else if (!error.response) {
+      errorMessage = "네트워크 연결을 확인해주세요.";
+    }
+
     throw new Error(errorMessage);
   }
 };
