@@ -80,26 +80,28 @@ export default function CommunityPage() {
                 onSearch={search} // 검색 버튼 클릭 시
             />
 
-            {/* 로딩 상태 표시 */}
-            {loading && (
-                <div className="text-center py-3">
+            {/* 로딩 상태일 때는 기존 컨텐츠 숨기고 로딩만 표시 */}
+            {loading ? (
+                <div className="text-center py-5">
                   <Spinner animation="border" size="sm" className="me-2" />
                   게시글을 불러오는 중...
                 </div>
+            ) : (
+                <>
+                  <CommunityBoardList posts={posts} onPostClick={handlePostClick} />
+
+                  {/* 게시글이 없을 때 메시지 */}
+                  {posts.length === 0 && (
+                      <div className="text-center py-5">
+                        <p className="text-muted">
+                          {keyword ? `"${keyword}"에 대한 검색 결과가 없습니다.` : "등록된 게시글이 없습니다."}
+                        </p>
+                      </div>
+                  )}
+
+                  <BoardPagination page={page} total={totalPages} onChange={setPage} />
+                </>
             )}
-
-            <CommunityBoardList posts={posts} onPostClick={handlePostClick} />
-
-            {/* 게시글이 없을 때 메시지 */}
-            {!loading && posts.length === 0 && (
-                <div className="text-center py-5">
-                  <p className="text-muted">
-                    {keyword ? `"${keyword}"에 대한 검색 결과가 없습니다.` : "등록된 게시글이 없습니다."}
-                  </p>
-                </div>
-            )}
-
-            <BoardPagination page={page} total={totalPages} onChange={setPage} />
           </div>
         </div>
       </>
