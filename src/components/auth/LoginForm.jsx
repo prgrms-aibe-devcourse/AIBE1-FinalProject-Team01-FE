@@ -90,21 +90,7 @@ export const LoginForm = () => {
     <div className="loginpage-figma-card">
       <div className="loginpage-figma-card-title">아마추어스 로그인</div>
 
-      {loginError && (
-        <div
-          style={{
-            color: "#ff4757",
-            backgroundColor: "#fff5f5",
-            padding: "10px",
-            borderRadius: "4px",
-            marginBottom: "10px",
-            fontSize: "14px",
-            border: "1px solid #ffebee",
-          }}
-        >
-          {loginError}
-        </div>
-      )}
+      {loginError && <div className="login-error-message">{loginError}</div>}
 
       <form className="loginpage-figma-form" onSubmit={handleSubmit} noValidate>
         <div className="loginpage-figma-input-group">
