@@ -13,13 +13,13 @@ export const parseJsonArray = (jsonString) => {
       return jsonString;
     }
 
-    if (typeof jsonString === 'string') {
+    if (typeof jsonString === "string") {
       return JSON.parse(jsonString);
     }
 
     return [];
   } catch (error) {
-    console.error('JSON 파싱 실패:', error);
+    console.error("JSON 파싱 실패:", error);
     return [];
   }
 };
@@ -31,9 +31,9 @@ export const parseJsonArray = (jsonString) => {
  */
 export const parseProjectMembers = (membersData) => {
   const membersArray = parseJsonArray(membersData);
-  return membersArray.map(member => ({
-    name: member.includes('-') ? member.split('-')[0]?.trim() : member,
-    role: member.includes('-') ? member.split('-')[1]?.trim() || '' : ''
+  return membersArray.map((member) => ({
+    name: member.includes("-") ? member.split("-")[0]?.trim() : member,
+    role: member.includes("-") ? member.split("-")[1]?.trim() || "" : "",
   }));
 };
 
@@ -47,15 +47,15 @@ export function mapApiResponseToHubPost(apiResponse) {
     ...apiResponse,
     courseName: convertTrackFromApi(apiResponse.devcourseTrack),
     batchNumber: parseInt(apiResponse.devcourseBatch) || 0,
-    projectMembers: parseProjectMembers(apiResponse.projectMembers),
+    projectMembers: parseJsonArray(apiResponse.projectMembers),
     user: {
-      nickname: apiResponse.nickname || '',
-      imageUrl: apiResponse.profileImageUrl || null
+      nickname: apiResponse.nickname || "",
+      imageUrl: apiResponse.profileImageUrl || null,
     },
     tags: parseJsonArray(apiResponse.tags),
     isLiked: apiResponse.hasLiked || false,
     isBookmarked: apiResponse.hasBookmarked || false,
     viewCount: apiResponse.viewCount || 0,
-    thumbnailImageUrl: apiResponse.thumbnailImageUrl || defaultImage
+    thumbnailImageUrl: apiResponse.thumbnailImageUrl || defaultImage,
   };
 }

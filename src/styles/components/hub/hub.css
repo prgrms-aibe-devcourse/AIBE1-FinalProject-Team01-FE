@@ -1,3 +1,42 @@
+@import url('./hub-write.css');
+
+/* 허브 게시글 액션 버튼 스타일 */
+.hub-post-actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.hub-post-actions .btn-link {
+  border: none;
+  background: none;
+  text-decoration: none;
+  padding: 0.25rem !important;
+  color: #6c757d !important;
+  transition: color 0.2s ease;
+}
+
+.hub-post-actions .btn-link:hover {
+  color: #495057 !important;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.hub-post-actions .btn-link:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+/* 반응형 대응 */
+@media (max-width: 768px) {
+  .hub-post-actions .btn-link {
+    padding: 0.5rem !important;
+  }
+  
+  .hub-post-actions .btn-link i {
+    font-size: 1.1rem !important;
+  }
+}
+
 .hub-card {
   cursor: pointer;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
@@ -72,5 +111,30 @@
 
 .hub-detail-thumbnail:hover,
 .hub-detail-thumbnail.active {
-  border-color: #0d6efd; /* Bootstrap primary color */
+  border-color: #0d6efd;
+}
+
+.hub-search-bar-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.hub-write-btn {
+  background: #2d4053;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1.25rem;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.hub-write-btn:hover,
+.hub-write-btn:focus {
+  background: #1b2838;
+  color: #fff;
 }
