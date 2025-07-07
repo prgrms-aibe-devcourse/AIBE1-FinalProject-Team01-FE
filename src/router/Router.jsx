@@ -16,8 +16,10 @@ import InfoBoardDetailPage from "../pages/info/InfoBoardDetailPage";
 import InfoWritePage from "../pages/info/InfoWritePage";
 import HubPage from "../pages/hub/HubPage";
 import HubDetailPage from "../pages/hub/HubDetailPage";
+import HubWritePage from "../pages/hub/HubWritePage";
 import MyPage from "../pages/mypage/MyPage";
 import DMPage from "../pages/dm/DMPage";
+
 
 export function AppRouter() {
   return (
@@ -60,6 +62,7 @@ export function AppRouter() {
       <Route path="/info/:boardType/write" element={<InfoWritePage />} />
       <Route path="/hub" element={<HubPage />} />
       <Route path="/hub/:projectId" element={<HubDetailPage />} />
+      <Route path="/hub/write" element={<HubWritePage />} />
       <Route path="/mypage" element={<MyPage />} />
     </Routes>
   );

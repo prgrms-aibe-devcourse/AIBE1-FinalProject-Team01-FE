@@ -1,8 +1,9 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { HeroSection } from "../../components/common/HeroSection";
-import HubBoardList from "../../components/hub/HubBoardList";
-import HubBoardSkeleton from "../../components/hub/HubBoardSkeleton";
 import { BoardPagination } from "../../components/board/BoardPagination";
+import HubBoardList from "../../components/hub/HubBoardList";
+
 import { HubSearchBar } from "../../components/hub/HubSearchBar";
 import { COURSE_NAMES, BATCH_NUMBERS, convertTrackToApi } from "../../constants/devcourse";
 import { mapApiResponseToHubPost } from "../../utils/hub";
@@ -11,6 +12,7 @@ import "../../styles/components/community/community.css";
 import { getPosts } from "../../services/hubApi.js";
 
 export default function HubPage() {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -66,10 +68,10 @@ export default function HubPage() {
 
   const mappedPosts = useMemo(() => posts.map(post => mapApiResponseToHubPost(post)), [posts]);
 
-  const handleSearch = (searchFilters) => {
+  const handleSearch = useCallback((searchFilters) => {
     setAppliedFilters(searchFilters);
     setCurrentPage(1);
-  };
+  }, []);
 
   const handlePageChange = (page) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -85,8 +87,16 @@ export default function HubPage() {
             courseNames={COURSE_NAMES}
             batchNumbers={BATCH_NUMBERS}
             onSearch={handleSearch}
+            // TODO: 수강생만 글쓰기 가능하도록 수정 필요
+            onWrite={() => navigate(`/hub/write`)}
           />
-          {loading && <HubBoardSkeleton count={9} />}
+          {loading && (
+            <div className="d-flex justify-content-center py-5">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          )}
           {error && <div className="text-center text-danger py-4">{error}</div>}
           {!loading && !error && (
             <>
