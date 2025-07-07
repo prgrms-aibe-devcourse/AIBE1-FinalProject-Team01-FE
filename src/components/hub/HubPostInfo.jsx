@@ -7,13 +7,13 @@ import "../../styles/components/hub/hub.css";
 
 /**
  * @typedef {Object} HubPostInfoProps
- * @property {object} post - The post data object.
+ * @property {object} post
  */
 export const HubPostInfo = ({ post }) => {
   const { user: currentUser } = useAuth();
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
-  const canEditOrDelete = true; // isAuthor(currentUser, post.userId); // TODO: 로그인 구현되면 true 지우고 주석 해제
+  const canEditOrDelete = currentUser && isAuthor(currentUser, post.authorId);
   
   // 날짜 포맷팅 함수
   const formatDate = (dateString) => {
@@ -88,21 +88,18 @@ export const HubPostInfo = ({ post }) => {
 
   const {
     courseName,
-    batchNumber,
     title,
     user,
     createdAt,
     projectMembers,
     startedAt,
     endedAt,
-    tags,
     githubUrl,
     demoUrl,
   } = post;
 
   return (
     <div className="p-1 mt-3">
-      {/* 제목과 수정/삭제 버튼 */}
       <div className="d-flex justify-content-between align-items-start mb-3">
         <h1 className="fw-bold mb-0">{title}</h1>
         {canEditOrDelete && (
@@ -143,6 +140,7 @@ export const HubPostInfo = ({ post }) => {
             />
           )}
           <span className="author-name fw-bold">{user?.nickname}</span>
+          {/* 과정 명만 노출, 기수는 민감하기에 노출안함 */}
           {courseName && <span className="author-batch">{courseName}</span>}
         </div>
         <div className="d-flex align-items-center gap-2 text-muted small">
@@ -174,16 +172,6 @@ export const HubPostInfo = ({ post }) => {
         <div className="col-md-6">
           <p>
             <strong>기간:</strong> {formatDate(startedAt)} ~ {formatDate(endedAt)}
-          </p>
-          <p>
-            <strong>
-              기술 스택:{" "}
-              {tags?.map((tag, i) => (
-                <span key={i} className="badge bg-dark gap-1">
-                  {tag}
-                </span>
-              ))}
-            </strong>
           </p>
           <div className="d-flex flex-wrap gap-2"></div>
           <div className="d-grid gap-2 d-md-flex justify-content-md-end">

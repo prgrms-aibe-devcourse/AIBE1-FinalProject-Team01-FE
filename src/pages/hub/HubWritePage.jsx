@@ -64,8 +64,7 @@ export default function HubWritePage() {
     if (isLoggedIn && user && !isEditMode) {
       // 사용자 정보에서 트랙과 기수를 추출
       if (user.devcourseTrack) {
-        const userTrack = convertTrackFromApi(user.devcourseTrack);
-        setCourseName(userTrack);
+        setCourseName(user.devcourseTrack);
       }
       if (user.devcourseBatch) {
         setBatchNumber(user.devcourseBatch.toString());
@@ -84,16 +83,21 @@ export default function HubWritePage() {
       setTags(project.tags || []);
       setContent(project.content);
       setSimpleContent(project.simpleContent || "");
-      setCourseName(convertTrackFromApi(project.devcourseTrack) || "");
-      setBatchNumber(project.devcourseBatch?.toString() || "");
       setStartedAt(project.startedAt ? new Date(project.startedAt) : null);
       setEndedAt(project.endedAt ? new Date(project.endedAt) : null);
       setProjectMembers(project.projectMembers || [{ name: "", role: "" }]);
       setGithubUrl(project.githubUrl || "");
       setDemoUrl(project.demoUrl || "");
       setImageUrls(project.images || []);
+
+      if (user?.devcourseTrack) {
+        setCourseName(user.devcourseTrack);
+      }
+      if (user?.devcourseBatch) {
+        setBatchNumber(user.devcourseBatch.toString());
+      }
     }
-  }, [isEditMode, project, setImageUrls]);
+  }, [isEditMode, project, user, setImageUrls]);
 
   // 유효성 검사 에러 메시지 생성
   const getValidationErrors = () => {
@@ -214,8 +218,6 @@ export default function HubWritePage() {
 
   // 핸들러들을 객체로 정리
   const handlers = {
-    onCourseNameChange: setCourseName,
-    onBatchNumberChange: setBatchNumber,
     onTitleChange: setTitle,
     onSimpleContentChange: setSimpleContent,
     onStartDateChange: setStartedAt,

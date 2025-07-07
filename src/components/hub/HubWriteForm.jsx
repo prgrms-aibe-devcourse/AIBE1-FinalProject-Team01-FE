@@ -1,8 +1,8 @@
 import React from "react";
-import { Row, Col, Form, Button } from "react-bootstrap";
-import { TagInput } from "../common/TagInput";
-import { DatePicker } from "../common/DatePicker";
-import { CustomTiptapEditor } from "../editor/CustomTiptapEditor";
+import {Button, Col, Form, Row} from "react-bootstrap";
+import {TagInput} from "../common/TagInput";
+import {DatePicker} from "../common/DatePicker";
+import {CustomTiptapEditor} from "../editor/CustomTiptapEditor";
 
 /**
  * @typedef {Object} ProjectMember
@@ -23,10 +23,7 @@ import { CustomTiptapEditor } from "../editor/CustomTiptapEditor";
  * @property {string} githubUrl - GitHub URL
  * @property {string} demoUrl - Demo URL
  * @property {string} content - 프로젝트 내용
- * @property {string[]} courseNames - 과정명 옵션
- * @property {number[]} batchNumbers - 기수 옵션
  * @property {boolean} validated - 유효성 검사 상태
- * @property {boolean} isEditMode - 수정 모드 여부
  * @property {Object} handlers - 이벤트 핸들러들
  */
 
@@ -47,18 +44,10 @@ export const HubWriteForm = ({
   githubUrl,
   demoUrl,
   content,
-  // 옵션 데이터
-  courseNames,
-  batchNumbers,
-  // 상태
   validated,
-  isEditMode,
-  // 핸들러들
   handlers
 }) => {
   const {
-    onCourseNameChange,
-    onBatchNumberChange,
     onTitleChange,
     onSimpleContentChange,
     onStartDateChange,
@@ -71,7 +60,6 @@ export const HubWriteForm = ({
     onImageUpload
   } = handlers;
 
-  // 팀원 관련 핸들러들
   const handleAddMember = () => {
     onMembersChange([...projectMembers, { name: "", role: "" }]);
   };
@@ -91,82 +79,29 @@ export const HubWriteForm = ({
 
   return (
     <>
-      {/* 기본 정보 */}
       <Row className="mb-4">
         <Col md={6}>
           <Form.Group className="mb-3">
             <Form.Label>과정명 *</Form.Label>
-            {isEditMode ? (
-              // 수정 모드에서는 드롭다운으로 변경 가능
-              <Form.Select
-                value={courseName}
-                onChange={(e) => onCourseNameChange(e.target.value)}
-                required
-                isInvalid={validated && !courseName}
-              >
-                <option value="">과정을 선택하세요</option>
-                {courseNames.map((name) => (
-                  <option key={name} value={name}>
-                    {name}
-                  </option>
-                ))}
-              </Form.Select>
-            ) : (
-              // 신규 작성 시에는 로그인한 사용자의 정보로 고정
-              <Form.Control
-                type="text"
-                value={courseName || "정보 없음"}
-                readOnly
-                className="bg-light"
-                title="로그인한 사용자의 과정 정보입니다"
-              />
-            )}
-            <Form.Control.Feedback type="invalid">
-              과정을 선택해주세요.
-            </Form.Control.Feedback>
-            {!isEditMode && (
-              <Form.Text className="text-muted">
-                현재 로그인한 계정의 과정 정보입니다.
-              </Form.Text>
-            )}
+            <Form.Control
+              type="text"
+              value={courseName || "정보 없음"}
+              readOnly
+              className="bg-light"
+              title="사용자의 데브코스 과정 정보입니다"
+            />
           </Form.Group>
         </Col>
         <Col md={6}>
           <Form.Group className="mb-3">
             <Form.Label>기수 *</Form.Label>
-            {isEditMode ? (
-              // 수정 모드에서는 드롭다운으로 변경 가능
-              <Form.Select
-                value={batchNumber}
-                onChange={(e) => onBatchNumberChange(e.target.value)}
-                required
-                isInvalid={validated && !batchNumber}
-              >
-                <option value="">기수를 선택하세요</option>
-                {batchNumbers.map((num) => (
-                  <option key={num} value={num}>
-                    {num}기
-                  </option>
-                ))}
-              </Form.Select>
-            ) : (
-              // 신규 작성 시에는 로그인한 사용자의 정보로 고정
-              <Form.Control
-                type="text"
-                value={batchNumber ? `${batchNumber}기` : "정보 없음"}
-                readOnly
-                className="bg-light"
-                title="로그인한 사용자의 기수 정보입니다"
-              />
-            )}
-            <Form.Control.Feedback type="invalid">
-              기수를 선택해주세요.
-            </Form.Control.Feedback>
-            {!isEditMode && (
-              <Form.Text className="text-muted">
-                현재 로그인한 계정의 기수 정보입니다.
-              </Form.Text>
-            )}
+            <Form.Control
+              type="text"
+              value={batchNumber ? `${batchNumber}기` : "정보 없음"}
+              readOnly
+              className="bg-light"
+              title="사용자의 데브코스 과정 기수 정보입니다"
+            />
           </Form.Group>
         </Col>
       </Row>
@@ -282,11 +217,10 @@ export const HubWriteForm = ({
 
       {/* 기술 스택 (태그) */}
       <Form.Group className="mb-3">
-        <Form.Label>기술 스택 (최대 10개)</Form.Label>
-        <TagInput 
-          tags={tags} 
+        <Form.Label>태그 (최대 10개)</Form.Label>
+        <TagInput
+          tags={tags}
           onTagsChange={onTagsChange}
-          placeholder="기술 스택을 입력하세요 (예: React, Node.js, MySQL)"
         />
       </Form.Group>
 

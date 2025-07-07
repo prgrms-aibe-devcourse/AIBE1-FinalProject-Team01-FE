@@ -1,13 +1,31 @@
-export const COURSE_NAMES = [
-  "프론트엔드",
-  "백엔드", 
-  "AI 백엔드",
-  "풀스택",
-  "데이터 분석",
-  "데이터 엔지니어링",
-];
+const TRACK_MAPPING = {
+  FRONTEND: '프론트엔드',
+  BACKEND: '백엔드',
+  AI_BACKEND: 'AI 백엔드',
+  FULL_STACK: '풀스택',
+  DATA_SCIENCE: '데이터 분석',
+  DATA_ENGINEERING: '데이터 엔지니어링'
+};
 
+export const COURSE_NAMES = Object.values(TRACK_MAPPING);
 export const BATCH_NUMBERS = Array.from({ length: 10 }, (_, i) => i + 1);
+
+/**
+ * 데브코스 과정 API를 한글명으로 변환
+ */
+export const convertTrackFromApi = (apiTrack) => {
+  return TRACK_MAPPING[apiTrack] || apiTrack;
+};
+
+/**
+ * 과정명을 API로 변환
+ */
+export const convertTrackToApi = (koreanTrack) => {
+  const reverseMapping = Object.fromEntries(
+    Object.entries(TRACK_MAPPING).map(([key, value]) => [value, key])
+  );
+  return reverseMapping[koreanTrack] || koreanTrack;
+};
 
 export const getCourseFullName = (courseName, batchNumber) => {
   return `${courseName} ${batchNumber}기`;
@@ -25,42 +43,4 @@ export const getAllCourses = () => {
     });
   });
   return courses;
-};
-
-export const convertTrackFromApi = (track) => {
-  switch (track) {
-    case 'FRONTEND':
-      return '프론트엔드';
-    case 'BACKEND':
-      return '백엔드';
-    case 'AI_BACKEND':
-      return 'AI 백엔드';
-    case 'FULL_STACK':
-      return '풀스택';
-    case 'DATA_SCIENCE':
-      return '데이터 분석';
-    case 'DATA_ENGINEERING':
-      return '데이터 엔지니어링';
-    default:
-      return track;
-  }
-};
-
-export const convertTrackToApi = (koreanTrack) => {
-  switch (koreanTrack) {
-    case '프론트엔드':
-      return 'FRONTEND';
-    case '백엔드':
-      return 'BACKEND';
-    case 'AI 백엔드':
-      return 'AI_BACKEND';
-    case '풀스택':
-      return 'FULL_STACK';
-    case '데이터 분석':
-      return 'DATA_SCIENCE';
-    case '데이터 엔지니어링':
-      return 'DATA_ENGINEERING';
-    default:
-      return koreanTrack;
-  }
 };

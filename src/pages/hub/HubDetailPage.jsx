@@ -4,6 +4,7 @@ import { HubBoardDetail } from "../../components/hub/HubBoardDetail";
 import { useLikeBookmark } from "../../hooks/useLikeBookmark";
 import { mapApiResponseToHubPost } from "../../utils/hub";
 import { getPostById } from "../../services/hubApi";
+import { Alert, Spinner } from "react-bootstrap";
 import "../../styles/components/community/community.css";
 
 export default function HubDetailPage() {
@@ -14,29 +15,73 @@ export default function HubDetailPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchPost = async () => {
+    const loadPost = async () => {
       try {
         setLoading(true);
         const response = await getPostById(projectId);
-
-        // utils 함수를 사용하여 API 응답을 프론트엔드 형식으로 변환
         const mappedPost = mapApiResponseToHubPost(response);
-
         setPost(mappedPost);
         setError(null);
       } catch (err) {
-        console.error("프로젝트 상세 정보를 가져오는 데 실패했습니다.", err);
-        setError("프로젝트를 찾을 수 없습니다.");
+        console.error("프로젝트 로드 실패:", err);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
     if (projectId) {
-      fetchPost();
+      loadPost();
     }
   }, [projectId]);
 
+  // 로딩 상태
+  if (loading) {
+    return (
+      <div className="container py-5 text-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">로딩 중...</span>
+        </Spinner>
+        <p className="mt-2">프로젝트를 불러오는 중입니다...</p>
+      </div>
+    );
+  }
+
+  // 에러 상태
+  if (error) {
+    return (
+      <div className="container py-5 text-center">
+        <Alert variant="danger">
+          <Alert.Heading>오류가 발생했습니다</Alert.Heading>
+          <p>{error}</p>
+          <button className="btn btn-primary mt-3" onClick={() => navigate(-1)}>
+            돌아가기
+          </button>
+        </Alert>
+      </div>
+    );
+  }
+
+  // 프로젝트가 없는 경우
+  if (!post) {
+    return (
+      <div className="container py-5 text-center">
+        <h2>프로젝트를 찾을 수 없습니다.</h2>
+        <button className="btn btn-primary mt-3" onClick={() => navigate(-1)}>
+          돌아가기
+        </button>
+      </div>
+    );
+  }
+
+  // 프로젝트가 있을 때만 렌더링하는 컴포넌트
+  return <HubDetailContent post={post} />;
+}
+
+/**
+ * 실제 상세 내용을 렌더링하는 컴포넌트
+ */
+function HubDetailContent({ post }) {
   const {
     liked,
     likeCount,
@@ -45,41 +90,23 @@ export default function HubDetailPage() {
     bookmarkCount,
     toggleBookmark,
   } = useLikeBookmark({
-    initialLikeCount: post?.likeCount || 0,
-    initialLiked: post?.isLiked || false,
-    initialBookmarkCount: post?.bookmarkCount || 0,
-    initialBookmarked: post?.isBookmarked || false,
+    initialLikeCount: post.likeCount || 0,
+    initialLiked: post.isLiked || false,
+    initialBookmarkCount: post.bookmarkCount || 0,
+    initialBookmarked: post.isBookmarked || false,
   });
 
-  if (loading) {
-    return (
-      <div className="container py-5 text-center">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">로딩 중...</span>
-        </div>
-        <p className="mt-3">프로젝트 정보를 불러오는 중...</p>
-      </div>
-    );
-  }
-
-  if (error || !post) {
-    return (
-      <div className="container py-5 text-center">
-        <h2>{error || "프로젝트를 찾을 수 없습니다."}</h2>
-        <button
-          className="btn btn-primary mt-3"
-          onClick={() => navigate(-1)}
-          aria-label="이전 페이지로 돌아가기"
-        >
-          돌아가기
-        </button>
-      </div>
-    );
-  }
+  const detailPost = {
+    ...post,
+    isLiked: liked,
+    likeCount: likeCount,
+    isBookmarked: bookmarked,
+    bookmarkCount: bookmarkCount,
+  };
 
   return (
     <HubBoardDetail
-      post={post}
+      post={detailPost}
       onLike={() => toggleLike(post.postId)}
       onBookmark={() => toggleBookmark(post.postId)}
       likeCount={likeCount}
