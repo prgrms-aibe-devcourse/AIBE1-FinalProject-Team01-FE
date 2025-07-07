@@ -5,29 +5,6 @@ import {DatePicker} from "../common/DatePicker";
 import {CustomTiptapEditor} from "../editor/CustomTiptapEditor";
 
 /**
- * @typedef {Object} ProjectMember
- * @property {string} name - 팀원 이름
- * @property {string} role - 팀원 역할
- */
-
-/**
- * @typedef {Object} HubWriteFormProps
- * @property {string} courseName - 과정명
- * @property {string} batchNumber - 기수
- * @property {string} title - 제목
- * @property {string} simpleContent - 한 줄 소개
- * @property {Date|null} startedAt - 시작일
- * @property {Date|null} endedAt - 종료일
- * @property {ProjectMember[]} projectMembers - 팀원 목록
- * @property {string[]} tags - 태그 목록
- * @property {string} githubUrl - GitHub URL
- * @property {string} demoUrl - Demo URL
- * @property {string} content - 프로젝트 내용
- * @property {boolean} validated - 유효성 검사 상태
- * @property {Object} handlers - 이벤트 핸들러들
- */
-
-/**
  * 허브 프로젝트 작성 폼 컴포넌트
  * @param {HubWriteFormProps} props
  */

@@ -4,10 +4,7 @@ import { Button, Form, Alert } from "react-bootstrap";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { useAuth } from "../../context/AuthContext";
 import {
-  COURSE_NAMES,
-  BATCH_NUMBERS,
-  convertTrackToApi,
-  convertTrackFromApi,
+  convertTrackToApi
 } from "../../constants/devcourse";
 import { createPost, updatePost } from "../../services/hubApi";
 import { HubWriteForm } from "../../components/hub/HubWriteForm";
@@ -25,11 +22,12 @@ export default function HubWritePage() {
     if (!isLoggedIn) {
       alert("로그인이 필요한 서비스입니다.");
       navigate("/login", { 
-        state: { from: location.pathname } 
+        state: { from: location.pathname },
+        replace: true,
       });
       return;
     }
-  }, [isLoggedIn, navigate, location]);
+  }, [isLoggedIn, navigate, location.pathname]);
 
   // 기본 필드들
   const [title, setTitle] = useState("");
@@ -273,9 +271,6 @@ export default function HubWritePage() {
           githubUrl={githubUrl}
           demoUrl={demoUrl}
           content={content}
-          // 옵션 데이터
-          courseNames={COURSE_NAMES}
-          batchNumbers={BATCH_NUMBERS}
           // 상태
           validated={validated}
           isEditMode={isEditMode}

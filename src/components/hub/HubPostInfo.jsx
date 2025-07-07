@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { isAuthor } from "../../utils/auth";
 import { deletePost } from "../../services/hubApi";
 import "../../styles/components/hub/hub.css";
+import {formatDate} from "../../utils/date.js";
 
 /**
  * @typedef {Object} HubPostInfoProps
@@ -14,13 +15,6 @@ export const HubPostInfo = ({ post }) => {
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
   const canEditOrDelete = currentUser && isAuthor(currentUser, post.authorId);
-  
-  // 날짜 포맷팅 함수
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('ko-KR');
-  };
 
   // 수정 버튼 핸들러
   const handleEdit = () => {
