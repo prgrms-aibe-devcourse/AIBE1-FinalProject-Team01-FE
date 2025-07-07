@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { tokenManager } from "../../services/api";
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
 // 날짜 포맷팅 함수
 const formatDate = (dateString) => {

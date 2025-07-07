@@ -3,6 +3,8 @@ import axios from "axios";
 // 기본 API 설정
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+// 환경변수에서 도메인 가져오기
+const COOKIE_DOMAIN = import.meta.env.VITE_COOKIE_DOMAIN || "localhost";
 
 // Axios 인스턴스 생성
 export const apiClient = axios.create({
@@ -27,11 +29,9 @@ const tokenManager = {
 
   // 토큰 제거
   removeToken: () => {
-    // TODO: 로그아웃 API 구현후 변경예정
-    document.cookie =
-      "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=localhost";
-    document.cookie =
-      "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=localhost";
+    // TODO: 로그아웃 API 구현 후 서버에서 쿠키 삭제로 변경 예정
+    document.cookie = `accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${COOKIE_DOMAIN}`;
+    document.cookie = `refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${COOKIE_DOMAIN}`;
   },
 
   // 토큰 유효성 검사 (간단한 형태)
