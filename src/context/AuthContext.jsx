@@ -42,11 +42,6 @@ export const AuthProvider = ({ children }) => {
   const login = (userData, token) => {
     setUser(userData);
     setIsLoggedIn(true);
-
-    // JWT 토큰이 제공되면 저장
-    if (token) {
-      tokenManager.setToken(token);
-    }
   };
 
   const logout = () => {
