@@ -29,20 +29,25 @@ export const BoardDetailLayout = ({
   onBookmark,
 
 }) => {
-  return (
-    <div className="community-detail-container">
-      {children}
-      <BoardTagShareBar
-        tags={post.tags}
-        likes={likeCount}
-        isLiked={isLiked}
-        bookmarks={bookmarkCount}
-        isBookmarked={isBookmarked}
-        onLikeToggle={onLike}
-        onBookmarkToggle={onBookmark}
-        postId={post.postId}
-      />
-      <CommentSection postId={post.postId} comments={post.comments || []} />
-    </div>
-  );
+    return (
+        <div className="community-detail-container">
+            {children}
+            <BoardTagShareBar
+                tags={post.tags}
+                likes={likeCount}
+                isLiked={isLiked}
+                bookmarks={bookmarkCount}
+                isBookmarked={isBookmarked}
+                onLikeToggle={onLike}
+                onBookmarkToggle={onBookmark}
+                postId={post.postId}
+            />
+            <CommentSection
+                boardType={post.boardType}
+                boardPostId={post.communityId || post.id}
+                postId={post.postId}
+                comments={post.comments || []}
+            />
+        </div>
+    );
 };
