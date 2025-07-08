@@ -8,34 +8,35 @@ const API_BASE_URL =
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// JWT 토큰 관리
-const TOKEN_KEY = "amateurs_token";
-
 // 토큰 관리자 객체
 const tokenManager = {
-  // 토큰 저장
-  setToken: (token) => {
-    localStorage.setItem(TOKEN_KEY, token);
-  },
-
   // 토큰 조회
   getToken: () => {
-    return localStorage.getItem(TOKEN_KEY);
+    const cookies = document.cookie.split(";");
+    const accessTokenCookie = cookies.find((cookie) =>
+      cookie.trim().startsWith("accessToken=")
+    );
+    return accessTokenCookie ? accessTokenCookie.split("=")[1] : null;
   },
 
   // 토큰 제거
   removeToken: () => {
-    localStorage.removeItem(TOKEN_KEY);
+    // TODO: 로그아웃 API 구현후 변경예정
+    document.cookie =
+      "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=localhost";
+    document.cookie =
+      "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=localhost";
   },
 
   // 토큰 유효성 검사 (간단한 형태)
   isTokenValid: () => {
-    const token = localStorage.getItem(TOKEN_KEY);
+    const token = tokenManager.getToken();
     if (!token) return false;
 
     // 개발용 더미 토큰이거나 .env의 토큰인 경우 항상 유효하다고 처리
@@ -48,6 +49,7 @@ const tokenManager = {
       const currentTime = Date.now() / 1000;
       return payload.exp > currentTime;
     } catch (error) {
+      console.warn("토큰 검증 실패:", error);
       return false;
     }
   },
@@ -95,3 +97,29 @@ apiClient.interceptors.response.use(
 );
 
 export default apiClient;
+
+// 로그인 API
+export const loginUser = async (credentials) => {
+  try {
+    const response = await apiClient.post("/api/v1/auth/login", {
+      email: credentials.email,
+      password: credentials.password,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("로그인 API 에러:", error);
+
+    // HTTP 상태 코드에 따른 안전한 에러 메시지
+    let errorMessage =
+      "이메일 또는 비밀번호가 올바르지 않습니다. 다시 시도해주세요.";
+
+    if (error.response?.status >= 500) {
+      errorMessage =
+        "서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도해주세요.";
+    } else if (!error.response) {
+      errorMessage = "네트워크 연결을 확인해주세요.";
+    }
+
+    throw new Error(errorMessage);
+  }
+};
