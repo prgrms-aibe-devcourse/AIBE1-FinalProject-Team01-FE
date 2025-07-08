@@ -59,9 +59,16 @@ const tokenManager = {
 export { tokenManager };
 
 const redirectToLogin = () => {
+  const currentPath = window.location.pathname;
+
+  // 메인페이지에서는 리다이렉트 안 함
+  if (currentPath === "/") {
+    console.log("메인페이지에서는 401 에러 무시");
+    return;
+  }
+
   const currentUrl = window.location.pathname + window.location.search;
   const encodedRedirectUrl = encodeURIComponent(currentUrl);
-
   window.location.href = `/login?redirectUrl=${encodedRedirectUrl}`;
 };
 
@@ -81,15 +88,34 @@ apiClient.interceptors.request.use(
 
 // 응답 인터셉터 - 401 에러 처리
 apiClient.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // 토큰이 만료되었거나 유효하지 않음
+      if (error.config.url.includes("/users/me")) {
+        return Promise.reject(error);
+      }
+
+      const excludeUrls = [
+        "/api/v1/community/",
+        "/api/v1/like",
+        "/api/v1/bookmark",
+        "/api/v1/comment",
+        "/api/v1/report",
+        "/api/v1/dm",
+        "/api/v1/alarm",
+      ];
+
+      const shouldExclude = excludeUrls.some((url) =>
+        error.config.url.includes(url)
+      );
+
+      if (shouldExclude) {
+        console.log("🚫 권한 부족");
+        return Promise.reject(error);
+      }
+
+      console.log("🔐 인증 만료");
       tokenManager.removeToken();
-      // 개발 모드에서는 자동 리다이렉트 하지 않음
-      console.warn("인증 토큰이 만료되었습니다.");
       redirectToLogin();
     }
     return Promise.reject(error);

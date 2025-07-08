@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import apiClient from "../services/api.js";
 
-// Context 생성 - 정의 - 커스텀 훅
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -12,10 +11,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        // 쿠키 읽기는 포기하고 API로 직접 확인
+        // setTimeout 제거 - 즉시 API 호출
         const response = await apiClient.get("/api/v1/users/me");
 
-        // API 성공 시 로그인 상태 설정
         setIsLoggedIn(true);
         setUser({
           id: response.data.userId,
@@ -25,7 +23,8 @@ export const AuthProvider = ({ children }) => {
           nickname: response.data.nickname,
         });
       } catch (error) {
-        // API 실패 시 로그아웃 상태
+        // 401 에러는 정상적인 로그아웃 상태
+        console.log("사용자 정보 조회 실패 - 로그아웃 상태");
         setIsLoggedIn(false);
         setUser(null);
       } finally {
@@ -34,20 +33,21 @@ export const AuthProvider = ({ children }) => {
     };
 
     initializeAuth();
-  }, []);
+  }, []); // 빈 의존성 배열로 한 번만 실행
 
-  // userData: { name, email, ... } + token
   const login = (userData, token) => {
     setUser(userData);
     setIsLoggedIn(true);
+    // 로그인 즉시 로딩 상태 해제
+    setLoading(false);
   };
 
   const logout = () => {
     setUser(null);
     setIsLoggedIn(false);
+    // 로그아웃 API도 호출해야 할 수 있음
   };
 
-  // 로딩 중에는 로딩 표시
   if (loading) {
     return <div>로딩 중...</div>;
   }
