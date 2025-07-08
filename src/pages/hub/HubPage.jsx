@@ -1,50 +1,71 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { HeroSection } from "../../components/common/HeroSection";
-import HubBoardList from "../../components/hub/HubBoardList";
-import { hubData } from "./hubData";
 import { BoardPagination } from "../../components/board/BoardPagination";
+import HubBoardList from "../../components/hub/HubBoardList";
 import { HubSearchBar } from "../../components/hub/HubSearchBar";
-import { COURSE_NAMES, BATCH_NUMBERS } from "../../constants/devcourse";
-import { mapHubPost } from "../../utils/hub";
+import { COURSE_NAMES, BATCH_NUMBERS, convertTrackToApi } from "../../constants/devcourse";
+import { mapApiResponseToHubPost } from "../../utils/hub";
+import { useHubPosts } from "../../hooks/useHubPosts";
 import heroHub from "../../assets/hero-hub.png";
+import { Alert, Spinner } from "react-bootstrap";
 import "../../styles/components/community/community.css";
 
-// 추후 허브 게시판 구조에 맞춰  수정 예정
 export default function HubPage() {
-  const [filters, setFilters] = useState({
-    courseName: "",
-    batchNumber: "",
-    keyword: "",
-  });
+  const navigate = useNavigate();
+  
+  const {
+    posts,
+    loading,
+    error,
+    pageInfo,
+    page,
+    setPage,
+    search,
+    reset
+  } = useHubPosts();
 
-  // 변환된 데이터 사용
-  const mappedPosts = useMemo(() => hubData.map(mapHubPost), [hubData]);
+  // API 응답을 프론트엔드 형식으로 변환
+  const mappedPosts = useMemo(() => 
+    posts.map(post => mapApiResponseToHubPost(post)), [posts]
+  );
 
-  const filteredPosts = useMemo(() => {
-    return mappedPosts.filter((post) => {
-      const matchesCourse =
-        !filters.courseName || post.courseName === filters.courseName;
-      const matchesBatch =
-        !filters.batchNumber ||
-        post.batchNumber === Number(filters.batchNumber);
-      const matchesKeyword =
-        !filters.keyword ||
-        post.title.toLowerCase().includes(filters.keyword.toLowerCase()) ||
-        (post.simpleContent &&
-          post.simpleContent
-            .toLowerCase()
-            .includes(filters.keyword.toLowerCase()));
-
-      return matchesCourse && matchesBatch && matchesKeyword;
-    });
-  }, [mappedPosts, filters]);
-
-  const handleFilterChange = (newFilters) => {
-    setFilters((prev) => ({
-      ...prev,
-      ...newFilters,
-    }));
+  const handleSearch = (searchFilters) => {
+    // courseName을 API 형식으로 변환
+    const apiFilters = {
+      ...searchFilters,
+      courseName: searchFilters.courseName ? convertTrackToApi(searchFilters.courseName) : ""
+    };
+    search(apiFilters);
   };
+
+  const handlePageChange = (newPage) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setPage(newPage);
+  };
+
+  // 에러 처리
+  if (error) {
+    return (
+      <>
+        <HeroSection backgroundImageSrc={heroHub} />
+        <div className="py-4">
+          <div className="community-main-container">
+            <Alert variant="danger">
+              <Alert.Heading>오류가 발생했습니다</Alert.Heading>
+              <p>{error}</p>
+              <hr />
+              <div className="d-flex justify-content-end">
+                <button onClick={reset} className="btn btn-outline-danger">
+                  다시 시도
+                </button>
+              </div>
+            </Alert>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -54,15 +75,34 @@ export default function HubPage() {
           <HubSearchBar
             courseNames={COURSE_NAMES}
             batchNumbers={BATCH_NUMBERS}
-            filters={filters}
-            onFilterChange={handleFilterChange}
+            onSearch={handleSearch}
+            onWrite={() => navigate(`/hub/write`)}
           />
-          <HubBoardList posts={filteredPosts} />
-          <BoardPagination
-            page={1}
-            total={Math.ceil(filteredPosts.length / 10)}
-            onChange={() => {}}
-          />
+
+          {loading && (
+            <div className="text-center py-3">
+              <Spinner animation="border" size="sm" className="me-2" />
+              프로젝트를 불러오는 중...
+            </div>
+          )}
+
+          {!loading && (
+            <>
+              {mappedPosts.length > 0 ? (
+                <HubBoardList posts={mappedPosts} />
+              ) : (
+                <div className="text-center py-5">
+                  <p className="text-muted">검색 조건에 맞는 프로젝트가 없습니다.</p>
+                </div>
+              )}
+              
+              <BoardPagination
+                page={page}
+                total={pageInfo.totalPages}
+                onChange={handlePageChange}
+              />
+            </>
+          )}
         </div>
       </div>
     </>

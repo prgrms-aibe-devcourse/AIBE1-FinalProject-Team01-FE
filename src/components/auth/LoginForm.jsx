@@ -6,6 +6,7 @@ import githubLoginImg from "../../assets/github_login.png";
 import "../../styles/components/auth/auth.css";
 import { useInput } from "../../hooks/useInput";
 import apiClient, { loginUser } from "../../services/api";
+import { convertTrackFromApi } from "../../constants/devcourse.js";
 
 const validateEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -73,6 +74,8 @@ export const LoginForm = () => {
           email: userResponse.data.email,
           avatar: userResponse.data.imageUrl || "/assets/user-icon.png",
           nickname: userResponse.data.nickname,
+          devcourseTrack: convertTrackFromApi(userResponse.data.devcourseName),
+          devcourseBatch: userResponse.data.devcourseBatch
         },
         loginResponse.accessToken
       );
