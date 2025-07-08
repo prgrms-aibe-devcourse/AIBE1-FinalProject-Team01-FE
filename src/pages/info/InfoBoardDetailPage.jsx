@@ -22,7 +22,6 @@ export default function InfoBoardDetailPage() {
         const postData = await getInfoPost(boardType, itId);
         setPost(postData);
       } catch (err) {
-        console.error("게시글 로드 실패:", err);
         setError(err.message);
       } finally {
         setLoading(false);

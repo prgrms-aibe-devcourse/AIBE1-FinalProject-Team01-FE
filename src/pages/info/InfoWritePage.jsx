@@ -66,7 +66,6 @@ export default function InfoWritePage() {
         navigate(`/info/${boardType}/${response.itId}`);
       }
     } catch (error) {
-      console.error("게시글 처리 실패:", error);
       alert(error.message || "게시글 처리 중 오류가 발생했습니다.");
     }
   };

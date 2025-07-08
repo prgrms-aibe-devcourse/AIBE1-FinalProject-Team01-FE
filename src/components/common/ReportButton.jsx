@@ -49,13 +49,10 @@ export default function ReportButton({
       if (onReportSubmit) {
         await onReportSubmit(reportData);
       } else {
-        // 기본 신고 처리 로직 (API 호출 등)
-        console.log('신고 데이터:', reportData);
         alert('신고가 접수되었습니다.');
       }
       setShowModal(false);
     } catch (error) {
-      console.error('신고 처리 실패:', error);
       throw error; // 모달에서 에러 처리하도록 다시 throw
     }
   };
