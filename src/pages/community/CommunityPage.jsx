@@ -109,6 +109,8 @@ export default function CommunityPage() {
             {!loading && posts.length > 0 && totalPages > 1 && (
                 <BoardPagination page={page} total={totalPages} onChange={setPage} />
             )}
+                </>
+                )}
           </div>
         </div>
       </>
