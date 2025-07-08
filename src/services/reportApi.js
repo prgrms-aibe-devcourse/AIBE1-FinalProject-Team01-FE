@@ -11,16 +11,9 @@ import { apiClient } from "./api.js";
  */
 export const submitReport = async (reportData) => {
     try {
-        console.log("📤 신고 데이터 전송:", reportData);
-
         const response = await apiClient.post("/api/v1/reports", reportData);
-
-        console.log("✅ 신고 제출 성공:", response.data);
         return response.data;
     } catch (error) {
-        console.error("❌ 신고 제출 실패:", error);
-
-        // 에러 메시지 처리
         if (error.response?.data?.message) {
             throw new Error(error.response.data.message);
         } else if (error.response?.status === 400) {
@@ -68,7 +61,6 @@ export const getMyReports = async (params = {}) => {
         );
         return response.data;
     } catch (error) {
-        console.error("❌ 내 신고 목록 조회 실패:", error);
         throw error;
     }
 };
@@ -83,7 +75,6 @@ export const getReportDetail = async (reportId) => {
         const response = await apiClient.get(`/api/v1/reports/${reportId}`);
         return response.data;
     } catch (error) {
-        console.error("❌ 신고 상세 조회 실패:", error);
         throw error;
     }
 };
@@ -98,8 +89,6 @@ export const cancelReport = async (reportId) => {
         const response = await apiClient.delete(`/api/v1/reports/${reportId}`);
         return response.data;
     } catch (error) {
-        console.error("❌ 신고 취소 실패:", error);
-
         if (error.response?.status === 400) {
             throw new Error("이미 처리된 신고는 취소할 수 없습니다.");
         } else if (error.response?.status === 403) {

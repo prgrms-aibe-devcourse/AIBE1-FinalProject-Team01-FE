@@ -114,7 +114,6 @@ export const getCommunityPost = async (boardType, communityId) => {
 export const createCommunityPost = async (postData) => {
     try {
         const response = await apiClient.post(`/api/v1/community/${postData.boardType}`, postData);
-        console.log(response);
         return response.data;
     } catch (error) {
         if (error.response?.status === 400) {
@@ -140,8 +139,6 @@ export const updateCommunityPost = async (boardType, postId, postData) => {
 
         return response.data;
     } catch (error) {
-        console.error(`❌ 커뮤니티 게시글 수정 실패 (${boardType}/${postId}):`, error);
-
         if (error.response?.status === 403) {
             throw new Error("수정 권한이 없습니다.");
         } else if (error.response?.status === 404) {

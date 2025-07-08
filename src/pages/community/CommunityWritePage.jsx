@@ -51,7 +51,7 @@ export default function CommunityWritePage() {
     const postData = {
       boardType: selectedBoardType,
       title,
-      tags: tags.join(','),
+      tags: tags,
       content
     };
 
@@ -60,9 +60,9 @@ export default function CommunityWritePage() {
       alert("게시글이 수정되었습니다.");
       navigate(`/community/${postToEdit.boardType}/${postToEdit.communityId}`);
     } else {
-      createCommunityPost(postData);
+      const response = await createCommunityPost(postData);
       alert("게시글이 등록되었습니다.");
-      navigate(`/community/${selectedBoardType}`);
+      navigate(`/community/${selectedBoardType}/${response.communityId}`);
     }
   };
 
