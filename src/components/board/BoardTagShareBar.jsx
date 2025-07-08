@@ -38,10 +38,7 @@ export const BoardTagShareBar = ({
     const handlePostReport = async (reportData) => {
         try {
             const result = await submitReport(reportData);
-
-            console.log('게시글 신고:', reportData);
         } catch (error) {
-            console.error('게시글 신고 실패:', error);
             throw error;
         }
     };

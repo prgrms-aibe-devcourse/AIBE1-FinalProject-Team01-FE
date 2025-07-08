@@ -20,47 +20,39 @@ import MyPage from "../pages/mypage/MyPage";
 import DMPage from "../pages/dm/DMPage";
 
 export function AppRouter() {
-  return (
-    <Routes>
-      <Route path="/" element={<MainPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignupPage />} />
-      <Route path="/signup/profile" element={<ProfileSetupPage />} />
-      <Route path="/find-account" element={<FindPasswordPage />} />
-      <Route path="/dm" element={<DMPage />} />
-      <Route
-        path="/community"
-        element={<Navigate to="/community/FREE" replace />}
-      />
-      <Route path="/community/:boardType" element={<CommunityPage />} />
-      <Route
-        path="/community/:boardType/:postId"
-        element={<CommunityBoardDetailPage />}
-      />
-      <Route
-        path="/community/:boardType/write"
-        element={<CommunityWritePage />}
-      />
-      <Route
-        path="/together"
-        element={<Navigate to="/together/GATHERING" replace />}
-      />
-      <Route path="/together/:category" element={<TogetherPage />} />
-      <Route
-        path="/together/:category/:postId"
-        element={<TogetherBoardDetailPage />}
-      />
-      <Route path="/together/:category/write" element={<TogetherWritePage />} />
-      <Route path="/info" element={<Navigate to="/info/REVIEW" replace />} />
-      <Route path="/info/:boardType" element={<InfoPage />} />
-      <Route
-        path="/info/:boardType/:postId"
-        element={<InfoBoardDetailPage />}
-      />
-      <Route path="/info/:boardType/write" element={<InfoWritePage />} />
-      <Route path="/HUB" element={<HubPage />} />
-      <Route path="/HUB/:postId" element={<HubDetailPage />} />
-      <Route path="/mypage" element={<MyPage />} />
-    </Routes>
-  );
+    return (
+        <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/signup/profile" element={<ProfileSetupPage />} />
+            <Route path="/find-account" element={<FindPasswordPage />} />
+            <Route path="/dm" element={<DMPage />} />
+            <Route path="/community" element={<Navigate to="/community/FREE" replace />} />
+            <Route path="/community/:boardType/write" element={<CommunityWritePage />} />
+            <Route path="/community/:boardType/:communityId/edit" element={<CommunityWritePage />} />
+            <Route path="/community/:boardType/:communityId" element={<CommunityBoardDetailPage />} />
+            <Route path="/community/:boardType" element={<CommunityPage />} />
+            <Route
+                path="/together"
+                element={<Navigate to="/together/GATHERING" replace />}
+            />
+            <Route path="/together/:category" element={<TogetherPage />} />
+            <Route
+                path="/together/:category/:postId"
+                element={<TogetherBoardDetailPage />}
+            />
+            <Route path="/together/:category/write" element={<TogetherWritePage />} />
+            <Route path="/info" element={<Navigate to="/info/REVIEW" replace />} />
+            <Route path="/info/:boardType" element={<InfoPage />} />
+            <Route
+                path="/info/:boardType/:postId"
+                element={<InfoBoardDetailPage />}
+            />
+            <Route path="/info/:boardType/write" element={<InfoWritePage />} />
+            <Route path="/HUB" element={<HubPage />} />
+            <Route path="/HUB/:postId" element={<HubDetailPage />} />
+            <Route path="/mypage" element={<MyPage />} />
+        </Routes>
+    );
 }
