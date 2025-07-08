@@ -4,13 +4,14 @@ import BoardCategoryBar from "../../components/board/BoardCategoryBar";
 import { BoardSearchBar } from "../../components/board/BoardSearchBar";
 import TogetherBoardList from "../../components/together/TogetherBoardList";
 import MarketBoardList from "../../components/together/MarketBoardList";
-import { allTogetherPosts } from "./togetherData";
 import { BOARD_TABS } from "./constants";
 import { HeroSection } from "../../components/common/HeroSection";
 import heroTogetherImg from "../../assets/hero-together.png";
 import { useAuth } from "../../context/AuthContext";
 import { BoardPagination } from "../../components/board/BoardPagination";
-import { useBoardList } from "../../hooks/useBoardList";
+import useTogetherPosts from "../../hooks/useTogetherPosts";
+//import { useBoardList } from "../../hooks/useBoardList";
+//import { allTogetherPosts } from "./togetherData";
 
 /**
  * 투게더 메인 페이지 컴포넌트
@@ -31,10 +32,7 @@ function TogetherPage() {
     posts: pagedPosts,
     totalPages,
     reset,
-  } = useBoardList({
-    data: allTogetherPosts,
-    boardType: category,
-  });
+  } = useTogetherPosts(category);
 
   // URL 파라미터에 따라 탭 이동
   const handleTabClick = (tabId) => {
