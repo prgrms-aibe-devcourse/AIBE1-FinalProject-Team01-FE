@@ -35,8 +35,14 @@ export default function CommunityPage() {
     search,
   } = useCommunityPosts(boardType);
 
-  const handleTabSelect = (tabKey) => navigate(`/community/${tabKey}`);
-  const handlePostClick = (communityId) => navigate(`/community/${boardType}/${communityId}`);
+  const handleTabSelect = (tabKey) => {
+    // 탭 변경 시 URL 파라미터도 초기화
+    navigate(`/community/${tabKey}`, { replace: true });
+  };
+
+  const handlePostClick = (communityId) => {
+    navigate(`/community/${boardType}/${communityId}`);
+  };
 
   // 에러 처리
   if (error) {
@@ -99,7 +105,10 @@ export default function CommunityPage() {
                 </div>
             )}
 
-            <BoardPagination page={page} total={totalPages} onChange={setPage} />
+            {/* 페이지네이션 */}
+            {!loading && posts.length > 0 && totalPages > 1 && (
+                <BoardPagination page={page} total={totalPages} onChange={setPage} />
+            )}
           </div>
         </div>
       </>
