@@ -22,7 +22,6 @@ export const useComments = (postId, initialSize = 10) => {
   const loadComments = useCallback(async (cursor = null, size = initialSize) => {
     // 중복 로딩 방지
     if (loadingRef.current) {
-      console.log('이미 로딩 중이므로 요청 무시');
       return;
     }
 
@@ -32,8 +31,6 @@ export const useComments = (postId, initialSize = 10) => {
 
     try {
       const response = await commentApi.getComments(postId, cursor, size);
-      console.log(response)
-
       if (cursor) {
         // 추가 로드
         setComments(prev => [...prev, ...response.comments]);
@@ -50,7 +47,6 @@ export const useComments = (postId, initialSize = 10) => {
       setError(err.message || '댓글을 불러오는 중 오류가 발생했습니다.');
       setInitialLoaded(true);
       initialLoadRef.current = true;
-      console.error('댓글 로드 실패:', err);
     } finally {
       setLoading(false);
       loadingRef.current = false;
@@ -91,7 +87,6 @@ export const useComments = (postId, initialSize = 10) => {
         };
       });
     } catch (err) {
-      console.error('대댓글 로드 실패:', err);
     } finally {
       setRepliesLoading(prev => ({ ...prev, [commentId]: false }));
     }
@@ -124,7 +119,6 @@ export const useComments = (postId, initialSize = 10) => {
 
       return newComment;
     } catch (err) {
-      console.error('댓글 작성 실패:', err);
       throw new Error(err.message || '댓글 작성 중 오류가 발생했습니다.');
     }
   }, [postId, hasNext]);
@@ -165,7 +159,6 @@ export const useComments = (postId, initialSize = 10) => {
 
       return newReply;
     } catch (err) {
-      console.error('대댓글 작성 실패:', err);
       throw new Error(err.message || '대댓글 작성 중 오류가 발생했습니다.');
     }
   }, [postId, repliesData]);
@@ -199,7 +192,6 @@ export const useComments = (postId, initialSize = 10) => {
         ));
       }
     } catch (err) {
-      console.error('댓글 수정 실패:', err);
       throw new Error(err.message || '댓글 수정 중 오류가 발생했습니다.');
     }
   }, [postId]);
@@ -235,7 +227,6 @@ export const useComments = (postId, initialSize = 10) => {
         });
       }
     } catch (err) {
-      console.error('댓글 삭제 실패:', err);
       throw new Error(err.message || '댓글 삭제 중 오류가 발생했습니다.');
     }
   }, [postId]);
@@ -258,7 +249,6 @@ export const useComments = (postId, initialSize = 10) => {
    */
   useEffect(() => {
     if (postId && !initialLoadRef.current) {
-      console.log('초기 댓글 로드 시작:', postId);
       loadComments();
     }
   }, [postId]); // loadComments 의존성 제거

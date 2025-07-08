@@ -17,7 +17,6 @@ export const commentApi = {
             const response = await apiClient.get(`/api/v1/posts/${postId}/comments?${params}`);
             return response.data;
         } catch (error) {
-            console.error('댓글 목록 조회 실패:', error);
             throw error;
         }
     },
@@ -35,7 +34,6 @@ export const commentApi = {
             const response = await apiClient.get(`/api/v1/posts/${postId}/comments/${commentId}/replies?${params}`);
             return response.data;
         } catch (error) {
-            console.error('대댓글 목록 조회 실패:', error);
             throw error;
         }
     },
@@ -48,7 +46,6 @@ export const commentApi = {
             const response = await apiClient.post(`/api/v1/posts/${postId}/comments`, commentData);
             return response.data;
         } catch (error) {
-            console.error('댓글 작성 실패:', error);
             throw error;
         }
     },
@@ -61,7 +58,6 @@ export const commentApi = {
             const response = await apiClient.put(`/api/v1/posts/${postId}/comments/${commentId}`, commentData);
             return response.data;
         } catch (error) {
-            console.error('댓글 수정 실패:', error);
             throw error;
         }
     },
@@ -74,7 +70,6 @@ export const commentApi = {
             const response = await apiClient.delete(`/api/v1/posts/${postId}/comments/${commentId}`);
             return response.data;
         } catch (error) {
-            console.error('댓글 삭제 실패:', error);
             throw error;
         }
     }
