@@ -51,7 +51,7 @@ export default function InfoWritePage() {
     const postData = {
       boardType,
       title,
-      tags: tags.join(','),
+      tags: tags,
       content
     };
 
@@ -61,9 +61,9 @@ export default function InfoWritePage() {
         alert("게시글이 수정되었습니다.");
         navigate(`/info/${postToEdit.boardType}/${postToEdit.postId}`);
       } else {
-        await createInfoPost(postData);
+        const response = await createInfoPost(postData);
         alert("게시글이 등록되었습니다.");
-        navigate(`/info/${boardType}`);
+        navigate(`/info/${boardType}/${response.itId}`);
       }
     } catch (error) {
       console.error("게시글 처리 실패:", error);
