@@ -125,6 +125,28 @@ export const BoardPostHeader = ({
           </div>
         </div>
       )}
+        {(onEdit || onDelete) && isMine && (
+            <div className="d-flex gap-2 mt-3 mb-2">
+                {onEdit && (
+                    <button
+                        className="btn btn-sm btn-outline-secondary"
+                        onClick={onEdit}
+                    >
+                        <i className="bi bi-pencil me-1"></i>
+                        수정
+                    </button>
+                )}
+                {onDelete && (
+                    <button
+                        className="btn btn-sm btn-outline-danger"
+                        onClick={onDelete}
+                    >
+                        <i className="bi bi-trash me-1"></i>
+                        삭제
+                    </button>
+                )}
+            </div>
+        )}
       <hr />
     </div>
   );

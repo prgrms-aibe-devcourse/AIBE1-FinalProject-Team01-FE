@@ -5,9 +5,11 @@ import { BoardPostHeader } from "../board/BoardPostHeader";
 import { PostContent } from "../common/PostContent";
 import { BOARD_TYPE_LABEL } from "../../pages/community/constants";
 import "../../styles/components/community/community.css";
+import { deleteCommunityPost } from "../../services/communityApi.js"
 
 /**
  * @typedef {Object} Post
+ * @property {string | number} communityId - 게시글 ID
  * @property {string | number} postId - 게시글 ID
  * @property {string} boardType - 게시글 타입 (FREE, QNA, RETROSPECT)
  * @property {string} title - 게시글 제목
@@ -35,15 +37,15 @@ export const CommunityBoardDetail = ({ post, onLike, onBookmark }) => {
   const navigate = useNavigate();
 
   const handleEdit = () => {
-    navigate(`/community/${post.boardType}/write`, {
+    navigate(`/community/${post.boardType}/${post.communityId}/edit`, {
       state: { postToEdit: post },
     });
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
-      console.log("삭제할 게시글 ID:", post.postId);
-      alert("게시글이 삭제되었습니다.");
+      await deleteCommunityPost(post.boardType, post.communityId);
+      alert("게시글이 삭제되었습니다.")
       navigate(`/community/${post.boardType}`);
     }
   };

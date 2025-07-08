@@ -1,51 +1,118 @@
-/* info 게시판 전용 스타일 (community/board 스타일과 유사하게 적용) */
+/* Info 게시판 전용 스타일 */
 
-.info-main-container {
-  max-width: 1200px;
-  width: 100%;
-  min-height: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 24px;
-}
-
-@media (max-width: 900px) {
-  .info-main-container {
-    padding: 0 8px;
-    min-width: 0;
-  }
-}
-@media (max-width: 600px) {
-  .info-main-container {
-    padding: 0 2px;
-  }
-}
-
+/* Info 게시글 카드 스타일 */
 .info-post-card {
-  border-radius: 12px;
-  border: 1px solid #e9ecef;
-  background: #fff;
-  transition: box-shadow 0.2s;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  background: white;
+  transition: all 0.2s ease;
 }
+
 .info-post-card:hover {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  border-color: #bdbdbd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-color: #007bff;
 }
 
-.info-post-card .card-title {
-  font-size: 1.15rem;
+/* Info 카테고리 라벨 스타일 */
+.info-category-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  color: white;
 }
 
-.info-post-card .badge {
-  font-size: 0.95em;
-  font-weight: 500;
+.info-category-label.review {
+  background-color: #28a745;
 }
 
-.tag-badge {
-  background: #f1f3f5;
-  color: #1a1b1d;
+.info-category-label.news {
+  background-color: #17a2b8;
+}
+
+/* Info 상세 페이지 스타일 */
+.info-detail-header {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.info-detail-content {
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Info 태그 스타일 */
+.info-tag {
+  background-color: #f8f9fa;
+  color: #495057;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.25rem;
+  display: inline-block;
+}
+
+/* Info 작성자 정보 스타일 */
+.info-author-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.info-author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+}
+
+.info-author-details h6 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.info-author-details small {
+  color: #6c757d;
+}
+
+/* 데브코스 정보 스타일 */
+.info-devcourse-badge {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  padding: 0.125rem 0.375rem;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+/* NEWS 게시글 읽기 전용 표시 */
+.info-readonly-notice {
+  background-color: #f8f9fa;
   border: 1px solid #dee2e6;
-  font-size: 0.85em;
-  border-radius: 0.5em;
-  padding: 0.2em 0.7em;
+  border-radius: 4px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .info-post-card {
+    padding: 0.75rem;
+  }
+  
+  .info-author-avatar {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .info-category-label {
+    font-size: 0.7rem;
+  }
 }

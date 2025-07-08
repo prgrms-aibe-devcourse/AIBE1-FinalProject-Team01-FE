@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import {useNavigate, useLocation, useParams} from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 import { CustomTiptapEditor } from "../../components/editor/CustomTiptapEditor";
 import { TagInput } from "../../components/common/TagInput";
 import { useImageUpload } from "../../hooks/useImageUpload";
 import { BOARD_TYPE, BOARD_TYPE_LABEL } from "./constants";
+import { createCommunityPost, updateCommunityPost } from "../../services/communityApi.js";
 
 export default function CommunityWritePage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const params = useParams();
+
+  const isEditMode = params.communityId !== undefined;
   const { postToEdit } = location.state || {};
 
   const [selectedBoardType, setSelectedBoardType] = useState(BOARD_TYPE.FREE);
@@ -16,40 +20,49 @@ export default function CommunityWritePage() {
   const [tags, setTags] = useState([]);
   const [content, setContent] = useState("");
 
-  const isEditMode = !!postToEdit;
-
-  const { imageUrls, handleUpload, setImageUrls } = useImageUpload(
+  const { handleUpload} = useImageUpload(
     postToEdit?.images || []
   );
 
   useEffect(() => {
     if (isEditMode && postToEdit) {
-      setSelectedBoardType(postToEdit.boardType);
-      setTitle(postToEdit.title);
-      setTags(postToEdit.tags || []);
-      setContent(postToEdit.content);
-      setImageUrls(postToEdit.images || []);
-    }
-  }, [isEditMode, postToEdit, setImageUrls]);
+      setSelectedBoardType(postToEdit.boardType || BOARD_TYPE.FREE);
+      setTitle(postToEdit.title || "");
 
-  const handleSubmit = (e) => {
+      let tagsArray = [];
+      if (postToEdit.tags) {
+        if (typeof postToEdit.tags === 'string') {
+          tagsArray = postToEdit.tags.split(',').filter(tag => tag.trim() !== '');
+        } else if (Array.isArray(postToEdit.tags)) {
+          tagsArray = postToEdit.tags;
+        }
+      }
+      setTags(tagsArray);
+
+      setContent(postToEdit.content || "");
+    }else if (isEditMode && !postToEdit) {
+      alert("잘못된 접근입니다.")
+      navigate("/community/FREE")
+    }
+  }, [isEditMode, postToEdit]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const postData = {
       boardType: selectedBoardType,
       title,
-      tags,
-      content,
-      images: imageUrls,
+      tags: tags,
+      content
     };
 
     if (isEditMode) {
-      console.log("수정된 게시글 데이터:", { ...postData, id: postToEdit.id });
+      await updateCommunityPost(postToEdit.boardType, postToEdit.communityId, postData);
       alert("게시글이 수정되었습니다.");
-      navigate(`/community/${postToEdit.boardType}/${postToEdit.id}`);
+      navigate(`/community/${postToEdit.boardType}/${postToEdit.communityId}`);
     } else {
-      console.log("작성된 게시글 데이터:", postData);
+      const response = await createCommunityPost(postData);
       alert("게시글이 등록되었습니다.");
-      navigate(`/community/${selectedBoardType}`);
+      navigate(`/community/${selectedBoardType}/${response.communityId}`);
     }
   };
 

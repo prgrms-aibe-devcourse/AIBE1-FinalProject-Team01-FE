@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import apiClient, { tokenManager } from "../services/api.js";
+import apiClient from "../services/api.js";
 
 // Context 생성 - 정의 - 커스텀 훅
 const AuthContext = createContext();
@@ -9,25 +9,23 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 초기 로드 시 토큰 확인
   useEffect(() => {
-    const initializeAuth = () => {
+    const initializeAuth = async () => {
       try {
-        const token = tokenManager.getToken();
-        if (token && tokenManager.isTokenValid()) {
-          // 토큰이 유효하면 로그인 상태로 설정
-          // 실제로는 토큰으로 사용자 정보를 가져와야 함
-          setIsLoggedIn(true);
-          // TODO: 토큰으로 사용자 정보 조회 API 호출
-        } else {
-          // 토큰이 없거나 만료되었으면 제거
-          tokenManager.removeToken();
-          setIsLoggedIn(false);
-          setUser(null);
-        }
+        // 쿠키 읽기는 포기하고 API로 직접 확인
+        const response = await apiClient.get("/api/v1/users/me");
+
+        // API 성공 시 로그인 상태 설정
+        setIsLoggedIn(true);
+        setUser({
+          id: response.data.userId,
+          name: response.data.name,
+          email: response.data.email,
+          avatar: response.data.imageUrl || "/assets/user-icon.png",
+          nickname: response.data.nickname,
+        });
       } catch (error) {
-        console.error("인증 초기화 실패:", error);
-        tokenManager.removeToken();
+        // API 실패 시 로그아웃 상태
         setIsLoggedIn(false);
         setUser(null);
       } finally {
@@ -47,8 +45,6 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setIsLoggedIn(false);
-    // JWT 토큰 제거
-    tokenManager.removeToken();
   };
 
   // 로딩 중에는 로딩 표시
