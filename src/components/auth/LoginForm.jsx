@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import kakaoLoginImg from "../../assets/kakao_login_medium_narrow.png";
 import githubLoginImg from "../../assets/github_login.png";
@@ -20,8 +20,10 @@ const validateLoginPassword = (password) => {
 export const LoginForm = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const emailRef = useRef(null);
   const pwRef = useRef(null);
+  const redirectUrl = new URLSearchParams(location.search).get("redirectUrl");
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
 
@@ -78,7 +80,7 @@ export const LoginForm = () => {
         loginResponse.accessToken
       );
 
-      navigate("/");
+      navigate(redirectUrl || "/");
     } catch (error) {
       console.error("로그인 실패: ", error);
       const safeErrorMessage =

@@ -3,6 +3,8 @@ import { useClipboard } from "../../hooks/useClipboard";
 import LikeButton from "../common/LikeButton";
 import BookmarkButton from "../common/BookmarkButton";
 import ShareButton from "../common/ShareButton";
+import ReportButton from "../common/ReportButton";
+import {submitReport} from "../../services/reportApi.js";
 
 /**
  * @typedef {Object} BoardTagShareBarProps
@@ -27,8 +29,19 @@ export const BoardTagShareBar = ({
   isBookmarked = false,
   onLikeToggle,
   onBookmarkToggle,
+  postId,
+  isMyPost = false,
+
 }) => {
   const { copy } = useClipboard();
+
+    const handlePostReport = async (reportData) => {
+        try {
+            const result = await submitReport(reportData);
+        } catch (error) {
+            throw error;
+        }
+    };
 
   const handleShare = () => {
     copy(window.location.href);
@@ -56,6 +69,13 @@ export const BoardTagShareBar = ({
           />
         )}
         <ShareButton onClick={handleShare} />
+          {!isMyPost && (
+              <ReportButton
+                  targetId={postId}
+                  reportTarget="POST"
+                  onReportSubmit={handlePostReport}
+              />
+          )}
       </div>
     </div>
   );

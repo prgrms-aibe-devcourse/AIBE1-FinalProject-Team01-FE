@@ -3,6 +3,8 @@ import axios from "axios";
 // 기본 API 설정
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+// 환경변수에서 도메인 가져오기
+const COOKIE_DOMAIN = import.meta.env.VITE_COOKIE_DOMAIN || "localhost";
 
 // Axios 인스턴스 생성
 export const apiClient = axios.create({
@@ -27,11 +29,9 @@ const tokenManager = {
 
   // 토큰 제거
   removeToken: () => {
-    // TODO: 로그아웃 API 구현후 변경예정
-    document.cookie =
-      "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=localhost";
-    document.cookie =
-      "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=localhost";
+    // TODO: 로그아웃 API 구현 후 서버에서 쿠키 삭제로 변경 예정
+    document.cookie = `accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${COOKIE_DOMAIN}`;
+    document.cookie = `refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${COOKIE_DOMAIN}`;
   },
 
   // 토큰 유효성 검사 (간단한 형태)
@@ -58,6 +58,20 @@ const tokenManager = {
 // 명시적으로 export
 export { tokenManager };
 
+const redirectToLogin = () => {
+  const currentPath = window.location.pathname;
+
+  // 메인페이지에서는 리다이렉트 안 함
+  if (currentPath === "/") {
+    console.log("메인페이지에서는 401 에러 무시");
+    return;
+  }
+
+  const currentUrl = window.location.pathname + window.location.search;
+  const encodedRedirectUrl = encodeURIComponent(currentUrl);
+  window.location.href = `/login?redirectUrl=${encodedRedirectUrl}`;
+};
+
 // 요청 인터셉터 - JWT 토큰 자동 추가
 apiClient.interceptors.request.use(
   (config) => {
@@ -74,16 +88,35 @@ apiClient.interceptors.request.use(
 
 // 응답 인터셉터 - 401 에러 처리
 apiClient.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // 토큰이 만료되었거나 유효하지 않음
+      if (error.config.url.includes("/users/me")) {
+        return Promise.reject(error);
+      }
+
+      const excludeUrls = [
+        "/api/v1/community/",
+        "/api/v1/like",
+        "/api/v1/bookmark",
+        "/api/v1/comment",
+        "/api/v1/report",
+        "/api/v1/dm",
+        "/api/v1/alarm",
+      ];
+
+      const shouldExclude = excludeUrls.some((url) =>
+        error.config.url.includes(url)
+      );
+
+      if (shouldExclude) {
+        console.log("🚫 권한 부족");
+        return Promise.reject(error);
+      }
+
+      console.log("🔐 인증 만료");
       tokenManager.removeToken();
-      // 개발 모드에서는 자동 리다이렉트 하지 않음
-      console.warn("인증 토큰이 만료되었습니다.");
-      // window.location.href = "/login"; // 주석 처리
+      redirectToLogin();
     }
     return Promise.reject(error);
   }
