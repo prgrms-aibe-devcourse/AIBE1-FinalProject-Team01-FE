@@ -114,7 +114,7 @@ export const getCommunityPost = async (boardType, communityId) => {
 export const createCommunityPost = async (postData) => {
     try {
         const response = await apiClient.post(`/api/v1/community/${postData.boardType}`, postData);
-        console.log(response);
+
         return response.data;
     } catch (error) {
         if (error.response?.status === 400) {

@@ -109,15 +109,8 @@ const CommentItem = (props) => {
 
   const handleReportSubmit = async (reportData) => {
     try {
-      console.log("CommentItem - 받은 reportData:", reportData);
-      console.log("CommentItem - reportData.reportTarget:", reportData.reportTarget);
-
       const result = await submitReport(reportData);
-
-      console.log("댓글 신고 성공:", result);
     } catch (error) {
-      console.error("댓글 신고 오류:", error);
-
       throw error;
     }
   };

@@ -11,11 +11,8 @@ import { apiClient } from "./api.js";
  */
 export const submitReport = async (reportData) => {
     try {
-        console.log("📤 신고 데이터 전송:", reportData);
-
         const response = await apiClient.post("/api/v1/reports", reportData);
 
-        console.log("✅ 신고 제출 성공:", response.data);
         return response.data;
     } catch (error) {
         console.error("❌ 신고 제출 실패:", error);
