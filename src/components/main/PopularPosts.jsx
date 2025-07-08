@@ -4,8 +4,9 @@ import iconUser from "../../assets/icon-user.png";
 import iconHeart from "../../assets/icon-heart.png";
 import iconComment from "../../assets/icon-comment.png";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
 // 날짜 포맷팅 함수
 const formatDate = (dateString) => {
@@ -32,18 +33,17 @@ export const PopularPosts = () => {
   const [posts, setPosts] = useState([]);
   const [type, setType] = useState("popular");
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
   // AuthContext 사용 시
   // const { token } = useContext(AuthContext);
-  // localStorage 사용 시
-  const token = localStorage.getItem("token");
 
   // API 호출 함수
   const fetchRecommendedPosts = async (limit = 10) => {
     const res = await fetch(
       `${BASE_URL}/api/v1/ai/posts/recommendations?limit=${limit}`,
       {
-        headers: { Authorization: `Bearer ${token}` },
+        credentials: "include",
       }
     );
     if (!res.ok) throw new Error("추천 게시글 조회 실패");
@@ -63,7 +63,7 @@ export const PopularPosts = () => {
     fetchPopularPosts(10).then(setPosts);
 
     // 2. 로그인 상태면 맞춤 게시글 요청
-    if (token) {
+    if (isLoggedIn) {
       fetchRecommendedPosts(4)
         .then((recommended) => {
           if (recommended && recommended.length > 0) {
@@ -77,7 +77,7 @@ export const PopularPosts = () => {
     } else {
       setType("popular");
     }
-  }, [token]);
+  }, [isLoggedIn]);
 
   // posts 데이터에 맞게 렌더링 (아래는 예시, 실제 API 응답에 맞게 수정 필요)
   return (

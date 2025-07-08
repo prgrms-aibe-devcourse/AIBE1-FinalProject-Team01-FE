@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import apiClient, { tokenManager } from "../services/api.js";
+import apiClient from "../services/api.js";
 
-// Context 생성 - 정의 - 커스텀 훅
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -9,25 +8,23 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 초기 로드 시 토큰 확인
   useEffect(() => {
-    const initializeAuth = () => {
+    const initializeAuth = async () => {
       try {
-        const token = tokenManager.getToken();
-        if (token && tokenManager.isTokenValid()) {
-          // 토큰이 유효하면 로그인 상태로 설정
-          // 실제로는 토큰으로 사용자 정보를 가져와야 함
-          setIsLoggedIn(true);
-          // TODO: 토큰으로 사용자 정보 조회 API 호출
-        } else {
-          // 토큰이 없거나 만료되었으면 제거
-          tokenManager.removeToken();
-          setIsLoggedIn(false);
-          setUser(null);
-        }
+        // setTimeout 제거 - 즉시 API 호출
+        const response = await apiClient.get("/api/v1/users/me");
+
+        setIsLoggedIn(true);
+        setUser({
+          id: response.data.userId,
+          name: response.data.name,
+          email: response.data.email,
+          avatar: response.data.imageUrl || "/assets/user-icon.png",
+          nickname: response.data.nickname,
+        });
       } catch (error) {
-        console.error("인증 초기화 실패:", error);
-        tokenManager.removeToken();
+        // 401 에러는 정상적인 로그아웃 상태
+        console.log("사용자 정보 조회 실패 - 로그아웃 상태");
         setIsLoggedIn(false);
         setUser(null);
       } finally {
@@ -36,27 +33,21 @@ export const AuthProvider = ({ children }) => {
     };
 
     initializeAuth();
-  }, []);
+  }, []); // 빈 의존성 배열로 한 번만 실행
 
-  // userData: { name, email, ... } + token
   const login = (userData, token) => {
     setUser(userData);
     setIsLoggedIn(true);
-
-    // JWT 토큰이 제공되면 저장
-    if (token) {
-      tokenManager.setToken(token);
-    }
+    // 로그인 즉시 로딩 상태 해제
+    setLoading(false);
   };
 
   const logout = () => {
     setUser(null);
     setIsLoggedIn(false);
-    // JWT 토큰 제거
-    tokenManager.removeToken();
+    // 로그아웃 API도 호출해야 할 수 있음
   };
 
-  // 로딩 중에는 로딩 표시
   if (loading) {
     return <div>로딩 중...</div>;
   }
