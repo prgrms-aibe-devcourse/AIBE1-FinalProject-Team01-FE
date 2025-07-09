@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { InputGroup, FormControl, Button, Modal, Form } from "react-bootstrap";
+import {
+  InputGroup,
+  FormControl,
+  Button,
+  Modal,
+  Form,
+  Alert,
+} from "react-bootstrap";
 import { Search, Trash, Plus } from "react-bootstrap-icons";
 import { useInput } from "../../hooks/useInput";
 import { DMChatList } from "./DMChatList";
@@ -35,70 +42,23 @@ export const DMSidebar = ({
   const [chatList, setChatList] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newChatUserId, setNewChatUserId] = useState("");
-  const [newChatUserNickname, setNewChatUserNickname] = useState("");
   const [creating, setCreating] = useState(false);
-  const [hasProcessedRooms, setHasProcessedRooms] = useState(false);
+  const [error, setError] = useState(null);
 
   const currentUserId = user?.id || 1;
 
-  // 서버 데이터가 로드되면 처리 (한 번만)
+  // 서버 데이터 처리
   useEffect(() => {
-    if (!loading && !hasProcessedRooms) {
-      // 더미 데이터 사용 (API 연결 준비는 완료)
-      const dummyRooms = [
-        {
-          roomId: "room-1",
-          otherUserId: 2,
-          otherUserNickname: "김개발",
-          otherUserProfileImage: null,
-          lastMessage: "안녕하세요! 도움이 필요해서 연락드렸어요",
-          sentAt: new Date(Date.now() - 5 * 60 * 1000).toISOString(), // 5분 전
-        },
-        {
-          roomId: "room-2",
-          otherUserId: 3,
-          otherUserNickname: "박코딩",
-          otherUserProfileImage: null,
-          lastMessage: "프로젝트 관련해서 궁금한 게 있는데요",
-          sentAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2시간 전
-        },
-        {
-          roomId: "room-3",
-          otherUserId: 4,
-          otherUserNickname: "이백엔드",
-          otherUserProfileImage: null,
-          lastMessage: "네, 좋은 아이디어인 것 같아요!",
-          sentAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // 1일 전
-        },
-        {
-          roomId: "room-4",
-          otherUserId: 5,
-          otherUserNickname: "최프론트",
-          otherUserProfileImage: null,
-          lastMessage: "감사합니다! 덕분에 해결되었어요 😊",
-          sentAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3일 전
-        },
-        {
-          roomId: "room-5",
-          otherUserId: 6,
-          otherUserNickname: "정데이터",
-          otherUserProfileImage: null,
-          lastMessage: "내일 스터디 몇 시에 할까요?",
-          sentAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), // 5일 전
-        },
-      ];
+    if (!loading && serverRooms) {
+      console.log("🔍 DMSidebar에서 받은 서버 데이터:", serverRooms);
 
-      // 실제 API 호출은 주석 처리 (연결 준비는 완료)
-      // if (serverRooms && serverRooms.length > 0) {
-      //   console.log("🔍 DMSidebar에서 받은 서버 데이터:", serverRooms);
-      //   const formattedServerRooms = serverRooms.map((room, index) => { ... });
-      //   setChatList(formattedServerRooms);
-      // }
+      if (serverRooms.length === 0) {
+        setChatList([]);
+        return;
+      }
 
-      console.log("🔍 더미 데이터 사용 중");
-
-      // 더미 데이터를 클라이언트 형식으로 변환
-      const formattedDummyRooms = dummyRooms.map((room, index) => {
+      // 서버 데이터를 클라이언트 형식으로 변환
+      const formattedServerRooms = serverRooms.map((room) => {
         // lastMessage 처리
         let displayLastMessage = "새로운 대화를 시작해보세요";
         if (room.lastMessage && room.lastMessage.trim() !== "") {
@@ -109,11 +69,11 @@ export const DMSidebar = ({
         let displayTimestamp = "방금";
         if (room.sentAt) {
           try {
-            displayTimestamp = new Date(room.sentAt).toLocaleTimeString(
+            displayTimestamp = new Date(room.sentAt).toLocaleDateString(
               "ko-KR",
               {
-                hour: "2-digit",
-                minute: "2-digit",
+                month: "short",
+                day: "numeric",
               }
             );
           } catch (error) {
@@ -122,34 +82,24 @@ export const DMSidebar = ({
           }
         }
 
-        const formatted = {
-          id: room.roomId,
-          nickname: room.otherUserNickname || `사용자 ${room.otherUserId}`,
+        return {
+          id: room.id,
+          nickname: room.partnerNickname || `사용자 ${room.partnerId}`,
           lastMessage: displayLastMessage,
           timestamp: displayTimestamp,
-          profileImage: room.otherUserProfileImage || null,
+          profileImage: room.partnerProfileImage || null,
           unreadCount: 0,
-          otherUserId: room.otherUserId,
+          otherUserId: room.partnerId,
         };
-
-        return formatted;
       });
 
-      setChatList(formattedDummyRooms);
-      setHasProcessedRooms(true);
+      setChatList(formattedServerRooms);
     }
-  }, [serverRooms, loading, hasProcessedRooms]);
-
-  // 방 생성 시 플래그 리셋
-  useEffect(() => {
-    if (serverRooms.length === 0) {
-      setHasProcessedRooms(false);
-    }
-  }, [serverRooms.length]);
+  }, [serverRooms, loading]);
 
   const handleDeleteChat = async (chatId) => {
     try {
-      await leaveDMRoom(chatId, currentUserId);
+      await leaveDMRoom(chatId);
 
       // 로컬 목록에서 제거
       setChatList((prev) => prev.filter((chat) => chat.id !== chatId));
@@ -158,30 +108,25 @@ export const DMSidebar = ({
       }
     } catch (error) {
       console.error(`❌ 채팅방 나가기 실패:`, error);
-      // 실패해도 로컬에서는 제거 (UI 일관성)
-      setChatList((prev) => prev.filter((chat) => chat.id !== chatId));
-      if (selectedChatId === chatId) {
-        onChatSelect(null);
-      }
+      setError(error.message || "채팅방 나가기에 실패했습니다.");
     }
   };
 
   const handleCreateRoom = async () => {
     if (!newChatUserId.trim()) {
-      alert("상대방 사용자 ID를 입력해주세요.");
+      setError("상대방 사용자 ID를 입력해주세요.");
       return;
     }
 
     try {
       setCreating(true);
+      setError(null);
 
-      // 새로운 API 스펙: partnerId만 전달
       const newRoom = await createDMRoom(parseInt(newChatUserId));
 
       // 모달 닫기 및 입력값 초기화
       setShowCreateModal(false);
       setNewChatUserId("");
-      setNewChatUserNickname("");
 
       // 부모 컴포넌트에 방 생성 완료 알림 (방 목록 새로고침 위해)
       if (onRoomCreated) {
@@ -189,7 +134,7 @@ export const DMSidebar = ({
       }
     } catch (error) {
       console.error("❌ 채팅방 생성 실패:", error);
-      alert("채팅방 생성에 실패했습니다. 다시 시도해주세요.");
+      setError(error.message || "채팅방 생성에 실패했습니다.");
     } finally {
       setCreating(false);
     }
@@ -225,6 +170,18 @@ export const DMSidebar = ({
           </InputGroup>
         </div>
 
+        {/* 에러 메시지 */}
+        {error && (
+          <Alert
+            variant="danger"
+            className="m-2"
+            dismissible
+            onClose={() => setError(null)}
+          >
+            {error}
+          </Alert>
+        )}
+
         <div className="dm-chat-list-container">
           {loading ? (
             <div className="dm-loading">
@@ -259,13 +216,21 @@ export const DMSidebar = ({
       {/* 채팅방 생성 모달 */}
       <Modal
         show={showCreateModal}
-        onHide={() => setShowCreateModal(false)}
+        onHide={() => {
+          setShowCreateModal(false);
+          setError(null);
+        }}
         centered
       >
         <Modal.Header closeButton>
           <Modal.Title>새 채팅방 만들기</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {error && (
+            <Alert variant="danger" className="mb-3">
+              {error}
+            </Alert>
+          )}
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>상대방 사용자 ID</Form.Label>
@@ -274,6 +239,12 @@ export const DMSidebar = ({
                 placeholder="채팅할 상대방의 사용자 ID를 입력하세요"
                 value={newChatUserId}
                 onChange={(e) => setNewChatUserId(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleCreateRoom();
+                  }
+                }}
               />
               <Form.Text className="text-muted">
                 상대방의 사용자 ID를 입력하면 자동으로 채팅방이 생성됩니다.
@@ -282,7 +253,13 @@ export const DMSidebar = ({
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowCreateModal(false)}>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setShowCreateModal(false);
+              setError(null);
+            }}
+          >
             취소
           </Button>
           <Button

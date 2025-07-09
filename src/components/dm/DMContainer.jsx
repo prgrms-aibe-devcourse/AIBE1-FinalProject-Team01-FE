@@ -14,6 +14,7 @@ export const DMContainer = () => {
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [dmRooms, setDmRooms] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // 현재 사용자 ID (AuthContext에서 실제 userId 우선 사용, 없으면 테스트용으로 1)
   const currentUserId = user?.id || 1;
@@ -22,16 +23,18 @@ export const DMContainer = () => {
   const loadDMRooms = useCallback(async () => {
     try {
       setLoading(true);
+      setError(null);
 
-      const rooms = await getDMRooms(currentUserId);
+      const rooms = await getDMRooms();
       setDmRooms(rooms);
     } catch (error) {
       console.error("❌ DM 방 목록 로드 실패:", error);
+      setError(error.message || "채팅방 목록을 불러오는데 실패했습니다.");
       setDmRooms([]); // 실패 시 빈 배열로 설정하여 무한 로딩 방지
     } finally {
       setLoading(false);
     }
-  }, [currentUserId]);
+  }, []);
 
   // DM 방 목록 불러오기 - 컴포넌트 마운트 시 한 번만
   useEffect(() => {
@@ -45,6 +48,25 @@ export const DMContainer = () => {
   const handleRoomCreated = () => {
     loadDMRooms();
   };
+
+  // 에러 처리
+  if (error) {
+    return (
+      <Container className="dm-main-container">
+        <Row className="dm-content-row">
+          <Col className="text-center py-5">
+            <div className="alert alert-danger">
+              <h5>오류가 발생했습니다</h5>
+              <p>{error}</p>
+              <button className="btn btn-primary" onClick={loadDMRooms}>
+                다시 시도
+              </button>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    );
+  }
 
   return (
     <Container className="dm-main-container">

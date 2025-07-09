@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { InputGroup, FormControl, Button } from "react-bootstrap";
+import {
+  InputGroup,
+  FormControl,
+  Button,
+  Alert,
+  Spinner,
+} from "react-bootstrap";
 import { Send, Camera } from "react-bootstrap-icons";
 import { useInput } from "../../hooks/useInput";
 import { useWebSocket } from "../../hooks/useWebSocket";
@@ -25,10 +31,11 @@ export const DMChatArea = ({ selectedChatId }) => {
     reset: resetMessage,
   } = useInput("");
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
   const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false);
-  const [roomData, setRoomData] = useState(null);
   const [chatPartner, setChatPartner] = useState(null);
 
   const chatMessages = selectedChatId
@@ -45,8 +52,8 @@ export const DMChatArea = ({ selectedChatId }) => {
     } else {
       // 채팅방 선택 해제 시 상태 초기화
       setMessages([]);
-      setRoomData(null);
       setChatPartner(null);
+      setError(null);
     }
   }, [selectedChatId, currentUserId]);
 
@@ -56,7 +63,10 @@ export const DMChatArea = ({ selectedChatId }) => {
     }
 
     try {
-      // 메시지 목록 불러오기 (새로운 API 스펙)
+      setLoading(true);
+      setError(null);
+
+      // 메시지 목록 불러오기
       const messageResponse = await getDMMessages(
         selectedChatId,
         currentUserId,
@@ -99,10 +109,13 @@ export const DMChatArea = ({ selectedChatId }) => {
       setShouldScrollToBottom(true);
     } catch (error) {
       console.error(`❌ 채팅방 ${selectedChatId} 입장 실패:`, error);
+      setError(error.message || "채팅방을 불러오는 중 오류가 발생했습니다.");
       // 서버 연결 실패 시 빈 메시지 목록
       setMessages((prev) =>
         prev.filter((msg) => msg.chatId !== selectedChatId)
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -115,8 +128,8 @@ export const DMChatArea = ({ selectedChatId }) => {
       chatId: selectedChatId,
       senderId: messageData.senderId,
       text: messageData.content,
-      timestamp: messageData.timestamp
-        ? new Date(messageData.timestamp).toLocaleTimeString("ko-KR", {
+      timestamp: messageData.sentAt
+        ? new Date(messageData.sentAt).toLocaleTimeString("ko-KR", {
             hour: "2-digit",
             minute: "2-digit",
           })
@@ -125,6 +138,7 @@ export const DMChatArea = ({ selectedChatId }) => {
             minute: "2-digit",
           }),
       isMe: messageData.senderId === currentUserId,
+      senderNickname: messageData.senderNickname,
     };
 
     setMessages((prev) => [...prev, newMessage]);
@@ -156,37 +170,33 @@ export const DMChatArea = ({ selectedChatId }) => {
   const handleSendMessage = () => {
     if (!messageText.trim() || !selectedChatId) return;
 
-    // 메시지 객체 생성
-    const newMessage = {
-      id: `local-${Date.now()}-${Math.random()}`, // 로컬 메시지 구분을 위한 prefix
-      chatId: selectedChatId,
-      senderId: currentUserId,
-      text: messageText.trim(),
-      timestamp: new Date().toLocaleTimeString("ko-KR", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      isMe: true,
-    };
-
-    // 웹소켓이 연결되어 있으면 웹소켓으로만 전송 (수신 시 UI 업데이트)
+    // 웹소켓이 연결되어 있으면 웹소켓으로 전송
     if (isConnected) {
       const success = sendWebSocketMessage(messageText.trim());
       if (success) {
         resetMessage();
-        // 웹소켓 전송 성공 시에는 로컬 메시지를 추가하지 않음 (서버에서 받은 메시지로 처리)
       } else {
         console.error("❌ 웹소켓 메시지 전송 실패");
-        // 전송 실패 시 로컬에라도 추가
-        setMessages((prev) => [...prev, newMessage]);
+        // 전송 실패 시 로컬에라도 추가하여 사용자 피드백 제공
+        const fallbackMessage = {
+          id: `local-${Date.now()}-${Math.random()}`,
+          chatId: selectedChatId,
+          senderId: currentUserId,
+          text: messageText.trim(),
+          timestamp: new Date().toLocaleTimeString("ko-KR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          isMe: true,
+          error: true, // 에러 플래그 추가
+        };
+        setMessages((prev) => [...prev, fallbackMessage]);
         setShouldScrollToBottom(true);
         resetMessage();
       }
     } else {
-      // 웹소켓이 연결되지 않은 경우 로컬에만 추가 (더미 모드)
-      setMessages((prev) => [...prev, newMessage]);
-      setShouldScrollToBottom(true);
-      resetMessage();
+      // 웹소켓이 연결되지 않은 경우 사용자에게 알림
+      setError("채팅 서버에 연결되지 않았습니다. 잠시 후 다시 시도해주세요.");
     }
   };
 
@@ -226,9 +236,7 @@ export const DMChatArea = ({ selectedChatId }) => {
           </div>
           <div>
             <div className="dm-chat-user-name">
-              {chatPartner?.nickname ||
-                roomData?.participantName ||
-                "채팅 상대"}
+              {chatPartner?.nickname || "채팅 상대"}
             </div>
             <div className="dm-chat-user-status">
               {chatPartner?.devcourse || "생성형 AI 백엔드 1기"}
@@ -241,8 +249,28 @@ export const DMChatArea = ({ selectedChatId }) => {
         </div>
       </div>
 
+      {/* 에러 메시지 */}
+      {error && (
+        <Alert
+          variant="danger"
+          className="m-3"
+          dismissible
+          onClose={() => setError(null)}
+        >
+          {error}
+        </Alert>
+      )}
+
+      {/* 로딩 상태 */}
+      {loading && (
+        <div className="text-center py-3">
+          <Spinner animation="border" size="sm" className="me-2" />
+          채팅 기록을 불러오는 중...
+        </div>
+      )}
+
       <div className="dm-messages-container" ref={messagesContainerRef}>
-        <DMMessageList messages={chatMessages} />
+        <DMMessageList messages={chatMessages} currentUserId={currentUserId} />
         <div ref={messagesEndRef} />
       </div>
 
@@ -256,16 +284,20 @@ export const DMChatArea = ({ selectedChatId }) => {
             onChange={onMessageChange}
             onKeyPress={handleKeyPress}
             className="dm-message-input"
+            disabled={!isConnected}
           />
           <Button
             variant="primary"
             onClick={handleSendMessage}
-            disabled={!messageText.trim()}
+            disabled={!messageText.trim() || !isConnected}
             className="dm-send-btn"
           >
             <Send size={16} />
           </Button>
         </InputGroup>
+        {!isConnected && (
+          <small className="text-warning">채팅 서버에 연결 중입니다...</small>
+        )}
       </div>
     </div>
   );
