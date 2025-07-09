@@ -262,54 +262,7 @@ export const DMChatArea = ({ selectedChatId, onMessageUpdate }) => {
             </div>
             <div className="dm-chat-user-status">
               {chatPartner?.devcourse || "생성형 AI 백엔드 1기"}
-              {connectionState === "CONNECTED" && (
-                <span style={{ color: "green" }}> • 연결됨</span>
-              )}
-              {connectionState === "CONNECTING" && (
-                <span style={{ color: "orange" }}> • 연결 중...</span>
-              )}
-              {connectionState === "DISCONNECTED" && (
-                <span style={{ color: "gray" }}> • 연결 안됨</span>
-              )}
-              {connectionState === "ERROR" && (
-                <span style={{ color: "red" }}> • 연결 오류</span>
-              )}
             </div>
-          </div>
-          <div>
-            {import.meta.env.DEV && (
-              <div style={{ display: "flex", gap: "8px", fontSize: "12px" }}>
-                <Button
-                  size="sm"
-                  variant="outline-primary"
-                  onClick={connect}
-                  disabled={isConnected}
-                >
-                  연결
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline-danger"
-                  onClick={disconnect}
-                  disabled={!isConnected}
-                >
-                  해제
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline-success"
-                  onClick={() =>
-                    sendWebSocketMessage(
-                      "테스트 메시지",
-                      user?.nickname || user?.name || "익명"
-                    )
-                  }
-                  disabled={!isConnected}
-                >
-                  테스트
-                </Button>
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -360,17 +313,6 @@ export const DMChatArea = ({ selectedChatId, onMessageUpdate }) => {
             <Send size={16} />
           </Button>
         </InputGroup>
-        {connectionState === "CONNECTING" && (
-          <small className="text-warning">채팅 서버에 연결 중입니다...</small>
-        )}
-        {connectionState === "DISCONNECTED" && (
-          <small className="text-muted">채팅 서버 연결이 해제되었습니다.</small>
-        )}
-        {connectionState === "ERROR" && (
-          <small className="text-danger">
-            채팅 서버 연결에 오류가 발생했습니다.
-          </small>
-        )}
       </div>
     </div>
   );
