@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   InputGroup,
   FormControl,
@@ -119,38 +119,63 @@ export const DMChatArea = ({ selectedChatId }) => {
     }
   };
 
-  // 웹소켓 메시지 수신 처리
-  const handleMessageReceived = (messageData) => {
-    console.log("📥 DMChatArea에서 받은 메시지:", messageData);
+  // 웹소켓 메시지 수신 처리 (useCallback으로 memoize)
+  const handleMessageReceived = useCallback(
+    (messageData) => {
+      console.log("📥 DMChatArea에서 받은 메시지:", messageData);
 
-    const newMessage = {
-      id: `ws-${Date.now()}-${Math.random()}`, // 웹소켓 메시지 구분을 위한 prefix
-      chatId: selectedChatId,
-      senderId: messageData.senderId,
-      text: messageData.content,
-      timestamp: messageData.sentAt
-        ? new Date(messageData.sentAt).toLocaleTimeString("ko-KR", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })
-        : new Date().toLocaleTimeString("ko-KR", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-      isMe: messageData.senderId === currentUserId,
-      senderNickname: messageData.senderNickname,
-    };
+      const newMessage = {
+        id: messageData.id || `ws-${Date.now()}-${Math.random()}`, // 서버에서 제공하는 ID 사용
+        chatId: messageData.roomId || selectedChatId, // 서버에서 제공하는 roomId 사용
+        senderId: messageData.senderId,
+        text: messageData.content,
+        timestamp: messageData.sentAt
+          ? new Date(messageData.sentAt).toLocaleTimeString("ko-KR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          : new Date().toLocaleTimeString("ko-KR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+        isMe: messageData.senderId === currentUserId,
+        senderNickname: messageData.senderNickname, // 서버 DTO의 senderNickname 필드
+      };
 
-    setMessages((prev) => [...prev, newMessage]);
-    setShouldScrollToBottom(true);
-  };
+      setMessages((prev) => [...prev, newMessage]);
+      setShouldScrollToBottom(true);
+    },
+    [selectedChatId, currentUserId]
+  ); // 필요한 dependencies만 포함
 
   // 웹소켓 훅 사용
-  const { isConnected, sendMessage: sendWebSocketMessage } = useWebSocket(
+  const {
+    isConnected,
+    connectionState,
+    sendMessage: sendWebSocketMessage,
+    connect,
+    disconnect,
+  } = useWebSocket(selectedChatId, handleMessageReceived, currentUserId);
+
+  // 디버깅용 로그
+  useEffect(() => {
+    console.log("🔍 DMChatArea 상태:", {
+      selectedChatId,
+      currentUserId,
+      userInfo: user,
+      userNickname: user?.nickname || user?.name,
+      connectionState,
+      isConnected,
+      messagesCount: chatMessages.length,
+    });
+  }, [
     selectedChatId,
-    handleMessageReceived,
-    currentUserId
-  );
+    currentUserId,
+    user,
+    connectionState,
+    isConnected,
+    chatMessages.length,
+  ]);
 
   useEffect(() => {
     if (shouldScrollToBottom) {
@@ -172,7 +197,10 @@ export const DMChatArea = ({ selectedChatId }) => {
 
     // 웹소켓이 연결되어 있으면 웹소켓으로 전송
     if (isConnected) {
-      const success = sendWebSocketMessage(messageText.trim());
+      const success = sendWebSocketMessage(
+        messageText.trim(),
+        user?.nickname || user?.name || "익명"
+      );
       if (success) {
         resetMessage();
       } else {
@@ -240,11 +268,54 @@ export const DMChatArea = ({ selectedChatId }) => {
             </div>
             <div className="dm-chat-user-status">
               {chatPartner?.devcourse || "생성형 AI 백엔드 1기"}
-              {isConnected && <span style={{ color: "green" }}> • 연결됨</span>}
-              {!isConnected && (
+              {connectionState === "CONNECTED" && (
+                <span style={{ color: "green" }}> • 연결됨</span>
+              )}
+              {connectionState === "CONNECTING" && (
                 <span style={{ color: "orange" }}> • 연결 중...</span>
               )}
+              {connectionState === "DISCONNECTED" && (
+                <span style={{ color: "gray" }}> • 연결 안됨</span>
+              )}
+              {connectionState === "ERROR" && (
+                <span style={{ color: "red" }}> • 연결 오류</span>
+              )}
             </div>
+          </div>
+          <div>
+            {import.meta.env.DEV && (
+              <div style={{ display: "flex", gap: "8px", fontSize: "12px" }}>
+                <Button
+                  size="sm"
+                  variant="outline-primary"
+                  onClick={connect}
+                  disabled={isConnected}
+                >
+                  연결
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline-danger"
+                  onClick={disconnect}
+                  disabled={!isConnected}
+                >
+                  해제
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline-success"
+                  onClick={() =>
+                    sendWebSocketMessage(
+                      "테스트 메시지",
+                      user?.nickname || user?.name || "익명"
+                    )
+                  }
+                  disabled={!isConnected}
+                >
+                  테스트
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -295,8 +366,16 @@ export const DMChatArea = ({ selectedChatId }) => {
             <Send size={16} />
           </Button>
         </InputGroup>
-        {!isConnected && (
+        {connectionState === "CONNECTING" && (
           <small className="text-warning">채팅 서버에 연결 중입니다...</small>
+        )}
+        {connectionState === "DISCONNECTED" && (
+          <small className="text-muted">채팅 서버 연결이 해제되었습니다.</small>
+        )}
+        {connectionState === "ERROR" && (
+          <small className="text-danger">
+            채팅 서버 연결에 오류가 발생했습니다.
+          </small>
         )}
       </div>
     </div>

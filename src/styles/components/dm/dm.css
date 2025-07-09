@@ -171,6 +171,11 @@
     color: #f9fafb !important; /* 밝은 텍스트 */
   }
 
+  .dm-unread-count {
+    background: #dc3545 !important; /* 읽지 않은 메시지 배지 빨간색 유지 */
+    color: white !important;
+  }
+
   .dm-chat-preview {
     color: #d1d5db !important; /* 회색 텍스트 */
   }
@@ -194,6 +199,65 @@
 
   .dm-chat-list-container::-webkit-scrollbar-thumb:hover {
     background: #9ca3af;
+  }
+
+  /* 채팅창 다크 모드 */
+  .dm-chat-header {
+    /* background-color: #1a1a1a; */
+    border-bottom-color: #333;
+  }
+
+  .dm-chat-user-name {
+    color: #e9ecf3;
+  }
+
+  .dm-message-bubble {
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.02);
+  }
+
+  .dm-message-other .dm-message-bubble {
+    background-color: #333;
+    color: #e9ecf3;
+  }
+
+  .dm-input-container {
+    background-color: #1a1a1a;
+    border-top-color: #333;
+    box-shadow: 0 -2px 4px rgba(255, 255, 255, 0.02);
+  }
+
+  .dm-message-input {
+    background-color: #333;
+    border-color: #555;
+    color: #e9ecf3;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.02);
+  }
+
+  .dm-message-input:focus {
+    border-color: #5a6c7d;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05);
+  }
+
+  .dm-message-input::placeholder {
+    color: #999;
+  }
+
+  .dm-welcome-area {
+    background-color: #333;
+  }
+
+  .dm-welcome-title {
+    color: #e9ecf3;
+  }
+
+  .dm-welcome-subtitle {
+    color: #999;
+  }
+
+  .dm-message-avatar .dm-avatar-placeholder {
+    background-color: #333;
+    color: #e9ecf3;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.02);
   }
 }
 
@@ -380,7 +444,7 @@
 
 .dm-chat-item.active .dm-chat-nickname {
   font-weight: 600 !important;
-  color: #2d4053 !important; /* 활성 상태에서 어두운 색 */
+  color: #2d4053 !important; /* 일반 상태와 동일한 색상 */
   font-size: 0.95rem !important;
   line-height: 1.2 !important;
   margin: 0 !important;
@@ -644,6 +708,8 @@
   padding: 20px 0 16px;
   border-bottom: 1px solid #e9ecf3;
   flex-shrink: 0; /* 헤더 크기 고정 */
+  /* background-color: white; */
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02); */
 }
 
 .dm-chat-user-info {
@@ -728,12 +794,16 @@
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .dm-message-avatar .dm-avatar-placeholder {
   width: 32px;
   height: 32px;
   font-size: 0.85rem;
+  background-color: #e9ecf3;
+  color: #2d4053;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .dm-message-content {
@@ -752,22 +822,24 @@
 
 .dm-message-bubble {
   padding: 12px 16px;
-  border-radius: 18px;
+  border-radius: 8px;
   font-size: 0.9rem;
   line-height: 1.4;
   word-wrap: break-word;
+  transition: 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .dm-message-mine .dm-message-bubble {
   background-color: #2d4053;
   color: white;
-  border-bottom-right-radius: 6px;
+  border-bottom-right-radius: 4px;
 }
 
 .dm-message-other .dm-message-bubble {
-  background-color: #f1f3f4;
+  background-color: #e9ecf3;
   color: #2d4053;
-  border-bottom-left-radius: 6px;
+  border-bottom-left-radius: 4px;
 }
 
 .dm-message-time {
@@ -782,6 +854,7 @@
   border-top: 1px solid #e9ecf3;
   flex-shrink: 0; /* 입력 영역 크기 고정 */
   background-color: white; /* 배경색 명시 */
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .dm-message-input-group {
@@ -790,34 +863,40 @@
 
 .dm-message-input {
   border: 1px solid #d6dbe7;
-  border-radius: 24px;
-  padding: 12px 20px;
+  border-radius: 8px;
+  padding: 12px 16px;
   resize: none;
   font-size: 0.9rem;
   min-height: 44px;
-  outline: none !important; /* 포커스 시 파란 outline 제거 */
-  box-shadow: none !important; /* 포커스 시 그림자 제거 */
+  outline: none !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: 0.2s ease-in-out;
 }
 
 .dm-message-input:focus {
   border-color: #2d4053;
-  box-shadow: none !important; /* 포커스 시 파란 박스 제거 */
-  outline: none !important; /* 포커스 시 outline 제거 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  outline: none !important;
+  transform: translateY(-1px);
 }
 
 .dm-send-btn {
   background-color: #2d4053;
   border: none;
-  border-radius: 50%;
+  border-radius: 8px;
   width: 44px;
   height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .dm-send-btn:hover:not(:disabled) {
   background-color: #1b2838;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .dm-send-btn:disabled {
@@ -831,7 +910,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f8f9fa;
+  background-color: #e9ecf3;
   min-height: 400px; /* 최소 높이 보장 */
 }
 
