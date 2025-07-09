@@ -1,14 +1,21 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Container, Form, Button, Row, Col, Alert } from "react-bootstrap";
 import { CustomTiptapEditor } from "../../components/editor/CustomTiptapEditor";
 import { TagInput } from "../../components/common/TagInput";
 import { TOGETHER_CATEGORIES } from "./constants";
+import { createGatheringPost, getGatheringPostDetail, updateGatheringPost } from "../../services/together/gatheringApi";
+import { createMatchingPost, getMatchingPostDetail, updateMatchingPost } from "../../services/together/matchingApi";
+import { createMarketPost, getMarketPostDetail, updateMarketPost } from "../../services/together/marketApi";
+
+
 
 function TogetherWritePage() {
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
+  const { boardType, postId } = useParams(); 
+  const isEditMode = Boolean(postId);
 
+  const [error, setError] = useState(null);
   // 공통 필드
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -26,13 +33,44 @@ function TogetherWritePage() {
   const [expertiseArea, setExpertiseArea] = useState(""); // Match
   const [price, setPrice] = useState(""); // Market
 
+  useEffect(() => {
+    if (!isEditMode) return;
+
+    (async () => {
+      try {
+        let data;
+        if (boardType === "GATHERING") {
+          data = await getGatheringPostDetail(postId);
+        } else if (boardType === "MATCH") {
+          data = await getMatchingPostDetail(postId);
+        } else {
+          data = await getMarketPostDetail(postId);
+        }
+        setSelectedCategory(boardType);
+        setSubCategory(data.gatheringType || data.matchingType || "");
+        setTitle(data.title);
+        setContent(data.content);
+        setTags((data.tags || "").split(",").filter(t => t));
+        setHeadCount(data.headCount?.toString() || "");
+        setPeriod(data.period || "");
+        setPlace(data.place || "");
+        setSchedule(data.schedule || "");
+        setExpertiseArea(data.expertiseArea || "");
+        setPrice(data.price?.toString() || "");
+      } catch (e) {
+        console.error(e);
+        setError("게시글을 불러오는 데 실패했습니다.");
+      }
+    })();
+  }, [isEditMode, boardType, postId]);
+
   const handleMainCategoryChange = (e) => {
     const value = e.target.value;
     setMainCategory(value);
     setSubCategory(""); // 메인 카테고리 변경 시 서브 카테고리 초기화
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
 
     if (!mainCategory) {
@@ -46,53 +84,77 @@ function TogetherWritePage() {
       setError("세부 유형을 선택해주세요.");
       return;
     }
-
-    // TODO: API 연동
+    if (!title.trim() || !content.trim()) {
+      setError("제목과 내용을 모두 입력해주세요.");
+      return;
+    }
+    setError(null);
+    setLoading(true);
 
     let postData = {
       boardType: mainCategory,
-      title,
+      title: title.trim(),
       content,
       tags: tags.join(","), 
     };
 
     switch (mainCategory) {
       case "GATHERING":
-        postData = {
-          ...postData,
-          gatheringType: subCategory,
-          headCount: parseInt(headCount, 10) || 0,
-          period,
-          place,
-          schedule
-        };
-        // BE의 GatheringPostRequestDTO 참고
+        postData.gatheringType = subCategory;
+        postData.headCount = parseInt(headCount, 10) || 0;
+        postData.period = period;
+        postData.place = place;
+        postData.schedule = schedule;
         break;
       case "MATCH":
-        postData = {
-          ...postData,
-          matchingType: subCategory,
-          expertiseArea,
-        };
-        // BE의 MatchPostRequestDTO 참고
+        postData.matchingType = subCategory;
+        postData.expertiseArea = expertiseArea;
         break;
       case "MARKET":
-        postData = {
-          ...postData,
-          price: parseInt(price, 10) || 0,
-          place,
-        };
-        // BE의 MarketPostRequestDTO 참고
+        postData.price = parseInt(price, 10) || 0;
+        postData.place = place;
         break;
       default:
         setError("알 수 없는 카테고리입니다.");
         return;
     }
 
-    console.log("Submitting Post Data: ", postData);
-    setError(null);
-    alert("게시글이 성공적으로 등록되었습니다.");
-    navigate("/together");
+    try {
+      if (isEditMode) {
+        // 수정
+        if (selectedCategory === "GATHERING") {
+          await updateGatheringPost(postId, postData);
+        } else if (selectedCategory === "MATCH") {
+          await updateMatchingPost(postId, postData);
+        } else {
+          await updateMarketPost(postId, postData);
+        }
+        console.log("Submitting Post Data: ", postData);
+        setError(null);
+        alert("게시글이 성공적으로 등록되었습니다.");
+      } else {
+        // 생성
+        let created;
+        if (selectedCategory === "GATHERING") {
+          created = await createGatheringPost(postData);
+        } else if (selectedCategory === "MATCH") {
+          created = await createMatchingPost(postData);
+        } else {
+          created = await createMarketPost(postData);
+        }
+        console.log("Submitting Post Data: ", postData);
+        setError(null);
+        alert("게시글이 성공적으로 등록되었습니다.");
+      }
+    } catch (err) {
+     console.error(err);
+     if(isEditMode) {
+       setError("게시글 수정에 실패했습니다. 잠시 후 다시 시도해주세요.");
+     } else {
+     setError("게시글 등록에 실패했습니다. 잠시 후 다시 시도해주세요.");
+     }
+   }
+   navigate("/together");
   };
 
   const renderDynamicFields = () => {

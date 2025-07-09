@@ -9,12 +9,14 @@ export default function useTogetherPosts(category, initialParams = {}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
 
   // 상태: 페이지(1-based), 검색어, 정렬
   const [keyword, setKeyword] = useState("");
   const [page, setPageState] = useState(1);
   const [sort, setSortState] = useState("최신순");
   const [searchTerm, setSearchTerm] = useState("");
+  
 
   const inProgress = useRef(false);
   const lastParams = useRef(null);
@@ -47,7 +49,6 @@ export default function useTogetherPosts(category, initialParams = {}) {
         const sortMapping = {
             "최신순": { field: "POST_LATEST", sortDirection: "DESC" },
             "조회순": { field: "POST_MOST_VIEW", sortDirection: "DESC" },
-            "댓글순": { field: "commentCount", sortDirection: "DESC" },
             "좋아요순": { field: "POST_POPULAR", sortDirection: "DESC" },
         };
         return sortMapping[sortValue] || sortMapping["최신순"];
