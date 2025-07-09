@@ -904,38 +904,274 @@
   opacity: 0.5;
 }
 
-/* 웰컴 영역 */
+/* 새로운 웰컴 영역 디자인 */
 .dm-welcome-area {
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #e9ecf3;
-  min-height: 400px; /* 최소 높이 보장 */
+  background: linear-gradient(135deg, #f8f9ff 0%, #e9ecf3 100%);
+  min-height: 500px;
+  position: relative;
+  overflow: hidden;
+}
+
+.dm-welcome-area::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(45, 64, 83, 0.05) 0%,
+    transparent 70%
+  );
+  animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
 }
 
 .dm-welcome-content {
   text-align: center;
-  max-width: 500px;
-  padding: 60px 20px;
+  max-width: 800px;
+  padding: 40px 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.dm-welcome-header {
+  margin-bottom: 48px;
+}
+
+.dm-welcome-icon-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
 }
 
 .dm-welcome-icon {
-  font-size: 5rem;
-  margin-bottom: 32px;
+  font-size: 4rem;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.dm-welcome-icon-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(
+    135deg,
+    rgba(45, 64, 83, 0.1) 0%,
+    rgba(74, 111, 165, 0.05) 100%
+  );
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  animation: rotate 30s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 .dm-welcome-title {
   font-size: 2.5rem;
-  font-weight: 700;
+  font-weight: 800;
   color: #2d4053;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #2d4053 0%, #4a6fa5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .dm-welcome-subtitle {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: #6c757d;
   line-height: 1.6;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+.dm-welcome-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin: 48px 0;
+}
+
+.dm-feature-card {
+  background: white;
+  padding: 32px 24px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(45, 64, 83, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.dm-feature-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #2d4053 0%, #4a6fa5 100%);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.dm-feature-card:hover::before {
+  transform: scaleX(1);
+}
+
+.dm-feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.dm-feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.dm-feature-card h4 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2d4053;
+  margin-bottom: 12px;
+}
+
+.dm-feature-card p {
+  font-size: 0.95rem;
+  color: #6c757d;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.dm-welcome-actions {
+  margin-top: 40px;
+}
+
+.dm-action-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: white;
+  padding: 24px 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(45, 64, 83, 0.1);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.dm-tip-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.dm-tip-content {
+  text-align: left;
+}
+
+.dm-tip-content strong {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d4053;
+  margin-bottom: 4px;
+}
+
+.dm-tip-content p {
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* 다크 모드 웰컴 영역 */
+@media (prefers-color-scheme: dark) {
+  .dm-welcome-area {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  }
+
+  .dm-welcome-title {
+    color: #f9fafb;
+    background: linear-gradient(135deg, #f9fafb 0%, #e9ecf3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .dm-welcome-subtitle {
+    color: #d1d5db;
+  }
+
+  .dm-feature-card {
+    background: #333;
+    border-color: #4b5563;
+  }
+
+  .dm-feature-card h4 {
+    color: #f9fafb;
+  }
+
+  .dm-feature-card p {
+    color: #d1d5db;
+  }
+
+  .dm-action-tip {
+    background: #333;
+    border-color: #4b5563;
+  }
+
+  .dm-tip-content strong {
+    color: #f9fafb;
+  }
+
+  .dm-tip-content p {
+    color: #d1d5db;
+  }
 }
 
 /* 반응형 스타일 */
@@ -959,6 +1195,32 @@
   .dm-messages-container {
     max-height: calc(100vh - 250px); /* 모바일에서 높이 조정 */
   }
+
+  /* 웰컴 영역 모바일 반응형 */
+  .dm-welcome-title {
+    font-size: 2rem;
+  }
+
+  .dm-welcome-features {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .dm-feature-card {
+    padding: 24px 20px;
+  }
+
+  .dm-action-tip {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+    padding: 20px;
+  }
+
+  .dm-tip-content {
+    text-align: center;
+  }
 }
 
 @media (max-width: 600px) {
@@ -976,5 +1238,56 @@
 
   .dm-messages-container {
     max-height: calc(100vh - 200px); /* 작은 화면에서 메시지 영역 높이 조정 */
+  }
+
+  /* 웰컴 영역 작은 화면 반응형 */
+  .dm-welcome-content {
+    padding: 20px 16px;
+  }
+
+  .dm-welcome-title {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+  }
+
+  .dm-welcome-subtitle {
+    font-size: 1rem;
+  }
+
+  .dm-welcome-icon {
+    font-size: 3rem;
+  }
+
+  .dm-welcome-icon-bg {
+    width: 100px;
+    height: 100px;
+  }
+
+  .dm-welcome-features {
+    margin: 24px 0;
+  }
+
+  .dm-feature-card {
+    padding: 20px 16px;
+  }
+
+  .dm-feature-card h4 {
+    font-size: 1.1rem;
+  }
+
+  .dm-feature-card p {
+    font-size: 0.9rem;
+  }
+
+  .dm-action-tip {
+    padding: 16px;
+  }
+
+  .dm-tip-content strong {
+    font-size: 1rem;
+  }
+
+  .dm-tip-content p {
+    font-size: 0.9rem;
   }
 }

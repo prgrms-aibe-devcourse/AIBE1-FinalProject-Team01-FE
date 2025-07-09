@@ -233,13 +233,49 @@ export const DMChatArea = ({ selectedChatId, onMessageUpdate }) => {
     return (
       <div className="dm-welcome-area">
         <div className="dm-welcome-content">
-          <div className="dm-welcome-icon">📱</div>
-          <h4 className="dm-welcome-title">DM</h4>
-          <p className="dm-welcome-subtitle">
-            아마추어스 DM을 통해 수강생들과 소통해보세요!
-            <br />
-            궁금한 것이나 알고 싶은 것이 있다면 언제든 메시지를 보내세요
-          </p>
+          <div className="dm-welcome-header">
+            <div className="dm-welcome-icon-container">
+              <div className="dm-welcome-icon">📬</div>
+              <div className="dm-welcome-icon-bg"></div>
+            </div>
+            <h2 className="dm-welcome-title">실시간 채팅을 시작해보세요</h2>
+            <p className="dm-welcome-subtitle">
+              아마추어스에서 동료들과 1:1 대화를 나누며
+              <br />
+              소중한 인연을 만들어가세요
+            </p>
+          </div>
+
+          <div className="dm-welcome-features">
+            <div className="dm-feature-card">
+              <div className="dm-feature-icon">⚡</div>
+              <h4>실시간 메시징</h4>
+              <p>빠르고 안정적인 실시간 대화</p>
+            </div>
+            <div className="dm-feature-card">
+              <div className="dm-feature-icon">🔧</div>
+              <h4>기술 토론</h4>
+              <p>최신 기술 트렌드에 대해 깊이 있는 대화</p>
+            </div>
+            <div className="dm-feature-card">
+              <div className="dm-feature-icon">🌟</div>
+              <h4>간편한 사용</h4>
+              <p>직관적이고 사용하기 쉬운 인터페이스</p>
+            </div>
+          </div>
+
+          <div className="dm-welcome-actions">
+            <div className="dm-action-tip">
+              <div className="dm-tip-icon">💡</div>
+              <div className="dm-tip-content">
+                <strong>시작하는 방법</strong>
+                <p>
+                  왼쪽에서 대화상대를 선택하거나 <strong>+</strong> 버튼으로 새
+                  채팅을 시작하세요
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
