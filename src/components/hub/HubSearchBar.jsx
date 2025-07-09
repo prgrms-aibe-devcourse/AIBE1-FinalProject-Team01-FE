@@ -1,13 +1,12 @@
-import React from "react";
-import { Form, InputGroup, Button } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Form, InputGroup } from "react-bootstrap";
 import "../../styles/components/hub/hub.css";
 
 /**
  * @typedef {Object} HubSearchBarProps
  * @property {string[]} courseNames
  * @property {number[]} batchNumbers
- * @property {{ courseName: string, batchNumber: string, keyword: string }} filters
- * @property {(newFilters: object) => void} onFilterChange
+ * @property {(filters: object) => void} onSearch
  */
 
 /**
@@ -17,25 +16,38 @@ import "../../styles/components/hub/hub.css";
 export const HubSearchBar = ({
   courseNames,
   batchNumbers,
-  filters,
-  onFilterChange,
+  onSearch,
+  onWrite,
 }) => {
-  // 드롭다운/검색어 입력 시 바로 필터링
+  const [filters, setFilters] = useState({
+    courseName: "",
+    batchNumber: "",
+    keyword: "",
+  });
+
+  // 초기 로드 시에만 검색 실행
+  useEffect(() => {
+    onSearch(filters);
+  }, []); // 초기 한 번만 실행
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    onFilterChange({ [name]: value });
+    setFilters(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  // 엔터 또는 버튼 클릭 시에도 필터링
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onFilterChange({ ...filters });
+  const handleKeywordKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      onSearch(filters);
+    }
   };
 
   return (
-    <Form onSubmit={handleSubmit} className="bg-light p-3 rounded">
-      <div className="row g-2 align-items-center">
-        <div className="col-12 col-md-4">
+    <div className="hub-search-bar-wrapper py-3 rounded">
+      <div className="row g-2 align-items-center flex-grow-1">
+        <div className="col-12 col-md-3">
           <Form.Select
             name="courseName"
             value={filters.courseName}
@@ -50,7 +62,7 @@ export const HubSearchBar = ({
             ))}
           </Form.Select>
         </div>
-        <div className="col-12 col-md-4">
+        <div className="col-12 col-md-3">
           <Form.Select
             name="batchNumber"
             value={filters.batchNumber}
@@ -65,21 +77,40 @@ export const HubSearchBar = ({
             ))}
           </Form.Select>
         </div>
-        <div className="col-12 col-md-4">
+        <div className="col-12 col-md-6">
           <InputGroup>
+            <InputGroup.Text className="bg-white border-end-0">
+              <svg
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="text-muted"
+                viewBox="0 0 16 16"
+              >
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+              </svg>
+            </InputGroup.Text>
             <Form.Control
               name="keyword"
               value={filters.keyword}
               onChange={handleChange}
-              placeholder="프로젝트, 기술 스택, 팀원 검색"
+              onKeyPress={handleKeywordKeyPress}
+              placeholder="프로젝트 검색"
               aria-label="검색어 입력"
+              className="border-start-0"
+              style={{ paddingLeft: '0.5rem' }}
             />
-            <Button variant="dark" type="submit">
-              검색
-            </Button>
           </InputGroup>
         </div>
       </div>
-    </Form>
+      {onWrite && (
+          <button
+              className="community-write-btn d-flex align-items-center gap-1"
+              onClick={onWrite}
+          >
+            <span>글쓰기</span>
+          </button>
+      )}
+    </div>
   );
 };

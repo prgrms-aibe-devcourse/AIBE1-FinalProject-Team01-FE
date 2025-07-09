@@ -31,20 +31,8 @@ export const HubBoardDetail = ({
   isBookmarked,
 }) => {
   const navigate = useNavigate();
-  const { postImages, postId, title } = post;
+  const { postImages, projectId, title } = post;
   const [mainImage, setMainImage] = useState(postImages?.[0]?.imageUrl || null);
-
-  const handleEdit = () => {
-    console.log("수정 기능은 현재 비활성화되어 있습니다.");
-  };
-
-  const handleDelete = () => {
-    if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
-      console.log("삭제할 게시글 ID:", postId);
-      alert("게시글이 삭제되었습니다.");
-      navigate(`/HUB`);
-    }
-  };
 
   return (
     <BoardDetailLayout
@@ -61,7 +49,7 @@ export const HubBoardDetail = ({
           {BOARD_TYPE_LABEL[post.boardType] || post.boardType}
         </p>
       )}
-      <HubPostInfo post={post} onEdit={handleEdit} onDelete={handleDelete} />
+      <HubPostInfo post={post} />
       <div className="row g-5 mt-1">
         <div className="col-md-5">
           {postImages && postImages.length > 0 && (
