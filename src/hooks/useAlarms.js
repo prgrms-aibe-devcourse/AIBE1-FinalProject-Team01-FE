@@ -1,18 +1,39 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
 import {
   getAlarms,
   markAllAlarmsAsRead,
   markAlarmAsRead,
 } from "../services/alarmApi";
+import { useSSE } from "./useSSE";
 
 export const useAlarms = () => {
   const { isLoggedIn } = useAuth();
   const [alarms, setAlarms] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { registerAlarmCallback } = useSSE();
 
   // 읽지 않은 알림 개수
   const unreadCount = alarms.filter((n) => !n.isRead).length;
+
+  // 새 알람 추가 함수
+  const addNewAlarm = useCallback((newAlarm) => {
+    setAlarms((prev) => {
+      // 중복 체크 (ID로)
+      const exists = prev.find((alarm) => alarm.id === newAlarm.id);
+      if (exists) {
+        return prev;
+      }
+
+      // 새 알람을 맨 앞에 추가
+      return [newAlarm, ...prev];
+    });
+  }, []);
+
+  // SSE 알람 콜백 등록
+  useEffect(() => {
+    registerAlarmCallback(addNewAlarm);
+  }, [registerAlarmCallback, addNewAlarm]);
 
   // 알림 목록 가져오기
   const fetchAlarms = async () => {
@@ -22,7 +43,7 @@ export const useAlarms = () => {
       setLoading(true);
       const response = await getAlarms({ size: 20, sortDirection: "DESC" });
 
-      setAlarms(response.alarms || []);
+      setAlarms(response.content || []);
     } catch (error) {
       console.error("❌ 알림 조회 실패:", error);
       setAlarms([]);

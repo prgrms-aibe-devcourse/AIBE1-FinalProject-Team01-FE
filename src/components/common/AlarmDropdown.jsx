@@ -46,13 +46,15 @@ const AlarmDropdown = ({
     <div className="alarm-dropdown">
       <div className="alarm-header">
         <h6>알림</h6>
-        <button
-          className="mark-all-read"
-          onClick={handleMarkAllRead}
-          disabled={markingAll}
-        >
-          {markingAll ? "처리중..." : "모두 읽음"}
-        </button>
+        <div className="header-actions">
+          <button
+            className="mark-all-read"
+            onClick={handleMarkAllRead}
+            disabled={markingAll}
+          >
+            {markingAll ? "처리중..." : "모두 읽음"}
+          </button>
+        </div>
       </div>
       <div className="alarm-list">
         {alarms.length === 0 ? (
