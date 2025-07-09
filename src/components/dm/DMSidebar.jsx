@@ -150,24 +150,25 @@ export const DMSidebar = ({
     <>
       <div className="dm-sidebar">
         <div className="dm-search-section">
-          <InputGroup className="dm-search-input-group">
-            <InputGroup.Text className="dm-search-icon">
-              <Search size={16} />
-            </InputGroup.Text>
-            <FormControl
-              placeholder="메시지를 검색해보세요"
-              value={searchKeyword}
-              onChange={onSearchChange}
-              className="dm-search-input"
-            />
-            <button
-              className="dm-create-btn"
-              onClick={() => setShowCreateModal(true)}
-              title="새 채팅방 만들기"
-            >
-              <Plus size={16} />
-            </button>
-          </InputGroup>
+          <div className="dm-search-container">
+            <div className="dm-search-wrapper">
+              <Search className="dm-search-icon" size={18} />
+              <input
+                type="text"
+                className="dm-search-input"
+                placeholder="메시지를 검색해보세요"
+                value={searchKeyword}
+                onChange={onSearchChange}
+              />
+              <button
+                className="dm-create-btn"
+                onClick={() => setShowCreateModal(true)}
+                title="새 채팅방 만들기"
+              >
+                <Plus size={18} />
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* 에러 메시지 */}

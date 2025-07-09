@@ -61,57 +61,169 @@
 
 /* 검색 섹션 */
 .dm-search-section {
-  padding: 20px 0 0; /* 상단 패딩을 20px로 증가 */
+  padding: 20px 16px 20px; /* 좌우 패딩 추가 */
+  border-bottom: 1px solid #e9ecf3;
 }
 
-.dm-search-input-group {
-  border-radius: 8px;
-  overflow: hidden;
+.dm-search-container {
   position: relative;
 }
 
-.dm-search-icon {
-  background: #f8f9fa;
-  border: 1px solid #d6dbe7;
-  border-right: none;
-  color: #6c757d;
-}
-
-.dm-search-input {
-  border: 1px solid #d6dbe7;
-  border-left: none;
-  border-right: none;
-  font-size: 0.9rem;
-}
-
-.dm-search-input:focus {
-  border-color: #2d4053;
+.dm-search-wrapper {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 8px 12px;
   box-shadow: none;
 }
 
+.dm-search-wrapper:hover {
+  border-color: #ced4da;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.dm-search-wrapper:focus-within {
+  border-color: #2d4053;
+  box-shadow: 0 2px 8px rgba(45, 64, 83, 0.15);
+}
+
+.dm-search-icon {
+  color: #9ca3af;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.dm-search-wrapper:focus-within .dm-search-icon {
+  color: #2d4053;
+}
+
+.dm-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.95rem;
+  color: #374151;
+  padding: 6px 0;
+  font-weight: 400;
+}
+
+.dm-search-input::placeholder {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
 .dm-create-btn {
-  background: #f8f9fa;
-  border: 1px solid #d6dbe7;
-  border-left: none;
-  color: #6c757d;
+  background: #2d4053;
+  border: none;
+  border-radius: 8px;
+  color: white;
   padding: 8px 12px;
   cursor: pointer;
-  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  flex-shrink: 0;
+  font-weight: 600;
+  transition: background 0.2s;
 }
 
 .dm-create-btn:hover {
-  background: #e9ecef;
-  color: #2d4053;
+  background: #1b2838;
+}
+
+/* 다크 모드 대응 (나중에 추가할 수 있음) */
+@media (prefers-color-scheme: dark) {
+  .dm-search-wrapper {
+    background: #1f2937;
+    border-color: #374151;
+  }
+
+  .dm-search-wrapper:hover {
+    border-color: #4b5563;
+  }
+
+  .dm-search-input {
+    color: #f9fafb;
+  }
+
+  .dm-search-input::placeholder {
+    color: #6b7280;
+  }
+
+  /* 채팅방 목록 다크 모드 */
+  .dm-chat-item {
+    background: #374151 !important; /* 다크 배경 */
+    border-color: #4b5563 !important; /* 다크 테두리 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important; /* 더 짙은 그림자 */
+  }
+
+  .dm-chat-item:hover {
+    background: #4b5563 !important; /* 호버 시 더 밝은 다크 */
+    border-color: #6b7280 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  .dm-chat-nickname {
+    color: #f9fafb !important; /* 밝은 텍스트 */
+  }
+
+  .dm-chat-preview {
+    color: #d1d5db !important; /* 회색 텍스트 */
+  }
+
+  .dm-chat-time {
+    color: #9ca3af !important; /* 연한 회색 */
+    white-space: nowrap !important; /* 줄바꿈 방지 */
+    overflow: hidden !important; /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis !important; /* 넘치는 텍스트를 ... 으로 표시 */
+    max-width: 80px !important; /* 최대 너비 제한 */
+  }
+
+  .dm-avatar-img,
+  .dm-avatar-placeholder {
+    border-color: #4b5563 !important; /* 다크 테두리 */
+  }
+
+  .dm-chat-list-container::-webkit-scrollbar-thumb {
+    background: #6b7280;
+  }
+
+  .dm-chat-list-container::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
 }
 
 /* 채팅 리스트 컨테이너 */
 .dm-chat-list-container {
   flex: 1;
   overflow-y: auto;
-  /* padding-top: 8px; */
+  padding: 12px 8px 8px 8px; /* 상단에 패딩 추가로 여백 확보 */
 }
 
-/* DM 채팅 리스트 - Bootstrap 완전 재정의 */
+/* 채팅 리스트 스크롤바 스타일링 */
+.dm-chat-list-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dm-chat-list-container::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.dm-chat-list-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+.dm-chat-list-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* DM 채팅 리스트 - 프로젝트 표준 스타일 */
 .dm-chat-list {
   border: none !important;
   margin: 0 !important;
@@ -120,6 +232,9 @@
   border-radius: 0 !important;
   box-shadow: none !important;
   list-style: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important; /* 적당한 카드 간격 */
 }
 
 .dm-chat-list .list-group-item {
@@ -127,7 +242,7 @@
   margin: 0 !important;
   padding: 0 !important;
   background: transparent !important;
-  border-radius: 0 !important;
+  border-radius: 12px !important; /* 카드형 둥근 모서리 */
   box-shadow: none !important;
   outline: none !important;
   text-decoration: none !important;
@@ -146,34 +261,35 @@
 
 .dm-chat-list .list-group-item:first-child {
   border-top: none !important;
-  border-radius: 0 !important;
+  border-radius: 12px !important;
 }
 
 .dm-chat-list .list-group-item:not(:last-child) {
-  border-bottom: 1px solid #e9ecf3 !important; /* 구분선 추가 */
+  border-bottom: none !important; /* 구분선 제거 */
 }
 
 .dm-chat-list .list-group-item:last-child {
-  border-bottom: 1px solid #e9ecf3 !important; /* 마지막 아이템에도 구분선 추가 */
-  border-radius: 0 !important;
+  border-bottom: none !important; /* 구분선 제거 */
+  border-radius: 12px !important;
 }
 
 .dm-chat-item * {
   border: none !important;
 }
 
+/* 채팅 아이템 디자인 - 프로젝트 스타일에 맞춤 */
 .dm-chat-item {
-  border: none !important;
-  border-bottom: 1px solid #e9ecf3 !important; /* 구분선 추가 */
-  padding: 12px 12px !important;
+  border: 1px solid #e9ecef !important; /* 프로젝트 표준 테두리 */
+  border-radius: 8px !important; /* 프로젝트 표준 둥근 모서리 */
+  padding: 16px !important;
   cursor: pointer;
-  transition: background-color 0.2s;
-  background-color: transparent !important;
+  background: white !important;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important; /* 프로젝트 표준 애니메이션 */
   display: flex !important;
   align-items: center !important;
-  min-height: 84px !important; /* 높이를 84px로 증가 */
-  max-height: 84px !important;
-  height: 84px !important;
+  min-height: 88px !important;
+  max-height: 88px !important;
+  height: 88px !important;
   position: relative !important;
   text-decoration: none !important;
   color: inherit !important;
@@ -181,8 +297,6 @@
   width: 100% !important;
   box-sizing: border-box !important;
   outline: none !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
   font-family: inherit !important;
   font-size: inherit !important;
   line-height: inherit !important;
@@ -192,71 +306,70 @@
 }
 
 .dm-chat-item:last-child {
-  border-bottom: 1px solid #e9ecf3 !important; /* 마지막 아이템에도 구분선 유지 */
+  border-bottom: none !important; /* 마지막 아이템 구분선 제거 */
 }
 
-/* 단순한 색상 변경만 - 모든 속성 고정 */
+/* 호버 효과 - 프로젝트 표준 스타일 */
 .dm-chat-item:hover {
-  background-color: #f8f9fa !important;
-  border-bottom: 1px solid #e9ecf3 !important; /* 호버 시에도 구분선 유지 */
+  transform: translateY(-4px) !important; /* 프로젝트 표준 호버 효과 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important; /* 프로젝트 표준 그림자 */
+  border-color: #dee2e6 !important;
   margin: 0 !important;
   font-size: inherit !important;
   line-height: inherit !important;
   font-weight: inherit !important;
-  transform: none !important;
-  box-shadow: none !important;
   outline: none !important;
   text-decoration: none !important;
   color: inherit !important;
   width: 100% !important;
   box-sizing: border-box !important;
-  border-radius: 0 !important;
+  border-radius: 8px !important;
   vertical-align: baseline !important;
   text-align: left !important;
-  min-height: 84px !important;
-  max-height: 84px !important;
-  height: 84px !important;
+  min-height: 88px !important;
+  max-height: 88px !important;
+  height: 88px !important;
 }
 
+/* 활성 상태 - 프로젝트 표준 스타일 */
 .dm-chat-item.active,
 .dm-chat-item.active:focus,
 .dm-chat-item.active:hover,
 .dm-chat-list .dm-chat-item.active,
 .list-group-item.active {
-  background-color: #d0d0d0 !important;
-  border-color: #d0d0d0 !important;
-  border-bottom: 1px solid #e9ecf3 !important; /* 활성 상태에서도 구분선 유지 */
+  background: #f8f9fa !important; /* 연한 회색 배경 */
+  border-color: #2d4053 !important; /* 프로젝트 주요 색상 테두리 */
+  border-width: 2px !important;
+  box-shadow: 0 4px 12px rgba(45, 64, 83, 0.15) !important; /* 프로젝트 색상 그림자 */
   color: #2d4053 !important;
   margin: 0 !important;
   font-size: inherit !important;
   line-height: inherit !important;
   font-weight: inherit !important;
-  transform: none !important;
-  box-shadow: none !important;
+  transform: translateY(-2px) !important; /* 약간의 상승 효과 */
   outline: none !important;
   text-decoration: none !important;
   width: 100% !important;
   box-sizing: border-box !important;
-  border-radius: 0 !important;
+  border-radius: 8px !important;
   vertical-align: baseline !important;
   text-align: left !important;
-  min-height: 84px !important;
-  max-height: 84px !important;
-  height: 84px !important;
+  min-height: 88px !important;
+  max-height: 88px !important;
+  height: 88px !important;
 }
 
 /* 마지막 항목도 동일한 높이 */
 .dm-chat-item:last-child:hover,
 .dm-chat-item.active:last-child {
-  border-bottom: 1px solid #e9ecf3 !important; /* 마지막 아이템 구분선 유지 */
-  min-height: 84px !important;
-  max-height: 84px !important;
-  height: 84px !important;
+  border-bottom: none !important; /* 마지막 아이템 구분선 제거 */
+  min-height: 88px !important;
+  max-height: 88px !important;
+  height: 88px !important;
 }
 
-/* 내부 요소들도 완전 고정 */
-.dm-chat-item:hover .dm-chat-nickname,
-.dm-chat-item.active .dm-chat-nickname {
+/* 활성 상태의 텍스트 스타일 */
+.dm-chat-item:hover .dm-chat-nickname {
   font-weight: 600 !important;
   color: #2d4053 !important;
   font-size: 0.95rem !important;
@@ -265,8 +378,16 @@
   padding: 0 !important;
 }
 
-.dm-chat-item:hover .dm-chat-preview,
-.dm-chat-item.active .dm-chat-preview {
+.dm-chat-item.active .dm-chat-nickname {
+  font-weight: 600 !important;
+  color: #2d4053 !important; /* 활성 상태에서 어두운 색 */
+  font-size: 0.95rem !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.dm-chat-item:hover .dm-chat-preview {
   font-size: 0.85rem !important;
   color: #666 !important;
   line-height: 1.3 !important;
@@ -274,18 +395,33 @@
   padding: 0 !important;
 }
 
-.dm-chat-item:hover .dm-chat-time,
+.dm-chat-item.active .dm-chat-preview {
+  font-size: 0.85rem !important;
+  color: #666 !important; /* 활성 상태에서도 기본 색상 */
+  line-height: 1.3 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.dm-chat-item:hover .dm-chat-time {
+  opacity: 0 !important; /* 호버 시 시간 완전히 숨김 */
+}
+
 .dm-chat-item.active .dm-chat-time {
   font-size: 0.75rem !important;
-  color: #999 !important;
+  color: #999 !important; /* 활성 상태에서도 기본 색상 */
   line-height: 1 !important;
   margin: 0 !important;
   padding: 0 !important;
-  opacity: 0 !important;
+  opacity: 1 !important; /* 활성 상태에서는 시간 표시 */
   position: absolute !important;
   top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
+  white-space: nowrap !important; /* 줄바꿈 방지 */
+  overflow: hidden !important; /* 넘치는 텍스트 숨김 */
+  text-overflow: ellipsis !important; /* 넘치는 텍스트를 ... 으로 표시 */
+  max-width: 80px !important; /* 최대 너비 제한 */
 }
 
 .dm-chat-item:hover .dm-chat-info,
@@ -319,23 +455,25 @@
 }
 
 .dm-avatar-img {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   object-fit: cover;
+  border: 1px solid #dee2e6; /* 프로젝트 표준 테두리 */
 }
 
 .dm-avatar-placeholder {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background-color: #e9ecf3;
+  background: #e9ecf3; /* 프로젝트 표준 배경색 */
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  color: #2d4053;
-  font-size: 1rem;
+  color: #2d4053; /* 프로젝트 표준 텍스트 색상 */
+  font-size: 1.1rem;
+  border: 1px solid #dee2e6; /* 프로젝트 표준 테두리 */
 }
 
 .dm-chat-info {
@@ -346,7 +484,7 @@
   justify-content: center; /* 다시 중앙 정렬로 변경 */
   gap: 4px; /* 닉네임과 미리보기 사이 간격 조정 */
   margin-left: 12px;
-  margin-right: 80px;
+  margin-right: 100px; /* dm-chat-right 너비 증가에 맞춰 조정 */
   height: 100%; /* 전체 높이 사용 */
 }
 
@@ -368,7 +506,7 @@
   right: 12px;
   top: 0; /* 상단부터 시작 */
   height: 100%; /* 부모 아이템의 전체 높이 사용 */
-  width: 60px;
+  width: 80px; /* 시간 표시를 위해 너비 증가 */
 }
 
 .dm-chat-nickname {
@@ -381,19 +519,24 @@
 }
 
 .dm-unread-count {
-  background-color: #dc3545;
+  background: #dc3545; /* 프로젝트 표준 빨간색 */
   color: white;
   font-size: 0.7rem;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 18px; /* 프로젝트 표준 배지 둥근 모서리 */
   margin-left: 8px;
-  min-width: 16px;
-  height: 16px;
+  min-width: 18px;
+  height: 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
+}
+
+/* 활성 상태에서 읽지 않은 메시지 배지는 기본값 유지 */
+.dm-chat-item.active .dm-unread-count {
+  background: #dc3545 !important; /* 기본 빨간색 유지 */
 }
 
 .dm-chat-time {
@@ -408,7 +551,11 @@
   position: absolute; /* 절대 위치로 정확한 위치 제어 */
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* 완전한 중앙 정렬 */
+  transform: translate(-50%, -50%); /* 완전한 중아 정렬 */
+  white-space: nowrap; /* 줄바꿈 방지 */
+  overflow: hidden; /* 넘치는 텍스트 숨김 */
+  text-overflow: ellipsis; /* 넘치는 텍스트를 ... 으로 표시 */
+  max-width: 80px; /* 최대 너비 제한 */
 }
 
 .dm-chat-preview {
@@ -429,36 +576,42 @@
 }
 
 .dm-delete-btn {
-  background: none;
-  border: none;
-  color: #999;
+  background: rgba(255, 255, 255, 0.95); /* 반투명 흰색 배경 */
+  border: 1px solid #dee2e6; /* 프로젝트 표준 테두리 */
+  color: #dc3545; /* 빨간색 */
   cursor: pointer;
-  padding: 0; /* 패딩 제거로 시간과 정확히 같은 위치에 */
+  padding: 4px 8px;
   opacity: 0; /* 기본적으로 숨김 */
   margin: 0;
   line-height: 1;
-  font-size: 0.75rem; /* 시간과 같은 폰트 크기 */
+  font-size: 0.7rem;
+  font-weight: 600;
   z-index: 2;
-  text-align: center; /* 중앙 정렬 */
-  width: auto; /* 너비 자동 조정 */
-  height: auto; /* 높이 자동 조정 */
-  position: absolute; /* 절대 위치로 시간과 정확히 같은 자리에 */
+  text-align: center;
+  border-radius: 4px;
+  position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* 완전한 중앙 정렬 */
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 80px;
+  transition: background 0.2s; /* 프로젝트 표준 애니메이션 */
 }
 
 .dm-chat-item:hover .dm-delete-btn {
-  opacity: 1; /* 호버 시 삭제 버튼 표시 */
+  opacity: 1 !important; /* 호버 시 삭제 버튼 표시 */
 }
 
 .dm-delete-btn:hover {
-  color: #dc3545;
+  background: #f8d7da !important; /* 프로젝트 표준 빨간색 호버 배경 */
+  color: #721c24 !important; /* 더 어두운 빨간색 */
+  border-color: #dc3545 !important;
 }
 
 /* 호버 시 시간 숨기고 삭제 버튼 표시 */
 .dm-chat-item:hover .dm-chat-time {
-  opacity: 0;
+  opacity: 0 !important;
 }
 
 /* 메시지 없음 상태 */
