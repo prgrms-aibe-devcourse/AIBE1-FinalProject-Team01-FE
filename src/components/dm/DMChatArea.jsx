@@ -17,13 +17,14 @@ import { getDMMessages } from "../../services/dmApi";
 /**
  * @typedef {Object} DMChatAreaProps
  * @property {string|null} selectedChatId
+ * @property {function} onMessageUpdate - 마지막 메시지 업데이트 콜백
  */
 
 /**
  * DM 채팅 영역 컴포넌트
  * @param {DMChatAreaProps} props
  */
-export const DMChatArea = ({ selectedChatId }) => {
+export const DMChatArea = ({ selectedChatId, onMessageUpdate }) => {
   const { user } = useAuth();
   const {
     value: messageText,
@@ -122,8 +123,6 @@ export const DMChatArea = ({ selectedChatId }) => {
   // 웹소켓 메시지 수신 처리 (useCallback으로 memoize)
   const handleMessageReceived = useCallback(
     (messageData) => {
-      console.log("📥 DMChatArea에서 받은 메시지:", messageData);
-
       const newMessage = {
         id: messageData.id || `ws-${Date.now()}-${Math.random()}`, // 서버에서 제공하는 ID 사용
         chatId: messageData.roomId || selectedChatId, // 서버에서 제공하는 roomId 사용
@@ -144,8 +143,16 @@ export const DMChatArea = ({ selectedChatId }) => {
 
       setMessages((prev) => [...prev, newMessage]);
       setShouldScrollToBottom(true);
+
+      // 메시지 수신 시 채팅방 목록 업데이트 (다른 사용자의 메시지인 경우만)
+      if (messageData.senderId !== currentUserId && onMessageUpdate) {
+        const messageTime = messageData.sentAt
+          ? new Date(messageData.sentAt)
+          : new Date();
+        onMessageUpdate(selectedChatId, messageData.content, messageTime);
+      }
     },
-    [selectedChatId, currentUserId]
+    [selectedChatId, currentUserId, onMessageUpdate]
   ); // 필요한 dependencies만 포함
 
   // 웹소켓 훅 사용
@@ -156,26 +163,6 @@ export const DMChatArea = ({ selectedChatId }) => {
     connect,
     disconnect,
   } = useWebSocket(selectedChatId, handleMessageReceived, currentUserId);
-
-  // 디버깅용 로그
-  useEffect(() => {
-    console.log("🔍 DMChatArea 상태:", {
-      selectedChatId,
-      currentUserId,
-      userInfo: user,
-      userNickname: user?.nickname || user?.name,
-      connectionState,
-      isConnected,
-      messagesCount: chatMessages.length,
-    });
-  }, [
-    selectedChatId,
-    currentUserId,
-    user,
-    connectionState,
-    isConnected,
-    chatMessages.length,
-  ]);
 
   useEffect(() => {
     if (shouldScrollToBottom) {
@@ -195,13 +182,20 @@ export const DMChatArea = ({ selectedChatId }) => {
   const handleSendMessage = () => {
     if (!messageText.trim() || !selectedChatId) return;
 
+    const messageContent = messageText.trim();
+    const timestamp = new Date();
+
     // 웹소켓이 연결되어 있으면 웹소켓으로 전송
     if (isConnected) {
       const success = sendWebSocketMessage(
-        messageText.trim(),
+        messageContent,
         user?.nickname || user?.name || "익명"
       );
       if (success) {
+        // 메시지 전송 성공 시 채팅방 목록 업데이트
+        if (onMessageUpdate) {
+          onMessageUpdate(selectedChatId, messageContent, timestamp);
+        }
         resetMessage();
       } else {
         console.error("❌ 웹소켓 메시지 전송 실패");
@@ -210,8 +204,8 @@ export const DMChatArea = ({ selectedChatId }) => {
           id: `local-${Date.now()}-${Math.random()}`,
           chatId: selectedChatId,
           senderId: currentUserId,
-          text: messageText.trim(),
-          timestamp: new Date().toLocaleTimeString("ko-KR", {
+          text: messageContent,
+          timestamp: timestamp.toLocaleTimeString("ko-KR", {
             hour: "2-digit",
             minute: "2-digit",
           }),

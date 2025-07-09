@@ -49,6 +49,35 @@ export const DMContainer = () => {
     loadDMRooms();
   };
 
+  // 마지막 메시지 업데이트 함수
+  const handleMessageUpdate = useCallback((roomId, lastMessage, timestamp) => {
+    setDmRooms((prevRooms) =>
+      prevRooms
+        .map((room) =>
+          room.id === roomId
+            ? {
+                ...room,
+                lastMessage,
+                lastMessageTime: timestamp,
+                sentAt: timestamp, // 서버 형식과 일치하도록 sentAt도 업데이트
+              }
+            : room
+        )
+        .sort((a, b) => {
+          // 최신 메시지가 있는 방을 위로 정렬
+          const timeA =
+            a.id === roomId
+              ? new Date(timestamp)
+              : new Date(a.lastMessageTime || a.sentAt || 0);
+          const timeB =
+            b.id === roomId
+              ? new Date(timestamp)
+              : new Date(b.lastMessageTime || b.sentAt || 0);
+          return timeB - timeA;
+        })
+    );
+  }, []);
+
   // 에러 처리
   if (error) {
     return (
@@ -81,7 +110,10 @@ export const DMContainer = () => {
           />
         </Col>
         <Col md={8} className="dm-chat-col">
-          <DMChatArea selectedChatId={selectedChatId} />
+          <DMChatArea
+            selectedChatId={selectedChatId}
+            onMessageUpdate={handleMessageUpdate}
+          />
         </Col>
       </Row>
     </Container>

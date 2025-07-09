@@ -50,8 +50,6 @@ export const DMSidebar = ({
   // 서버 데이터 처리
   useEffect(() => {
     if (!loading && serverRooms) {
-      console.log("🔍 DMSidebar에서 받은 서버 데이터:", serverRooms);
-
       if (serverRooms.length === 0) {
         setChatList([]);
         return;
@@ -65,28 +63,11 @@ export const DMSidebar = ({
           displayLastMessage = room.lastMessage;
         }
 
-        // timestamp 처리
-        let displayTimestamp = "방금";
-        if (room.sentAt) {
-          try {
-            displayTimestamp = new Date(room.sentAt).toLocaleDateString(
-              "ko-KR",
-              {
-                month: "short",
-                day: "numeric",
-              }
-            );
-          } catch (error) {
-            console.error("시간 변환 오류:", error);
-            displayTimestamp = "방금";
-          }
-        }
-
         return {
           id: room.id,
           nickname: room.partnerNickname || `사용자 ${room.partnerId}`,
           lastMessage: displayLastMessage,
-          timestamp: displayTimestamp,
+          lastMessageTime: room.sentAt || room.lastMessageTime || new Date(), // 최신 메시지 시간
           profileImage: room.partnerProfileImage || null,
           unreadCount: 0,
           otherUserId: room.partnerId,

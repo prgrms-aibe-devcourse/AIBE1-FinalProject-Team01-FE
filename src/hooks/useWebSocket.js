@@ -20,22 +20,10 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
   const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
-  // 디버깅용 환경 변수 로그
-  useEffect(() => {
-    console.log("🌐 WebSocket 환경 설정:", {
-      API_BASE_URL,
-      envViteApiBaseUrl: import.meta.env.VITE_API_BASE_URL,
-      isDev: import.meta.env.DEV,
-      mode: import.meta.env.MODE,
-      wsEndpoint: `${API_BASE_URL}/ws`,
-    });
-  }, [API_BASE_URL]);
-
   // 웹소켓 연결
   const connect = useCallback(() => {
     if (clientRef.current && isConnected) return;
 
-    console.log("🔄 WebSocket 연결 시작...");
     setConnectionState("CONNECTING");
 
     // SockJS를 사용한 웹소켓 클라이언트 생성 (쿠키 자동 전송)
@@ -50,20 +38,9 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
-      debug: (str) => {
-        if (import.meta.env.DEV) {
-          console.log("🔌 STOMP Debug:", str);
-        }
-      },
     });
 
     client.onConnect = (frame) => {
-      console.log("✅ WebSocket 연결 성공:", {
-        frame,
-        server: frame.headers?.server,
-        heartbeat: frame.headers?.["heart-beat"],
-        url: API_BASE_URL,
-      });
       setIsConnected(true);
       setConnectionState("CONNECTED");
       clientRef.current = client;
@@ -83,7 +60,6 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
     };
 
     client.onDisconnect = () => {
-      console.log("🔌 WebSocket 연결 해제");
       setIsConnected(false);
       setConnectionState("DISCONNECTED");
     };
@@ -101,7 +77,6 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
         currentRoomIdRef.current === newRoomId &&
         currentSubscriptionRef.current
       ) {
-        console.log(`🔄 이미 구독 중인 방: ${newRoomId}`);
         return;
       }
 
@@ -112,7 +87,6 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
       ) {
         currentSubscriptionRef.current.unsubscribe();
         currentSubscriptionRef.current = null;
-        console.log(`📤 기존 구독 해제: ${currentRoomIdRef.current}`);
       }
 
       // 새 채팅방 구독
@@ -121,11 +95,6 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
         (message) => {
           try {
             const messageBody = JSON.parse(message.body);
-            console.log("📥 WebSocket 메시지 수신:", {
-              rawMessage: message,
-              parsedBody: messageBody,
-              roomId: newRoomId,
-            });
             if (onMessageReceived) {
               onMessageReceived(messageBody);
             }
@@ -141,10 +110,6 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
 
       currentSubscriptionRef.current = subscription;
       currentRoomIdRef.current = newRoomId;
-      console.log(`📡 채팅방 구독 완료: ${newRoomId}`, {
-        subscriptionId: subscription.id,
-        destination: `/topic/dm/room/${newRoomId}`,
-      });
     },
     [onMessageReceived] // isConnected 제거 - 함수 내부에서 체크하므로 불필요
   );
@@ -154,14 +119,12 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
     if (currentSubscriptionRef.current) {
       currentSubscriptionRef.current.unsubscribe();
       currentSubscriptionRef.current = null;
-      console.log("📤 구독 해제");
     }
 
     if (clientRef.current) {
       clientRef.current.deactivate();
       setIsConnected(false);
       setConnectionState("DISCONNECTED");
-      console.log("🔌 WebSocket 연결 해제");
     }
   }, []); // 의존성 제거로 함수 안정화
 
@@ -186,18 +149,11 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
           messageType: "TEXT", // MessageType enum 값
         };
 
-        console.log("📤 메시지 전송 시작:", {
-          destination: `/app/dm/room/${roomId}`,
-          messageData,
-          clientState: clientRef.current?.connected,
-        });
-
         clientRef.current.publish({
           destination: `/app/dm/room/${roomId}`,
           body: JSON.stringify(messageData),
         });
 
-        console.log("✅ 메시지 전송 완료");
         return true;
       } catch (error) {
         console.error("❌ 메시지 전송 오류:", error);
@@ -223,7 +179,6 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
         currentRoomIdRef.current === roomId &&
         currentSubscriptionRef.current
       ) {
-        console.log(`🔄 이미 구독 중인 방: ${roomId}`);
         return;
       }
 
@@ -234,7 +189,6 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
       ) {
         currentSubscriptionRef.current.unsubscribe();
         currentSubscriptionRef.current = null;
-        console.log(`📤 기존 구독 해제: ${currentRoomIdRef.current}`);
       }
 
       // 새 채팅방 구독
@@ -243,11 +197,6 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
         (message) => {
           try {
             const messageBody = JSON.parse(message.body);
-            console.log("📥 WebSocket 메시지 수신:", {
-              rawMessage: message,
-              parsedBody: messageBody,
-              roomId,
-            });
             if (onMessageReceived) {
               onMessageReceived(messageBody);
             }
@@ -263,10 +212,6 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
 
       currentSubscriptionRef.current = subscription;
       currentRoomIdRef.current = roomId;
-      console.log(`📡 채팅방 구독 완료: ${roomId}`, {
-        subscriptionId: subscription.id,
-        destination: `/topic/dm/room/${roomId}`,
-      });
     }
   }, [roomId, isConnected, onMessageReceived]); // 필요한 의존성만 포함
 
