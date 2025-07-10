@@ -39,7 +39,6 @@ export const useAlarms = () => {
 
       setAlarms(response.content || []);
     } catch (error) {
-      console.error("알림 조회 실패:", error);
       setAlarms([]);
     } finally {
       setLoading(false);
@@ -52,7 +51,6 @@ export const useAlarms = () => {
 
       setAlarms((prev) => prev.map((n) => ({ ...n, isRead: true })));
     } catch (error) {
-      console.error("전체 읽음 처리 실패:", error);
       throw error;
     }
   };
@@ -65,7 +63,6 @@ export const useAlarms = () => {
         prev.map((n) => (n.id === alarmId ? { ...n, isRead: true } : n))
       );
     } catch (error) {
-      console.error("단건 읽음 처리 실패:", error);
       throw error;
     }
   };

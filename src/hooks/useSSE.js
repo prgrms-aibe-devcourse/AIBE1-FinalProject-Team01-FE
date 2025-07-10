@@ -58,7 +58,7 @@ export const useSSE = () => {
             onAlarmReceivedRef.current(alarmData);
           }
         } catch (error) {
-          console.error("알람 데이터 파싱 실패:", error);
+          // 알람 데이터 파싱 실패 시 무시
         }
       });
 

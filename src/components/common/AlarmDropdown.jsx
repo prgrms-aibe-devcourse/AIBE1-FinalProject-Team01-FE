@@ -17,7 +17,6 @@ const AlarmDropdown = ({
       setMarkingAll(true);
       await onMarkAllRead();
     } catch (error) {
-      console.error("전체 읽기 처리 실패:", error);
       alert("전체 읽음 처리에 실패했습니다. 다시 시도해주세요.");
     } finally {
       setMarkingAll(false);
@@ -30,7 +29,6 @@ const AlarmDropdown = ({
         setMarkingIds((prev) => new Set(prev).add(alarm.id));
         await onMarkAsRead(alarm.id);
       } catch (error) {
-        console.error("읽음 처리 실패:", error);
         alert("읽음 처리에 실패했습니다. 다시 시도해주세요.");
       } finally {
         setMarkingIds((prev) => {
