@@ -29,7 +29,6 @@ export const getAlarms = async (params = {}) => {
     );
     return response.data;
   } catch (error) {
-    console.error("❌ 알람 목록 조회 실패:", error);
     throw error;
   }
 };
@@ -43,7 +42,6 @@ export const markAllAlarmsAsRead = async () => {
     const response = await apiClient.patch("/api/v1/alarms");
     return response.data;
   } catch (error) {
-    console.error("❌ 알람 전체 읽기 처리 실패:", error);
     throw error;
   }
 };
@@ -58,7 +56,6 @@ export const markAlarmAsRead = async (alarmId) => {
     const response = await apiClient.patch(`/api/v1/alarms/${alarmId}`);
     return response.data;
   } catch (error) {
-    console.error("❌ 알람 읽음 처리 실패:", error);
     throw error;
   }
 };
