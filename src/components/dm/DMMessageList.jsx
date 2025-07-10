@@ -4,13 +4,14 @@ import chatDefaultImage from "../../assets/chat-default-image.png";
 /**
  * @typedef {Object} DMMessageListProps
  * @property {Array} messages
+ * @property {number} currentUserId
  */
 
 /**
  * DM 메시지 목록 컴포넌트
  * @param {DMMessageListProps} props
  */
-export const DMMessageList = ({ messages }) => {
+export const DMMessageList = ({ messages, currentUserId }) => {
   if (!messages || messages.length === 0) {
     return (
       <div className="dm-no-messages">
@@ -32,14 +33,28 @@ export const DMMessageList = ({ messages }) => {
             <div className="dm-message-avatar">
               <img
                 src={chatDefaultImage}
-                alt={message.senderName}
+                alt={message.senderNickname || "사용자"}
                 className="dm-message-avatar-img"
               />
             </div>
           )}
           <div className="dm-message-content">
-            <div className="dm-message-bubble">{message.text}</div>
-            <div className="dm-message-time">{message.timestamp}</div>
+            <div className="dm-message-bubble">
+              {message.text}
+              {message.error && (
+                <div style={{ marginTop: "4px" }}>
+                  <small style={{ color: "#dc3545" }}>전송 실패</small>
+                </div>
+              )}
+            </div>
+            <div className="dm-message-time">
+              {message.timestamp}
+              {!message.isMe && message.senderNickname && (
+                <span style={{ marginLeft: "8px", color: "#6c757d" }}>
+                  {message.senderNickname}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       ))}

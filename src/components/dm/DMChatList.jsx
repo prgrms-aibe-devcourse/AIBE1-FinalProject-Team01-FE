@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ListGroup } from "react-bootstrap";
 import { Trash } from "react-bootstrap-icons";
 import chatDefaultImage from "../../assets/chat-default-image.png";
+import { formatChatTime } from "../../utils/date";
 
 /**
  * @typedef {Object} DMChatListProps
@@ -21,6 +22,24 @@ export const DMChatList = ({
   onChatSelect,
   onDeleteChat,
 }) => {
+  // 현재 시간을 주기적으로 업데이트하여 시간 표시를 실시간으로 갱신
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    // 더 자주 현재 시간 업데이트 (특히 최근 메시지들을 위해)
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 10000); // 10초마다 업데이트
+
+    // 컴포넌트 언마운트 시 인터벌 정리
+    return () => clearInterval(interval);
+  }, []);
+
+  // 채팅 목록이 변경될 때마다 시간도 즉시 업데이트
+  useEffect(() => {
+    setCurrentTime(new Date());
+  }, [chats]);
+
   if (!chats || chats.length === 0) {
     return (
       <div className="dm-empty-state">
@@ -29,24 +48,6 @@ export const DMChatList = ({
       </div>
     );
   }
-
-  // 더미 마지막 메시지 매핑
-  const getDummyLastMessage = (nickname) => {
-    switch (nickname) {
-      case "김개발":
-        return "안녕하세요! 도움이 필요해서 연락드렸어요";
-      case "박코딩":
-        return "프로젝트 관련해서 궁금한 게 있는데요";
-      case "이백엔드":
-        return "네, 좋은 아이디어인 것 같아요!";
-      case "최프론트":
-        return "감사합니다! 덕분에 해결되었어요 😊";
-      case "정데이터":
-        return "내일 스터디 몇 시에 할까요?";
-      default:
-        return "새로운 대화를 시작해보세요";
-    }
-  };
 
   return (
     <ListGroup variant="flush" className="dm-chat-list">
@@ -69,19 +70,30 @@ export const DMChatList = ({
             <div className="dm-chat-info">
               <div className="dm-chat-header">
                 <span className="dm-chat-nickname">{chat.nickname}</span>
+                {chat.unreadCount > 0 && (
+                  <span className="dm-unread-count">{chat.unreadCount}</span>
+                )}
               </div>
               <div className="dm-chat-preview">
-                {getDummyLastMessage(chat.nickname)}
+                {chat.lastMessage || "새로운 대화를 시작해보세요"}
               </div>
             </div>
             <div className="dm-chat-right">
-              <span className="dm-chat-time">{chat.timestamp}</span>
+              <span className="dm-chat-time">
+                {(() => {
+                  const formattedTime = formatChatTime(chat.lastMessageTime);
+                  return formattedTime;
+                })()}
+              </span>
               <button
                 className="dm-delete-btn"
                 onClick={(e) => {
                   e.stopPropagation();
-                  onDeleteChat(chat.id);
+                  if (window.confirm("정말로 이 채팅방을 나가시겠습니까?")) {
+                    onDeleteChat(chat.id);
+                  }
                 }}
+                title="채팅방 나가기"
               >
                 <Trash size={14} />
               </button>
