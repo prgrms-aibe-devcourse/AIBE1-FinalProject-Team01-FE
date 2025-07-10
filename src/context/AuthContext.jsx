@@ -21,6 +21,8 @@ export const AuthProvider = ({ children }) => {
           email: response.data.email,
           avatar: response.data.imageUrl || "/assets/user-icon.png",
           nickname: response.data.nickname,
+          devcourseTrack: response.data.devcourseName,
+          devcourseBatch: response.data.devcourseBatch
         });
       } catch (error) {
         // 401 에러는 정상적인 로그아웃 상태
