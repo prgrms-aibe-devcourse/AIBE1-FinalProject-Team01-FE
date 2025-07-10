@@ -26,6 +26,7 @@ function TogetherWritePage() {
   const [subCategory, setSubCategory] = useState("");
 
   // boardType에 따른 동적 필드
+  
   const [headCount, setHeadCount] = useState("");
   const [period, setPeriod] = useState("");
   const [place, setPlace] = useState("");
@@ -46,7 +47,7 @@ function TogetherWritePage() {
         } else {
           data = await getMarketPostDetail(postId);
         }
-        setSelectedCategory(boardType);
+        setMainCategory(boardType);
         setSubCategory(data.gatheringType || data.matchingType || "");
         setTitle(data.title);
         setContent(data.content);
@@ -88,14 +89,12 @@ function TogetherWritePage() {
       setError("제목과 내용을 모두 입력해주세요.");
       return;
     }
-    setError(null);
-    setLoading(true);
 
     let postData = {
       boardType: mainCategory,
       title: title.trim(),
       content,
-      tags: tags.join(","), 
+      tags: tags, 
     };
 
     switch (mainCategory) {
@@ -105,14 +104,17 @@ function TogetherWritePage() {
         postData.period = period;
         postData.place = place;
         postData.schedule = schedule;
+        postData.status = "RECRUITING";
         break;
       case "MATCH":
         postData.matchingType = subCategory;
         postData.expertiseArea = expertiseArea;
+        postData.status = "OPEN";
         break;
       case "MARKET":
         postData.price = parseInt(price, 10) || 0;
         postData.place = place;
+        postData.status = "SELLING"
         break;
       default:
         setError("알 수 없는 카테고리입니다.");
@@ -122,22 +124,22 @@ function TogetherWritePage() {
     try {
       if (isEditMode) {
         // 수정
-        if (selectedCategory === "GATHERING") {
+        if (mainCategory === "GATHERING") {
           await updateGatheringPost(postId, postData);
-        } else if (selectedCategory === "MATCH") {
+        } else if (mainCategory === "MATCH") {
           await updateMatchingPost(postId, postData);
         } else {
           await updateMarketPost(postId, postData);
         }
         console.log("Submitting Post Data: ", postData);
         setError(null);
-        alert("게시글이 성공적으로 등록되었습니다.");
+        alert("게시글이 성공적으로 수정되었습니다.");
       } else {
         // 생성
         let created;
-        if (selectedCategory === "GATHERING") {
+        if (mainCategory === "GATHERING") {
           created = await createGatheringPost(postData);
-        } else if (selectedCategory === "MATCH") {
+        } else if (mainCategory === "MATCH") {
           created = await createMatchingPost(postData);
         } else {
           created = await createMarketPost(postData);
@@ -342,7 +344,7 @@ function TogetherWritePage() {
         <Form.Group className="mb-3">
           <CustomTiptapEditor
             content={content}
-            onUpdate={({ editor }) => setContent(editor.getHTML())}
+            onChange={(html) => setContent(html)}
           />
         </Form.Group>
 

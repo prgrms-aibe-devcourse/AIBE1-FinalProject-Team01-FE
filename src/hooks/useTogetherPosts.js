@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { getGatheringPostList } from "../services/together/gatheringApi";
 import { getMarketPostList } from "../services/together/marketApi";
 import { getMatchingPostList } from "../services/together/matchingApi";
-export default function useTogetherPosts(category, initialParams = {}) {
+export default function useTogetherPosts(boardType, initialParams = {}) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -56,7 +56,7 @@ export default function useTogetherPosts(category, initialParams = {}) {
 
   // API 호출
   const fetchPosts = useCallback(async (params = null) => {
-    if (!category) return;
+    if (!boardType) return;
     const sortParams = mapSort(sort);
     const req = params || {
       page: page - 1,
@@ -64,7 +64,7 @@ export default function useTogetherPosts(category, initialParams = {}) {
       ...sortParams,
       ...initialParams,
     };
-    const key = JSON.stringify({ category, ...req });
+    const key = JSON.stringify({ boardType, ...req });
     if (inProgress.current || lastParams.current === key) return;
     inProgress.current = true;
     lastParams.current = key;
@@ -72,9 +72,9 @@ export default function useTogetherPosts(category, initialParams = {}) {
     setError(null);
     try {
         let res;
-        if (category === "GATHERING") {
+        if (boardType === "GATHERING") {
             res = await getGatheringPostList(req);
-        } else if (category === "MATCH") {
+        } else if (boardType === "MATCH") {
             res = await getMatchingPostList(req);
         } else {
             res = await getMarketPostList(req);
@@ -92,7 +92,7 @@ export default function useTogetherPosts(category, initialParams = {}) {
         setLoading(false);
         inProgress.current = false;
     }
-  }, [category, page, keyword, sort, initialParams, mapSort]);
+  }, [boardType, page, keyword, sort, initialParams, mapSort]);
 
 
 
@@ -159,7 +159,7 @@ export default function useTogetherPosts(category, initialParams = {}) {
     } 
     if(s !== sort) setSortState(s);
     fetchPosts({ ...mapSort(s), page: p - 1, keyword: k.trim(), ...initialParams });
-  }, [category]);
+  }, [boardType]);
 
 
 
