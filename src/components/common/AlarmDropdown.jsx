@@ -17,7 +17,6 @@ const AlarmDropdown = ({
       setMarkingAll(true);
       await onMarkAllRead();
     } catch (error) {
-      console.error("전체 읽기 처리 실패:", error);
       alert("전체 읽음 처리에 실패했습니다. 다시 시도해주세요.");
     } finally {
       setMarkingAll(false);
@@ -30,7 +29,6 @@ const AlarmDropdown = ({
         setMarkingIds((prev) => new Set(prev).add(alarm.id));
         await onMarkAsRead(alarm.id);
       } catch (error) {
-        console.error("읽음 처리 실패:", error);
         alert("읽음 처리에 실패했습니다. 다시 시도해주세요.");
       } finally {
         setMarkingIds((prev) => {
@@ -42,17 +40,38 @@ const AlarmDropdown = ({
     }
   };
 
+  const formatTimeAgo = (sentAt) => {
+    const now = new Date();
+    const sentTime = new Date(sentAt);
+    const diffInSeconds = Math.floor((now - sentTime) / 1000);
+
+    if (diffInSeconds < 60) {
+      return "방금 전";
+    } else if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return `${minutes}분 전`;
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return `${hours}시간 전`;
+    } else {
+      const days = Math.floor(diffInSeconds / 86400);
+      return `${days}일 전`;
+    }
+  };
+
   return (
     <div className="alarm-dropdown">
       <div className="alarm-header">
         <h6>알림</h6>
-        <button
-          className="mark-all-read"
-          onClick={handleMarkAllRead}
-          disabled={markingAll}
-        >
-          {markingAll ? "처리중..." : "모두 읽음"}
-        </button>
+        <div className="header-actions">
+          <button
+            className="mark-all-read"
+            onClick={handleMarkAllRead}
+            disabled={markingAll}
+          >
+            {markingAll ? "처리중..." : "모두 읽음"}
+          </button>
+        </div>
       </div>
       <div className="alarm-list">
         {alarms.length === 0 ? (
@@ -80,9 +99,7 @@ const AlarmDropdown = ({
                   )}
                 </div>
                 <div className="alarm-message">{alarm.content}</div>
-                <div className="alarm-time">
-                  {new Date(alarm.sentAt).toLocaleString("ko-KR")}
-                </div>
+                <div className="alarm-time">{formatTimeAgo(alarm.sentAt)}</div>
               </div>
               {!alarm.isRead && <div className="unread-dot"></div>}
             </div>
