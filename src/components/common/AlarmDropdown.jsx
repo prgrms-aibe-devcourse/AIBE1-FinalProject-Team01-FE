@@ -42,6 +42,25 @@ const AlarmDropdown = ({
     }
   };
 
+  const formatTimeAgo = (sentAt) => {
+    const now = new Date();
+    const sentTime = new Date(sentAt);
+    const diffInSeconds = Math.floor((now - sentTime) / 1000);
+
+    if (diffInSeconds < 60) {
+      return "방금 전";
+    } else if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return `${minutes}분 전`;
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return `${hours}시간 전`;
+    } else {
+      const days = Math.floor(diffInSeconds / 86400);
+      return `${days}일 전`;
+    }
+  };
+
   return (
     <div className="alarm-dropdown">
       <div className="alarm-header">
@@ -82,9 +101,7 @@ const AlarmDropdown = ({
                   )}
                 </div>
                 <div className="alarm-message">{alarm.content}</div>
-                <div className="alarm-time">
-                  {new Date(alarm.sentAt).toLocaleString("ko-KR")}
-                </div>
+                <div className="alarm-time">{formatTimeAgo(alarm.sentAt)}</div>
               </div>
               {!alarm.isRead && <div className="unread-dot"></div>}
             </div>

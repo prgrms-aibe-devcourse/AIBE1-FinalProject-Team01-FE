@@ -5,85 +5,97 @@ export const useSSE = () => {
   const { isLoggedIn } = useAuth();
   const eventSourceRef = useRef(null);
   const reconnectTimeoutRef = useRef(null);
+  const isConnectingRef = useRef(false);
   const [reconnectAttempts, setReconnectAttempts] = useState(0);
 
   const MAX_RECONNECT_ATTEMPTS = 5;
-  const RECONNECT_DELAY = 3000; // 3초
+  const RECONNECT_DELAY = 3000;
 
-  // 새 알람 수신 콜백
-  const [onAlarmReceived, setOnAlarmReceived] = useState(() => () => {});
+  const onAlarmReceivedRef = useRef(() => {});
 
-  // SSE 연결
   const connect = useCallback(() => {
-    if (!isLoggedIn || eventSourceRef.current) {
+    if (
+      !isLoggedIn ||
+      isConnectingRef.current ||
+      (eventSourceRef.current &&
+        eventSourceRef.current.readyState === EventSource.OPEN)
+    ) {
       return;
     }
+
+    isConnectingRef.current = true;
 
     try {
       const API_BASE_URL =
         import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+        eventSourceRef.current = null;
+      }
+
       eventSourceRef.current = new EventSource(`${API_BASE_URL}/api/v1/sse`, {
         withCredentials: true,
       });
 
-      // 연결 성공
       eventSourceRef.current.onopen = () => {
         setReconnectAttempts(0);
+        isConnectingRef.current = false;
       };
 
-      // 하트비트 이벤트 처리
-      eventSourceRef.current.addEventListener("heartbeat", (event) => {
-        // 하트비트 수신 (연결 유지용)
+      eventSourceRef.current.addEventListener("heartbeat", () => {
+        // 하트비트 수신 처리
       });
 
-      // 알람 이벤트 처리
+      eventSourceRef.current.addEventListener("connect", () => {
+        // 초기 연결 완료
+      });
+
       eventSourceRef.current.addEventListener("alarm", (event) => {
         try {
           const alarmData = JSON.parse(event.data);
-
-          // 콜백 함수 호출
-          if (onAlarmReceived) {
-            onAlarmReceived(alarmData);
+          if (onAlarmReceivedRef.current) {
+            onAlarmReceivedRef.current(alarmData);
           }
         } catch (error) {
-          console.error("❌ 알람 데이터 파싱 실패:", error);
+          console.error("알람 데이터 파싱 실패:", error);
         }
       });
 
-      // 에러 처리
-      eventSourceRef.current.onerror = (event) => {
-        console.error("❌ SSE 연결 에러:", event);
+      eventSourceRef.current.onerror = () => {
+        isConnectingRef.current = false;
 
-        // 자동 재연결 시도
-        if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
-          disconnect();
-          reconnectTimeoutRef.current = setTimeout(() => {
-            setReconnectAttempts((prev) => prev + 1);
-            connect();
-          }, RECONNECT_DELAY);
-        } else {
-          console.error("❌ SSE 최대 재연결 시도 횟수 초과");
+        if (eventSourceRef.current?.readyState === EventSource.CLOSED) {
+          if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS && isLoggedIn) {
+            disconnect();
+
+            reconnectTimeoutRef.current = setTimeout(() => {
+              setReconnectAttempts((prev) => prev + 1);
+              connect();
+            }, RECONNECT_DELAY);
+          }
         }
       };
     } catch (error) {
-      console.error("❌ SSE 연결 생성 실패:", error);
+      isConnectingRef.current = false;
     }
-  }, [isLoggedIn, onAlarmReceived, reconnectAttempts]);
+  }, [isLoggedIn, reconnectAttempts]);
 
-  // SSE 연결 해제
   const disconnect = useCallback(() => {
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+      reconnectTimeoutRef.current = null;
+    }
+
     if (eventSourceRef.current) {
       eventSourceRef.current.close();
       eventSourceRef.current = null;
     }
 
-    if (reconnectTimeoutRef.current) {
-      clearTimeout(reconnectTimeoutRef.current);
-      reconnectTimeoutRef.current = null;
-    }
+    isConnectingRef.current = false;
+    setReconnectAttempts(0);
   }, []);
 
-  // 서버에 연결 해제 요청
   const disconnectFromServer = useCallback(async () => {
     try {
       const API_BASE_URL =
@@ -93,16 +105,14 @@ export const useSSE = () => {
         credentials: "include",
       });
     } catch (error) {
-      console.error("❌ 서버 SSE 해제 요청 실패:", error);
+      // 연결이 이미 끊어진 경우 무시
     }
   }, []);
 
-  // 알람 콜백 등록
   const registerAlarmCallback = useCallback((callback) => {
-    setOnAlarmReceived(() => callback);
+    onAlarmReceivedRef.current = callback;
   }, []);
 
-  // 로그인 상태에 따른 연결/해제
   useEffect(() => {
     if (isLoggedIn) {
       connect();
@@ -110,27 +120,41 @@ export const useSSE = () => {
       disconnect();
     }
 
-    // 컴포넌트 언마운트 시 정리
     return () => {
-      if (isLoggedIn) {
-        disconnectFromServer();
+      disconnect();
+    };
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    const handleBeforeUnload = async () => {
+      if (isLoggedIn && eventSourceRef.current) {
+        const API_BASE_URL =
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+        navigator.sendBeacon(`${API_BASE_URL}/api/v1/sse`, new FormData());
       }
       disconnect();
     };
-  }, [isLoggedIn, connect, disconnect, disconnectFromServer]);
 
-  // 페이지 언로드 시 정리
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      if (isLoggedIn) {
-        disconnectFromServer();
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        if (
+          isLoggedIn &&
+          (!eventSourceRef.current ||
+            eventSourceRef.current.readyState !== EventSource.OPEN)
+        ) {
+          setTimeout(() => connect(), 1000);
+        }
       }
-      disconnect();
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [isLoggedIn, disconnect, disconnectFromServer]);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [isLoggedIn]);
 
   return {
     registerAlarmCallback,
