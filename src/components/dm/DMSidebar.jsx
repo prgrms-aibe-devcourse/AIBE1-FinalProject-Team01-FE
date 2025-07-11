@@ -64,7 +64,7 @@ export const DMSidebar = ({
           try {
             const parsedContent = JSON.parse(room.lastMessage);
             if (parsedContent.fileUrl && parsedContent.fileName) {
-              // 파일 메시지인 경우 파일명과 이모지 표시
+              // 파일 메시지인 경우 파일명과 텍스트 표시 (이모지 제거)
               const fileExtension = parsedContent.fileName
                 .split(".")
                 .pop()
@@ -72,8 +72,8 @@ export const DMSidebar = ({
               const isImage = ["jpg", "jpeg", "png", "gif", "webp"].includes(
                 fileExtension
               );
-              const fileEmoji = isImage ? "📷" : "📁";
-              displayLastMessage = `${fileEmoji} ${parsedContent.fileName}`;
+              const filePrefix = isImage ? "이미지" : "파일";
+              displayLastMessage = `${filePrefix}: ${parsedContent.fileName}`;
             } else {
               displayLastMessage = room.lastMessage;
             }
