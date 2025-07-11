@@ -705,6 +705,9 @@
 }
 
 .dm-chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 20px 0 16px;
   border-bottom: 1px solid #e9ecf3;
   flex-shrink: 0; /* 헤더 크기 고정 */
@@ -727,6 +730,44 @@
 .dm-chat-user-status {
   font-size: 0.85rem;
   color: #6c757d;
+}
+
+/* WebSocket 연결 상태 */
+.dm-connection-status {
+  display: flex;
+  align-items: center;
+}
+
+.dm-connection-indicator {
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.dm-connection-indicator.connected {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.dm-connection-indicator.disconnected {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0.5;
+  }
 }
 
 /* 메시지 컨테이너 */
@@ -861,6 +902,40 @@
   margin-bottom: 0; /* 추천 메시지 제거로 여백 제거 */
 }
 
+/* Bootstrap focus 스타일 완전 제거 */
+.dm-message-input-group .form-control:focus,
+.dm-message-input-group .form-control:focus-visible,
+.dm-message-input-group .form-control:active,
+.dm-message-input-group input:focus,
+.dm-message-input-group textarea:focus {
+  border-color: #2d4053 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.dm-message-input-group .input-group:focus-within {
+  box-shadow: none !important;
+}
+
+/* 모든 focus 상태에서 파란 박스 완전 제거 */
+.dm-input-container *:focus,
+.dm-input-container *:focus-visible,
+.dm-input-container *:active,
+.dm-input-container .form-control,
+.dm-input-container .btn,
+.dm-input-container .dropdown-toggle {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.dm-input-container .btn:focus,
+.dm-input-container .btn:active,
+.dm-input-container .btn.focus,
+.dm-input-container .btn.active {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
 .dm-message-input {
   border: 1px solid #d6dbe7;
   border-radius: 8px;
@@ -869,15 +944,14 @@
   font-size: 0.9rem;
   min-height: 44px;
   outline: none !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: none !important;
   transition: 0.2s ease-in-out;
 }
 
 .dm-message-input:focus {
   border-color: #2d4053;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: none !important;
   outline: none !important;
-  transform: translateY(-1px);
 }
 
 .dm-send-btn {
@@ -1290,4 +1364,236 @@
   .dm-tip-content p {
     font-size: 0.9rem;
   }
+}
+
+/* 파일 첨부 관련 스타일 */
+.dm-attachment-dropdown {
+  border: none;
+}
+
+.dm-attachment-btn {
+  border: none;
+  background: transparent;
+  color: #6c757d;
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dm-attachment-btn:hover {
+  background: #f8f9fa;
+  color: #2d4053;
+}
+
+.dm-attachment-btn:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.dm-attachment-dropdown .dropdown-menu {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  margin-top: 4px;
+}
+
+.dm-attachment-dropdown .dropdown-item {
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.dm-attachment-dropdown .dropdown-item:hover {
+  background: #f8f9fa;
+  color: #2d4053;
+}
+
+/* 이미지 메시지 스타일 */
+.dm-message-bubble-image {
+  padding: 4px;
+  background: transparent;
+  border: none;
+}
+
+.dm-message-mine .dm-message-bubble-image {
+  background: transparent;
+}
+
+.dm-message-other .dm-message-bubble-image {
+  background: transparent;
+}
+
+.dm-message-image {
+  max-width: 250px;
+  width: 100%;
+}
+
+.dm-message-image-content {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  transition: transform 0.2s;
+}
+
+.dm-message-image-content:hover {
+  transform: scale(1.02);
+}
+
+.dm-message-image-name {
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin-top: 4px;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 파일 메시지 스타일 */
+.dm-message-bubble-file {
+  padding: 12px;
+  min-width: 200px;
+}
+
+.dm-message-file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dm-message-file-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.dm-message-file-icon {
+  color: #6c757d;
+  flex-shrink: 0;
+}
+
+.dm-message-file-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.dm-message-file-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #374151;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dm-message-file-size {
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin-top: 2px;
+}
+
+.dm-message-file-download {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+}
+
+.dm-message-file-download:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+/* 업로드 중 상태 */
+.dm-message-input-group .btn[disabled] {
+  opacity: 0.6;
+}
+
+/* 다크 모드 대응 */
+@media (prefers-color-scheme: dark) {
+  .dm-attachment-btn {
+    color: #9ca3af;
+  }
+
+  .dm-attachment-btn:hover {
+    background: #374151;
+    color: #f9fafb;
+  }
+
+  .dm-attachment-dropdown .dropdown-menu {
+    background: #1f2937;
+    border-color: #374151;
+  }
+
+  .dm-attachment-dropdown .dropdown-item {
+    color: #d1d5db;
+  }
+
+  .dm-attachment-dropdown .dropdown-item:hover {
+    background: #374151;
+    color: #f9fafb;
+  }
+
+  .dm-message-file-name {
+    color: #f9fafb;
+  }
+
+  .dm-message-file-icon,
+  .dm-message-file-size,
+  .dm-message-image-name {
+    color: #9ca3af;
+  }
+
+  .dm-message-file-download {
+    border-color: #4b5563;
+    background: #374151;
+    color: #d1d5db;
+  }
+
+  .dm-message-file-download:hover {
+    background: #4b5563;
+    border-color: #6b7280;
+  }
+}
+
+/* 메시지 상태 표시 */
+.dm-message-pending {
+  opacity: 0.7;
+  position: relative;
+}
+
+.dm-message-pending .dm-message-bubble::after {
+  content: "⏳";
+  position: absolute;
+  right: -25px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+}
+
+.dm-message-error {
+  position: relative;
+}
+
+.dm-message-error .dm-message-bubble {
+  border-left: 3px solid #dc3545;
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.dm-message-error .dm-message-bubble::after {
+  content: "❌";
+  position: absolute;
+  right: -25px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
 }
