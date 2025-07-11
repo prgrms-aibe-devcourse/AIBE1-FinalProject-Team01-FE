@@ -8,46 +8,69 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const initializeAuth = async () => {
+    try {
+      const response = await apiClient.get("/api/v1/users/me");
+
+      setIsLoggedIn(true);
+      setUser({
+        id: response.data.userId,
+        name: response.data.name,
+        email: response.data.email,
+        avatar: response.data.imageUrl || "/assets/user-icon.png",
+        nickname: response.data.nickname,
+        devcourseTrack: response.data.devcourseName,
+        devcourseBatch: response.data.devcourseBatch,
+        topics: response.data.topics,
+        providerType: response.data.providerType
+      });
+    } catch (error) {
+      console.log("사용자 정보 조회 실패 - 로그아웃 상태");
+      setIsLoggedIn(false);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 🆕 사용자 정보 새로고침 함수 추가
+  const refreshUserInfo = async () => {
+    try {
+      const response = await apiClient.get("/api/v1/users/me");
+
+      const updatedUser = {
+        id: response.data.userId,
+        name: response.data.name,
+        email: response.data.email,
+        avatar: response.data.imageUrl || "/assets/user-icon.png",
+        nickname: response.data.nickname,
+        devcourseTrack: response.data.devcourseName,
+        devcourseBatch: response.data.devcourseBatch,
+        topics: response.data.topics,
+        providerType: response.data.providerType
+      };
+
+      setUser(updatedUser);
+      return updatedUser;
+    } catch (error) {
+      console.error("사용자 정보 새로고침 실패:", error);
+      throw error;
+    }
+  };
+
   useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        // setTimeout 제거 - 즉시 API 호출
-        const response = await apiClient.get("/api/v1/users/me");
-
-        setIsLoggedIn(true);
-        setUser({
-          id: response.data.userId,
-          name: response.data.name,
-          email: response.data.email,
-          avatar: response.data.imageUrl || "/assets/user-icon.png",
-          nickname: response.data.nickname,
-          devcourseTrack: response.data.devcourseName,
-          devcourseBatch: response.data.devcourseBatch
-        });
-      } catch (error) {
-        // 401 에러는 정상적인 로그아웃 상태
-        console.log("사용자 정보 조회 실패 - 로그아웃 상태");
-        setIsLoggedIn(false);
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     initializeAuth();
-  }, []); // 빈 의존성 배열로 한 번만 실행
+  }, []);
 
   const login = (userData, token) => {
     setUser(userData);
     setIsLoggedIn(true);
-    // 로그인 즉시 로딩 상태 해제
     setLoading(false);
   };
 
   const logout = () => {
     setUser(null);
     setIsLoggedIn(false);
-    // 로그아웃 API도 호출해야 할 수 있음
   };
 
   if (loading) {
@@ -55,9 +78,16 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout, user, loading }}>
-      {children}
-    </AuthContext.Provider>
+      <AuthContext.Provider value={{
+        isLoggedIn,
+        login,
+        logout,
+        user,
+        loading,
+        refreshUserInfo
+      }}>
+        {children}
+      </AuthContext.Provider>
   );
 };
 
