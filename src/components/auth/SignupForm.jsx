@@ -29,7 +29,7 @@ export const SignupForm = () => {
       return;
     } else if (!isValidPassword(pw)) {
       pwRef.current.setCustomValidity(
-        "비밀번호는 6자 이상, 알파벳과 숫자를 모두 포함해야 합니다."
+        "비밀번호는 8자 이상, 알파벳과 숫자를 모두 포함해야 합니다."
       );
       pwRef.current.reportValidity();
       return;
@@ -107,7 +107,7 @@ export const SignupForm = () => {
         <div className="loginpage-figma-input-group">
           <input
             type="password"
-            placeholder="최소 6자 이상(알파벳, 숫자 필수)"
+            placeholder="최소 8자 이상(알파벳, 숫자 필수)"
             value={pw}
             onChange={handlePwChange}
             ref={pwRef}

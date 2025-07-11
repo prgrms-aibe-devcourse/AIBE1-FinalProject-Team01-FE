@@ -10,9 +10,9 @@ export function isAuthor(user, author) {
   return user.id === author;
 }
 
-// 비밀번호 유효성 검사: 6자 이상, 알파벳+숫자 포함
+// 비밀번호 유효성 검사: 8자 이상, 알파벳+숫자 포함
 export function isValidPassword(pw) {
-  return pw.length >= 6 && /[a-zA-Z]/.test(pw) && /[0-9]/.test(pw);
+  return pw.length >= 8 && /[a-zA-Z]/.test(pw) && /[0-9]/.test(pw);
 }
 
 // 비밀번호 일치 검사

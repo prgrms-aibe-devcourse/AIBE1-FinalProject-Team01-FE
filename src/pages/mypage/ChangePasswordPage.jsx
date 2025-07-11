@@ -17,7 +17,7 @@ export default function ChangePasswordPage({ onSave }) {
       return;
     }
     if (!isValidPassword(newPw)) {
-      setError("새 비밀번호는 6자 이상, 알파벳과 숫자를 모두 포함해야 합니다.");
+      setError("새 비밀번호는 8자 이상, 알파벳과 숫자를 모두 포함해야 합니다.");
       newPwRef.current.focus();
       return;
     }
