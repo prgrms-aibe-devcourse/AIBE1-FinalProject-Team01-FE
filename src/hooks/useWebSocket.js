@@ -47,14 +47,11 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
     };
 
     client.onStompError = (frame) => {
-      console.error("❌ STOMP 오류:", frame.headers["message"]);
-      console.error("추가 세부사항:", frame.body);
       setIsConnected(false);
       setConnectionState("ERROR");
     };
 
     client.onWebSocketError = (error) => {
-      console.error("❌ 웹소켓 오류:", error);
       setIsConnected(false);
       setConnectionState("ERROR");
     };
@@ -98,13 +95,7 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
             if (onMessageReceived) {
               onMessageReceived(messageBody);
             }
-          } catch (error) {
-            console.error("❌ 메시지 파싱 오류:", {
-              error,
-              rawBody: message.body,
-              roomId: newRoomId,
-            });
-          }
+          } catch (error) {}
         }
       );
 
@@ -130,14 +121,8 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
 
   // 메시지 전송
   const sendMessage = useCallback(
-    (messageContent, senderName) => {
+    (messageContent, senderName, messageType = "TEXT") => {
       if (!clientRef.current || !isConnected || !roomId || !userId) {
-        console.error("❌ 웹소켓이 연결되지 않았거나 필수 정보가 누락됨", {
-          client: !!clientRef.current,
-          isConnected,
-          roomId,
-          userId,
-        });
         return false;
       }
 
@@ -146,7 +131,7 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
           content: messageContent,
           senderId: userId,
           senderName: senderName || "익명", // 서버 DTO에 맞춰 senderName 추가
-          messageType: "TEXT", // MessageType enum 값
+          messageType: messageType, // 파라미터로 받은 messageType 사용
         };
 
         clientRef.current.publish({
@@ -156,7 +141,6 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
 
         return true;
       } catch (error) {
-        console.error("❌ 메시지 전송 오류:", error);
         return false;
       }
     },
@@ -200,13 +184,7 @@ export const useWebSocket = (roomId, onMessageReceived, userId) => {
             if (onMessageReceived) {
               onMessageReceived(messageBody);
             }
-          } catch (error) {
-            console.error("❌ 메시지 파싱 오류:", {
-              error,
-              rawBody: message.body,
-              roomId,
-            });
-          }
+          } catch (error) {}
         }
       );
 

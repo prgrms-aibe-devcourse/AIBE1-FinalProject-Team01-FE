@@ -60,7 +60,27 @@ export const DMSidebar = ({
         // lastMessage 처리
         let displayLastMessage = "새로운 대화를 시작해보세요";
         if (room.lastMessage && room.lastMessage.trim() !== "") {
-          displayLastMessage = room.lastMessage;
+          // JSON 형태의 파일 메시지인지 확인
+          try {
+            const parsedContent = JSON.parse(room.lastMessage);
+            if (parsedContent.fileUrl && parsedContent.fileName) {
+              // 파일 메시지인 경우 파일명과 이모지 표시
+              const fileExtension = parsedContent.fileName
+                .split(".")
+                .pop()
+                ?.toLowerCase();
+              const isImage = ["jpg", "jpeg", "png", "gif", "webp"].includes(
+                fileExtension
+              );
+              const fileEmoji = isImage ? "📷" : "📁";
+              displayLastMessage = `${fileEmoji} ${parsedContent.fileName}`;
+            } else {
+              displayLastMessage = room.lastMessage;
+            }
+          } catch (e) {
+            // JSON이 아닌 경우 일반 텍스트 메시지
+            displayLastMessage = room.lastMessage;
+          }
         }
 
         return {

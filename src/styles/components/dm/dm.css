@@ -1481,6 +1481,16 @@
   flex-shrink: 0;
 }
 
+/* 내가 보낸 파일 메시지의 아이콘 */
+.dm-message-mine .dm-message-file-icon {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 받은 파일 메시지의 아이콘 */
+.dm-message-other .dm-message-file-icon {
+  color: #6c757d;
+}
+
 .dm-message-file-details {
   flex: 1;
   min-width: 0;
@@ -1489,16 +1499,36 @@
 .dm-message-file-name {
   font-size: 0.9rem;
   font-weight: 500;
-  color: #374151;
+  color: #2d4053;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* 내가 보낸 파일 메시지는 흰색으로 */
+.dm-message-mine .dm-message-file-name {
+  color: #ffffff;
+}
+
+/* 받은 파일 메시지는 어두운 색으로 */
+.dm-message-other .dm-message-file-name {
+  color: #2d4053;
 }
 
 .dm-message-file-size {
   font-size: 0.8rem;
   color: #6c757d;
   margin-top: 2px;
+}
+
+/* 내가 보낸 파일 메시지의 크기 표시 */
+.dm-message-mine .dm-message-file-size {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* 받은 파일 메시지의 크기 표시 */
+.dm-message-other .dm-message-file-size {
+  color: #6c757d;
 }
 
 .dm-message-file-download {
@@ -1509,6 +1539,30 @@
 }
 
 .dm-message-file-download:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+/* 내가 보낸 파일 메시지의 다운로드 버튼 */
+.dm-message-mine .dm-message-file-download {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dm-message-mine .dm-message-file-download:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* 받은 파일 메시지의 다운로드 버튼 */
+.dm-message-other .dm-message-file-download {
+  border: 1px solid #dee2e6;
+  color: #2d4053;
+  background: #ffffff;
+}
+
+.dm-message-other .dm-message-file-download:hover {
   background: #f8f9fa;
   border-color: #adb5bd;
 }
@@ -1547,9 +1601,27 @@
     color: #f9fafb;
   }
 
+  .dm-message-mine .dm-message-file-name {
+    color: #ffffff;
+  }
+
+  .dm-message-other .dm-message-file-name {
+    color: #f9fafb;
+  }
+
   .dm-message-file-icon,
   .dm-message-file-size,
   .dm-message-image-name {
+    color: #9ca3af;
+  }
+
+  .dm-message-mine .dm-message-file-icon,
+  .dm-message-mine .dm-message-file-size {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .dm-message-other .dm-message-file-icon,
+  .dm-message-other .dm-message-file-size {
     color: #9ca3af;
   }
 
@@ -1560,6 +1632,28 @@
   }
 
   .dm-message-file-download:hover {
+    background: #4b5563;
+    border-color: #6b7280;
+  }
+
+  .dm-message-mine .dm-message-file-download {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+  }
+
+  .dm-message-mine .dm-message-file-download:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .dm-message-other .dm-message-file-download {
+    border-color: #4b5563;
+    background: #374151;
+    color: #d1d5db;
+  }
+
+  .dm-message-other .dm-message-file-download:hover {
     background: #4b5563;
     border-color: #6b7280;
   }
