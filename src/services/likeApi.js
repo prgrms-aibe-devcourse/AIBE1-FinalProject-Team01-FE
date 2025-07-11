@@ -1,8 +1,8 @@
 import apiClient from "./api";
 
-const LIKE_BASE_URL = "/api/v1/";
+const LIKE_BASE_URL = "/api/v1";
 
-export const addlikePost = async (postId) => {
+export const addLikePost = async (postId) => {
   try {
     const response = await apiClient.post(`${LIKE_BASE_URL}/posts/${postId}/likes`);
     return response.data;
@@ -12,7 +12,7 @@ export const addlikePost = async (postId) => {
   }
 };
 
-export const removelikePost = async (postId) => {
+export const removeLikePost = async (postId) => {
   try {
     await apiClient.delete(`${LIKE_BASE_URL}/posts/${postId}/likes`);
   } catch (error) {
@@ -21,7 +21,7 @@ export const removelikePost = async (postId) => {
   }
 };
 
-export const addlikeComment = async (postId, commentId) => {
+export const addLikeComment = async (postId, commentId) => {
   try {
     const response = await apiClient.post(`${LIKE_BASE_URL}/posts/${postId}/comments/${commentId}/likes`);
     return response.data;
@@ -31,7 +31,7 @@ export const addlikeComment = async (postId, commentId) => {
   }
 };
 
-export const removelikeComment = async (postId, commentId) => {
+export const removeLikeComment = async (postId, commentId) => {
   try {
     await apiClient.delete(`${LIKE_BASE_URL}/posts/${postId}/comments/${commentId}/likes`);
   } catch (error) {

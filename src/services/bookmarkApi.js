@@ -1,6 +1,6 @@
 import apiClient from "./api";
 
-const BOOKMARK_BASE_URL = "/api/v1/";
+const BOOKMARK_BASE_URL = "/api/v1/users";
 
 export const getBookmarkList = async (userId, params = {}) => {
     try{

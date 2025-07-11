@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { addBookmark, removeBookmark } from "../services/bookmarkApi";
+import { addLikePost, removeLikePost, addLikeComment, removeLikeComment } from "../services/likeApi";
+
 
 /**
  * 좋아요/북마크 상태 및 토글 로직을 제공하는 커스텀 훅
@@ -33,11 +36,20 @@ export function useLikeBookmark({
   const [bookmarked, setBookmarked] = useState(initialBookmarked);
   const [bookmarkCount, setBookmarkCount] = useState(initialBookmarkCount);
 
+  useEffect(() => {
+    setLiked(initialLiked);
+    setLikeCount(initialLikeCount);
+    setBookmarked(initialBookmarked);
+    setBookmarkCount(initialBookmarkCount);
+  }, [initialLiked, initialLikeCount, initialBookmarked, initialBookmarkCount]);
+
   const toggleLike = async () => {
     try {
-      // TODO: 백엔드 API 연동
-      // liked가 true면 DELETE
-      // liked가 false면 POST
+      if (liked) {
+        await removeLikePost(postId);
+      } else {
+        await addLikePost(postId);
+      }
 
       setLiked((prev) => !prev);
       setLikeCount((prev) => (liked ? Math.max(0, prev - 1) : prev + 1));
@@ -48,9 +60,11 @@ export function useLikeBookmark({
 
   const toggleBookmark = async () => {
     try {
-      // TODO: 백엔드 API 연동
-      // bookmarked가 true면 DELETE
-      // bookmarked가 false면 POST
+      if (bookmarked) {
+        await removeBookmark(23, postId);
+      } else {
+        await addBookmark(23, postId);
+      }
 
       setBookmarked((prev) => !prev);
       setBookmarkCount((prev) =>

@@ -56,9 +56,9 @@ function TogetherBoardDetailPage() {
     toggleBookmark,
   } = useLikeBookmark({
     initialLikeCount: post?.likeCount ?? 0,
-    initialLiked: post?.isLiked ?? false,
+    initialLiked: post?.hasLiked ?? false,
     initialBookmarkCount: post?.bookmarkCount ?? 0,
-    initialBookmarked: post?.isBookmarked ?? false,
+    initialBookmarked: post?.hasBookmarked ?? false,
     postId: post?.postId,
     boardType: post?.boardType,
   });
