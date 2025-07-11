@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/components/auth/auth.css";
 import { useInput } from "../../hooks/useInput";
@@ -26,6 +26,9 @@ export const SignupForm = () => {
     terms: false,
     privacy: false,
   });
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordCheckError, setPasswordCheckError] = useState("");
+  const [termsError, setTermsError] = useState("");
 
   const handleEmailCheck = async () => {
     if (!email) {
@@ -73,77 +76,62 @@ export const SignupForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    setPasswordError("");
+    setPasswordCheckError("");
+    setTermsError("");
+
+    let hasError = false;
+
+    // 이메일 중복확인 검증
     if (!emailCheck.checked) {
       setEmailCheck({
         checked: false,
         message: "이메일 중복확인을 해주세요",
       });
-      return;
+      hasError = true;
     }
 
-    // 비밀번호 입력 검증
+    // 비밀번호 검증
     if (!pw) {
-      pwRef.current.setCustomValidity("비밀번호를 입력해 주세요.");
-      pwRef.current.reportValidity();
-      return;
+      setPasswordError("비밀번호를 입력해 주세요");
+      hasError = true;
     } else if (!isValidPassword(pw)) {
-      pwRef.current.setCustomValidity(
-        "비밀번호는 8자 이상, 알파벳과 숫자를 모두 포함해야 합니다."
+      setPasswordError(
+        "비밀번호는 8자 이상, 알파벳과 숫자를 모두 포함해야 합니다"
       );
-      pwRef.current.reportValidity();
-      return;
-    } else {
-      pwRef.current.setCustomValidity("");
+      hasError = true;
     }
 
-    // 비밀번호 확인 입력 검증
+    // 비밀번호 확인 검증
     if (!pwCheck) {
-      pwCheckRef.current.setCustomValidity("비밀번호 확인을 입력해 주세요.");
-      pwCheckRef.current.reportValidity();
-      return;
-    } else {
-      pwCheckRef.current.setCustomValidity("");
-    }
-
-    // 비밀번호 일치 검증
-    if (!arePasswordsEqual(pw, pwCheck)) {
-      pwCheckRef.current.setCustomValidity("비밀번호가 일치하지 않습니다.");
-      pwCheckRef.current.reportValidity();
-      return;
-    } else {
-      pwCheckRef.current.setCustomValidity("");
+      setPasswordCheckError("비밀번호 확인을 입력해 주세요");
+      hasError = true;
+    } else if (!arePasswordsEqual(pw, pwCheck)) {
+      setPasswordCheckError("비밀번호가 일치하지 않습니다");
+      hasError = true;
     }
 
     // 약관 동의 검증
-    if (!agree.terms) {
-      termsRef.current.setCustomValidity("이용약관에 동의해 주세요.");
-      termsRef.current.reportValidity();
-      return;
-    } else {
-      termsRef.current.setCustomValidity("");
-    }
-    if (!agree.privacy) {
-      privacyRef.current.setCustomValidity("개인정보처리방침에 동의해 주세요.");
-      privacyRef.current.reportValidity();
-      return;
-    } else {
-      privacyRef.current.setCustomValidity("");
+    if (!agree.terms || !agree.privacy) {
+      setTermsError("필수 약관에 모두 동의해 주세요");
+      hasError = true;
     }
 
-    // TODO: 회원가입 API 연동
+    if (hasError) return;
 
+    // 성공 시 다음 페이지로 데이터 전달
     navigate("/signup/profile");
   };
 
   // input 값이 바뀔 때마다 커스텀 메시지 초기화
   const handlePwChange = (e) => {
     onPwChange(e);
-    pwRef.current.setCustomValidity("");
-    pwCheckRef.current.setCustomValidity("");
+    setPasswordError("");
+    setPasswordCheckError("");
   };
   const handlePwCheckChange = (e) => {
     onPwCheckChange(e);
-    pwCheckRef.current.setCustomValidity("");
+    setPasswordCheckError("");
   };
 
   return (
@@ -192,7 +180,11 @@ export const SignupForm = () => {
           </div>
         )}
         <div className="signup-label">비밀번호</div>
-        <div className="loginpage-figma-input-group">
+        <div
+          className={`loginpage-figma-input-group ${
+            passwordError ? "error" : pw && isValidPassword(pw) ? "success" : ""
+          }`}
+        >
           <input
             type="password"
             placeholder="최소 8자 이상(알파벳, 숫자 필수)"
@@ -202,8 +194,19 @@ export const SignupForm = () => {
             required
           />
         </div>
+        {passwordError && (
+          <div className="email-check-message error">{passwordError}</div>
+        )}
         <div className="signup-label">비밀번호 확인</div>
-        <div className="loginpage-figma-input-group">
+        <div
+          className={`loginpage-figma-input-group ${
+            passwordCheckError
+              ? "error"
+              : pwCheck && arePasswordsEqual(pw, pwCheck)
+              ? "success"
+              : ""
+          }`}
+        >
           <input
             type="password"
             placeholder="입력한 비밀번호와 동일하게 입력해 주세요"
@@ -213,6 +216,9 @@ export const SignupForm = () => {
             required
           />
         </div>
+        {passwordCheckError && (
+          <div className="email-check-message error">{passwordCheckError}</div>
+        )}
         <div className="signup-agree-area">
           <label className="signup-checkbox">
             <input
@@ -229,11 +235,14 @@ export const SignupForm = () => {
             <input
               type="checkbox"
               checked={agree.terms}
-              ref={termsRef}
-              onChange={(e) =>
-                setAgree((a) => ({ ...a, terms: e.target.checked }))
-              }
-              required
+              onChange={(e) => {
+                const newTerms = e.target.checked;
+                setAgree((prev) => ({
+                  ...prev,
+                  terms: newTerms,
+                  all: newTerms && prev.privacy, // 둘 다 체크되면 전체동의도 체크
+                }));
+              }}
             />{" "}
             이용약관에 동의합니다 (필수)
           </label>
@@ -241,15 +250,21 @@ export const SignupForm = () => {
             <input
               type="checkbox"
               checked={agree.privacy}
-              ref={privacyRef}
-              onChange={(e) =>
-                setAgree((a) => ({ ...a, privacy: e.target.checked }))
-              }
-              required
+              onChange={(e) => {
+                const newPrivacy = e.target.checked;
+                setAgree((prev) => ({
+                  ...prev,
+                  privacy: newPrivacy,
+                  all: prev.terms && newPrivacy, // 둘 다 체크되면 전체동의도 체크
+                }));
+              }}
             />{" "}
             개인정보처리방침에 동의합니다 (필수)
           </label>
         </div>
+        {termsError && (
+          <div className="email-check-message error">{termsError}</div>
+        )}
         <button type="submit" className="loginpage-figma-login-btn signup-btn">
           회원가입하기
         </button>
