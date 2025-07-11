@@ -120,7 +120,12 @@ export const SignupForm = () => {
     if (hasError) return;
 
     // 성공 시 다음 페이지로 데이터 전달
-    navigate("/signup/profile");
+    navigate("/signup/profile", {
+      state: {
+        email: email,
+        password: pw,
+      },
+    });
   };
 
   // input 값이 바뀔 때마다 커스텀 메시지 초기화
