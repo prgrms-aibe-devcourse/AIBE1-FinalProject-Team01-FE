@@ -47,3 +47,25 @@ export const checkNicknameDuplicate = async (nickname) => {
     throw new Error("닉네임 중복확인 중 오류가 발생했습니다");
   }
 };
+
+export const signupUser = async (userData) => {
+  try {
+    const response = await apiClient.post("/api/v1/auth/signup", {
+      email: userData.email,
+      password: userData.password,
+      nickname: userData.nickname,
+      name: userData.name,
+      topics: userData.topics,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("회원가입 API 에러:", error);
+
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+
+    throw new Error("회원가입 중 오류가 발생했습니다.");
+  }
+};
