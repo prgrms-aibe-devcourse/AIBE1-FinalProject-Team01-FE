@@ -31,6 +31,7 @@ const ProtectedRoute = ({ children }) => {
 
     if (!isLoggedIn) {
         // 현재 경로를 redirectUrl로 설정
+        alert("로그인이 필요한 서비스입니다.")
         const redirectUrl = encodeURIComponent(location.pathname + location.search);
         return <Navigate to={`/login?redirectUrl=${redirectUrl}`} replace />;
     }
@@ -40,55 +41,40 @@ const ProtectedRoute = ({ children }) => {
 
 
 export function AppRouter() {
-    const protectedRoutes = [
-        { path: "/community/:boardType/write", component: CommunityWritePage },
-        { path: "/community/:boardType/:communityId/edit", component: CommunityWritePage },
-        { path: "/community/:boardType/:communityId", component: CommunityBoardDetailPage },
-        { path: "/community/:boardType", component: CommunityPage },
-        { path: "/dm", component: DMPage },
-        { path: "/mypage", component: MyPage },
-    ];
+    return (
+        <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/signup/profile" element={<ProfileSetupPage />} />
+            <Route path="/find-account" element={<FindPasswordPage />} />
 
-  return (
-    <Routes>
-      <Route path="/" element={<MainPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignupPage />} />
-      <Route path="/signup/profile" element={<ProfileSetupPage />} />
-      <Route path="/find-account" element={<FindPasswordPage />} />
-      <Route path="/dm" element={<DMPage />} />
-        <Route path="/community/*" element={
-            <ProtectedRoute>
-                <Routes>
-                    <Route path="/" element={<Navigate to="FREE" replace />} />
-                    <Route path=":boardType/write" element={<CommunityWritePage />} />
-                    <Route path=":boardType/:communityId/edit" element={<CommunityWritePage />} />
-                    <Route path=":boardType/:communityId" element={<CommunityBoardDetailPage />} />
-                    <Route path=":boardType" element={<CommunityPage />} />
-                </Routes>
-            </ProtectedRoute>
-        } />
-        <Route
-        path="/together"
-        element={<Navigate to="/together/GATHERING" replace />}
-      />
-      <Route path="/together/:category" element={<TogetherPage />} />
-      <Route
-        path="/together/:category/:postId"
-        element={<TogetherBoardDetailPage />}
-      />
-      <Route path="/together/:category/write" element={<TogetherWritePage />} />
-      <Route path="/info" element={<Navigate to="/info/REVIEW" replace />} />
-      <Route path="/info/:boardType" element={<InfoPage />} />
-      <Route
-        path="/info/:boardType/:itId"
-        element={<InfoBoardDetailPage />}
-      />
-      <Route path="/info/:boardType/write" element={<InfoWritePage />} />
-      <Route path="/hub" element={<HubPage />} />
-      <Route path="/hub/:projectId" element={<HubDetailPage />} />
-      <Route path="/hub/write" element={<HubWritePage />} />
-      <Route path="/mypage" element={<MyPage />} />
-    </Routes>
-  );
+            <Route path="/community" element={<ProtectedRoute><Navigate to="/community/FREE" replace /></ProtectedRoute>} />
+            <Route path="/community/:boardType" element={<ProtectedRoute><CommunityPage /></ProtectedRoute>} />
+            <Route path="/community/:boardType/write" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
+            <Route path="/community/:boardType/:communityId" element={<ProtectedRoute><CommunityBoardDetailPage /></ProtectedRoute>} />
+            <Route path="/community/:boardType/:communityId/edit" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
+
+            <Route path="/together" element={<ProtectedRoute><Navigate to="/together/GATHERING" replace /></ProtectedRoute>} />
+            <Route path="/together/:category" element={<ProtectedRoute><TogetherPage /></ProtectedRoute>} />
+            <Route path="/together/:category/:postId" element={<ProtectedRoute><TogetherBoardDetailPage /></ProtectedRoute>} />
+            <Route path="/together/:category/write" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
+
+            <Route path="/info" element={<Navigate to="/info/REVIEW" replace />} />
+            <Route path="/info/:boardType" element={<InfoPage />} />
+            <Route path="/info/:boardType/:itId" element={<InfoBoardDetailPage />} />
+            <Route path="/info/:boardType/write" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />
+            <Route path="/info/:boardType/:itId/edit" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />
+
+            <Route path="/hub" element={<HubPage />} />
+            <Route path="/hub/:projectId" element={<HubDetailPage />} />
+            <Route path="/hub/:projectId/edit" element={<ProtectedRoute><HubWritePage /></ProtectedRoute>} />
+            <Route path="/hub/write" element={<ProtectedRoute><HubWritePage /></ProtectedRoute>} />
+
+
+
+            <Route path="/dm" element={<ProtectedRoute><DMPage /></ProtectedRoute>} />
+            <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
+        </Routes>
+    );
 }

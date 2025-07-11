@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import { BoardPostHeader } from "../board/BoardPostHeader";
@@ -34,17 +34,20 @@ import { deleteInfoPost } from "../../services/infoApi.js";
  */
 export const InfoBoardDetail = ({ post, onLike, onBookmark }) => {
   const navigate = useNavigate();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleEdit = () => {
-    navigate(`/info/${post.boardType}/${post.postId}/edit`, {
+    navigate(`/info/${post.boardType}/${post.itId}/edit`, {
       state: { postToEdit: post },
     });
   };
 
   const handleDelete = async () => {
+    if (isDeleting) return;
     if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
+      setIsDeleting(true)
       try {
-        await deleteInfoPost(post.boardType, post.postId);
+        await deleteInfoPost(post.boardType, post.itId);
         alert("게시글이 삭제되었습니다.");
         navigate(`/info/${post.boardType}`);
       } catch (error) {
@@ -72,6 +75,7 @@ export const InfoBoardDetail = ({ post, onLike, onBookmark }) => {
           onEdit={canEdit ? handleEdit : undefined}
           onDelete={canEdit ? handleDelete : undefined}
           categoryLabel={INFO_CATEGORY_LABELS[post.boardType]}
+          isDeleting = {isDeleting}
         />
         <PostContent post={post} />
       </BoardDetailLayout>
