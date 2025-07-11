@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/components/auth/auth.css";
 import { useInput } from "../../hooks/useInput";
 import { isValidPassword, arePasswordsEqual } from "../../utils/auth";
+import { checkEmailDuplicate } from "../../services/authApi";
 
 export const SignupForm = () => {
   const navigate = useNavigate();
+  const emailRef = useRef(null);
   const pwRef = useRef(null);
   const pwCheckRef = useRef(null);
   const termsRef = useRef(null);
@@ -13,14 +15,71 @@ export const SignupForm = () => {
 
   const { value: pw, onChange: onPwChange } = useInput("");
   const { value: pwCheck, onChange: onPwCheckChange } = useInput("");
+  const { value: email, onChange: onEmailChange } = useInput("");
+  const [emailCheck, setEmailCheck] = React.useState({
+    checked: false,
+    message: "",
+  });
+  const [checking, setChecking] = React.useState(false);
   const [agree, setAgree] = React.useState({
     all: false,
     terms: false,
     privacy: false,
   });
 
+  const handleEmailCheck = async () => {
+    if (!email) {
+      setEmailCheck({
+        checked: false,
+        message: "이메일을 입력해 주세요",
+      });
+      return;
+    }
+
+    // 이메일 형식 검증
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailCheck({
+        checked: false,
+        message: "올바른 이메일 형식이 아닙니다",
+      });
+      return;
+    }
+
+    setChecking(true);
+    setEmailCheck({ checked: false, message: "" });
+
+    try {
+      const result = await checkEmailDuplicate(email);
+      setEmailCheck({
+        checked: result.available,
+        message: result.message,
+      });
+    } catch (error) {
+      setEmailCheck({
+        checked: false,
+        message: "중복확인 중 오류가 발생했습니다",
+      });
+    } finally {
+      setChecking(false);
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    onEmailChange(e);
+    setEmailCheck({ checked: false, message: "" });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!emailCheck.checked) {
+      setEmailCheck({
+        checked: false,
+        message: "이메일 중복확인을 해주세요",
+      });
+      return;
+    }
 
     // 비밀번호 입력 검증
     if (!pw) {
@@ -98,11 +157,40 @@ export const SignupForm = () => {
       <form
         className="loginpage-figma-form signup-form"
         onSubmit={handleSubmit}
+        noValidate
       >
         <div className="signup-label">이메일</div>
-        <div className="loginpage-figma-input-group">
-          <input type="email" placeholder="이메일을 입력해 주세요" required />
+        <div
+          className={`loginpage-figma-input-group profile-nickname-group ${
+            emailCheck.message ? (emailCheck.checked ? "success" : "error") : ""
+          }`}
+        >
+          <input
+            type="email"
+            placeholder="이메일을 입력해 주세요"
+            value={email}
+            onChange={handleEmailChange}
+            ref={emailRef}
+            required
+          />
+          <button
+            type="button"
+            className="profile-nickname-check-btn"
+            onClick={handleEmailCheck}
+            disabled={checking}
+          >
+            {checking ? "확인 중..." : "중복확인"}
+          </button>
         </div>
+        {emailCheck.message && (
+          <div
+            className={`email-check-message ${
+              emailCheck.checked ? "success" : "error"
+            }`}
+          >
+            {emailCheck.message}
+          </div>
+        )}
         <div className="signup-label">비밀번호</div>
         <div className="loginpage-figma-input-group">
           <input
