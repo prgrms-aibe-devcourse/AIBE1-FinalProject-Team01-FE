@@ -60,7 +60,6 @@ function TogetherBoardDetailPage() {
     initialBookmarkCount: post?.bookmarkCount ?? 0,
     initialBookmarked: post?.hasBookmarked ?? false,
     postId: post?.postId,
-    boardType: post?.boardType,
   });
 
   if (loading) {

@@ -27,7 +27,7 @@ export function useLikeBookmark({
   initialBookmarkCount = 0,
   initialBookmarked = false,
   postId,
-  boardType,
+  commentId,
 } = {}) {
   // 좋아요
   const [liked, setLiked] = useState(initialLiked);
@@ -58,6 +58,21 @@ export function useLikeBookmark({
     }
   };
 
+  const toggleLikeComment = async () => {
+    try {
+      if (liked) {
+        await removeLikeComment(postId, commentId);
+      } else {
+        await addLikeComment(postId, commentId);
+      }
+
+      setLiked((prev) => !prev);
+      setLikeCount((prev) => (liked ? Math.max(0, prev - 1) : prev + 1));
+    } catch (error) {
+      console.error("Error toggling like on comment:", error);
+    }
+  };
+
   const toggleBookmark = async () => {
     try {
       if (bookmarked) {
@@ -79,6 +94,7 @@ export function useLikeBookmark({
     liked,
     likeCount,
     toggleLike,
+    toggleLikeComment,
     bookmarked,
     bookmarkCount,
     toggleBookmark,
