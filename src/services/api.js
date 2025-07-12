@@ -86,7 +86,6 @@ export const loginUser = async (credentials) => {
     const response = await apiClient.post("/api/v1/auth/login", {
       email: credentials.email,
       password: credentials.password,
-      rememberMe: credentials.rememberMe || false,
     });
 
     return response.data;
