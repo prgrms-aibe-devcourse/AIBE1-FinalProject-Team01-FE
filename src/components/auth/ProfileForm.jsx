@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import "../../styles/components/auth/auth.css";
 import { INTEREST_TOPICS } from "../../constants/topics";
+import { checkNicknameDuplicate } from "../../services/authApi";
 
 /**
  * @typedef {Object} ProfileFormProps
@@ -42,24 +43,26 @@ export const ProfileForm = ({
   const handleNicknameCheck = async () => {
     if (!nickname) {
       setNicknameCheck({ checked: false, message: "닉네임을 입력해 주세요." });
-      nicknameRef.current.focus();
       return;
     }
+
     setChecking(true);
     setNicknameCheck({ checked: false, message: "" });
-    // TODO: 실제 API 연동
-    if (nickname === "admin") {
+
+    try {
+      const result = await checkNicknameDuplicate(nickname);
+      setNicknameCheck({
+        checked: result.available,
+        message: result.message,
+      });
+    } catch (error) {
       setNicknameCheck({
         checked: false,
-        message: "이미 사용 중인 닉네임입니다.",
+        message: "중복확인 중 오류가 발생했습니다",
       });
-    } else {
-      setNicknameCheck({
-        checked: true,
-        message: "사용 가능한 닉네임입니다.",
-      });
+    } finally {
+      setChecking(false);
     }
-    setChecking(false);
   };
 
   const handleSubmit = (e) => {
