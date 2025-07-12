@@ -47,7 +47,6 @@ const ProfileSetupPage = () => {
       await signupUser(userData);
       navigate("/");
     } catch (error) {
-      console.error("회원가입 에러 상세:", error.response?.data);
       alert("회원가입 중 오류가 발생했습니다.");
     }
   };

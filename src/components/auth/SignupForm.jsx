@@ -180,10 +180,13 @@ export const SignupForm = () => {
             className={`email-check-message ${
               emailCheck.checked ? "success" : "error"
             }`}
+            role="alert"
+            aria-live="polite"
           >
             {emailCheck.message}
           </div>
         )}
+
         <div className="signup-label">비밀번호</div>
         <div
           className={`loginpage-figma-input-group ${
@@ -200,7 +203,13 @@ export const SignupForm = () => {
           />
         </div>
         {passwordError && (
-          <div className="email-check-message error">{passwordError}</div>
+          <div
+            className="email-check-message error"
+            role="alert"
+            aria-live="polite"
+          >
+            {passwordError}
+          </div>
         )}
         <div className="signup-label">비밀번호 확인</div>
         <div
@@ -222,7 +231,13 @@ export const SignupForm = () => {
           />
         </div>
         {passwordCheckError && (
-          <div className="email-check-message error">{passwordCheckError}</div>
+          <div
+            className="email-check-message error"
+            role="alert"
+            aria-live="polite"
+          >
+            {passwordCheckError}
+          </div>
         )}
         <div className="signup-agree-area">
           <label className="signup-checkbox">
@@ -268,7 +283,13 @@ export const SignupForm = () => {
           </label>
         </div>
         {termsError && (
-          <div className="email-check-message error">{termsError}</div>
+          <div
+            className="email-check-message error"
+            role="alert"
+            aria-live="polite"
+          >
+            {termsError}
+          </div>
         )}
         <button type="submit" className="loginpage-figma-login-btn signup-btn">
           회원가입하기

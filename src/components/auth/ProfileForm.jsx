@@ -183,7 +183,13 @@ export const ProfileForm = ({
           />
         </div>
         {nameError && (
-          <div className="email-check-message error">{nameError}</div>
+          <div
+            className="email-check-message error"
+            role="alert"
+            aria-live="polite"
+          >
+            {nameError}
+          </div>
         )}
         <div className="signup-label">닉네임</div>
         <div
@@ -215,13 +221,21 @@ export const ProfileForm = ({
           </button>
         </div>
         {nicknameError && (
-          <div className="email-check-message error">{nicknameError}</div>
+          <div
+            className="email-check-message error"
+            role="alert"
+            aria-live="polite"
+          >
+            {nicknameError}
+          </div>
         )}
         {nicknameCheck.message && (
           <div
             className={`email-check-message ${
               nicknameCheck.checked ? "success" : "error"
             }`}
+            role="alert"
+            aria-live="polite"
           >
             {nicknameCheck.message}
           </div>
@@ -245,7 +259,13 @@ export const ProfileForm = ({
           선택된 주제: {selectedTopics.join(", ") || "없음"}
         </div>
         {topicError && (
-          <div className="email-check-message error">{topicError}</div>
+          <div
+            className="email-check-message error"
+            role="alert"
+            aria-live="polite"
+          >
+            {topicError}
+          </div>
         )}
         <button
           type="submit"

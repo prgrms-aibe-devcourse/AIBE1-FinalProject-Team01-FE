@@ -11,8 +11,6 @@ export const checkEmailDuplicate = async (email) => {
       message: response.data.message,
     };
   } catch (error) {
-    console.error("이메일 중복확인 API 에러: ", error);
-
     if (error.response?.status === 400) {
       return {
         available: false,
@@ -35,8 +33,6 @@ export const checkNicknameDuplicate = async (nickname) => {
       message: response.data.message,
     };
   } catch (error) {
-    console.error("닉네임 중복확인 API 에러: ", error);
-
     if (error.response?.status === 400) {
       return {
         available: false,
@@ -60,8 +56,6 @@ export const signupUser = async (userData) => {
 
     return response.data;
   } catch (error) {
-    console.error("회원가입 API 에러:", error);
-
     if (error.response?.data?.message) {
       throw new Error(error.response.data.message);
     }
