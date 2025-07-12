@@ -68,10 +68,12 @@ const CommentItem = (props) => {
   const {
     liked,
     likeCount: likeCountState,
-    toggleLike,
+    toggleLikeComment,
   } = useLikeBookmark({
     initialLikeCount: likeCount,
     initialLiked: hasLiked,
+    postId: postId,
+    commentId: id,
   });
 
   const depth = props.depth || 1;
@@ -127,7 +129,7 @@ const CommentItem = (props) => {
   };
 
   const handleLikeClick = () => {
-    toggleLike();
+    toggleLikeComment();
     if (props.onLike) {
       props.onLike(id);
     }
