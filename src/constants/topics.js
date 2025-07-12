@@ -2,18 +2,22 @@
 export const TOPIC_MAPPING = {
   Frontend: "FRONTEND",
   Backend: "BACKEND",
+  "Full Stack": "FULLSTACK",
+  Mobile: "MOBILE",
   DevOps: "DEVOPS",
-  "AI/CC": "AI_CC",
+  "AI/ML": "AI",
   Algorithm: "ALGORITHM",
   Android: "ANDROID",
   iOS: "IOS",
-  게임개발: "GAME_DEV",
+  "Game Dev": "GAME_DEV",
   LLM: "LLM",
-  WEB: "WEB",
-  "Data Science": "DATA_SCIENCE",
-  DB: "DB",
+  "Data Science": "DATA",
+  Database: "DATABASE",
   "Build&Sec": "BUILD_SEC",
+  Cloud: "CLOUD",
+  Security: "SECURITY",
   Design: "DESIGN",
+  Web: "WEB",
 };
 
 export const INTEREST_TOPICS = Object.keys(TOPIC_MAPPING);
