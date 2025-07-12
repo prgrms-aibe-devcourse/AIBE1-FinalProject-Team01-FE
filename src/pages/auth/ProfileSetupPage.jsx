@@ -3,6 +3,7 @@ import { AuthLayout } from "../../components/auth/AuthLayout";
 import { ProfileForm } from "../../components/auth/ProfileForm";
 import { useLocation, useNavigate } from "react-router-dom";
 import { signupUser } from "../../services/authApi";
+import { TOPIC_MAPPING } from "../../constants/topics";
 import "../../styles/components/auth/auth.css";
 
 const ProfileSetupPage = () => {
@@ -31,12 +32,15 @@ const ProfileSetupPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const backendTopics = selectedTopics.map((topic) => TOPIC_MAPPING[topic]);
+
     const userData = {
       email: signupData.email,
       password: signupData.password,
       name: name,
       nickname: nickname,
-      topics: selectedTopics,
+      topics: backendTopics,
     };
 
     try {
