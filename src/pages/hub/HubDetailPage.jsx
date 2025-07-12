@@ -94,6 +94,7 @@ function HubDetailContent({ post }) {
     initialLiked: post.isLiked || false,
     initialBookmarkCount: post.bookmarkCount || 0,
     initialBookmarked: post.isBookmarked || false,
+    postId: post.postId,
   });
 
   const detailPost = {

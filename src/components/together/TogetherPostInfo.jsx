@@ -19,14 +19,14 @@ import {
  * 함께해요 게시글 상단 정보 (스터디/프로젝트, 커피챗/멘토링)
  * @param {TogetherPostInfoProps} props
  */
-const TogetherPostInfo = ({ post, onEdit, onDelete }) => {
+const TogetherPostInfo = ({ post, onEdit, onDelete, boardType }) => {
   const { user: currentUser } = useAuth();
   const isMine = currentUser && post && currentUser.userId === post.userId;
 
   if (!post) return <div>게시글 정보를 불러오는 중입니다...</div>;
 
   // GATHERING(스터디/프로젝트)
-  if (post.boardType === "GATHERING") {
+  if (boardType === "GATHERING") {
     return (
       <>
         <BoardPostHeader
@@ -70,7 +70,7 @@ const TogetherPostInfo = ({ post, onEdit, onDelete }) => {
   }
 
   // MATCH(커피챗/멘토링)
-  if (post.boardType === "MATCH") {
+  if (boardType === "MATCH") {
     return (
       <>
         <BoardPostHeader

@@ -18,7 +18,7 @@ export const HubPostInfo = ({ post }) => {
 
   // 수정 버튼 핸들러
   const handleEdit = () => {
-    navigate('/hub/write', { 
+    navigate(`/hub/${post.projectId}/edit`, {
       state: { project: post } 
     });
   };

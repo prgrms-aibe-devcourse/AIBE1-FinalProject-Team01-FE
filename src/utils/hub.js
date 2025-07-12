@@ -42,6 +42,7 @@ export const parseProjectMembers = (membersData) => {
  * @param {object} apiResponse - 백엔드 API 응답 데이터
  * @returns {object} 변환된 프로젝트 데이터
  */
+
 export function mapApiResponseToHubPost(apiResponse) {
   return {
     ...apiResponse,
@@ -52,7 +53,7 @@ export function mapApiResponseToHubPost(apiResponse) {
       nickname: apiResponse.nickname || "",
       imageUrl: apiResponse.profileImageUrl || null,
     },
-    tags: parseJsonArray(apiResponse.tags),
+    tags: apiResponse.tags.split(","),
     isLiked: apiResponse.hasLiked || false,
     isBookmarked: apiResponse.hasBookmarked || false,
     viewCount: apiResponse.viewCount || 0,

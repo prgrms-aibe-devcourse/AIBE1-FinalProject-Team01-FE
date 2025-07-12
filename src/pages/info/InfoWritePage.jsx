@@ -12,7 +12,7 @@ export default function InfoWritePage() {
   const location = useLocation();
   const params = useParams();
 
-  const isEditMode = params.postId !== undefined;
+  const isEditMode = params.itId !== undefined;
   const { postToEdit } = location.state || {};
 
   const [boardType] = useState("REVIEW"); // INFO는 REVIEW만 작성 가능
@@ -57,9 +57,9 @@ export default function InfoWritePage() {
 
     try {
       if (isEditMode) {
-        await updateInfoPost(postToEdit.boardType, postToEdit.postId, postData);
+        await updateInfoPost(postToEdit.boardType, postToEdit.itId, postData);
         alert("게시글이 수정되었습니다.");
-        navigate(`/info/${postToEdit.boardType}/${postToEdit.postId}`);
+        navigate(`/info/${postToEdit.boardType}/${postToEdit.itId}`);
       } else {
         const response = await createInfoPost(postData);
         alert("게시글이 등록되었습니다.");

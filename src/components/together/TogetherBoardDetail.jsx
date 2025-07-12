@@ -15,11 +15,11 @@ import { BoardDetailLayout } from "../board/BoardDetailLayout";
  * 함께해요 글 상세 메인 컴포넌트
  * @param {TogetherBoardDetailProps} props
  */
-const TogetherBoardDetail = ({ post, onLike, onBookmark }) => {
+const TogetherBoardDetail = ({ post, onLike, onBookmark, boardType }) => {
   const navigate = useNavigate();
 
   const handleEdit = () => {
-    navigate(`/together/${post.boardType.toLowerCase()}/write`, {
+    navigate(`/together/${boardType.toLowerCase()}/write`, {
       state: { postToEdit: post },
     });
   };
@@ -28,7 +28,7 @@ const TogetherBoardDetail = ({ post, onLike, onBookmark }) => {
     if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
       console.log("삭제할 게시글 ID:", post.postId);
       alert("게시글이 삭제되었습니다.");
-      navigate(`/together/${post.boardType.toLowerCase()}`);
+      navigate(`/together/${boardType}`);
     }
   };
 
@@ -52,6 +52,7 @@ const TogetherBoardDetail = ({ post, onLike, onBookmark }) => {
         post={post}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        boardType={boardType}
       />
       <PostContent post={post} />
     </BoardDetailLayout>
