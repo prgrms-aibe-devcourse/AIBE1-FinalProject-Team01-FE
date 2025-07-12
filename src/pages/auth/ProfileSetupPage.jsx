@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AuthLayout } from "../../components/auth/AuthLayout";
 import { ProfileForm } from "../../components/auth/ProfileForm";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../../styles/components/auth/auth.css";
 
 const ProfileSetupPage = () => {
@@ -9,6 +9,14 @@ const ProfileSetupPage = () => {
   const [nickname, setNickname] = useState("");
   const [selectedTopics, setSelectedTopics] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
+  const signupData = location.state;
+
+  useEffect(() => {
+    if (!signupData?.email || !signupData?.password) {
+      navigate("/signup", { replace: true });
+    }
+  }, []);
 
   const handleTopicClick = (topic) => {
     setSelectedTopics((prev) =>
