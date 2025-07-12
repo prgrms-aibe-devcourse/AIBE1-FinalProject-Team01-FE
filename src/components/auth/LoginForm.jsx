@@ -147,17 +147,7 @@ export const LoginForm = () => {
       </div>
 
       {welcomeEmail && (
-        <div
-          className="welcome-message"
-          style={{
-            background: "#e8f5e8",
-            padding: "12px",
-            borderRadius: "8px",
-            marginBottom: "16px",
-            color: "#2d5a2d",
-            fontSize: "14px",
-          }}
-        >
+        <div className="welcome-message">
           🎉 회원가입이 완료되었습니다! 로그인해주세요.
         </div>
       )}
@@ -244,7 +234,6 @@ export const LoginForm = () => {
               navigate("/find-account");
             }
           }}
-          style={{ color: isLoading ? "#ccc" : "" }}
         >
           비밀번호 찾기
         </a>
@@ -256,46 +245,31 @@ export const LoginForm = () => {
         SNS 계정으로 간편하게 시작하세요
       </div>
 
-      <div
-        className="loginpage-figma-sns-btns"
-        style={{ display: "flex", flexWrap: "wrap", gap: 8 }}
-      >
+      <div className="loginpage-figma-sns-btns">
         <button
           type="button"
-          className="loginpage-figma-sns-btn kakao"
-          style={{
-            padding: 0,
-            border: "none",
-            background: "none",
-            opacity: isLoading ? 0.6 : 1,
-            cursor: isLoading ? "not-allowed" : "pointer",
-          }}
+          className={`loginpage-figma-sns-btn kakao ${
+            isLoading ? "disabled" : ""
+          }`}
           disabled={isLoading}
+          onClick={() => {
+            console.log("카카오 로그인");
+          }}
         >
-          <img
-            src={kakaoLoginImg}
-            alt="카카오 로그인"
-            style={{ width: 183, height: 45 }}
-          />
+          <img src={kakaoLoginImg} alt="카카오 로그인" />
         </button>
 
         <button
           type="button"
-          className="loginpage-figma-sns-btn github"
-          style={{
-            padding: 0,
-            border: "none",
-            background: "none",
-            opacity: isLoading ? 0.6 : 1,
-            cursor: isLoading ? "not-allowed" : "pointer",
-          }}
+          className={`loginpage-figma-sns-btn github ${
+            isLoading ? "disabled" : ""
+          }`}
           disabled={isLoading}
+          onClick={() => {
+            console.log("깃허브 로그인");
+          }}
         >
-          <img
-            src={githubLoginImg}
-            alt="깃허브 로그인"
-            style={{ width: 183, height: 45 }}
-          />
+          <img src={githubLoginImg} alt="깃허브 로그인" />
         </button>
       </div>
     </div>
