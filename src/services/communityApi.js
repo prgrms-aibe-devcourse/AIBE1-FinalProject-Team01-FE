@@ -68,7 +68,7 @@ export const getCommunityPosts = async (boardType, params = {}) => {
         }
 
         const response = await apiClient.get(
-            `/api/v1/community/${boardType}?${queryParams.toString()}`
+            `/api/v1/community/${boardType.toUpperCase()}?${queryParams.toString()}`
         );
 
         return response.data;
@@ -91,7 +91,7 @@ export const getCommunityPosts = async (boardType, params = {}) => {
  */
 export const getCommunityPost = async (boardType, communityId) => {
     try {
-        const response = await apiClient.get(`/api/v1/community/${boardType}/${communityId}`);
+        const response = await apiClient.get(`/api/v1/community/${boardType.toUpperCase()}/${communityId}`);
 
         return transformCommunityPostData(response.data);
     } catch (error) {
@@ -113,7 +113,7 @@ export const getCommunityPost = async (boardType, communityId) => {
  */
 export const createCommunityPost = async (postData) => {
     try {
-        const response = await apiClient.post(`/api/v1/community/${postData.boardType}`, postData);
+        const response = await apiClient.post(`/api/v1/community/${postData.boardType.toUpperCase()}`, postData);
         return response.data;
     } catch (error) {
         if (error.response?.status === 400) {
@@ -135,7 +135,7 @@ export const createCommunityPost = async (postData) => {
  */
 export const updateCommunityPost = async (boardType, postId, postData) => {
     try {
-        const response = await apiClient.put(`/api/v1/community/${boardType}/${postId}`, postData);
+        const response = await apiClient.put(`/api/v1/community/${boardType.toUpperCase()}/${postId}`, postData);
 
         return response.data;
     } catch (error) {
@@ -157,7 +157,7 @@ export const updateCommunityPost = async (boardType, postId, postData) => {
  */
 export const deleteCommunityPost = async (boardType, postId) => {
     try {
-        const response = await apiClient.delete(`/api/v1/community/${boardType}/${postId}`);
+        const response = await apiClient.delete(`/api/v1/community/${boardType.toUpperCase()}/${postId}`);
 
         return response.data;
     } catch (error) {
