@@ -48,7 +48,9 @@ const ProfileSetupPage = () => {
 
     try {
       await signupUser(userData);
-      navigate("/");
+      navigate("/login", {
+        state: { email: signupData.email },
+      });
     } catch (error) {
       alert("회원가입 중 오류가 발생했습니다.");
     } finally {
