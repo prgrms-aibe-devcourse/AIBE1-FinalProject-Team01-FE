@@ -7,11 +7,7 @@ import "../../styles/components/auth/auth.css";
 import { useInput } from "../../hooks/useInput";
 import apiClient, { loginUser } from "../../services/api";
 import { convertTrackFromApi } from "../../constants/devcourse.js";
-
-const validateEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
+import { isValidEmail } from "../../utils/auth";
 
 export const LoginForm = () => {
   const { login } = useAuth();
@@ -50,8 +46,8 @@ export const LoginForm = () => {
     setEmailError("");
 
     const emailValue = e.target.value;
-    if (emailValue && !validateEmail(emailValue)) {
-      setEmailError("올바른 이메일 형식이 아닙니다.");
+    if (emailValue && !isValidEmail(emailValue)) {
+      setEmailError("올바른 이메일 형식이 아닙니다");
     }
   };
 
@@ -83,10 +79,10 @@ export const LoginForm = () => {
     let hasError = false;
 
     if (!email) {
-      setEmailError("이메일을 입력해 주세요.");
+      setEmailError("이메일을 입력해 주세요");
       hasError = true;
-    } else if (!validateEmail(email)) {
-      setEmailError("올바른 이메일 형식이 아닙니다.");
+    } else if (!isValidEmail(email)) {
+      setEmailError("올바른 이메일 형식이 아닙니다");
       hasError = true;
     }
 
@@ -96,7 +92,7 @@ export const LoginForm = () => {
     }
 
     if (hasError) {
-      if (!email || !validateEmail(email)) {
+      if (!email || !isValidEmail(email)) {
         emailRef.current?.focus();
       } else if (!pw) {
         pwRef.current?.focus();
@@ -167,11 +163,7 @@ export const LoginForm = () => {
       )}
 
       {loginError && (
-        <div
-          className="email-check-message error"
-          role="alert"
-          aria-live="polite"
-        >
+        <div className="input-check-message" role="alert" aria-live="polite">
           {loginError}
         </div>
       )}
@@ -179,11 +171,7 @@ export const LoginForm = () => {
       <form className="loginpage-figma-form" onSubmit={handleSubmit} noValidate>
         <div
           className={`loginpage-figma-input-group ${
-            emailError
-              ? "error"
-              : email && validateEmail(email)
-              ? "success"
-              : ""
+            emailError ? "error" : email && isValidEmail(email) ? "success" : ""
           }`}
         >
           <input
@@ -199,7 +187,11 @@ export const LoginForm = () => {
           />
         </div>
         {emailError && (
-          <div className="input-error-message" role="alert" aria-live="polite">
+          <div
+            className="email-check-message error"
+            role="alert"
+            aria-live="polite"
+          >
             {emailError}
           </div>
         )}

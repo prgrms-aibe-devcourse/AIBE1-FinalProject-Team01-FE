@@ -2,7 +2,11 @@ import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/components/auth/auth.css";
 import { useInput } from "../../hooks/useInput";
-import { isValidPassword, arePasswordsEqual } from "../../utils/auth";
+import {
+  isValidEmail,
+  isValidPassword,
+  arePasswordsEqual,
+} from "../../utils/auth";
 import { checkEmailDuplicate } from "../../services/authApi";
 
 export const SignupForm = () => {
@@ -31,10 +35,10 @@ export const SignupForm = () => {
   const [termsError, setTermsError] = useState("");
 
   const handleEmailCheck = async () => {
-    if (!email) {
+    if (!isValidEmail(email)) {
       setEmailCheck({
         checked: false,
-        message: "이메일을 입력해 주세요",
+        message: "올바른 이메일 형식이 아닙니다",
       });
       return;
     }
