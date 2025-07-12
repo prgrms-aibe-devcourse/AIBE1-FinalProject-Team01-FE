@@ -54,12 +54,10 @@ export function AppRouter() {
             <Route path="/community/:boardType/write" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
             <Route path="/community/:boardType/:communityId" element={<ProtectedRoute><CommunityBoardDetailPage /></ProtectedRoute>} />
             <Route path="/community/:boardType/:communityId/edit" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
-
             <Route path="/together" element={<ProtectedRoute><Navigate to="/together/GATHERING" replace /></ProtectedRoute>} />
             <Route path="/together/:category" element={<ProtectedRoute><TogetherPage /></ProtectedRoute>} />
             <Route path="/together/:category/:postId" element={<ProtectedRoute><TogetherBoardDetailPage /></ProtectedRoute>} />
             <Route path="/together/:category/write" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
-
             <Route path="/info" element={<Navigate to="/info/REVIEW" replace />} />
             <Route path="/info/:boardType" element={<InfoPage />} />
             <Route path="/info/:boardType/:itId" element={<InfoBoardDetailPage />} />
@@ -70,8 +68,6 @@ export function AppRouter() {
             <Route path="/hub/:projectId" element={<HubDetailPage />} />
             <Route path="/hub/:projectId/edit" element={<ProtectedRoute><HubWritePage /></ProtectedRoute>} />
             <Route path="/hub/write" element={<ProtectedRoute><HubWritePage /></ProtectedRoute>} />
-
-
 
             <Route path="/dm" element={<ProtectedRoute><DMPage /></ProtectedRoute>} />
             <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />

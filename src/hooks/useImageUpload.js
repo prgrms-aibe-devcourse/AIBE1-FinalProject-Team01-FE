@@ -1,4 +1,6 @@
 import { useState, useCallback } from "react";
+import { uploadPostImage } from "../services/imageApi";
+
 
 // 실제 프로덕션에서는 이 함수가 서버 API를 호출하여 이미지를 저장하고
 // 저장된 이미지의 URL을 반환해야 합니다.
@@ -39,24 +41,22 @@ export const useImageUpload = (initialImageUrls = []) => {
     if (!files || files.length === 0) return [];
 
     const newUrls = [];
-    // 여러 파일 동시 업로드를 위해 Promise.all 사용
-    const uploadPromises = Array.from(files)
-      .filter((file) => file.type.startsWith("image/"))
-      .map((file) => uploadFileToServer(file));
+
+    const imageFiles = Array.from(files).filter((f) =>
+      f.type.startsWith("image/")
+    );
 
     try {
-      const urls = await Promise.all(uploadPromises);
-      newUrls.push(...urls);
+      const urls = await Promise.all(
+        imageFiles.map((file) => uploadPostImage(file))
+      );
+      setImageUrls((prev) => [...prev, ...urls]);
+      return urls;
     } catch (error) {
       console.error("An error occurred during image upload:", error);
       alert("이미지 업로드 중 오류가 발생했습니다.");
+      return [];
     }
-
-    if (newUrls.length > 0) {
-      setImageUrls((prevUrls) => [...prevUrls, ...newUrls]);
-    }
-
-    return newUrls; // 에디터 등에서 즉시 사용 가능하도록 URL 배열 반환
   }, []);
 
   return { imageUrls, handleUpload, setImageUrls };

@@ -1,25 +1,28 @@
 import React from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import BoardCategoryBar from "../../components/board/BoardCategoryBar";
 import { BoardSearchBar } from "../../components/board/BoardSearchBar";
 import TogetherBoardList from "../../components/together/TogetherBoardList";
 import MarketBoardList from "../../components/together/MarketBoardList";
-import { allTogetherPosts } from "./togetherData";
 import { BOARD_TABS } from "./constants";
 import { HeroSection } from "../../components/common/HeroSection";
 import heroTogetherImg from "../../assets/hero-together.png";
 import { useAuth } from "../../context/AuthContext";
 import { BoardPagination } from "../../components/board/BoardPagination";
-import { useBoardList } from "../../hooks/useBoardList";
+import useTogetherPosts from "../../hooks/useTogetherPosts";
+//import { useBoardList } from "../../hooks/useBoardList";
+//import { allTogetherPosts } from "./togetherData";
 
 /**
  * 투게더 메인 페이지 컴포넌트
  */
 function TogetherPage() {
-  const { category = "GATHERING" } = useParams();
+  const { boardType = "GATHERING" } = useParams();
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
 
+  
   const {
     keyword,
     setKeyword,
@@ -31,22 +34,19 @@ function TogetherPage() {
     posts: pagedPosts,
     totalPages,
     reset,
-  } = useBoardList({
-    data: allTogetherPosts,
-    boardType: category,
-  });
+  } = useTogetherPosts(boardType);
 
   // URL 파라미터에 따라 탭 이동
-  const handleTabClick = (tabId) => {
-    navigate(`/together/${tabId}`);
-    reset();
+  const handleTabClick = (boardType) => {
+    navigate(`/together/${boardType}`, { replace: true });
   };
 
+
   const renderContent = () => {
-    if (category === "MARKET") {
-      return <MarketBoardList posts={pagedPosts} />;
+    if (boardType === "MARKET") {
+      return <MarketBoardList posts={pagedPosts} boardType={boardType} />;
     }
-    return <TogetherBoardList posts={pagedPosts} />;
+    return <TogetherBoardList posts={pagedPosts} boardType={boardType} />;
   };
 
   return (
@@ -56,7 +56,7 @@ function TogetherPage() {
         <div className="community-main-container">
           <BoardCategoryBar
             tabs={BOARD_TABS}
-            activeTab={category}
+            activeTab={boardType}
             onTabClick={handleTabClick}
           />
 
@@ -68,7 +68,7 @@ function TogetherPage() {
             onSearch={search}
             // TODO: 수강생만 글쓰기 가능하도록 수정 필요
             onWrite={() =>
-              navigate(`/together/${category.toLowerCase()}/write`)
+              navigate(`/together/${boardType.toLowerCase()}/write`)
             }
           />
 
