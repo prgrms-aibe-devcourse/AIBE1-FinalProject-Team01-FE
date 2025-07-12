@@ -48,6 +48,14 @@ export const ProfileForm = ({
       return;
     }
 
+    if (nickname.length < 2 || nickname.length > 15) {
+      setNicknameCheck({
+        checked: false,
+        message: "닉네임은 2~15글자로 입력해 주세요.",
+      });
+      return;
+    }
+
     setChecking(true);
     setNicknameCheck({ checked: false, message: "" });
 
@@ -80,8 +88,8 @@ export const ProfileForm = ({
     if (!name) {
       setNameError("이름을 입력해 주세요");
       hasError = true;
-    } else if (name.length > 10) {
-      setNameError("이름은 10글자 이하로 입력해 주세요");
+    } else if (name.length < 2 || name.length > 10) {
+      setNameError("이름은 2~10글자로 입력해 주세요");
       hasError = true;
     }
 
@@ -89,8 +97,8 @@ export const ProfileForm = ({
     if (!nickname) {
       setNicknameError("닉네임을 입력해 주세요");
       hasError = true;
-    } else if (nickname.length > 15) {
-      setNicknameError("닉네임은 15글자 이하로 입력해 주세요");
+    } else if (nickname.length < 2 || nickname.length > 15) {
+      setNicknameError("닉네임은 2~15글자로 입력해 주세요");
       hasError = true;
     } else if (!nicknameCheck.checked) {
       setNicknameError("닉네임 중복 확인을 해주세요");
@@ -112,11 +120,23 @@ export const ProfileForm = ({
   };
 
   const handleNameChange = (e) => {
+    const value = e.target.value;
+
+    if (value.length > 10) {
+      return;
+    }
+
     onChangeName(e);
     setNameError("");
   };
 
   const handleNicknameChange = (e) => {
+    const value = e.target.value;
+
+    if (value.length > 15) {
+      return;
+    }
+
     onChangeNickname(e);
     setNicknameError("");
     setNicknameCheck({ checked: false, message: "" });
@@ -147,7 +167,11 @@ export const ProfileForm = ({
         <div className="signup-label">이름</div>
         <div
           className={`loginpage-figma-input-group ${
-            nameError ? "error" : name && name.length <= 10 ? "success" : ""
+            nameError
+              ? "error"
+              : name && name.length >= 2 && name.length <= 10
+              ? "success"
+              : ""
           }`}
         >
           <input
@@ -166,7 +190,10 @@ export const ProfileForm = ({
           className={`loginpage-figma-input-group profile-nickname-group ${
             nicknameError
               ? "error"
-              : nickname && nickname.length <= 15 && nicknameCheck.checked
+              : nickname &&
+                nickname.length >= 2 &&
+                nickname.length <= 15 &&
+                nicknameCheck.checked
               ? "success"
               : ""
           }`}
@@ -192,11 +219,9 @@ export const ProfileForm = ({
         )}
         {nicknameCheck.message && (
           <div
-            style={{
-              color: nicknameCheck.checked ? "green" : "red",
-              fontSize: 13,
-              marginBottom: 8,
-            }}
+            className={`email-check-message ${
+              nicknameCheck.checked ? "success" : "error"
+            }`}
           >
             {nicknameCheck.message}
           </div>
