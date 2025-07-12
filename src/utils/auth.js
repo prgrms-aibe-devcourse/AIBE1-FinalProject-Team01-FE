@@ -10,6 +10,11 @@ export function isAuthor(user, author) {
   return user.id === author;
 }
 
+export function isAuthorByNickname(userNickname, postNickname){
+  if (!userNickname || !postNickname) return false;
+  return userNickname === postNickname;
+}
+
 // 비밀번호 유효성 검사: 6자 이상, 알파벳+숫자 포함
 export function isValidPassword(pw) {
   return pw.length >= 6 && /[a-zA-Z]/.test(pw) && /[0-9]/.test(pw);

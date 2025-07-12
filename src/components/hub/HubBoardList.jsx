@@ -81,7 +81,7 @@ export default function HubBoardList({ posts = [] }) {
                       key={i}
                       className="badge rounded-pill bg-light text-dark"
                     >
-                      {tag}
+                      #{tag}
                     </span>
                   ))}
                 </div>

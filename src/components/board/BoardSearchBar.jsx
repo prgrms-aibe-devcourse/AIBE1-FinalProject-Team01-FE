@@ -24,7 +24,7 @@ export const BoardSearchBar = ({
   onSearch = () => {},
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const sortOptions = ["최신순", "조회순", "댓글순", "좋아요순"];
+  const sortOptions = ["최신순", "조회순", "좋아요순"];
 
   const handleSortSelect = (option) => {
     setShowDropdown(false);

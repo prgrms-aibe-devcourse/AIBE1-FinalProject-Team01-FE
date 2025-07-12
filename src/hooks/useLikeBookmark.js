@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { addBookmark, removeBookmark } from "../services/bookmarkApi";
+import { addLikePost, removeLikePost, addLikeComment, removeLikeComment } from "../services/likeApi";
+
 
 /**
  * 좋아요/북마크 상태 및 토글 로직을 제공하는 커스텀 훅
@@ -24,7 +27,7 @@ export function useLikeBookmark({
   initialBookmarkCount = 0,
   initialBookmarked = false,
   postId,
-  boardType,
+  commentId,
 } = {}) {
   // 좋아요
   const [liked, setLiked] = useState(initialLiked);
@@ -33,11 +36,20 @@ export function useLikeBookmark({
   const [bookmarked, setBookmarked] = useState(initialBookmarked);
   const [bookmarkCount, setBookmarkCount] = useState(initialBookmarkCount);
 
+  useEffect(() => {
+    setLiked(initialLiked);
+    setLikeCount(initialLikeCount);
+    setBookmarked(initialBookmarked);
+    setBookmarkCount(initialBookmarkCount);
+  }, [initialLiked, initialLikeCount, initialBookmarked, initialBookmarkCount]);
+
   const toggleLike = async () => {
     try {
-      // TODO: 백엔드 API 연동
-      // liked가 true면 DELETE
-      // liked가 false면 POST
+      if (liked) {
+        await removeLikePost(postId);
+      } else {
+        await addLikePost(postId);
+      }
 
       setLiked((prev) => !prev);
       setLikeCount((prev) => (liked ? Math.max(0, prev - 1) : prev + 1));
@@ -46,11 +58,30 @@ export function useLikeBookmark({
     }
   };
 
+  const toggleLikeComment = async () => {
+    try {
+      if (liked) {
+        await removeLikeComment(postId, commentId);
+      } else {
+        await addLikeComment(postId, commentId);
+      }
+
+      setLiked((prev) => !prev);
+      setLikeCount((prev) => (liked ? Math.max(0, prev - 1) : prev + 1));
+    } catch (error) {
+      console.error("Error toggling like on comment:", error);
+    }
+  };
+
+
+  // 유저 아이디 하드코딩되어있음 나중에 수정 필요 
   const toggleBookmark = async () => {
     try {
-      // TODO: 백엔드 API 연동
-      // bookmarked가 true면 DELETE
-      // bookmarked가 false면 POST
+      if (bookmarked) {
+        await removeBookmark(23, postId);
+      } else {
+        await addBookmark(23, postId);
+      }
 
       setBookmarked((prev) => !prev);
       setBookmarkCount((prev) =>
@@ -65,6 +96,7 @@ export function useLikeBookmark({
     liked,
     likeCount,
     toggleLike,
+    toggleLikeComment,
     bookmarked,
     bookmarkCount,
     toggleBookmark,

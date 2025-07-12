@@ -30,6 +30,7 @@ export default function InfoPage() {
     loading,
     error,
     search,
+    searchTerm
   } = useInfoPosts(boardType);
 
   const handleTabSelect = (tabKey) => {
@@ -97,7 +98,7 @@ export default function InfoPage() {
             {!loading && posts.length === 0 && (
                 <div className="text-center py-5">
                   <p className="text-muted">
-                    {keyword ? `"${keyword}"에 대한 검색 결과가 없습니다.` : "등록된 게시글이 없습니다."}
+                    {searchTerm ? `"${searchTerm}"에 대한 검색 결과가 없습니다.` : "등록된 게시글이 없습니다."}
                   </p>
                 </div>
             )}
