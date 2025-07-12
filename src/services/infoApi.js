@@ -158,7 +158,7 @@ export const updateInfoPost = async (boardType, postId, postData) => {
  */
 export const deleteInfoPost = async (boardType, postId) => {
     try {
-        const response = await apiClient.delete(`/api/v1/info/${boardType}/${postId}`);
+        const response = await apiClient.delete(`/api/v1/IT/${boardType}/${postId}`);
 
         return response.data;
     } catch (error) {

@@ -31,6 +31,7 @@ const ProtectedRoute = ({ children }) => {
 
     if (!isLoggedIn) {
         // 현재 경로를 redirectUrl로 설정
+        alert("로그인이 필요한 서비스입니다.")
         const redirectUrl = encodeURIComponent(location.pathname + location.search);
         return <Navigate to={`/login?redirectUrl=${redirectUrl}`} replace />;
     }
@@ -54,17 +55,18 @@ export function AppRouter() {
             <Route path="/community/:boardType/:communityId" element={<ProtectedRoute><CommunityBoardDetailPage /></ProtectedRoute>} />
             <Route path="/community/:boardType/:communityId/edit" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
             <Route path="/together" element={<ProtectedRoute><Navigate to="/together/GATHERING" replace /></ProtectedRoute>} />
-            <Route path="/together/:boardType" element={<ProtectedRoute><TogetherPage /></ProtectedRoute>} />
-            <Route path="/together/:boardType/:postId" element={<ProtectedRoute><TogetherBoardDetailPage /></ProtectedRoute>} />
-            <Route path="/together/:boardType/write" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
-
+            <Route path="/together/:category" element={<ProtectedRoute><TogetherPage /></ProtectedRoute>} />
+            <Route path="/together/:category/:postId" element={<ProtectedRoute><TogetherBoardDetailPage /></ProtectedRoute>} />
+            <Route path="/together/:category/write" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
             <Route path="/info" element={<Navigate to="/info/REVIEW" replace />} />
             <Route path="/info/:boardType" element={<InfoPage />} />
             <Route path="/info/:boardType/:itId" element={<InfoBoardDetailPage />} />
             <Route path="/info/:boardType/write" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />
+            <Route path="/info/:boardType/:itId/edit" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />
 
             <Route path="/hub" element={<HubPage />} />
             <Route path="/hub/:projectId" element={<HubDetailPage />} />
+            <Route path="/hub/:projectId/edit" element={<ProtectedRoute><HubWritePage /></ProtectedRoute>} />
             <Route path="/hub/write" element={<ProtectedRoute><HubWritePage /></ProtectedRoute>} />
 
             <Route path="/dm" element={<ProtectedRoute><DMPage /></ProtectedRoute>} />
