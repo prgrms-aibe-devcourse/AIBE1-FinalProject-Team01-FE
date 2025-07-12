@@ -60,7 +60,6 @@ export const useCommunityPosts = (boardType, initialParams = {}) => {
         const sortMapping = {
             "최신순": { field: "POST_LATEST", sortDirection: "DESC" },
             "조회순": { field: "POST_MOST_VIEW", sortDirection: "DESC" },
-            "댓글순": { field: "commentCount", sortDirection: "DESC" },
             "좋아요순": { field: "POST_POPULAR", sortDirection: "DESC" },
         };
         return sortMapping[sortValue] || sortMapping["최신순"];

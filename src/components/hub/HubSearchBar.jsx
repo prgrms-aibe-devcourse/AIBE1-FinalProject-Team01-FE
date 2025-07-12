@@ -32,10 +32,15 @@ export const HubSearchBar = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFilters(prev => ({
-      ...prev,
+    const newFilters = {
+      ...filters,
       [name]: value
-    }));
+    };
+    setFilters(newFilters);
+
+    if (name === 'courseName' || name === 'batchNumber') {
+      onSearch(newFilters);
+    }
   };
 
   const handleKeywordKeyPress = (e) => {
