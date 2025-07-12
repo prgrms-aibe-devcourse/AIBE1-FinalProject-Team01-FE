@@ -23,6 +23,7 @@ export const ProfileForm = ({
   name,
   nickname,
   selectedTopics,
+  isSubmitting,
   onChangeName,
   onChangeNickname,
   onTopicClick,
@@ -270,8 +271,9 @@ export const ProfileForm = ({
         <button
           type="submit"
           className="loginpage-figma-login-btn signup-btn profile-setup-btn"
+          disabled={isSubmitting}
         >
-          아마추어스 시작하기
+          {isSubmitting ? "가입 처리중..." : "아마추어스 시작하기"}{" "}
         </button>
       </form>
     </div>

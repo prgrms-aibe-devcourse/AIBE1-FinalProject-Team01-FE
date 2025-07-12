@@ -10,6 +10,7 @@ const ProfileSetupPage = () => {
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [selectedTopics, setSelectedTopics] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const signupData = location.state;
@@ -43,11 +44,15 @@ const ProfileSetupPage = () => {
       topics: backendTopics,
     };
 
+    setIsSubmitting(true);
+
     try {
       await signupUser(userData);
       navigate("/");
     } catch (error) {
       alert("회원가입 중 오류가 발생했습니다.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -57,6 +62,7 @@ const ProfileSetupPage = () => {
         name={name}
         nickname={nickname}
         selectedTopics={selectedTopics}
+        isSubmitting={isSubmitting}
         onChangeName={(e) => setName(e.target.value)}
         onChangeNickname={handleNicknameChange}
         onTopicClick={handleTopicClick}
