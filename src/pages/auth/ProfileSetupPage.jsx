@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AuthLayout } from "../../components/auth/AuthLayout";
 import { ProfileForm } from "../../components/auth/ProfileForm";
 import { useLocation, useNavigate } from "react-router-dom";
+import { signupUser } from "../../services/authApi";
 import "../../styles/components/auth/auth.css";
 
 const ProfileSetupPage = () => {
@@ -28,14 +29,23 @@ const ProfileSetupPage = () => {
     setNickname(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 관심 주제를 string 형태로 변환
-    const topicsString = selectedTopics.join(",");
-    // TODO: 실제 저장 로직 (예: API 호출)
-    console.log({ name, nickname, topics: topicsString });
-    // 저장 후 홈으로 이동
-    navigate("/");
+    const userData = {
+      email: signupData.email,
+      password: signupData.password,
+      name: name,
+      nickname: nickname,
+      topics: selectedTopics,
+    };
+
+    try {
+      await signupUser(userData);
+      navigate("/");
+    } catch (error) {
+      console.error("회원가입 에러 상세:", error.response?.data);
+      alert("회원가입 중 오류가 발생했습니다.");
+    }
   };
 
   return (
