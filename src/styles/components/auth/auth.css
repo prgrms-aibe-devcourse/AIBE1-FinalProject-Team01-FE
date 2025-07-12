@@ -439,3 +439,65 @@
   border: 1px solid #ffebee;
   font-family: "Noto Sans KR", sans-serif;
 }
+
+.profile-nickname-group {
+  display: flex;
+  gap: 0;
+  align-items: center;
+  position: relative;
+}
+
+.profile-nickname-group input {
+  flex: 1;
+  padding-right: 100px;
+}
+
+.profile-nickname-check-btn {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #2d4053;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  height: 38px;
+  padding: 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  min-width: 80px;
+  white-space: nowrap;
+}
+
+.profile-nickname-check-btn:hover {
+  background: #1a2733;
+}
+
+.profile-nickname-check-btn:disabled {
+  background: #7890a0;
+  cursor: not-allowed;
+}
+
+.loginpage-figma-input-group.success {
+  border-color: #28a745;
+}
+
+.loginpage-figma-input-group.error {
+  border-color: #dc3545;
+}
+
+.email-check-message {
+  margin-left: 20px;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.email-check-message.success {
+  color: #28a745;
+}
+
+.email-check-message.error {
+  color: #dc3545;
+}
