@@ -145,7 +145,11 @@ export const ProfileForm = ({
         onSubmit={handleSubmit}
       >
         <div className="signup-label">이름</div>
-        <div className="loginpage-figma-input-group">
+        <div
+          className={`loginpage-figma-input-group ${
+            nameError ? "error" : name && name.length <= 10 ? "success" : ""
+          }`}
+        >
           <input
             type="text"
             placeholder="이름을 입력해 주세요 (10글자 이하)"
@@ -158,7 +162,15 @@ export const ProfileForm = ({
           <div className="email-check-message error">{nameError}</div>
         )}
         <div className="signup-label">닉네임</div>
-        <div className="loginpage-figma-input-group profile-nickname-group">
+        <div
+          className={`loginpage-figma-input-group profile-nickname-group ${
+            nicknameError
+              ? "error"
+              : nickname && nickname.length <= 15 && nicknameCheck.checked
+              ? "success"
+              : ""
+          }`}
+        >
           <input
             type="text"
             placeholder="닉네임을 입력해 주세요(15글자 이하)"
@@ -208,9 +220,7 @@ export const ProfileForm = ({
           선택된 주제: {selectedTopics.join(", ") || "없음"}
         </div>
         {topicError && (
-          <div style={{ color: "red", fontSize: 13, marginBottom: 8 }}>
-            {topicError}
-          </div>
+          <div className="email-check-message error">{topicError}</div>
         )}
         <button
           type="submit"
