@@ -20,6 +20,7 @@ import HubDetailPage from "../pages/hub/HubDetailPage";
 import HubWritePage from "../pages/hub/HubWritePage";
 import MyPage from "../pages/mypage/MyPage";
 import DMPage from "../pages/dm/DMPage";
+import { OAuthCallbackPage } from "../pages/auth/OAuthCallbackPage";
 
 const ProtectedRoute = ({ children }) => {
     const { isLoggedIn, loading } = useAuth();
@@ -38,7 +39,6 @@ const ProtectedRoute = ({ children }) => {
 
     return children;
 };
-
 
 export function AppRouter() {
     return (
@@ -71,6 +71,8 @@ export function AppRouter() {
 
             <Route path="/dm" element={<ProtectedRoute><DMPage /></ProtectedRoute>} />
             <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
+            <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
+            <Route path="/oauth/profile-complete" element={<ProfileSetupPage />} />
         </Routes>
     );
 }

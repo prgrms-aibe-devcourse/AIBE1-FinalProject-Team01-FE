@@ -6,8 +6,9 @@ import githubLoginImg from "../../assets/github_login.png";
 import "../../styles/components/auth/auth.css";
 import { useInput } from "../../hooks/useInput";
 import apiClient, { loginUser } from "../../services/api";
-import { convertTrackFromApi } from "../../constants/devcourse.js";
 import { isValidEmail } from "../../utils/auth";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const LoginForm = () => {
   const { login } = useAuth();
@@ -103,29 +104,10 @@ export const LoginForm = () => {
 
     setIsLoading(true);
     try {
-      const loginResponse = await loginUser({
+      await loginUser({
         email,
         password: pw,
       });
-
-      const userResponse = await apiClient.get("/api/v1/users/me", {
-        headers: {
-          Authorization: `Bearer ${loginResponse.accessToken}`,
-        },
-      });
-
-      login(
-        {
-          id: userResponse.data.userId,
-          name: userResponse.data.name,
-          email: userResponse.data.email,
-          avatar: userResponse.data.imageUrl || "/assets/user-icon.png",
-          nickname: userResponse.data.nickname,
-          devcourseTrack: convertTrackFromApi(userResponse.data.devcourseName),
-          devcourseBatch: userResponse.data.devcourseBatch,
-        },
-        loginResponse.accessToken
-      );
 
       navigate(redirectUrl || "/");
     } catch (error) {
@@ -139,6 +121,18 @@ export const LoginForm = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleKakaoLogin = () => {
+    if (isLoading) return;
+    console.log("카카오 OAuth 로그인 시작...");
+    window.location.href = `${API_BASE_URL}/oauth2/authorization/kakao`;
+  };
+
+  const handleGithubLogin = () => {
+    if (isLoading) return;
+    console.log("깃허브 OAuth 로그인 시작...");
+    window.location.href = `${API_BASE_URL}/oauth2/authorization/github`;
   };
 
   return (
@@ -253,10 +247,7 @@ export const LoginForm = () => {
             isLoading ? "disabled" : ""
           }`}
           disabled={isLoading}
-          onClick={() => {
-            if (isLoading) return;
-            console.log("카카오 로그인");
-          }}
+          onClick={handleKakaoLogin}
         >
           <img src={kakaoLoginImg} alt="카카오 로그인" />
         </button>
@@ -267,10 +258,7 @@ export const LoginForm = () => {
             isLoading ? "disabled" : ""
           }`}
           disabled={isLoading}
-          onClick={() => {
-            if (isLoading) return;
-            console.log("깃허브 로그인");
-          }}
+          onClick={handleGithubLogin}
         >
           <img src={githubLoginImg} alt="깃허브 로그인" />
         </button>
