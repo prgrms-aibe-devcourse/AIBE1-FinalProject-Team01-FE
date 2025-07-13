@@ -1,7 +1,7 @@
 // enum
 export const GATHERING_TYPE = {
   STUDY: "STUDY",
-  PROJECT: "PROJECT",
+  SIDE_PROJECT: "SIDE_PROJECT",
 };
 
 export const MATCH_TYPE = {
@@ -37,7 +37,7 @@ export const MARKET_STATUS = {
 // UI 표시 이름
 export const GATHERING_TYPE_LABELS = {
   [GATHERING_TYPE.STUDY]: "스터디",
-  [GATHERING_TYPE.PROJECT]: "프로젝트",
+  [GATHERING_TYPE.SIDE_PROJECT]: "프로젝트",
 };
 
 export const MATCH_TYPE_LABELS = {
@@ -106,7 +106,7 @@ export const TOGETHER_CATEGORIES = [
     value: "GATHERING",
     subCategories: [
       { label: "스터디", value: "STUDY" },
-      { label: "프로젝트", value: "PROJECT" },
+      { label: "프로젝트", value: "SIDE_PROJECT" },
     ],
   },
   {

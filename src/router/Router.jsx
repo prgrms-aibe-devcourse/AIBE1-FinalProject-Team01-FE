@@ -55,9 +55,9 @@ export function AppRouter() {
             <Route path="/community/:boardType/:communityId" element={<ProtectedRoute><CommunityBoardDetailPage /></ProtectedRoute>} />
             <Route path="/community/:boardType/:communityId/edit" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
             <Route path="/together" element={<ProtectedRoute><Navigate to="/together/GATHERING" replace /></ProtectedRoute>} />
-            <Route path="/together/:category" element={<ProtectedRoute><TogetherPage /></ProtectedRoute>} />
-            <Route path="/together/:category/:postId" element={<ProtectedRoute><TogetherBoardDetailPage /></ProtectedRoute>} />
-            <Route path="/together/:category/write" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
+            <Route path="/together/:boardType" element={<ProtectedRoute><TogetherPage /></ProtectedRoute>} />
+            <Route path="/together/:boardType/:postId" element={<ProtectedRoute><TogetherBoardDetailPage /></ProtectedRoute>} />
+            <Route path="/together/:boardType/write" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
             <Route path="/info" element={<Navigate to="/info/review" replace />} />
             <Route path="/info/:boardType" element={<InfoPage />} />
             <Route path="/info/:boardType/:itId" element={<InfoBoardDetailPage />} />
