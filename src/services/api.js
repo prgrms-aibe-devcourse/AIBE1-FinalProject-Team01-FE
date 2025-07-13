@@ -1,5 +1,4 @@
 import axios from "axios";
-import tokenManager from "../utils/tokenManager.js";
 
 // 기본 API 설정
 const API_BASE_URL =
@@ -27,20 +26,6 @@ const redirectToLogin = () => {
   const encodedRedirectUrl = encodeURIComponent(currentUrl);
   window.location.href = `/login?redirectUrl=${encodedRedirectUrl}`;
 };
-
-// 요청 인터셉터 - JWT 토큰 자동 추가
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = tokenManager.getAccessToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
 
 // 응답 인터셉터 - 401 에러 처리
 apiClient.interceptors.response.use(
@@ -71,7 +56,6 @@ apiClient.interceptors.response.use(
       }
 
       console.log("🔐 인증 만료");
-      tokenManager.removeToken();
       redirectToLogin();
     }
     return Promise.reject(error);
@@ -104,5 +88,3 @@ export const loginUser = async (credentials) => {
     throw new Error(errorMessage);
   }
 };
-
-export { tokenManager };
