@@ -124,6 +124,7 @@ export const ProfileForm = ({
     const value = e.target.value;
 
     if (value.length > 10) {
+      setNameError("이름은 10글자 이하로 입력해 주세요");
       return;
     }
 
@@ -135,6 +136,7 @@ export const ProfileForm = ({
     const value = e.target.value;
 
     if (value.length > 15) {
+      setNicknameError("닉네임은 15글자 이하로 입력해 주세요");
       return;
     }
 

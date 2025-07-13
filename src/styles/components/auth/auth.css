@@ -501,3 +501,50 @@
 .email-check-message.error {
   color: #dc3545;
 }
+
+/* 환영 메시지 */
+.welcome-message {
+  background: #e8f5e8;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  color: #2d5a2d;
+  font-size: 14px;
+}
+
+/* SNS 버튼 */
+.loginpage-figma-sns-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+.loginpage-figma-sns-btn {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  width: 100%;
+}
+
+.loginpage-figma-sns-btn:hover {
+  transform: translateY(-1px);
+}
+
+.loginpage-figma-sns-btn:disabled,
+.loginpage-figma-sns-btn.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loginpage-figma-sns-btn img {
+  width: 100%;
+  height: auto;
+  max-width: 183px;
+  height: 45px;
+  object-fit: contain;
+}

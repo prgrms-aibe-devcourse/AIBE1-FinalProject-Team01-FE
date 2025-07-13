@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import apiClient from "../services/api.js";
+import apiClient, { tokenManager } from "../services/api.js";
 
 const AuthContext = createContext();
 
@@ -8,24 +8,39 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const mapUserData = (responseData) => ({
+    id: responseData.userId,
+    name: responseData.name,
+    email: responseData.email,
+    avatar: responseData.imageUrl || "/assets/user-icon.png",
+    nickname: responseData.nickname,
+    devcourseTrack: responseData.devcourseName,
+    devcourseBatch: responseData.devcourseBatch,
+    topics: responseData.topics,
+    providerType: responseData.providerType,
+  });
+
+  const fetchUserInfo = async () => {
+    const response = await apiClient.get("/api/v1/users/me");
+    return mapUserData(response.data);
+  };
+
   const initializeAuth = async () => {
     try {
-      const response = await apiClient.get("/api/v1/users/me");
+      const hasToken = tokenManager.getAccessToken();
+      if (!hasToken) {
+        setIsLoggedIn(false);
+        setUser(null);
+        setLoading(false);
+        return;
+      }
 
+      const userData = await fetchUserInfo();
       setIsLoggedIn(true);
-      setUser({
-        id: response.data.userId,
-        name: response.data.name,
-        email: response.data.email,
-        avatar: response.data.imageUrl || "/assets/user-icon.png",
-        nickname: response.data.nickname,
-        devcourseTrack: response.data.devcourseName,
-        devcourseBatch: response.data.devcourseBatch,
-        topics: response.data.topics,
-        providerType: response.data.providerType,
-      });
+      setUser(userData);
     } catch (error) {
       if (error.response?.status === 401) {
+        tokenManager.removeToken();
       } else {
         console.error("예상치 못한 인증 에러:", error);
       }
@@ -39,22 +54,10 @@ export const AuthProvider = ({ children }) => {
   // 🆕 사용자 정보 새로고침 함수 추가
   const refreshUserInfo = async () => {
     try {
-      const response = await apiClient.get("/api/v1/users/me");
+      const userData = await fetchUserInfo();
 
-      const updatedUser = {
-        id: response.data.userId,
-        name: response.data.name,
-        email: response.data.email,
-        avatar: response.data.imageUrl || "/assets/user-icon.png",
-        nickname: response.data.nickname,
-        devcourseTrack: response.data.devcourseName,
-        devcourseBatch: response.data.devcourseBatch,
-        topics: response.data.topics,
-        providerType: response.data.providerType
-      };
-
-      setUser(updatedUser);
-      return updatedUser;
+      setUser(userData);
+      return userData;
     } catch (error) {
       console.error("사용자 정보 새로고침 실패:", error);
       throw error;
@@ -77,20 +80,28 @@ export const AuthProvider = ({ children }) => {
   };
 
   if (loading) {
-    return <div>로딩 중...</div>;
+    return (
+      <div className="d-flex justify-content-center align-items-center min-vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
   }
 
   return (
-      <AuthContext.Provider value={{
+    <AuthContext.Provider
+      value={{
         isLoggedIn,
         login,
         logout,
         user,
         loading,
-        refreshUserInfo
-      }}>
-        {children}
-      </AuthContext.Provider>
+        refreshUserInfo,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 

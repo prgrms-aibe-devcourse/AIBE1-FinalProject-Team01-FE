@@ -1,10 +1,9 @@
 import axios from "axios";
+import tokenManager from "../utils/tokenManager.js";
 
 // 기본 API 설정
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
-// 환경변수에서 도메인 가져오기
-const COOKIE_DOMAIN = import.meta.env.VITE_COOKIE_DOMAIN || "localhost";
 
 // Axios 인스턴스 생성
 export const apiClient = axios.create({
@@ -15,47 +14,6 @@ export const apiClient = axios.create({
     "Content-Type": "application/json",
   },
 });
-
-// 토큰 관리자 객체
-const tokenManager = {
-  // 토큰 조회
-  getToken: () => {
-    const cookies = document.cookie.split(";");
-    const accessTokenCookie = cookies.find((cookie) =>
-      cookie.trim().startsWith("accessToken=")
-    );
-    return accessTokenCookie ? accessTokenCookie.split("=")[1] : null;
-  },
-
-  // 토큰 제거
-  removeToken: () => {
-    // TODO: 로그아웃 API 구현 후 서버에서 쿠키 삭제로 변경 예정
-    document.cookie = `accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${COOKIE_DOMAIN}`;
-    document.cookie = `refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${COOKIE_DOMAIN}`;
-  },
-
-  // 토큰 유효성 검사 (간단한 형태)
-  isTokenValid: () => {
-    const token = tokenManager.getToken();
-    if (!token) return false;
-
-    // 개발용 더미 토큰이거나 .env의 토큰인 경우 항상 유효하다고 처리
-    const devToken = import.meta.env.VITE_DEV_JWT_TOKEN || "dev_dummy_token";
-    if (token === "dev_dummy_token" || token === devToken) return true;
-
-    try {
-      // JWT 토큰 구조 확인 (실제로는 만료 시간도 체크해야 함)
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      const currentTime = Date.now() / 1000;
-      return payload.exp > currentTime;
-    } catch {
-      return false;
-    }
-  },
-};
-
-// 명시적으로 export
-export { tokenManager };
 
 const redirectToLogin = () => {
   const currentPath = window.location.pathname;
@@ -73,7 +31,7 @@ const redirectToLogin = () => {
 // 요청 인터셉터 - JWT 토큰 자동 추가
 apiClient.interceptors.request.use(
   (config) => {
-    const token = tokenManager.getToken();
+    const token = tokenManager.getAccessToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -129,6 +87,7 @@ export const loginUser = async (credentials) => {
       email: credentials.email,
       password: credentials.password,
     });
+
     return response.data;
   } catch (error) {
     // HTTP 상태 코드에 따른 안전한 에러 메시지
@@ -145,3 +104,5 @@ export const loginUser = async (credentials) => {
     throw new Error(errorMessage);
   }
 };
+
+export { tokenManager };

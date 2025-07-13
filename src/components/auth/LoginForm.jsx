@@ -7,15 +7,7 @@ import "../../styles/components/auth/auth.css";
 import { useInput } from "../../hooks/useInput";
 import apiClient, { loginUser } from "../../services/api";
 import { convertTrackFromApi } from "../../constants/devcourse.js";
-
-const validateEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
-const validateLoginPassword = (password) => {
-  return password && password.length >= 1;
-};
+import { isValidEmail } from "../../utils/auth";
 
 export const LoginForm = () => {
   const { login } = useAuth();
@@ -24,42 +16,97 @@ export const LoginForm = () => {
   const emailRef = useRef(null);
   const pwRef = useRef(null);
   const redirectUrl = new URLSearchParams(location.search).get("redirectUrl");
+  const welcomeEmail = location.state?.email;
+
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
-  const { value: email, onChange: onEmailChange } = useInput("");
+  const { value: email, onChange: onEmailChange } = useInput(
+    welcomeEmail || ""
+  );
   const { value: pw, onChange: onPwChange } = useInput("");
+
+  const getErrorMessage = (error) => {
+    if (error.response?.status === 401) {
+      return "이메일 또는 비밀번호가 올바르지 않습니다.";
+    } else if (error.response?.status >= 500) {
+      return "서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도해주세요.";
+    } else if (!error.response) {
+      return "네트워크 연결을 확인해주세요.";
+    }
+    return error.response?.data?.message || "로그인 중 오류가 발생했습니다.";
+  };
+
+  // 실시간 이메일 검증
+  const handleEmailChange = (e) => {
+    onEmailChange(e);
+    setLoginError("");
+    setEmailError("");
+
+    const emailValue = e.target.value;
+    if (emailValue && !isValidEmail(emailValue)) {
+      setEmailError("올바른 이메일 형식이 아닙니다");
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    onPwChange(e);
+    setLoginError("");
+    setPasswordError("");
+  };
+
+  // Enter 키 처리
+  const handleKeyPress = (e, nextFieldRef) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (nextFieldRef && nextFieldRef.current) {
+        nextFieldRef.current.focus();
+      } else {
+        handleSubmit(e);
+      }
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoginError("");
+    setEmailError("");
+    setPasswordError("");
 
-    emailRef.current.setCustomValidity("");
-    pwRef.current.setCustomValidity("");
+    let hasError = false;
 
     if (!email) {
-      emailRef.current.setCustomValidity("이메일을 입력해 주세요.");
-      emailRef.current.reportValidity();
-      return;
-    } else if (!validateEmail(email)) {
-      emailRef.current.setCustomValidity("유효한 이메일 형식이 아닙니다.");
-      emailRef.current.reportValidity();
-      return;
+      setEmailError("이메일을 입력해 주세요");
+      hasError = true;
+    } else if (!isValidEmail(email)) {
+      setEmailError("올바른 이메일 형식이 아닙니다");
+      hasError = true;
     }
 
     if (!pw) {
-      pwRef.current.setCustomValidity("비밀번호를 입력해 주세요.");
-      pwRef.current.reportValidity();
-      return;
-    } else if (!validateLoginPassword(pw)) {
-      pwRef.current.setCustomValidity("비밀번호를 입력해 주세요.");
-      pwRef.current.reportValidity();
+      setPasswordError("비밀번호를 입력해 주세요.");
+      hasError = true;
+    }
+
+    if (hasError) {
+      setTimeout(() => {
+        if (!email || !isValidEmail(email)) {
+          emailRef.current?.focus();
+        } else if (!pw) {
+          pwRef.current?.focus();
+        }
+      }, 100);
       return;
     }
 
     setIsLoading(true);
     try {
-      const loginResponse = await loginUser({ email, password: pw });
+      const loginResponse = await loginUser({
+        email,
+        password: pw,
+      });
 
       const userResponse = await apiClient.get("/api/v1/users/me", {
         headers: {
@@ -82,9 +129,13 @@ export const LoginForm = () => {
 
       navigate(redirectUrl || "/");
     } catch (error) {
-      const safeErrorMessage =
-        "이메일 또는 비밀번호가 올바르지 않습니다. 다시 시도해주세요.";
-      setLoginError(safeErrorMessage);
+      console.error("로그인 에러:", error);
+      setLoginError(getErrorMessage(error));
+
+      // 특정 에러에 따라 포커스 이동
+      if (error.response?.status === 401) {
+        pwRef.current?.focus();
+      }
     } finally {
       setIsLoading(false);
     }
@@ -92,85 +143,136 @@ export const LoginForm = () => {
 
   return (
     <div className="loginpage-figma-card">
-      <div className="loginpage-figma-card-title">아마추어스 로그인</div>
+      <div className="loginpage-figma-card-title">
+        {welcomeEmail ? "회원가입 완료! 로그인하세요" : "아마추어스 로그인"}
+      </div>
 
-      {loginError && <div className="login-error-message">{loginError}</div>}
+      {welcomeEmail && (
+        <div className="welcome-message">
+          🎉 회원가입이 완료되었습니다! 로그인해주세요.
+        </div>
+      )}
+
+      {loginError && (
+        <div className="input-check-message" role="alert" aria-live="polite">
+          {loginError}
+        </div>
+      )}
 
       <form className="loginpage-figma-form" onSubmit={handleSubmit} noValidate>
-        <div className="loginpage-figma-input-group">
+        <div
+          className={`loginpage-figma-input-group ${
+            emailError ? "error" : email && isValidEmail(email) ? "success" : ""
+          }`}
+        >
           <input
             type="email"
             placeholder="이메일을 입력해 주세요"
             value={email}
-            onChange={onEmailChange}
+            onChange={handleEmailChange}
+            onKeyPress={(e) => handleKeyPress(e, pwRef)}
             ref={emailRef}
+            disabled={isLoading}
+            autoComplete="email"
             required
           />
         </div>
-        <div className="loginpage-figma-input-group">
+        {emailError && (
+          <div
+            className="email-check-message error"
+            role="alert"
+            aria-live="polite"
+          >
+            {emailError}
+          </div>
+        )}
+
+        <div
+          className={`loginpage-figma-input-group ${
+            passwordError ? "error" : pw ? "success" : ""
+          }`}
+        >
           <input
             type="password"
             placeholder="비밀번호를 입력해 주세요"
             value={pw}
-            onChange={onPwChange}
+            onChange={handlePasswordChange}
+            onKeyPress={(e) => handleKeyPress(e)}
             ref={pwRef}
+            disabled={isLoading}
+            autoComplete="current-password"
             required
           />
         </div>
+        {passwordError && (
+          <div className="input-error-message" role="alert" aria-live="polite">
+            {passwordError}
+          </div>
+        )}
         <button
           type="submit"
           className="loginpage-figma-login-btn"
-          disabled={isLoading}
+          disabled={isLoading || !email || !pw}
         >
           {isLoading ? "로그인 중..." : "로그인하기"}
         </button>
       </form>
+
       <button
         className="loginpage-figma-signup-btn"
         onClick={() => navigate("/signup")}
+        disabled={isLoading}
       >
         이메일로 회원가입
       </button>
+
       <div className="loginpage-figma-findpw">
         <a
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            navigate("/find-account");
+            if (!isLoading) {
+              navigate("/find-account");
+            }
           }}
         >
           비밀번호 찾기
         </a>
       </div>
+
       <div className="loginpage-figma-divider" />
+
       <div className="loginpage-figma-sns-title">
         SNS 계정으로 간편하게 시작하세요
       </div>
-      <div
-        className="loginpage-figma-sns-btns"
-        style={{ display: "flex", flexWrap: "wrap", gap: 8 }}
-      >
+
+      <div className="loginpage-figma-sns-btns">
         <button
           type="button"
-          className="loginpage-figma-sns-btn kakao"
-          style={{ padding: 0, border: "none", background: "none" }}
+          className={`loginpage-figma-sns-btn kakao ${
+            isLoading ? "disabled" : ""
+          }`}
+          disabled={isLoading}
+          onClick={() => {
+            if (isLoading) return;
+            console.log("카카오 로그인");
+          }}
         >
-          <img
-            src={kakaoLoginImg}
-            alt="카카오 로그인"
-            style={{ width: 183, height: 45 }}
-          />
+          <img src={kakaoLoginImg} alt="카카오 로그인" />
         </button>
+
         <button
           type="button"
-          className="loginpage-figma-sns-btn github"
-          style={{ padding: 0, border: "none", background: "none" }}
+          className={`loginpage-figma-sns-btn github ${
+            isLoading ? "disabled" : ""
+          }`}
+          disabled={isLoading}
+          onClick={() => {
+            if (isLoading) return;
+            console.log("깃허브 로그인");
+          }}
         >
-          <img
-            src={githubLoginImg}
-            alt="깃허브 로그인"
-            style={{ width: 183, height: 45 }}
-          />
+          <img src={githubLoginImg} alt="깃허브 로그인" />
         </button>
       </div>
     </div>
