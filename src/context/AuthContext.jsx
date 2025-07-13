@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
         devcourseTrack: response.data.devcourseName,
         devcourseBatch: response.data.devcourseBatch,
         topics: response.data.topics,
-        providerType: response.data.providerType,
+        providerType: response.data.providerType
       };
 
       setUser(updatedUser);
@@ -81,18 +81,16 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider
-      value={{
+      <AuthContext.Provider value={{
         isLoggedIn,
         login,
         logout,
         user,
         loading,
-        refreshUserInfo,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+        refreshUserInfo
+      }}>
+        {children}
+      </AuthContext.Provider>
   );
 };
 
