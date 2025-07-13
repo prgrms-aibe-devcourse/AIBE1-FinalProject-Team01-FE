@@ -8,47 +8,72 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        const response = await apiClient.get("/api/v1/users/me");
+  const initializeAuth = async () => {
+    try {
+      const response = await apiClient.get("/api/v1/users/me");
 
-        setIsLoggedIn(true);
-        setUser({
-          id: response.data.userId,
-          name: response.data.name,
-          email: response.data.email,
-          avatar: response.data.imageUrl || "/assets/user-icon.png",
-          nickname: response.data.nickname,
-          devcourseTrack: response.data.devcourseName,
-          devcourseBatch: response.data.devcourseBatch,
-        });
-      } catch (error) {
-        if (error.response?.status === 401) {
-        } else {
-          console.error("예상치 못한 인증 에러:", error);
-        }
-        setIsLoggedIn(false);
-        setUser(null);
-      } finally {
-        setLoading(false);
+      setIsLoggedIn(true);
+      setUser({
+        id: response.data.userId,
+        name: response.data.name,
+        email: response.data.email,
+        avatar: response.data.imageUrl || "/assets/user-icon.png",
+        nickname: response.data.nickname,
+        devcourseTrack: response.data.devcourseName,
+        devcourseBatch: response.data.devcourseBatch,
+        topics: response.data.topics,
+        providerType: response.data.providerType,
+      });
+    } catch (error) {
+      if (error.response?.status === 401) {
+      } else {
+        console.error("예상치 못한 인증 에러:", error);
       }
-    };
+      setIsLoggedIn(false);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  // 🆕 사용자 정보 새로고침 함수 추가
+  const refreshUserInfo = async () => {
+    try {
+      const response = await apiClient.get("/api/v1/users/me");
+
+      const updatedUser = {
+        id: response.data.userId,
+        name: response.data.name,
+        email: response.data.email,
+        avatar: response.data.imageUrl || "/assets/user-icon.png",
+        nickname: response.data.nickname,
+        devcourseTrack: response.data.devcourseName,
+        devcourseBatch: response.data.devcourseBatch,
+        topics: response.data.topics,
+        providerType: response.data.providerType,
+      };
+
+      setUser(updatedUser);
+      return updatedUser;
+    } catch (error) {
+      console.error("사용자 정보 새로고침 실패:", error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
     initializeAuth();
-  }, []); // 빈 의존성 배열로 한 번만 실행
+  }, []);
 
   const login = (userData, token) => {
     setUser(userData);
     setIsLoggedIn(true);
-    // 로그인 즉시 로딩 상태 해제
     setLoading(false);
   };
 
   const logout = () => {
     setUser(null);
     setIsLoggedIn(false);
-    // 로그아웃 API도 호출해야 할 수 있음
   };
 
   if (loading) {
@@ -56,7 +81,16 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout, user, loading }}>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn,
+        login,
+        logout,
+        user,
+        loading,
+        refreshUserInfo,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

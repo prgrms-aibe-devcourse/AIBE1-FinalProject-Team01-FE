@@ -2,6 +2,7 @@ import React from "react";
 import "../../styles/components/info/info.css";
 import { INFO_CATEGORY_LABELS } from "../../pages/info/constants";
 import { PostCard } from "../board/PostCard";
+import InfoPostCard from "./InfoPostCard.jsx";
 
 /**
  * @typedef {Object} Post
