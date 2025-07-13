@@ -8,8 +8,7 @@ import { useInput } from "../../hooks/useInput";
 import apiClient, { loginUser } from "../../services/api";
 import { isValidEmail } from "../../utils/auth";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const LoginForm = () => {
   const { login } = useAuth();
