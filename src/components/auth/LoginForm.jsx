@@ -109,6 +109,8 @@ export const LoginForm = () => {
         password: pw,
       });
 
+      await refreshUserInfo();
+
       navigate(redirectUrl || "/");
     } catch (error) {
       console.error("로그인 에러:", error);

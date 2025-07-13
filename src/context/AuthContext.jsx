@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }) => {
       const userData = await fetchUserInfo();
 
       setUser(userData);
+      setIsLoggedIn(true);
       return userData;
     } catch (error) {
       console.error("사용자 정보 새로고침 실패:", error);
