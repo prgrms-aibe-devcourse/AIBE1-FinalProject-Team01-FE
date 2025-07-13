@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
+        // setTimeout 제거 - 즉시 API 호출
         const response = await apiClient.get("/api/v1/users/me");
 
         setIsLoggedIn(true);
@@ -21,13 +22,11 @@ export const AuthProvider = ({ children }) => {
           avatar: response.data.imageUrl || "/assets/user-icon.png",
           nickname: response.data.nickname,
           devcourseTrack: response.data.devcourseName,
-          devcourseBatch: response.data.devcourseBatch,
+          devcourseBatch: response.data.devcourseBatch
         });
       } catch (error) {
-        if (error.response?.status === 401) {
-        } else {
-          console.error("예상치 못한 인증 에러:", error);
-        }
+        // 401 에러는 정상적인 로그아웃 상태
+        console.log("사용자 정보 조회 실패 - 로그아웃 상태");
         setIsLoggedIn(false);
         setUser(null);
       } finally {
