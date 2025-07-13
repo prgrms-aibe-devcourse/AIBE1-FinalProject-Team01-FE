@@ -92,7 +92,7 @@ export default function InfoPostCard({
         </div>
         <div className="d-flex align-items-center justify-content-between mt-2">
           <div className="d-flex flex-wrap gap-1 tags-container mb-0">
-            {tags?.map((tag, i) => (
+            {tags.split(",").map((tag, i) => (
               <span key={i} className="tag-badge">
                 {tag}
               </span>

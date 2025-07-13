@@ -1,6 +1,6 @@
 export const INFO_TABS = [
-  { key: "REVIEW", label: "데브코스 후기" },
-  { key: "NEWS", label: "IT 뉴스" },
+  { key: "review", label: "데브코스 후기" },
+  { key: "news", label: "IT 뉴스" },
 ];
 
 export const INFO_CATEGORY_LABELS = {

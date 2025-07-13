@@ -49,7 +49,7 @@ export function AppRouter() {
             <Route path="/signup/profile" element={<ProfileSetupPage />} />
             <Route path="/find-account" element={<FindPasswordPage />} />
 
-            <Route path="/community" element={<ProtectedRoute><Navigate to="/community/FREE" replace /></ProtectedRoute>} />
+            <Route path="/community" element={<ProtectedRoute><Navigate to="/community/free" replace /></ProtectedRoute>} />
             <Route path="/community/:boardType" element={<ProtectedRoute><CommunityPage /></ProtectedRoute>} />
             <Route path="/community/:boardType/write" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
             <Route path="/community/:boardType/:communityId" element={<ProtectedRoute><CommunityBoardDetailPage /></ProtectedRoute>} />
@@ -58,7 +58,7 @@ export function AppRouter() {
             <Route path="/together/:category" element={<ProtectedRoute><TogetherPage /></ProtectedRoute>} />
             <Route path="/together/:category/:postId" element={<ProtectedRoute><TogetherBoardDetailPage /></ProtectedRoute>} />
             <Route path="/together/:category/write" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
-            <Route path="/info" element={<Navigate to="/info/REVIEW" replace />} />
+            <Route path="/info" element={<Navigate to="/info/review" replace />} />
             <Route path="/info/:boardType" element={<InfoPage />} />
             <Route path="/info/:boardType/:itId" element={<InfoBoardDetailPage />} />
             <Route path="/info/:boardType/write" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />

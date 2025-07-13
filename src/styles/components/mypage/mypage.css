@@ -27,18 +27,56 @@
   display: flex;
   align-items: center;
   gap: 6px;
-}
+}/* 기존 스타일에 추가하거나 수정 */
 .mypage-sidebar .sidebar-item {
-  padding-left: 22px;
+  padding: 12px 22px;
   font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  margin: 2px 8px;
+  color: #495057;
 }
-.mypage-sidebar .sidebar-item.active {
-  background: #e3f0ff;
+
+.mypage-sidebar .sidebar-item:hover {
+  background-color: #f1f3f5 !important;
   color: #1976d2;
-  font-weight: bold;
+  transform: translateX(2px);
 }
+
+.mypage-sidebar .sidebar-item.active {
+  background: #e3f0ff !important;
+  color: #1976d2 !important;
+  font-weight: 600;
+  border-left: 3px solid #1976d2;
+}
+
 .mypage-sidebar .sidebar-item.text-danger {
   color: #e74c3c !important;
+}
+
+.mypage-sidebar .sidebar-item.text-danger:hover {
+  background-color: #fdf2f2 !important;
+  color: #c53030 !important;
+}
+
+/* 섹션 헤더는 클릭 불가하도록 */
+.mypage-sidebar .sidebar-section {
+  font-weight: bold;
+  color: #222;
+  font-size: 1.08rem;
+  margin-bottom: 8px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  cursor: default;
+}
+
+/* 첫 번째 섹션의 위쪽 마진 제거 */
+.mypage-sidebar .sidebar-section:first-child {
+  margin-top: 0;
 }
 
 .mypage-profile-img {

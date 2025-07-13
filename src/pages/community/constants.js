@@ -1,7 +1,7 @@
 export const BOARD_TYPE = {
-  FREE: "FREE",
-  QNA: "QNA",
-  RETROSPECT: "RETROSPECT",
+  FREE: "free",
+  QNA: "qna",
+  RETROSPECT: "retrospect",
 };
 
 export const BOARD_TYPE_LABEL = {
