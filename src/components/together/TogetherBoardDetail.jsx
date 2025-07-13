@@ -22,7 +22,7 @@ const TogetherBoardDetail = ({ post, onLike, onBookmark, boardType }) => {
   const navigate = useNavigate();
 
   const handleEdit = () => {
-    navigate(`/together/${boardType.toLowerCase()}/write`, {
+    navigate(`/together/${boardType.toLowerCase()}/write/${post.id}`, {
       state: { postToEdit: post },
     });
   };
