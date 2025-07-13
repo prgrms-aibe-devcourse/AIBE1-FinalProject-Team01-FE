@@ -9,6 +9,9 @@ import apiClient, { loginUser } from "../../services/api";
 import { convertTrackFromApi } from "../../constants/devcourse.js";
 import { isValidEmail } from "../../utils/auth";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+
 export const LoginForm = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -141,6 +144,18 @@ export const LoginForm = () => {
     }
   };
 
+  const handleKakaoLogin = () => {
+    if (isLoading) return;
+    console.log("카카오 OAuth 로그인 시작...");
+    window.location.href = `${API_BASE_URL}/oauth2/authorization/kakao`;
+  };
+
+  const handleGithubLogin = () => {
+    if (isLoading) return;
+    console.log("깃허브 OAuth 로그인 시작...");
+    window.location.href = `${API_BASE_URL}/oauth2/authorization/github`;
+  };
+
   return (
     <div className="loginpage-figma-card">
       <div className="loginpage-figma-card-title">
@@ -253,10 +268,7 @@ export const LoginForm = () => {
             isLoading ? "disabled" : ""
           }`}
           disabled={isLoading}
-          onClick={() => {
-            if (isLoading) return;
-            console.log("카카오 로그인");
-          }}
+          onClick={handleKakaoLogin}
         >
           <img src={kakaoLoginImg} alt="카카오 로그인" />
         </button>
@@ -267,10 +279,7 @@ export const LoginForm = () => {
             isLoading ? "disabled" : ""
           }`}
           disabled={isLoading}
-          onClick={() => {
-            if (isLoading) return;
-            console.log("깃허브 로그인");
-          }}
+          onClick={handleGithubLogin}
         >
           <img src={githubLoginImg} alt="깃허브 로그인" />
         </button>
