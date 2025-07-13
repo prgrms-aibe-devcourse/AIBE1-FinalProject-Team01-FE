@@ -22,10 +22,13 @@ export const AuthProvider = ({ children }) => {
         devcourseTrack: response.data.devcourseName,
         devcourseBatch: response.data.devcourseBatch,
         topics: response.data.topics,
-        providerType: response.data.providerType
+        providerType: response.data.providerType,
       });
     } catch (error) {
-      console.log("사용자 정보 조회 실패 - 로그아웃 상태");
+      if (error.response?.status === 401) {
+      } else {
+        console.error("예상치 못한 인증 에러:", error);
+      }
       setIsLoggedIn(false);
       setUser(null);
     } finally {
