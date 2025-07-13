@@ -46,31 +46,16 @@ const ProfileSetupPage = () => {
     setIsSubmitting(true);
 
     try {
-      // OAuth
       if (isOAuthFlow) {
+        // OAuth
         await apiClient.post("/api/v1/auth/complete-profile", {
           name: name,
           nickname: nickname,
           topics: backendTopics,
         });
-
-        const userResponse = await apiClient.get("/api/v1/users/me");
-
-        login({
-          id: userResponse.data.userId,
-          name: userResponse.data.name,
-          email: userResponse.data.email,
-          avatar: userResponse.data.imageUrl || "/assets/user-icon.png",
-          nickname: userResponse.data.nickname,
-          devcourseTrack: convertTrackFromApi(userResponse.data.devcourseName),
-          devcourseBatch: userResponse.data.devcourseBatch,
-          providerType: userResponse.data.providerType,
-          topics: userResponse.data.topics,
-        });
-
-        console.log("OAuth 프로필 완성 성공, 메인 페이지로 이동");
-        navigate("/");
+        console.log("OAuth 프로필 완성");
       } else {
+        // 로컬 회원가입
         const userData = {
           email: signupData.email,
           password: signupData.password,
@@ -80,10 +65,30 @@ const ProfileSetupPage = () => {
         };
 
         await signupUser(userData);
-        navigate("/login", {
-          state: { email: signupData.email },
+
+        // 회원가입 후 자동 로그인
+        await apiClient.post("/api/v1/auth/login", {
+          email: signupData.email,
+          password: signupData.password,
         });
+        console.log("로컬 회원가입 및 자동 로그인 완료");
       }
+
+      const userResponse = await apiClient.get("/api/v1/users/me");
+
+      login({
+        id: userResponse.data.userId,
+        name: userResponse.data.name,
+        email: userResponse.data.email,
+        avatar: userResponse.data.imageUrl || "/assets/user-icon.png",
+        nickname: userResponse.data.nickname,
+        devcourseTrack: convertTrackFromApi(userResponse.data.devcourseName),
+        devcourseBatch: userResponse.data.devcourseBatch,
+        providerType: userResponse.data.providerType,
+        topics: userResponse.data.topics,
+      });
+
+      navigate("/");
     } catch (error) {
       console.error("프로필 설정 에러:", error);
       if (isOAuthFlow) {
