@@ -75,14 +75,13 @@ export const LoginForm = () => {
           avatar: userResponse.data.imageUrl || "/assets/user-icon.png",
           nickname: userResponse.data.nickname,
           devcourseTrack: convertTrackFromApi(userResponse.data.devcourseName),
-          devcourseBatch: userResponse.data.devcourseBatch
+          devcourseBatch: userResponse.data.devcourseBatch,
         },
         loginResponse.accessToken
       );
 
       navigate(redirectUrl || "/");
     } catch (error) {
-      console.error("로그인 실패: ", error);
       const safeErrorMessage =
         "이메일 또는 비밀번호가 올바르지 않습니다. 다시 시도해주세요.";
       setLoginError(safeErrorMessage);
