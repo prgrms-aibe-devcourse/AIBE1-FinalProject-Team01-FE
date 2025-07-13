@@ -51,7 +51,6 @@ export const LoginForm = () => {
     }
   };
 
-  // 실시간 비밀번호 검증 (누락된 함수 추가)
   const handlePasswordChange = (e) => {
     onPwChange(e);
     setLoginError("");
@@ -92,11 +91,13 @@ export const LoginForm = () => {
     }
 
     if (hasError) {
-      if (!email || !isValidEmail(email)) {
-        emailRef.current?.focus();
-      } else if (!pw) {
-        pwRef.current?.focus();
-      }
+      setTimeout(() => {
+        if (!email || !isValidEmail(email)) {
+          emailRef.current?.focus();
+        } else if (!pw) {
+          pwRef.current?.focus();
+        }
+      }, 100);
       return;
     }
 
@@ -253,6 +254,7 @@ export const LoginForm = () => {
           }`}
           disabled={isLoading}
           onClick={() => {
+            if (isLoading) return;
             console.log("카카오 로그인");
           }}
         >
@@ -266,6 +268,7 @@ export const LoginForm = () => {
           }`}
           disabled={isLoading}
           onClick={() => {
+            if (isLoading) return;
             console.log("깃허브 로그인");
           }}
         >
