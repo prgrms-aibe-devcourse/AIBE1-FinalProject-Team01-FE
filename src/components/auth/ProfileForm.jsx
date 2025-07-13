@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import "../../styles/components/auth/auth.css";
 import { INTEREST_TOPICS } from "../../constants/topics";
-import { checkNicknameDuplicate } from "../../services/authApi";
 
 /**
  * @typedef {Object} ProfileFormProps
@@ -23,7 +22,6 @@ export const ProfileForm = ({
   name,
   nickname,
   selectedTopics,
-  isSubmitting,
   onChangeName,
   onChangeNickname,
   onTopicClick,
@@ -33,8 +31,6 @@ export const ProfileForm = ({
 }) => {
   const nameRef = useRef(null);
   const nicknameRef = useRef(null);
-  const [nameError, setNameError] = useState("");
-  const [nicknameError, setNicknameError] = useState("");
   const [topicError, setTopicError] = useState("");
   const [nicknameCheck, setNicknameCheck] = useState({
     checked: false,
@@ -46,101 +42,70 @@ export const ProfileForm = ({
   const handleNicknameCheck = async () => {
     if (!nickname) {
       setNicknameCheck({ checked: false, message: "닉네임을 입력해 주세요." });
+      nicknameRef.current.focus();
       return;
     }
-
-    if (nickname.length < 2 || nickname.length > 15) {
-      setNicknameCheck({
-        checked: false,
-        message: "닉네임은 2~15글자로 입력해 주세요.",
-      });
-      return;
-    }
-
     setChecking(true);
     setNicknameCheck({ checked: false, message: "" });
-
-    try {
-      const result = await checkNicknameDuplicate(nickname);
-      setNicknameCheck({
-        checked: result.available,
-        message: result.message,
-      });
-    } catch (error) {
+    // TODO: 실제 API 연동
+    if (nickname === "admin") {
       setNicknameCheck({
         checked: false,
-        message: "중복확인 중 오류가 발생했습니다",
+        message: "이미 사용 중인 닉네임입니다.",
       });
-    } finally {
-      setChecking(false);
+    } else {
+      setNicknameCheck({
+        checked: true,
+        message: "사용 가능한 닉네임입니다.",
+      });
     }
+    setChecking(false);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    setNameError("");
-    setNicknameError("");
-    setTopicError("");
-
-    let hasError = false;
-
-    // 이름 검증
     if (!name) {
-      setNameError("이름을 입력해 주세요");
-      hasError = true;
-    } else if (name.length < 2 || name.length > 10) {
-      setNameError("이름은 2~10글자로 입력해 주세요");
-      hasError = true;
+      nameRef.current.setCustomValidity("이름을 입력해 주세요.");
+      nameRef.current.reportValidity();
+      return;
+    } else {
+      nameRef.current.setCustomValidity("");
     }
-
-    // 닉네임 검증
     if (!nickname) {
-      setNicknameError("닉네임을 입력해 주세요");
-      hasError = true;
-    } else if (nickname.length < 2 || nickname.length > 15) {
-      setNicknameError("닉네임은 2~15글자로 입력해 주세요");
-      hasError = true;
-    } else if (!nicknameCheck.checked) {
-      setNicknameError("닉네임 중복 확인을 해주세요");
-      hasError = true;
+      nicknameRef.current.setCustomValidity("닉네임을 입력해 주세요.");
+      nicknameRef.current.reportValidity();
+      return;
+    } else {
+      nicknameRef.current.setCustomValidity("");
     }
-
-    // 관심 주제 검증
+    if (!nicknameCheck.checked) {
+      setNicknameCheck((prev) => ({
+        ...prev,
+        message: "닉네임 중복 확인을 해주세요.",
+      }));
+      nicknameRef.current.focus();
+      return;
+    }
     if (selectedTopics.length < 1) {
-      setTopicError("관심 주제를 최소 1개 선택해 주세요");
-      hasError = true;
+      setTopicError("관심 주제를 최소 1개 선택해 주세요.");
+      return;
     } else if (selectedTopics.length > 3) {
-      setTopicError("관심 주제는 최대 3개까지 선택할 수 있습니다");
-      hasError = true;
+      setTopicError("관심 주제는 최대 3개까지 선택할 수 있습니다.");
+      return;
+    } else {
+      setTopicError("");
     }
-
-    if (hasError) return;
-
     onSubmit(e);
   };
 
   const handleNameChange = (e) => {
-    const value = e.target.value;
-
-    if (value.length > 10) {
-      return;
-    }
-
     onChangeName(e);
-    setNameError("");
+    nameRef.current.setCustomValidity("");
   };
-
   const handleNicknameChange = (e) => {
-    const value = e.target.value;
-
-    if (value.length > 15) {
-      return;
-    }
-
     onChangeNickname(e);
-    setNicknameError("");
-    setNicknameCheck({ checked: false, message: "" });
+    nicknameRef.current.setCustomValidity("");
+    setNicknameCheck({ checked: false, message: "" }); // 닉네임 변경 시 중복확인 초기화
   };
 
   const handleTopicClick = (topic) => {
@@ -166,51 +131,25 @@ export const ProfileForm = ({
         onSubmit={handleSubmit}
       >
         <div className="signup-label">이름</div>
-        <div
-          className={`loginpage-figma-input-group ${
-            nameError
-              ? "error"
-              : name && name.length >= 2 && name.length <= 10
-              ? "success"
-              : ""
-          }`}
-        >
+        <div className="loginpage-figma-input-group">
           <input
             type="text"
-            placeholder="이름을 입력해 주세요 (10글자 이하)"
+            placeholder="이름을 입력해 주세요"
             value={name}
             onChange={handleNameChange}
             ref={nameRef}
+            required
           />
         </div>
-        {nameError && (
-          <div
-            className="email-check-message error"
-            role="alert"
-            aria-live="polite"
-          >
-            {nameError}
-          </div>
-        )}
         <div className="signup-label">닉네임</div>
-        <div
-          className={`loginpage-figma-input-group profile-nickname-group ${
-            nicknameError
-              ? "error"
-              : nickname &&
-                nickname.length >= 2 &&
-                nickname.length <= 15 &&
-                nicknameCheck.checked
-              ? "success"
-              : ""
-          }`}
-        >
+        <div className="loginpage-figma-input-group profile-nickname-group">
           <input
             type="text"
-            placeholder="닉네임을 입력해 주세요(15글자 이하)"
+            placeholder="닉네임을 입력해 주세요"
             value={nickname}
             onChange={handleNicknameChange}
             ref={nicknameRef}
+            required
           />
           <button
             type="button"
@@ -221,22 +160,13 @@ export const ProfileForm = ({
             {checking ? "확인 중..." : "중복확인"}
           </button>
         </div>
-        {nicknameError && (
-          <div
-            className="email-check-message error"
-            role="alert"
-            aria-live="polite"
-          >
-            {nicknameError}
-          </div>
-        )}
         {nicknameCheck.message && (
           <div
-            className={`email-check-message ${
-              nicknameCheck.checked ? "success" : "error"
-            }`}
-            role="alert"
-            aria-live="polite"
+            style={{
+              color: nicknameCheck.checked ? "green" : "red",
+              fontSize: 13,
+              marginBottom: 8,
+            }}
           >
             {nicknameCheck.message}
           </div>
@@ -260,20 +190,15 @@ export const ProfileForm = ({
           선택된 주제: {selectedTopics.join(", ") || "없음"}
         </div>
         {topicError && (
-          <div
-            className="email-check-message error"
-            role="alert"
-            aria-live="polite"
-          >
+          <div style={{ color: "red", fontSize: 13, marginBottom: 8 }}>
             {topicError}
           </div>
         )}
         <button
           type="submit"
           className="loginpage-figma-login-btn signup-btn profile-setup-btn"
-          disabled={isSubmitting}
         >
-          {isSubmitting ? "가입 처리중..." : "아마추어스 시작하기"}{" "}
+          아마추어스 시작하기
         </button>
       </form>
     </div>

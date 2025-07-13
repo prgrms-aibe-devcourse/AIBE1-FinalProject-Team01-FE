@@ -49,6 +49,7 @@ const tokenManager = {
       const currentTime = Date.now() / 1000;
       return payload.exp > currentTime;
     } catch (error) {
+      console.warn("토큰 검증 실패:", error);
       return false;
     }
   },
@@ -62,6 +63,7 @@ const redirectToLogin = () => {
 
   // 메인페이지에서는 리다이렉트 안 함
   if (currentPath === "/") {
+    console.log("메인페이지에서는 401 에러 무시");
     return;
   }
 
@@ -131,6 +133,8 @@ export const loginUser = async (credentials) => {
     });
     return response.data;
   } catch (error) {
+    console.error("로그인 API 에러:", error);
+
     // HTTP 상태 코드에 따른 안전한 에러 메시지
     let errorMessage =
       "이메일 또는 비밀번호가 올바르지 않습니다. 다시 시도해주세요.";
