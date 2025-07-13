@@ -11,7 +11,7 @@ import { isValidEmail } from "../../utils/auth";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const LoginForm = () => {
-  const { login } = useAuth();
+  const { login, refreshUserInfo } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const emailRef = useRef(null);

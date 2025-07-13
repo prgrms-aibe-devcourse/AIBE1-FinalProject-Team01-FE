@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import apiClient from "../services/api.js";
+import { logoutUser } from "../services/authApi.js";
 
 const AuthContext = createContext();
 
@@ -61,7 +62,13 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await logoutUser();
+    } catch {
+      // 실패해도 계속 진행
+    }
+
     setUser(null);
     setIsLoggedIn(false);
   };

@@ -63,3 +63,12 @@ export const signupUser = async (userData) => {
     throw new Error("회원가입 중 오류가 발생했습니다.");
   }
 };
+
+export const logoutUser = async () => {
+  try {
+    const response = await apiClient.post("/api/v1/auth/logout", {});
+    return response.data;
+  } catch (error) {
+    throw new Error("로그아웃 중 오류가 발생했습니다.");
+  }
+};
