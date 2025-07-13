@@ -72,3 +72,16 @@ export const logoutUser = async () => {
     throw new Error("로그아웃 중 오류가 발생했습니다.");
   }
 };
+
+export const reissueToken = async () => {
+  try {
+    const response = await apiClient.post("/api/v1/auth/reissue", {});
+
+    return response.data;
+  } catch (error) {
+    if (error.response?.status === 401) {
+      throw new Error("REFRESH_TOKEN_EXPIRED");
+    }
+    throw new Error("토큰 재발급 중 오류가 발생했습니다.");
+  }
+};
