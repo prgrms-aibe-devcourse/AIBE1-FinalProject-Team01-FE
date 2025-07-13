@@ -7,7 +7,6 @@ import { TOPIC_MAPPING } from "../../constants/topics";
 import "../../styles/components/auth/auth.css";
 import apiClient from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
-import { convertTrackFromApi } from "../../constants/devcourse.js";
 
 const ProfileSetupPage = () => {
   const [name, setName] = useState("");
@@ -73,20 +72,6 @@ const ProfileSetupPage = () => {
         });
         console.log("로컬 회원가입 및 자동 로그인 완료");
       }
-
-      const userResponse = await apiClient.get("/api/v1/users/me");
-
-      login({
-        id: userResponse.data.userId,
-        name: userResponse.data.name,
-        email: userResponse.data.email,
-        avatar: userResponse.data.imageUrl || "/assets/user-icon.png",
-        nickname: userResponse.data.nickname,
-        devcourseTrack: convertTrackFromApi(userResponse.data.devcourseName),
-        devcourseBatch: userResponse.data.devcourseBatch,
-        providerType: userResponse.data.providerType,
-        topics: userResponse.data.topics,
-      });
 
       navigate("/");
     } catch (error) {

@@ -6,7 +6,6 @@ import githubLoginImg from "../../assets/github_login.png";
 import "../../styles/components/auth/auth.css";
 import { useInput } from "../../hooks/useInput";
 import apiClient, { loginUser } from "../../services/api";
-import { convertTrackFromApi } from "../../constants/devcourse.js";
 import { isValidEmail } from "../../utils/auth";
 
 const API_BASE_URL =
@@ -106,29 +105,10 @@ export const LoginForm = () => {
 
     setIsLoading(true);
     try {
-      const loginResponse = await loginUser({
+      await loginUser({
         email,
         password: pw,
       });
-
-      const userResponse = await apiClient.get("/api/v1/users/me", {
-        headers: {
-          Authorization: `Bearer ${loginResponse.accessToken}`,
-        },
-      });
-
-      login(
-        {
-          id: userResponse.data.userId,
-          name: userResponse.data.name,
-          email: userResponse.data.email,
-          avatar: userResponse.data.imageUrl || "/assets/user-icon.png",
-          nickname: userResponse.data.nickname,
-          devcourseTrack: convertTrackFromApi(userResponse.data.devcourseName),
-          devcourseBatch: userResponse.data.devcourseBatch,
-        },
-        loginResponse.accessToken
-      );
 
       navigate(redirectUrl || "/");
     } catch (error) {
