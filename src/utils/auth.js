@@ -15,6 +15,12 @@ export function isAuthorByNickname(userNickname, postNickname) {
   return userNickname === postNickname;
 }
 
+// 이메일 유효성 검사
+export function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 // 비밀번호 유효성 검사: 8자 이상, 알파벳+숫자 포함
 export function isValidPassword(pw) {
   return pw.length >= 8 && /[a-zA-Z]/.test(pw) && /[0-9]/.test(pw);
