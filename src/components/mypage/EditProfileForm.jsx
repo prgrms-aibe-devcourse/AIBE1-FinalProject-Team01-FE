@@ -1,20 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button, Form, Alert, Spinner } from "react-bootstrap";
 import { accountApi } from "../../services/accountApi";
+import { TOPICS } from "../../constants/topics";
 
 // 관심 토픽 상수 (백엔드와 맞춤)
-const AVAILABLE_TOPICS = [
-    { key: 'FRONTEND', label: '프론트엔드' },
-    { key: 'BACKEND', label: '백엔드' },
-    { key: 'FULLSTACK', label: '풀스택' },
-    { key: 'AI', label: 'AI' },
-    { key: 'DEVOPS', label: 'DevOps' },
-    { key: 'MOBILE', label: '모바일' },
-    { key: 'WEB', label: '웹개발' },
-    { key: 'DATABASE', label: '데이터베이스' },
-    { key: 'CLOUD', label: '클라우드' },
-    { key: 'SECURITY', label: '보안' }
-];
+const AVAILABLE_TOPICS = TOPICS;
 
 const getProviderName = (provider) => {
     const providerNames = {

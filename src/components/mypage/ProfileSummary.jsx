@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { accountApi } from "../../services/accountApi";
 import "../../styles/components/mypage/mypage.css";
+import { TOPICS } from "../../constants/topics";
 
 /**
  * @typedef {Object} ProfileSummaryProps
@@ -57,30 +58,18 @@ export const ProfileSummary = ({ onEdit, onChangePassword, profile: initialProfi
     return trackNames[track] || track;
   };
 
-    const getTopicName = (topic) => {
-        const topicNames = {
-            'FRONTEND': '프론트엔드',
-            'BACKEND': '백엔드',
-            'FULLSTACK': '풀스택',
-            'AI': 'AI/ML',
-            'DEVOPS': 'DevOps',
-            'MOBILE': '모바일',
-            'WEB': '웹개발',
-            'DATABASE': '데이터베이스',
-            'CLOUD': '클라우드',
-            'SECURITY': '보안'
-        };
-        return topicNames[topic] || topic;
-    };
+  const getTopicName = (key) => 
+  TOPICS.find(topic => topic.key === key)?.label || key;
 
-    const getProviderName = (provider) => {
-        const providerNames = {
-            'LOCAL': '일반',
-            'GITHUB': '소셜(github)',
-            'KAKAO': '소셜(kakao)',
-        };
-        return providerNames[provider] || provider;
-    };
+
+  const getProviderName = (provider) => {
+      const providerNames = {
+          'LOCAL': '일반',
+          'GITHUB': '소셜(github)',
+          'KAKAO': '소셜(kakao)',
+      };
+      return providerNames[provider] || provider;
+  };
 
   // 로딩 상태
   if (loading) {
