@@ -72,9 +72,9 @@ export default function useTogetherPosts(boardType, initialParams = {}) {
     setError(null);
     try {
         let res;
-        if (boardType === "GATHERING") {
+        if (boardType === "gathering") {
             res = await getGatheringPostList(req);
-        } else if (boardType === "MATCH") {
+        } else if (boardType === "match") {
             res = await getMatchingPostList(req);
         } else {
             res = await getMarketPostList(req);
@@ -176,5 +176,6 @@ export default function useTogetherPosts(boardType, initialParams = {}) {
     setSort,
     setKeyword,
     reset,
+    searchTerm,
   };
 }
