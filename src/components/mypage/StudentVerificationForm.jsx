@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { Button, Form, Alert, Spinner } from "react-bootstrap";
 import { COURSE_NAMES, BATCH_NUMBERS } from "../../constants/devcourse";
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
 /**
  * 수강생 인증 폼 (인증용 사진 업로드)
  */
@@ -12,32 +14,50 @@ export const StudentVerificationForm = ({ onSave, onCancel, initial }) => {
   const [success, setSuccess] = useState("");
 
   const [formData, setFormData] = useState({
-    verificationImage: "", // 🔄 인증용 이미지 (프로필 이미지 X)
+    verificationImage: "",
     devcourseName: "",
     devcourseBatch: "",
   });
 
   const fileInputRef = useRef();
+  const currentImageUrlRef = useRef(null);
 
   useEffect(() => {
     if (initial) {
-        setFormData({
-            verificationImage: "",
-            devcourseName: initial.devcourseName || "",
-            devcourseBatch: initial.devcourseBatch || "",
-        });
+      setFormData({
+        verificationImage: "",
+        devcourseName: initial.devcourseName || "",
+        devcourseBatch: initial.devcourseBatch || "",
+      });
     }
   }, [initial]);
+
+  // 컴포넌트 언마운트 시 URL 해제
+  useEffect(() => {
+    return () => {
+      if (currentImageUrlRef.current) {
+        URL.revokeObjectURL(currentImageUrlRef.current);
+      }
+    };
+  }, []);
 
   const handleImgChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) {
+      if (file.size > MAX_FILE_SIZE) {
         setError("이미지 파일 크기는 5MB 이하여야 합니다.");
         return;
       }
 
+      // 이전 URL이 있다면 해제
+      if (currentImageUrlRef.current) {
+        URL.revokeObjectURL(currentImageUrlRef.current);
+      }
+
+      // 새로운 URL 생성
       const imageUrl = URL.createObjectURL(file);
+      currentImageUrlRef.current = imageUrl; // URL 추적
+      
       setFormData((prev) => ({ ...prev, verificationImage: imageUrl }));
       setError("");
     }
@@ -96,8 +116,7 @@ export const StudentVerificationForm = ({ onSave, onCancel, initial }) => {
             승인 대기 중
           </div>
           <div>
-            관리자 검토 후 <strong>5-10분 내</strong>에 승인 결과를
-            알려드립니다.
+            관리자 검토 후 승인 결과를 알려드립니다.
           </div>
         </Alert>
 
@@ -124,8 +143,7 @@ export const StudentVerificationForm = ({ onSave, onCancel, initial }) => {
           수강생 인증 안내
         </div>
         <small>
-          신청 후 관리자 검토를 거쳐 <strong>5-10분 내</strong>에 승인 결과가
-          나옵니다.
+          신청 후 관리자 검토를 거쳐 승인 결과가 나옵니다.
         </small>
       </Alert>
 
@@ -136,42 +154,42 @@ export const StudentVerificationForm = ({ onSave, onCancel, initial }) => {
       {/* 과정명 */}
       <div className="row mb-4">
         <div className="col-8">
-            <Form.Group>
-                <Form.Label className="fw-medium">과정명</Form.Label>
-                <Form.Select
-                    value={formData.devcourseName}
-                    onChange={(e) =>
-                        setFormData((prev) => ({ ...prev, devcourseName: e.target.value }))
-                    }
-                    >
-                    <option value="">과정을 선택해주세요</option>
-                    {COURSE_NAMES.map((course) => (
-                        <option key={course} value={course}>
-                            {course}
-                        </option>
-                    ))}
-                </Form.Select>
-            </Form.Group>
+          <Form.Group>
+            <Form.Label className="fw-medium">과정명</Form.Label>
+            <Form.Select
+              value={formData.devcourseName}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, devcourseName: e.target.value }))
+              }
+            >
+              <option value="">과정을 선택해주세요</option>
+              {COURSE_NAMES.map((course) => (
+                <option key={course} value={course}>
+                  {course}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
         </div>
 
-      {/* 기수 */}
+        {/* 기수 */}
         <div className="col-4">
-            <Form.Group>
-                <Form.Label className="fw-medium">기수</Form.Label>
-                <Form.Select
-                    value={formData.devcourseBatch}
-                    onChange={(e) =>
-                        setFormData((prev) => ({ ...prev, devcourseBatch: e.target.value }))
-                    }
-                    >
-                    <option value="">기수를 선택해주세요</option>
-                    {BATCH_NUMBERS.map((batch) => (
-                        <option key={batch} value={batch}>
-                            {batch}기
-                        </option>
-                    ))}
-                </Form.Select>
-            </Form.Group>
+          <Form.Group>
+            <Form.Label className="fw-medium">기수</Form.Label>
+            <Form.Select
+              value={formData.devcourseBatch}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, devcourseBatch: e.target.value }))
+              }
+            >
+              <option value="">기수를 선택해주세요</option>
+              {BATCH_NUMBERS.map((batch) => (
+                <option key={batch} value={batch}>
+                  {batch}기
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
         </div>
       </div>
 
