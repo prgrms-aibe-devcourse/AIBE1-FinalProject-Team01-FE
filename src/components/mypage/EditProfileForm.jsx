@@ -4,9 +4,6 @@ import { accountApi } from "../../services/accountApi";
 import { TOPICS } from "../../constants/topics";
 import { getProviderName } from "../../utils/provider";
 
-// 관심 토픽 상수 (백엔드와 맞춤)
-const AVAILABLE_TOPICS = TOPICS;
-
 /**
  * 마이페이지 계정 관리(프로필 수정) 폼 (API 연동)
  */
@@ -573,7 +570,7 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
                     }}
                 >
                     <div className="d-flex flex-wrap gap-2 mb-3">
-                        {AVAILABLE_TOPICS.map((topic) => {
+                        {TOPICS.map((topic) => {
                             const isSelected = formData.topics.includes(topic.key);
                             return (
                                 <Button
@@ -633,7 +630,7 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
                         <strong>선택된 토픽 ({formData.topics.length}/3):</strong> {
                         formData.topics.length > 0
                             ? formData.topics.map(topicKey =>
-                                AVAILABLE_TOPICS.find(t => t.key === topicKey)?.label
+                                TOPICS.find(t => t.key === topicKey)?.label
                             ).join(", ")
                             : "없음"
                     }
