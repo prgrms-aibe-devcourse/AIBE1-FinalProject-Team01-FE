@@ -20,6 +20,7 @@ import HubDetailPage from "../pages/hub/HubDetailPage";
 import HubWritePage from "../pages/hub/HubWritePage";
 import MyPage from "../pages/mypage/MyPage";
 import DMPage from "../pages/dm/DMPage";
+import { OAuthCallbackPage } from "../pages/auth/OAuthCallbackPage";
 
 const ProtectedRoute = ({ children }) => {
     const { isLoggedIn, loading } = useAuth();
@@ -39,7 +40,6 @@ const ProtectedRoute = ({ children }) => {
     return children;
 };
 
-
 export function AppRouter() {
     return (
         <Routes>
@@ -49,16 +49,17 @@ export function AppRouter() {
             <Route path="/signup/profile" element={<ProfileSetupPage />} />
             <Route path="/find-account" element={<FindPasswordPage />} />
 
-            <Route path="/community" element={<ProtectedRoute><Navigate to="/community/FREE" replace /></ProtectedRoute>} />
+            <Route path="/community" element={<ProtectedRoute><Navigate to="/community/free" replace /></ProtectedRoute>} />
             <Route path="/community/:boardType" element={<ProtectedRoute><CommunityPage /></ProtectedRoute>} />
             <Route path="/community/:boardType/write" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
             <Route path="/community/:boardType/:communityId" element={<ProtectedRoute><CommunityBoardDetailPage /></ProtectedRoute>} />
             <Route path="/community/:boardType/:communityId/edit" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
             <Route path="/together" element={<ProtectedRoute><Navigate to="/together/GATHERING" replace /></ProtectedRoute>} />
-            <Route path="/together/:category" element={<ProtectedRoute><TogetherPage /></ProtectedRoute>} />
-            <Route path="/together/:category/:postId" element={<ProtectedRoute><TogetherBoardDetailPage /></ProtectedRoute>} />
-            <Route path="/together/:category/write" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
-            <Route path="/info" element={<Navigate to="/info/REVIEW" replace />} />
+            <Route path="/together/:boardType" element={<ProtectedRoute><TogetherPage /></ProtectedRoute>} />
+            <Route path="/together/:boardType/:postId" element={<ProtectedRoute><TogetherBoardDetailPage /></ProtectedRoute>} />
+            <Route path="/together/:boardType/write" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
+            <Route path="/together/:boardType/write/:postId" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
+            <Route path="/info" element={<Navigate to="/info/review" replace />} />
             <Route path="/info/:boardType" element={<InfoPage />} />
             <Route path="/info/:boardType/:itId" element={<InfoBoardDetailPage />} />
             <Route path="/info/:boardType/write" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />
@@ -71,6 +72,8 @@ export function AppRouter() {
 
             <Route path="/dm" element={<ProtectedRoute><DMPage /></ProtectedRoute>} />
             <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
+            <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
+            <Route path="/oauth/profile-complete" element={<ProfileSetupPage />} />
         </Routes>
     );
 }

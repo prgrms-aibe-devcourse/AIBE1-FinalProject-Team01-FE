@@ -99,7 +99,7 @@ const gatheringPosts = [
     title: "사이드 프로젝트 팀원 구합니다",
     content: "<p>함께 성장할 사이드 프로젝트 팀원을 모집합니다.</p>",
     tags: ["프로젝트", "협업", "포트폴리오"],
-    gatheringType: GATHERING_TYPE.PROJECT,
+    gatheringType: GATHERING_TYPE.SIDE_PROJECT,
     status: GATHERING_STATUS.COMPLETED,
     headCount: 5,
     place: "서울 강남구",
