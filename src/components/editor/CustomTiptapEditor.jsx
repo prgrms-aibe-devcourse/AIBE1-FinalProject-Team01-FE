@@ -65,7 +65,6 @@ export const CustomTiptapEditor = ({
                   editor.chain().focus().setImage({ src: url }).run();
                 });
               }
-              console.error("Image upload on drop successful:", urls);
             })
             .catch((error) => {
               console.error("Image upload on drop failed:", error);
@@ -95,7 +94,6 @@ export const CustomTiptapEditor = ({
               editor.chain().focus().setImage({ src: url }).run();
             });
           }
-          console.error("Image upload successful:", urls);
         } catch (error) {
           console.error("Image upload failed:", error);
           alert("이미지 업로드에 실패했습니다.");
