@@ -51,10 +51,9 @@ function TogetherWritePage() {
         setSchedule(postToEdit.schedule || "");
         setExpertiseArea(postToEdit.expertiseArea || "");
         setPrice(postToEdit.price?.toString() || "");
-        setInitialImages(data.images || []);
       } catch (e) {
         console.error(e);
-        setError("게시글을 불러오는 데 실패했습니다.");
+        setError("`게시글을 불러`오는 데 실패했습니다.");
       }
     }else if(isEditMode && !postToEdit){
       alert("잘못된 접근입니다.")
