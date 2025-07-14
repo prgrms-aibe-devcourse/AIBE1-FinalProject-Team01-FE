@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { accountApi } from "../../services/accountApi";
 import "../../styles/components/mypage/mypage.css";
 import { TOPICS } from "../../constants/topics";
+import { convertTrackFromApi } from "../../constants/devcourse";
 
 /**
  * @typedef {Object} ProfileSummaryProps
@@ -48,19 +49,6 @@ export const ProfileSummary = ({
     } finally {
       setLoading(false);
     }
-  };
-
-  // 토픽명 한글 변환
-  const getDevTrackName = (track) => {
-    const trackNames = {
-      'FRONTEND': '프론트엔드',
-      'BACKEND': '백엔드',
-      'FULL_STACK': '풀스택',
-      'AI_BACKEND': 'AI 백엔드',
-      'DATA_SCIENCE': '데이터 분석',
-      'DATA_ENGINEERING': '데이터 엔지니어링',
-    };
-    return trackNames[track] || track;
   };
 
   const getTopicName = (key) => 
@@ -157,6 +145,40 @@ export const ProfileSummary = ({
                         <i className="bi bi-pencil-square"></i>
                         정보 수정
                     </button>
+                    <button
+                        className="btn btn-outline-success"
+                        onClick={onStudentVerification}
+                        style={{
+                          borderRadius: "8px",
+                          padding: "10px 20px",
+                          fontSize: "0.875rem",
+                          fontWeight: "600",
+                          borderColor: "#198754",
+                          color: "#198754",
+                          backgroundColor: "transparent",
+                          transition: "all 0.2s ease",
+                          minWidth: "120px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "6px",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.backgroundColor = "#198754";
+                          e.target.style.color = "#ffffff";
+                          e.target.style.transform = "translateY(-1px)";
+                          e.target.style.boxShadow = "0 4px 8px rgba(25, 135, 84, 0.2)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.backgroundColor = "transparent";
+                          e.target.style.color = "#198754";
+                          e.target.style.transform = "translateY(0)";
+                          e.target.style.boxShadow = "none";
+                        }}
+                    >
+                      <i className="bi bi-shield-check"></i>
+                      수강생 인증
+                    </button>
                     {profile.providerType === "LOCAL" && (
                     <button
                         className="btn btn-outline-secondary"
@@ -235,7 +257,7 @@ export const ProfileSummary = ({
                             color: '#212529'
                           }}
                       >
-                        {getDevTrackName(profile.devcourseName) || 'AI'}
+                        {convertTrackFromApi(profile.devcourseName) || 'AI'}
                       </div>
                     </div>
                     <div className="col-6">
