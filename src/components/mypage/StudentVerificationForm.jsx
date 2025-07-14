@@ -21,11 +21,11 @@ export const StudentVerificationForm = ({ onSave, onCancel, initial }) => {
 
   useEffect(() => {
     if (initial) {
-      setFormData({
-        verificationImage: "",
-        devcourseName: initial.devcourseName || "",
-        devcourseBatch: initial.devcourseBatch || "",
-      });
+        setFormData({
+            verificationImage: "",
+            devcourseName: initial.devcourseName || "",
+            devcourseBatch: initial.devcourseBatch || "",
+        });
     }
   }, [initial]);
 
@@ -133,6 +133,48 @@ export const StudentVerificationForm = ({ onSave, onCancel, initial }) => {
       {error && <Alert variant="danger">{error}</Alert>}
       {success && <Alert variant="success">{success}</Alert>}
 
+      {/* 과정명 */}
+      <div className="row mb-4">
+        <div className="col-8">
+            <Form.Group>
+                <Form.Label className="fw-medium">과정명</Form.Label>
+                <Form.Select
+                    value={formData.devcourseName}
+                    onChange={(e) =>
+                        setFormData((prev) => ({ ...prev, devcourseName: e.target.value }))
+                    }
+                    >
+                    <option value="">과정을 선택해주세요</option>
+                    {COURSE_NAMES.map((course) => (
+                        <option key={course} value={course}>
+                            {course}
+                        </option>
+                    ))}
+                </Form.Select>
+            </Form.Group>
+        </div>
+
+      {/* 기수 */}
+        <div className="col-4">
+            <Form.Group>
+                <Form.Label className="fw-medium">기수</Form.Label>
+                <Form.Select
+                    value={formData.devcourseBatch}
+                    onChange={(e) =>
+                        setFormData((prev) => ({ ...prev, devcourseBatch: e.target.value }))
+                    }
+                    >
+                    <option value="">기수를 선택해주세요</option>
+                    {BATCH_NUMBERS.map((batch) => (
+                        <option key={batch} value={batch}>
+                            {batch}기
+                        </option>
+                    ))}
+                </Form.Select>
+            </Form.Group>
+        </div>
+      </div>
+
       {/* 인증용 사진 업로드 */}
       <Form.Group className="mb-4">
         <Form.Label className="fw-medium mb-3">인증용 사진 업로드</Form.Label>
@@ -203,42 +245,6 @@ export const StudentVerificationForm = ({ onSave, onCancel, initial }) => {
             <br />• 개인정보가 포함된 경우 일부 가릴 수 있습니다
           </div>
         </div>
-      </Form.Group>
-
-      {/* 과정명 */}
-      <Form.Group className="mb-3">
-        <Form.Label className="fw-medium">과정명</Form.Label>
-        <Form.Select
-            value={formData.devcourseName}
-            onChange={(e) =>
-                setFormData((prev) => ({ ...prev, devcourseName: e.target.value }))
-            }
-            >
-            <option value="">과정을 선택해주세요</option>
-            {COURSE_NAMES.map((course) => (
-                <option key={course} value={course}>
-                    {course}
-                </option>
-            ))}
-        </Form.Select>
-      </Form.Group>
-
-      {/* 기수 */}
-      <Form.Group className="mb-4">
-        <Form.Label className="fw-medium">기수</Form.Label>
-        <Form.Select
-            value={formData.devcourseBatch}
-            onChange={(e) =>
-                setFormData((prev) => ({ ...prev, devcourseBatch: e.target.value }))
-            }
-            >
-            <option value="">기수를 선택해주세요</option>
-            {BATCH_NUMBERS.map((batch) => (
-                <option key={batch} value={batch}>
-                    {batch}기
-                </option>
-            ))}
-        </Form.Select>
       </Form.Group>
 
       {/* 버튼 */}

@@ -25,6 +25,7 @@ const TAB_LIST = [
 
 export default function MyPage() {
     const [editMode, setEditMode] = useState(false);
+    const [verificationMode, setVerificationMode] = useState(false);
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const { user, isLoggedIn, refreshUserInfo } = useAuth();
@@ -35,10 +36,15 @@ export default function MyPage() {
         email: user.email || '',
         imageUrl: user.avatar || '/assets/user-icon.png',
         nickname: user.nickname || '',
-        devcourseName: user.devcourseTrack || 'AI 백엔드',
-        devcourseBatch: user.devcourseBatch || '1',
+        devcourseName: user.devcourseTrack || '',
+        devcourseBatch: user.devcourseBatch || '',
         topics: user.topics || [],
         providerType: user.providerType || 'LOCAL'  // 추가 필요
+    };
+
+    const handleStudentVerification = () => {
+        setEditMode(false);
+        setVerificationMode(true);
     };
 
     // URL 쿼리 파라미터에서 현재 탭과 페이지 정보 추출
