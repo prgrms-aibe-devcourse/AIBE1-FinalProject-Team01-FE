@@ -55,11 +55,11 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
             const profileData = {
                 name: initial.name || '',
                 nickname: initial.nickname || '',
-                imageUrl: initial.imageUrl || initial.avatar || '', // avatar도 체크
+                imageUrl: initial.imageUrl || initial.avatar || '',
                 topics: initial.topics || [],
                 email: initial.email || '',
-                devcourseName: initial.devcourseName || initial.devcourseTrack || 'AI', // devcourseTrack도 체크
-                devcourseBatch: initial.devcourseBatch || '1',
+                devcourseName: initial.devcourseName || initial.devcourseTrack || '',
+                devcourseBatch: initial.devcourseBatch || '',
                 providerType: initial.providerType || "LOCAL"
             };
 
