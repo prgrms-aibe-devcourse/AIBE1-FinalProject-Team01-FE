@@ -257,7 +257,7 @@ export const ProfileSummary = ({
                             color: '#212529'
                           }}
                       >
-                        {convertTrackFromApi(profile.devcourseName) || 'AI'}
+                        {profile.devcourseName ? convertTrackFromApi(profile.devcourseName) : '미설정'}
                       </div>
                     </div>
                     <div className="col-6">
@@ -277,7 +277,7 @@ export const ProfileSummary = ({
                             color: '#212529'
                           }}
                       >
-                        {profile.devcourseBatch}기
+                        {profile.devcourseBatch ? `${profile.devcourseBatch}기` : '미설정'}
                       </div>
                     </div>
                       <div className="col-6">
