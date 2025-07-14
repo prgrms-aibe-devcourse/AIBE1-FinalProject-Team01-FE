@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import apiClient, { tokenManager } from "../services/api.js";
+import apiClient from "../services/api.js";
+import { logoutUser } from "../services/authApi.js";
 
 const AuthContext = createContext();
 
@@ -27,23 +28,10 @@ export const AuthProvider = ({ children }) => {
 
   const initializeAuth = async () => {
     try {
-      const hasToken = tokenManager.getAccessToken();
-      if (!hasToken) {
-        setIsLoggedIn(false);
-        setUser(null);
-        setLoading(false);
-        return;
-      }
-
       const userData = await fetchUserInfo();
       setIsLoggedIn(true);
       setUser(userData);
     } catch (error) {
-      if (error.response?.status === 401) {
-        tokenManager.removeToken();
-      } else {
-        console.error("예상치 못한 인증 에러:", error);
-      }
       setIsLoggedIn(false);
       setUser(null);
     } finally {
@@ -57,6 +45,7 @@ export const AuthProvider = ({ children }) => {
       const userData = await fetchUserInfo();
 
       setUser(userData);
+      setIsLoggedIn(true);
       return userData;
     } catch (error) {
       console.error("사용자 정보 새로고침 실패:", error);
@@ -68,13 +57,19 @@ export const AuthProvider = ({ children }) => {
     initializeAuth();
   }, []);
 
-  const login = (userData, token) => {
+  const login = (userData) => {
     setUser(userData);
     setIsLoggedIn(true);
     setLoading(false);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await logoutUser();
+    } catch {
+      // 실패해도 계속 진행
+    }
+
     setUser(null);
     setIsLoggedIn(false);
   };

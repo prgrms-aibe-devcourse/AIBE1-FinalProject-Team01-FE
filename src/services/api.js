@@ -1,9 +1,24 @@
 import axios from "axios";
-import tokenManager from "../utils/tokenManager.js";
+import { reissueToken } from "./authApi.js";
 
 // 기본 API 설정
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) {
+      reject(error);
+    } else {
+      resolve(token);
+    }
+  });
+
+  failedQueue = [];
+};
 
 // Axios 인스턴스 생성
 export const apiClient = axios.create({
@@ -18,8 +33,11 @@ export const apiClient = axios.create({
 const redirectToLogin = () => {
   const currentPath = window.location.pathname;
 
-  // 메인페이지에서는 리다이렉트 안 함
-  if (currentPath === "/") {
+  if (
+    currentPath === "/" ||
+    currentPath === "/login" ||
+    currentPath === "/signup"
+  ) {
     return;
   }
 
@@ -28,29 +46,49 @@ const redirectToLogin = () => {
   window.location.href = `/login?redirectUrl=${encodedRedirectUrl}`;
 };
 
-// 요청 인터셉터 - JWT 토큰 자동 추가
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = tokenManager.getAccessToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
 // 응답 인터셉터 - 401 에러 처리
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      if (error.config.url.includes("/users/me")) {
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      if (error.config.url.includes("/auth/reissue")) {
         return Promise.reject(error);
       }
 
+      originalRequest._retry = true;
+
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then(() => {
+            return apiClient(originalRequest);
+          })
+          .catch((err) => {
+            return Promise.reject(err);
+          });
+      }
+
+      isRefreshing = true;
+
+      try {
+        await reissueToken();
+
+        processQueue(null);
+        return apiClient(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError, null);
+
+        redirectToLogin();
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
+    if (error.response?.status === 401) {
       const excludeUrls = [
         "/api/v1/community/",
         "/api/v1/like",
@@ -71,7 +109,6 @@ apiClient.interceptors.response.use(
       }
 
       console.log("🔐 인증 만료");
-      tokenManager.removeToken();
       redirectToLogin();
     }
     return Promise.reject(error);
@@ -104,5 +141,3 @@ export const loginUser = async (credentials) => {
     throw new Error(errorMessage);
   }
 };
-
-export { tokenManager };
