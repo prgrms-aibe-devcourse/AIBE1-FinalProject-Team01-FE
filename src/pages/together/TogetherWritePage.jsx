@@ -10,7 +10,7 @@ import { createMarketPost, getMarketPostDetail, updateMarketPost } from "../../s
 
 
 
-function TogetherWritePage() {
+const TogetherWritePage = () => {
   const navigate = useNavigate();
   const { boardType, postId } = useParams(); 
   const isEditMode = Boolean(postId);
@@ -367,6 +367,5 @@ function TogetherWritePage() {
       </Form>
     </Container>
   );
-}
-
+};
 export default TogetherWritePage;

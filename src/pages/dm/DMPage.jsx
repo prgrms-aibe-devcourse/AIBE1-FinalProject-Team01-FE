@@ -8,7 +8,7 @@ import "../../styles/components/dm/dm.css";
 /**
  * DM 페이지 메인 컴포넌트
  */
-export default function DMPage() {
+const DMPage = () => {
   return (
     <>
       <HeroSection backgroundImageSrc={heroChatImage} />
@@ -17,4 +17,5 @@ export default function DMPage() {
       </div>
     </>
   );
-}
+};
+export default DMPage;

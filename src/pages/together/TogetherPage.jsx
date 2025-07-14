@@ -17,7 +17,7 @@ import useTogetherPosts from "../../hooks/useTogetherPosts";
 /**
  * 투게더 메인 페이지 컴포넌트
  */
-function TogetherPage() {
+const TogetherPage = () => {
   const { boardType = "GATHERING" } = useParams();
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
@@ -78,6 +78,5 @@ function TogetherPage() {
       </div>
     </>
   );
-}
-
+};
 export default TogetherPage;

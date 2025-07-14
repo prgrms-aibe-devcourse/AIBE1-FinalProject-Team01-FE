@@ -7,7 +7,7 @@ import { useImageUpload } from "../../hooks/useImageUpload";
 import { INFO_CATEGORY_LABELS } from "./constants";
 import { createInfoPost, updateInfoPost } from "../../services/infoApi.js";
 
-export default function InfoWritePage() {
+const InfoWritePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
@@ -116,4 +116,5 @@ export default function InfoWritePage() {
       </Form>
     </div>
   );
-}
+};
+export default InfoWritePage;
