@@ -35,7 +35,7 @@ export default function MyPage() {
     email: user.email || "",
     imageUrl: user.avatar || "/assets/user-icon.png",
     nickname: user.nickname || "",
-    devcourseName: user.devcourseTrack || "AI",
+    devcourseName: user.devcourseTrack || "생성형 AI 활용 백엔드",
     devcourseBatch: user.devcourseBatch || "1",
     topics: user.topics || [],
     providerType: user.providerType || "LOCAL", // 추가 필요

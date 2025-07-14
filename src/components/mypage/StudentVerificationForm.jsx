@@ -132,6 +132,44 @@ export const StudentVerificationForm = ({ onSave, onCancel, initial }) => {
       {error && <Alert variant="danger">{error}</Alert>}
       {success && <Alert variant="success">{success}</Alert>}
 
+      <div className="row mb-4">
+        <div className="col-8">
+          <Form.Group>
+            <Form.Label className="fw-medium">과정명</Form.Label>
+            <Form.Control
+              type="text"
+              value={formData.devcourseName}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  devcourseName: e.target.value,
+                }))
+              }
+              placeholder="예: AI, 프론트엔드, 백엔드..."
+              required
+            />
+          </Form.Group>
+        </div>
+        <div className="col-4">
+          <Form.Group>
+            <Form.Label className="fw-medium">기수</Form.Label>
+            <Form.Control
+              type="number"
+              value={formData.devcourseBatch}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  devcourseBatch: e.target.value,
+                }))
+              }
+              placeholder="예: 1, 2, 3..."
+              required
+              min="1"
+            />
+          </Form.Group>
+        </div>
+      </div>
+
       {/* 인증용 사진 업로드 */}
       <Form.Group className="mb-4">
         <Form.Label className="fw-medium mb-3">인증용 사진 업로드</Form.Label>
@@ -202,34 +240,6 @@ export const StudentVerificationForm = ({ onSave, onCancel, initial }) => {
             <br />• 개인정보가 포함된 경우 일부 가릴 수 있습니다
           </div>
         </div>
-      </Form.Group>
-
-      {/* 과정명 */}
-      <Form.Group className="mb-3">
-        <Form.Label className="fw-medium">과정명</Form.Label>
-        <Form.Control
-          type="text"
-          value={formData.devcourseName}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, devcourseName: e.target.value }))
-          }
-          placeholder="예: AI, 프론트엔드, 백엔드..."
-          required
-        />
-      </Form.Group>
-
-      {/* 기수 */}
-      <Form.Group className="mb-4">
-        <Form.Label className="fw-medium">기수</Form.Label>
-        <Form.Control
-          type="text"
-          value={formData.devcourseBatch}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, devcourseBatch: e.target.value }))
-          }
-          placeholder="예: 1, 2, 3..."
-          required
-        />
       </Form.Group>
 
       {/* 버튼 */}
