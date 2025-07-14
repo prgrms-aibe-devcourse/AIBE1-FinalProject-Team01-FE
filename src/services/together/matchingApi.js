@@ -4,7 +4,7 @@ const MATCHING_BASE_URL = "/api/v1/matches";
 
 export const getMatchingPostList = async (params = {}) => {
   try {
-    const { page = 0, size = 10, sortDirection, field } = params;
+    const { page = 0, size = 10, sortDirection, field, keyword } = params;
 
     const queryParams = new URLSearchParams();
     queryParams.append("page", page.toString());
@@ -15,6 +15,9 @@ export const getMatchingPostList = async (params = {}) => {
     }
     if (field) {
       queryParams.append("field", field);
+    }
+    if (keyword && keyword.trim()) {
+      queryParams.append("keyword", keyword.trim());
     }
 
     const response = await apiClient.get(`${MATCHING_BASE_URL}?${queryParams.toString()}`);

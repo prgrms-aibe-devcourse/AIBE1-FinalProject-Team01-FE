@@ -22,15 +22,11 @@ const TogetherBoardList = ({ posts, boardType }) => {
     navigate(`/together/${boardType}/${post.id}`);
   };
 
-  if (!posts || posts.length === 0) {
-    return <div className="text-center py-5">게시글이 없습니다.</div>;
-  }
-
   return (
     <div className="d-flex flex-column gap-3">
       {posts.map((post) => {
         const categoryLabel =
-          boardType === "GATHERING"
+          boardType === "gathering"
             ? GATHERING_TYPE_LABELS[post.gatheringType]
             : MATCH_TYPE_LABELS[post.matchingType];
 

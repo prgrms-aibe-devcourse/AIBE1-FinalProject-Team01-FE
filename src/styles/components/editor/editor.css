@@ -57,6 +57,10 @@ img {
   height: auto;
 }
 
+.custom-editor img {
+  max-width: 30%;
+  height: auto;}
+
 img.ProseMirror-selectednode {
   outline: 3px solid #68cef8;
 }

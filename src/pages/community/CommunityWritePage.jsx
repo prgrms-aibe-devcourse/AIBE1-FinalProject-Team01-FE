@@ -42,7 +42,7 @@ const CommunityWritePage = () => {
       setContent(postToEdit.content || "");
     }else if (isEditMode && !postToEdit) {
       alert("잘못된 접근입니다.")
-      navigate("/community/FREE")
+      navigate("/community/free")
     }
   }, [isEditMode, postToEdit]);
 

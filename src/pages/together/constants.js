@@ -94,16 +94,16 @@ export const STATUS_COLOR_MAP = {
 
 // UI 컴포넌트용 상수
 export const BOARD_TABS = [
-  { id: "GATHERING", label: "스터디/프로젝트" },
-  { id: "MATCH", label: "커피챗/멘토링" },
-  { id: "MARKET", label: "중고장터" },
+  { id: "gathering", label: "스터디/프로젝트" },
+  { id: "match", label: "커피챗/멘토링" },
+  { id: "market", label: "중고장터" },
 ];
 
 // 글쓰기 페이지용 카테고리
 export const TOGETHER_CATEGORIES = [
   {
     label: "스터디/프로젝트",
-    value: "GATHERING",
+    value: "gathering",
     subCategories: [
       { label: "스터디", value: "STUDY" },
       { label: "프로젝트", value: "SIDE_PROJECT" },
@@ -111,7 +111,7 @@ export const TOGETHER_CATEGORIES = [
   },
   {
     label: "커피챗/멘토링",
-    value: "MATCH",
+    value: "match",
     subCategories: [
       { label: "커피챗", value: "COFFEE_CHAT" },
       { label: "멘토링", value: "MENTORING" },
@@ -119,7 +119,7 @@ export const TOGETHER_CATEGORIES = [
   },
   {
     label: "중고장터",
-    value: "MARKET",
+    value: "market",
     subCategories: [], // 중고장터는 하위 카테고리 없음
   },
 ];

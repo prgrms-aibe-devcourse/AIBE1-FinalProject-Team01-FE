@@ -50,37 +50,7 @@ export const HubBoardDetail = ({
         </p>
       )}
       <HubPostInfo post={post} />
-      <div className="row g-5 mt-1">
-        <div className="col-md-5">
-          {postImages && postImages.length > 0 && (
-            <>
-              <img
-                src={mainImage}
-                alt={title}
-                className="img-fluid rounded hub-detail-main-image mb-3"
-              />
-              {postImages.length > 1 && (
-                <div className="d-flex flex-wrap gap-2">
-                  {postImages.map((image, index) => (
-                    <img
-                      key={index}
-                      src={image.imageUrl}
-                      alt={`${title} thumbnail ${index + 1}`}
-                      className={`rounded hub-detail-thumbnail ${
-                        mainImage === image.imageUrl ? "active" : ""
-                      }`}
-                      onClick={() => setMainImage(image.imageUrl)}
-                    />
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-        </div>
-        <div className="col-md-7">
-          <PostContent post={post} stripImages={true} />
-        </div>
-      </div>
+      <PostContent post={post} stripImages={true} />
     </BoardDetailLayout>
   );
 };

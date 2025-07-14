@@ -7,14 +7,6 @@ import AlarmDropdown from "./AlarmDropdown";
 import { useAlarms } from "../../hooks/useAlarms";
 import "../../styles/components/common/NavigationBar.css";
 
-// 개발자용 임시 로그인 버튼들
-const DevLoginButtons = () => {
-  const { login, isLoggedIn } = useAuth();
-  if (isLoggedIn) return null;
-
-  // .env에서 개발용 토큰 가져오기
-  const devToken = import.meta.env.VITE_DEV_JWT_TOKEN || "dev_dummy_token";
-};
 
 export const NavigationBar = ({ onlyLogo }) => {
   const navigate = useNavigate();

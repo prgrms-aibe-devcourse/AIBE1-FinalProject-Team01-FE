@@ -26,11 +26,11 @@ const TogetherBoardDetailPage = () => {
       setError(null);
       try {
         let data;
-        if (boardType === "GATHERING") {
+        if (boardType === "gathering") {
           data = await getGatheringPostDetail(postId);
-        } else if (boardType === "MATCH") {
+        } else if (boardType === "match") {
           data = await getMatchingPostDetail(postId);
-        } else if (boardType === "MARKET") {
+        } else if (boardType === "market") {
           data = await getMarketPostDetail(postId);
         } else {
           throw new Error("Unknown board type: " + boardType);
@@ -90,20 +90,12 @@ const TogetherBoardDetailPage = () => {
 
   return (
     <Container className="py-5">
-      {boardType === "MARKET" ? (
-        <MarketBoardDetail
-          post={detailPost}
-          onLike={toggleLike}
-          onBookmark={toggleBookmark}
-        />
-      ) : (
         <TogetherBoardDetail
           post={detailPost}
           onLike={toggleLike}
           onBookmark={toggleBookmark}
           boardType={boardType}
         />
-      )}
     </Container>
   );
 };

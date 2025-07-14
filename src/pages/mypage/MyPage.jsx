@@ -10,6 +10,7 @@ import WithdrawPage from "../../components/mypage/WithdrawPage.jsx";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getPostDetailUrl } from "../../utils/board";
 import ChangePasswordPage from "../../components/mypage/ChangePasswordPage.jsx";
+import { StudentVerificationForm } from "../../components/mypage/StudentVerificationForm";
 
 
 /**
@@ -24,6 +25,7 @@ const TAB_LIST = [
 
 const MyPage = () => {
     const [editMode, setEditMode] = useState(false);
+    const [verificationMode, setVerificationMode] = useState(false);
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const { user, isLoggedIn, refreshUserInfo } = useAuth();
@@ -34,10 +36,15 @@ const MyPage = () => {
         email: user.email || '',
         imageUrl: user.avatar || '/assets/user-icon.png',
         nickname: user.nickname || '',
-        devcourseName: user.devcourseTrack || 'AI',
-        devcourseBatch: user.devcourseBatch || '1',
+        devcourseName: user.devcourseTrack || '',
+        devcourseBatch: user.devcourseBatch || '',
         topics: user.topics || [],
         providerType: user.providerType || 'LOCAL'  // 추가 필요
+    };
+
+    const handleStudentVerification = () => {
+        setEditMode(false);
+        setVerificationMode(true);
     };
 
     // URL 쿼리 파라미터에서 현재 탭과 페이지 정보 추출
@@ -141,11 +148,20 @@ const MyPage = () => {
                 onSave={handleSave}
                 onCancel={handleCancel}
             />
+        ) : verificationMode ? (
+            <StudentVerificationForm
+                initial={profileData}
+                onSave={(updatedData) => {
+                setVerificationMode(false);
+                }}
+                onCancel={() => setVerificationMode(false)}
+            />
         ) : (
             <ProfileSummary
                 profile={profileData}  // 현재 user 데이터 전달
                 onEdit={handleEdit}
                 onChangePassword={() => handleMenuChange("changePassword")}
+                onStudentVerification={handleStudentVerification}
             />
         ),
         changePassword: (
