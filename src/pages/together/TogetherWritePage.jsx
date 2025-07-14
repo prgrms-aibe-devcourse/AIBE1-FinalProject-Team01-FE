@@ -351,8 +351,6 @@ function TogetherWritePage() {
               onChange={setContent}
               onImageUpload={handleUpload}
               placeholder="내용을 입력하세요..."
-            onImageUpload={handleUpload}
-            placeholder="내용을 입력하세요..."
           />
         </Form.Group>
 
