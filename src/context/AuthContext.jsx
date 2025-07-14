@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import apiClient from "../services/api.js";
+import { logoutUser } from "../services/authApi.js";
 
 const AuthContext = createContext();
 
@@ -44,6 +45,7 @@ export const AuthProvider = ({ children }) => {
       const userData = await fetchUserInfo();
 
       setUser(userData);
+      setIsLoggedIn(true);
       return userData;
     } catch (error) {
       console.error("사용자 정보 새로고침 실패:", error);
@@ -61,7 +63,13 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await logoutUser();
+    } catch {
+      // 실패해도 계속 진행
+    }
+
     setUser(null);
     setIsLoggedIn(false);
   };
