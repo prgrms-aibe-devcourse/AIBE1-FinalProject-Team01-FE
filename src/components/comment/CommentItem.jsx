@@ -5,6 +5,7 @@ import { isAuthor } from "../../utils/auth";
 import ReportModal from "../common/ReportModal";
 import { submitReport } from "../../services/reportApi.js";
 import '../../styles/components/comment/CommentSection.css'
+import UserInfoModal from "../user/UserInfoModal.jsx";
 
 /**
  * @typedef {Object} CommentItemProps
@@ -51,6 +52,7 @@ const CommentItem = (props) => {
 
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [replySubmitting, setReplySubmitting] = useState(false);
@@ -210,10 +212,18 @@ const CommentItem = (props) => {
               src={profileImageUrl}
               alt="프로필"
               className="comment-author-img"
+              style={{ cursor: 'pointer' }}
+              onClick={() => setShowModal(true)}
           />
           <div className="d-flex align-items-center w-100">
             <div className="d-flex align-items-center flex-grow-1">
-              <span className="comment-author-name">{nickname}</span>
+              <span 
+                className="comment-author-name"
+                style={{ cursor: 'pointer' }} 
+                onClick={() => setShowModal(true)}
+              >
+                {nickname}
+              </span>
             </div>
             <span className="comment-date">
             {new Date(createdAt).toLocaleString()}
@@ -406,6 +416,12 @@ const CommentItem = (props) => {
             reportTarget="COMMENT"
             onSubmit={handleReportSubmit}
         />
+        {/* 사용자 정보 모달 */}
+        <UserInfoModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        nickname={nickname}
+      />
       </div>
   );
 };

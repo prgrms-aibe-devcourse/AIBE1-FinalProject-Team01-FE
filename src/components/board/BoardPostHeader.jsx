@@ -5,6 +5,7 @@ import UserInfo from "../common/UserInfo";
 import InfoPostInfo from "../info/InfoPostInfo";
 import "../../styles/components/common/PostInfoHeader.css";
 import { BOARD_TYPE_LABEL } from "../../pages/community/constants";
+import UserInfoModal from "../user/UserInfoModal";
 
 /**
  * @typedef {Object} BoardPostHeaderProps
@@ -28,6 +29,7 @@ export const BoardPostHeader = ({
     isDeleting
 }) => {
   const { user: currentUser } = useAuth();
+  const [showModal, setShowModal] = useState(false);
 
   const user = post.user ||
     (post.nickname ? {
@@ -156,9 +158,17 @@ export const BoardPostHeader = ({
                                         src={user.profileImageUrl}
                                         alt="프로필"
                                         className="author-img"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => setShowModal(true)}
                                     />
                                 )}
-                                <span className="author-name fw-bold">{user?.nickname}</span>
+                                <span 
+                                    className="author-name fw-bold"
+                                    onClick={() => setShowModal(true)}
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    {user?.nickname}
+                                </span>
                                 {devcourseName && (
                                     <span className="author-batch">{devcourseName}</span>
                                 )}
@@ -177,6 +187,12 @@ export const BoardPostHeader = ({
                 </div>
             )}
             <hr />
+            {/* 사용자 정보 모달 */}
+            <UserInfoModal
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                nickname={user?.nickname}
+            />
         </div>
     );
 };

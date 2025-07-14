@@ -1,7 +1,7 @@
 import apiClient from "./api";
 
 
-FOLLOW_API_BASE_URL = "api/v1";
+const FOLLOW_API_BASE_URL = "/api/v1";
 
 export const followUser = async (userId) => {
     try {
@@ -22,6 +22,15 @@ export const unfollowUser = async (userId) => {
     }
 }
 
+export const getModalInfo = async (nickname) => {
+    try {
+        const response = await apiClient.get(`${FOLLOW_API_BASE_URL}/users/${nickname}/info`);
+        return response.data;
+    } catch (error) {
+        console.error("❌ 유저 정보 조회 실패:", error);
+        throw error;
+    }
+};
 
 export const getFollowingList = async () => {
     try {
