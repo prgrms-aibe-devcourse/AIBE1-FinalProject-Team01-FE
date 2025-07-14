@@ -3,7 +3,6 @@ import { apiClient } from "./api";
 export const getPosts = async (params) => {
     try {
         const response = await apiClient.get(`/api/v1/projects`, { params });
-        console.log(`프로젝트 허브 목록 조회 성공: `, response.data);
         return response.data;
     } catch (error) {
         console.error(`프로젝트 허브 목록 조회 요청 실패: `, error);

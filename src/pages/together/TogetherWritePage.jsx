@@ -1,20 +1,20 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Container, Form, Button, Row, Col, Alert } from "react-bootstrap";
 import { CustomTiptapEditor } from "../../components/editor/CustomTiptapEditor";
 import { TagInput } from "../../components/common/TagInput";
 import { TOGETHER_CATEGORIES } from "./constants";
-import { createGatheringPost, getGatheringPostDetail, updateGatheringPost } from "../../services/together/gatheringApi";
-import { createMatchingPost, getMatchingPostDetail, updateMatchingPost } from "../../services/together/matchingApi";
-import { createMarketPost, getMarketPostDetail, updateMarketPost } from "../../services/together/marketApi";
-import { useImageUpload } from "../../hooks/useImageUpload";
-
-
+import { createGatheringPost, updateGatheringPost } from "../../services/together/gatheringApi";
+import { createMatchingPost, updateMatchingPost } from "../../services/together/matchingApi";
+import { createMarketPost, updateMarketPost } from "../../services/together/marketApi";
+import {useImageUpload} from "../../hooks/useImageUpload.js";
 
 function TogetherWritePage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { boardType, postId } = useParams(); 
   const isEditMode = Boolean(postId);
+  const { postToEdit } = location.state || {};
 
   const [error, setError] = useState(null);
   // 공통 필드
@@ -38,35 +38,28 @@ function TogetherWritePage() {
   const [price, setPrice] = useState(""); // Market
 
   useEffect(() => {
-    if (!isEditMode) return;
-
-    (async () => {
+    if (isEditMode && postToEdit){
       try {
-        let data;
-        if (boardType === "gathering") {
-          data = await getGatheringPostDetail(postId);
-        } else if (boardType === "match") {
-          data = await getMatchingPostDetail(postId);
-        } else {
-          data = await getMarketPostDetail(postId);
-        }
         setMainCategory(boardType);
-        setSubCategory(data.gatheringType || data.matchingType || "");
-        setTitle(data.title);
-        setContent(data.content);
-        setTags((data.tags || "").split(",").filter(t => t));
-        setHeadCount(data.headCount?.toString() || "");
-        setPeriod(data.period || "");
-        setPlace(data.place || "");
-        setSchedule(data.schedule || "");
-        setExpertiseArea(data.expertiseArea || "");
-        setPrice(data.price?.toString() || "");
+        setSubCategory(postToEdit.gatheringType || postToEdit.matchingType || "");
+        setTitle(postToEdit.title);
+        setContent(postToEdit.content);
+        setTags((postToEdit.tags || ""));
+        setHeadCount(postToEdit.headCount?.toString() || "");
+        setPeriod(postToEdit.period || "");
+        setPlace(postToEdit.place || "");
+        setSchedule(postToEdit.schedule || "");
+        setExpertiseArea(postToEdit.expertiseArea || "");
+        setPrice(postToEdit.price?.toString() || "");
         setInitialImages(data.images || []);
       } catch (e) {
         console.error(e);
         setError("게시글을 불러오는 데 실패했습니다.");
       }
-    })();
+    }else if(isEditMode && !postToEdit){
+      alert("잘못된 접근입니다.")
+      navigate("/together/gathering")
+    }
   }, [isEditMode, boardType, postId]);
 
   const { handleUpload } = useImageUpload(initialImages);
@@ -106,7 +99,7 @@ function TogetherWritePage() {
     };
 
     switch (mainCategory) {
-      case "GATHERING":
+      case "gathering":
         postData.gatheringType = subCategory;
         postData.headCount = parseInt(headCount, 10) || 0;
         postData.period = period;
@@ -114,12 +107,12 @@ function TogetherWritePage() {
         postData.schedule = schedule;
         postData.status = "RECRUITING";
         break;
-      case "MATCH":
+      case "match":
         postData.matchingType = subCategory;
         postData.expertiseArea = expertiseArea;
         postData.status = "OPEN";
         break;
-      case "MARKET":
+      case "market":
         postData.price = parseInt(price, 10) || 0;
         postData.place = place;
         postData.status = "SELLING"
@@ -132,9 +125,9 @@ function TogetherWritePage() {
     try {
       if (isEditMode) {
         // 수정
-        if (mainCategory === "GATHERING") {
+        if (mainCategory === "gathering") {
           await updateGatheringPost(postId, postData);
-        } else if (mainCategory === "MATCH") {
+        } else if (mainCategory === "match") {
           await updateMatchingPost(postId, postData);
         } else {
           await updateMarketPost(postId, postData);
@@ -144,9 +137,9 @@ function TogetherWritePage() {
       } else {
         // 생성
         let created;
-        if (mainCategory === "GATHERING") {
+        if (mainCategory === "gathering") {
           created = await createGatheringPost(postData);
-        } else if (mainCategory === "MATCH") {
+        } else if (mainCategory === "match") {
           created = await createMatchingPost(postData);
         } else {
           created = await createMarketPost(postData);
@@ -162,7 +155,7 @@ function TogetherWritePage() {
      setError("게시글 등록에 실패했습니다. 잠시 후 다시 시도해주세요.");
      }
    }
-   navigate("/together");
+   navigate(`/together/${mainCategory}`);
   };
 
   const renderDynamicFields = () => {
@@ -196,7 +189,7 @@ function TogetherWritePage() {
         )}
 
         {/* Gathering 필드 */}
-        {mainCategory === "GATHERING" && (
+        {mainCategory === "gathering" && (
           <>
             <Form.Group as={Row} className="mb-3">
               <Form.Label column sm={2}>
@@ -254,7 +247,7 @@ function TogetherWritePage() {
         )}
 
         {/* Match 필드 */}
-        {mainCategory === "MATCH" && (
+        {mainCategory === "match" && (
           <Form.Group as={Row} className="mb-3">
             <Form.Label column sm={2}>
               전문 분야
@@ -271,7 +264,7 @@ function TogetherWritePage() {
         )}
 
         {/* Market 필드 */}
-        {mainCategory === "MARKET" && (
+        {mainCategory === "market" && (
           <>
             <Form.Group as={Row} className="mb-3">
               <Form.Label column sm={2}>
@@ -337,27 +330,31 @@ function TogetherWritePage() {
         <hr />
 
         <Form.Group className="mb-3">
+          <Form.Label>제목</Form.Label>
           <Form.Control
-            type="text"
-            placeholder="제목을 입력하세요"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            size="lg"
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="제목을 입력하세요"
+              required
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
+          <Form.Label>태그 (최대 10개)</Form.Label>
+          <TagInput tags={tags} onTagsChange={setTags} />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>내용</Form.Label>
           <CustomTiptapEditor
-            content={content}
-            onChange={(html) => setContent(html)}
+              content={content}
+              onChange={setContent}
+              onImageUpload={handleUpload}
+              placeholder="내용을 입력하세요..."
             onImageUpload={handleUpload}
             placeholder="내용을 입력하세요..."
           />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <TagInput tags={tags} onTagsChange={setTags} />
         </Form.Group>
 
         <div className="d-flex justify-content-end">
