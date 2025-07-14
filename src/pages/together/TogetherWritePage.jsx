@@ -7,6 +7,7 @@ import { TOGETHER_CATEGORIES } from "./constants";
 import { createGatheringPost, getGatheringPostDetail, updateGatheringPost } from "../../services/together/gatheringApi";
 import { createMatchingPost, getMatchingPostDetail, updateMatchingPost } from "../../services/together/matchingApi";
 import { createMarketPost, getMarketPostDetail, updateMarketPost } from "../../services/together/marketApi";
+import { useImageUpload } from "../../hooks/useImageUpload";
 
 
 
@@ -24,6 +25,8 @@ function TogetherWritePage() {
   // 카테고리 선택
   const [mainCategory, setMainCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
+
+  const [initialImages, setInitialImages] = useState([]);
 
   // boardType에 따른 동적 필드
   
@@ -58,6 +61,7 @@ function TogetherWritePage() {
         setSchedule(data.schedule || "");
         setExpertiseArea(data.expertiseArea || "");
         setPrice(data.price?.toString() || "");
+        setInitialImages(data.images || []);
       } catch (e) {
         console.error(e);
         setError("게시글을 불러오는 데 실패했습니다.");
@@ -65,11 +69,15 @@ function TogetherWritePage() {
     })();
   }, [isEditMode, boardType, postId]);
 
+  const { handleUpload } = useImageUpload(initialImages);
+
   const handleMainCategoryChange = (e) => {
     const value = e.target.value;
     setMainCategory(value);
     setSubCategory(""); // 메인 카테고리 변경 시 서브 카테고리 초기화
   };
+
+  
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -131,7 +139,6 @@ function TogetherWritePage() {
         } else {
           await updateMarketPost(postId, postData);
         }
-        console.log("Submitting Post Data: ", postData);
         setError(null);
         alert("게시글이 성공적으로 수정되었습니다.");
       } else {
@@ -144,7 +151,6 @@ function TogetherWritePage() {
         } else {
           created = await createMarketPost(postData);
         }
-        console.log("Submitting Post Data: ", postData);
         setError(null);
         alert("게시글이 성공적으로 등록되었습니다.");
       }
@@ -345,6 +351,8 @@ function TogetherWritePage() {
           <CustomTiptapEditor
             content={content}
             onChange={(html) => setContent(html)}
+            onImageUpload={handleUpload}
+            placeholder="내용을 입력하세요..."
           />
         </Form.Group>
 
