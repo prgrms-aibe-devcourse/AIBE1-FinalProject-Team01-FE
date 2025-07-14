@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { PostContent } from "../common/PostContent";
 import TogetherPostInfo from "./TogetherPostInfo";
 import { BoardDetailLayout } from "../board/BoardDetailLayout";
+import { deleteGatheringPost } from "../../services/together/gatheringApi";
+import { deleteMatchingPost } from "../../services/together/matchingApi";
+import { deleteMarketPost } from "../../services/together/marketApi";
 
 /**
  * @typedef {Object} TogetherBoardDetailProps
@@ -19,17 +22,18 @@ const TogetherBoardDetail = ({ post, onLike, onBookmark, boardType }) => {
   const navigate = useNavigate();
 
   const handleEdit = () => {
-    navigate(`/together/${boardType.toLowerCase()}/write`, {
+    navigate(`/together/${boardType.toLowerCase()}/write/${post.id}`, {
       state: { postToEdit: post },
     });
   };
 
-  const handleDelete = () => {
-    if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
-      console.log("삭제할 게시글 ID:", post.postId);
-      alert("게시글이 삭제되었습니다.");
-      navigate(`/together/${boardType}`);
-    }
+  const handleDelete = async () => {
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+    if (boardType === "GATHERING")      await deleteGatheringPost(post.id);
+    else if (boardType === "MATCH")     await deleteMatchingPost(post.id);
+    else /* MARKET */                   await deleteMarketPost(post.id);
+    alert("삭제되었습니다.");
+    navigate(`/together/${boardType}`);
   };
 
   if (!post) {

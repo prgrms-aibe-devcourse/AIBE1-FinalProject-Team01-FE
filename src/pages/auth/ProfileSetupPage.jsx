@@ -1,36 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AuthLayout } from "../../components/auth/AuthLayout";
 import { ProfileForm } from "../../components/auth/ProfileForm";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { signupUser } from "../../services/authApi";
+import { TOPIC_MAPPING } from "../../constants/topics";
 import "../../styles/components/auth/auth.css";
-
-const INTEREST_TOPICS = [
-  "Frontend",
-  "Backend",
-  "DevOps",
-  "AI/CC",
-  "Algorithm",
-  "Android",
-  "iOS",
-  "게임개발",
-  "LLM",
-  "WEB",
-  "Data Science",
-  "DB",
-  "Build&Sec",
-  "Design",
-];
+import apiClient from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
 
 const ProfileSetupPage = () => {
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [selectedTopics, setSelectedTopics] = useState([]);
-  const [nicknameCheck, setNicknameCheck] = useState({
-    checked: false,
-    message: "",
-  });
-  const [checking, setChecking] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const signupData = location.state;
+  const { login } = useAuth();
+
+  useEffect(() => {
+    const isOAuthFlow = location.pathname === "/oauth/profile-complete";
+
+    if (!isOAuthFlow && (!signupData?.email || !signupData?.password)) {
+      navigate("/signup", { replace: true });
+    }
+  }, [location.pathname, signupData, navigate]);
 
   const handleTopicClick = (topic) => {
     setSelectedTopics((prev) =>
@@ -38,39 +32,58 @@ const ProfileSetupPage = () => {
     );
   };
 
-  // 닉네임 중복확인
-  const handleNicknameCheck = async () => {
-    if (!nickname) {
-      setNicknameCheck({ checked: false, message: "닉네임을 입력해 주세요." });
-      return;
-    }
-    setChecking(true);
-    setNicknameCheck({ checked: false, message: "" });
-    // TODO: 실제 API 연동
-    if (nickname === "admin") {
-      setNicknameCheck({
-        checked: false,
-        message: "이미 사용 중인 닉네임입니다.",
-      });
-    } else {
-      setNicknameCheck({ checked: true, message: "사용 가능한 닉네임입니다." });
-    }
-    setChecking(false);
-  };
-
   const handleNicknameChange = (e) => {
     setNickname(e.target.value);
-    setNicknameCheck({ checked: false, message: "" });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 관심 주제를 string 형태로 변환
-    const topicsString = selectedTopics.join(",");
-    // TODO: 실제 저장 로직 (예: API 호출)
-    console.log({ name, nickname, topics: topicsString });
-    // 저장 후 홈으로 이동
-    navigate("/");
+
+    const isOAuthFlow = location.pathname === "/oauth/profile-complete";
+    const backendTopics = selectedTopics.map((topic) => TOPIC_MAPPING[topic]);
+
+    setIsSubmitting(true);
+
+    try {
+      if (isOAuthFlow) {
+        // OAuth
+        await apiClient.post("/api/v1/auth/complete-profile", {
+          name: name,
+          nickname: nickname,
+          topics: backendTopics,
+        });
+        console.log("OAuth 프로필 완성");
+      } else {
+        // 로컬 회원가입
+        const userData = {
+          email: signupData.email,
+          password: signupData.password,
+          name: name,
+          nickname: nickname,
+          topics: backendTopics,
+        };
+
+        await signupUser(userData);
+
+        // 회원가입 후 자동 로그인
+        await apiClient.post("/api/v1/auth/login", {
+          email: signupData.email,
+          password: signupData.password,
+        });
+        console.log("로컬 회원가입 및 자동 로그인 완료");
+      }
+
+      navigate("/");
+    } catch (error) {
+      console.error("프로필 설정 에러:", error);
+      if (isOAuthFlow) {
+        alert("프로필 완성 중 오류가 발생했습니다.");
+      } else {
+        alert("회원가입 중 오류가 발생했습니다.");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -79,13 +92,11 @@ const ProfileSetupPage = () => {
         name={name}
         nickname={nickname}
         selectedTopics={selectedTopics}
+        isSubmitting={isSubmitting}
         onChangeName={(e) => setName(e.target.value)}
         onChangeNickname={handleNicknameChange}
         onTopicClick={handleTopicClick}
         onSubmit={handleSubmit}
-        nicknameCheck={nicknameCheck}
-        checking={checking}
-        onNicknameCheck={handleNicknameCheck}
       />
     </AuthLayout>
   );

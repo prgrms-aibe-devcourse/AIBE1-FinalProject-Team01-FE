@@ -73,14 +73,12 @@ export function useLikeBookmark({
     }
   };
 
-
-  // 유저 아이디 하드코딩되어있음 나중에 수정 필요 
   const toggleBookmark = async () => {
     try {
       if (bookmarked) {
-        await removeBookmark(23, postId);
+        await removeBookmark(postId);
       } else {
-        await addBookmark(23, postId);
+        await addBookmark(postId);
       }
 
       setBookmarked((prev) => !prev);

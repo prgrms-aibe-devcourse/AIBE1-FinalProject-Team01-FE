@@ -24,6 +24,17 @@ function getStatusLabelAndColor(status) {
   return { label, colorClass };
 }
 
+function processTagsString(tags) {
+  if (!tags || typeof tags !== 'string') {
+    return [];
+  }
+
+  return tags
+      .split(',')
+      .map(tag => tag.trim())
+      .filter(tag => tag.length > 0);
+}
+
 /**
  * 게시글 목록에 사용되는 공통 카드 레이아웃
  * @param {PostCardProps} props
@@ -69,6 +80,8 @@ export const PostCard = ({
       ? comments.length
       : 0;
 
+  const validTags = processTagsString(tags);
+
   const isActiveStatus = (currentStatus) => {
     const activeKeywords = ["모집중", "매칭가능", "판매중"];
     return activeKeywords.includes(currentStatus);
@@ -105,7 +118,7 @@ export const PostCard = ({
       {children}
       <div className="d-flex align-items-center gap-2 mt-2">
         <span className="small tags-container">
-          {tags?.split(',').map((tag, i) => (
+          {validTags.map((tag, i) => (
               <span key={i} className="badge bg-light text-dark ms-1">
               #{tag.trim()}
             </span>
