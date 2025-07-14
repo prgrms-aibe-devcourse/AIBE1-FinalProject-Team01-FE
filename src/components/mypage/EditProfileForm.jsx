@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button, Form, Alert, Spinner } from "react-bootstrap";
+import "../../styles/components/mypage/mypage.css";
 import { accountApi } from "../../services/accountApi";
 import { TOPICS } from "../../constants/topics";
 import { getProviderName } from "../../utils/provider";
