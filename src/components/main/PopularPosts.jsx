@@ -33,10 +33,6 @@ export const PopularPosts = () => {
   const [type, setType] = useState("popular");
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
-
-  // AuthContext 사용 시
-  // const { token } = useContext(AuthContext);
-
   // API 호출 함수
   const fetchRecommendedPosts = async (limit = 10) => {
     try {
@@ -65,12 +61,10 @@ export const PopularPosts = () => {
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        // 1. 기본: 인기 게시글 먼저 세팅
         const popularPosts = await fetchPopularPosts(10);
         setPosts(popularPosts);
         setType("popular");
 
-        // 2. 로그인 상태면 맞춤 게시글 요청
         if (isLoggedIn) {
           try {
             const recommended = await fetchRecommendedPosts(4);
@@ -88,7 +82,7 @@ export const PopularPosts = () => {
         }
       } catch (error) {
         console.error("게시글 로드 실패:", error);
-        setPosts([]); // 빈 배열로 설정하여 에러 방지
+        setPosts([]); 
       }
     };
 
@@ -108,30 +102,31 @@ export const PopularPosts = () => {
             key={post.id || idx}
             onClick={() => {
               // boardType에 따라 Router.jsx의 실제 경로에 맞게 이동
-              const boardType = post.boardType?.toUpperCase();
+              const boardType = post.boardType?.toLowerCase();
+              const boardId = post.boardId || post.id; // boardId 우선, 없으면 id fallback
               let path = "";
 
               switch (boardType) {
-                case "FREE":
-                case "QNA":
-                case "SHARE":
-                case "NOTICE":
-                  path = `/community/${boardType}/${post.id}`;
+                case "free":
+                case "qna":
+                case "share":
+                case "notice":
+                  path = `/community/${boardType}/${boardId}`;
                   break;
-                case "GATHERING":
-                case "MARKET":
-                  path = `/together/${boardType}/${post.id}`;
+                case "gathering":
+                case "market":
+                  path = `/together/${boardType}/${boardId}`;
                   break;
-                case "REVIEW":
-                case "NEWS":
-                  path = `/info/${boardType}/${post.id}`;
+                case "review":
+                case "news":
+                  path = `/info/${boardType}/${boardId}`;
                   break;
-                case "HUB":
-                  path = `/HUB/${post.id}`;
+                case "hub":
+                  path = `/hub/${boardId}`;
                   break;
                 default:
-                  // 기본값으로 community/FREE로 이동
-                  path = `/community/FREE/${post.id}`;
+                  // 기본값으로 community/free로 이동
+                  path = `/community/free/${boardId}`;
                   break;
               }
               navigate(path);
