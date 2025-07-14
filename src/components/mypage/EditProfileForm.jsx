@@ -2,18 +2,10 @@ import React, { useState, useRef, useEffect } from "react";
 import { Button, Form, Alert, Spinner } from "react-bootstrap";
 import { accountApi } from "../../services/accountApi";
 import { TOPICS } from "../../constants/topics";
+import { getProviderName } from "../../utils/provider";
 
 // 관심 토픽 상수 (백엔드와 맞춤)
 const AVAILABLE_TOPICS = TOPICS;
-
-const getProviderName = (provider) => {
-    const providerNames = {
-        'LOCAL': '일반',
-        'GITHUB': '소셜(github)',
-        'KAKAO': '소셜(kakao)',
-    };
-    return providerNames[provider] || provider;
-};
 
 /**
  * 마이페이지 계정 관리(프로필 수정) 폼 (API 연동)

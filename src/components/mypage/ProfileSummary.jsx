@@ -3,6 +3,8 @@ import { accountApi } from "../../services/accountApi";
 import "../../styles/components/mypage/mypage.css";
 import { TOPICS } from "../../constants/topics";
 import { convertTrackFromApi } from "../../constants/devcourse";
+import { getProviderName } from "../../utils/provider";
+
 
 /**
  * @typedef {Object} ProfileSummaryProps
@@ -54,15 +56,6 @@ export const ProfileSummary = ({
 
   const getTopicName = (key) => 
     TOPICS.find(topic => topic.key === key)?.label || key;
-
-  const getProviderName = (provider) => {
-    const providerNames = {
-      'LOCAL': '일반',
-      'GITHUB': '소셜(github)',
-      'KAKAO': '소셜(kakao)',
-    };
-    return providerNames[provider] || provider;
-  };
 
   // 로딩 상태
   if (loading) {
