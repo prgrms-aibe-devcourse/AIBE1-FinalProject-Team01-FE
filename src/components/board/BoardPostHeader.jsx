@@ -50,8 +50,7 @@ export const BoardPostHeader = ({
     return "bg-secondary"; // 완료 상태
   };
 
-  const { devcourseName, devcourseBatch, boardType } = post;
-
+  const { devcourseName, devcourseBatch, boardType, isBlinded } = post;
   const isInfoBoard = boardType === "REVIEW" || boardType === "NEWS";
 
     return (
@@ -67,13 +66,16 @@ export const BoardPostHeader = ({
                         <h1 className="post-info-title mb-0">{post.title}</h1>
                         {canEditOrDelete && (
                             <div className="hub-post-actions">
-                                <button
-                                    className="btn btn-sm btn-link text-muted p-1"
-                                    onClick={onEdit}
-                                    title="수정"
-                                >
-                                    <i className="bi bi-pencil-square fs-5"></i>
-                                </button>
+                                {!isBlinded && (
+                                    <button
+                                        className="btn btn-sm btn-link text-muted p-1"
+                                        onClick={onEdit}
+                                        title="수정"
+                                    >
+                                        <i className="bi bi-pencil-square fs-5"></i>
+                                    </button>
+                                )}
+
                                 <button
                                     className="btn btn-sm btn-link text-muted p-1"
                                     onClick={onDelete}
@@ -127,13 +129,15 @@ export const BoardPostHeader = ({
                             </div>
                             {canEditOrDelete && (
                                 <div className="hub-post-actions">
-                                    <button
-                                        className="btn btn-sm btn-link text-muted p-1"
-                                        onClick={onEdit}
-                                        title="수정"
-                                    >
-                                        <i className="bi bi-pencil-square fs-5"></i>
-                                    </button>
+                                    {!isBlinded && (
+                                        <button
+                                            className="btn btn-sm btn-link text-muted p-1"
+                                            onClick={onEdit}
+                                            title="수정"
+                                        >
+                                            <i className="bi bi-pencil-square fs-5"></i>
+                                        </button>
+                                    )}
                                     <button
                                         className="btn btn-sm btn-link text-muted p-1"
                                         onClick={onDelete}

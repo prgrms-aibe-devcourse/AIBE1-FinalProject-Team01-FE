@@ -4,7 +4,7 @@ const GATHERING_BASE_URL = "/api/v1/gatherings";
 
 export const getGatheringPostList = async (params = {}) => {
     try {
-        const { page = 0, size = 10, sortDirection, field } = params;
+        const { page = 0, size = 10, sortDirection, field, keyword  } = params;
 
         const queryParams = new URLSearchParams();
         queryParams.append("page", page.toString());
@@ -15,6 +15,9 @@ export const getGatheringPostList = async (params = {}) => {
         }
         if (field) {
             queryParams.append("field", field);
+        }
+        if (keyword && keyword.trim()) {
+            queryParams.append("keyword", keyword.trim());
         }
 
         const response = await apiClient.get(`${GATHERING_BASE_URL}?${queryParams.toString()}`);

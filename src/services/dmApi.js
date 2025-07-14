@@ -1,32 +1,21 @@
-/**
- * DM 관련 API 서비스 (새로운 API 스펙 적용)
- */
-
-const BASE_URL = "http://localhost:8080/api/v1";
+import { apiClient } from "./api.js";
 
 /**
  * 채팅방 목록 조회
- * @param {number} userId - 사용자 ID
  * @returns {Promise<Array>} DM 방 목록
  */
-export const getDMRooms = async (userId) => {
+export const getDMRooms = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/dm/rooms/${userId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
+    const response = await apiClient.get("/api/v1/dm/rooms");
+    return response.data;
   } catch (error) {
-    console.error("❌ DM 방 목록 조회 실패:", error);
-    throw error;
+    if (error.response?.status === 401) {
+      throw new Error("로그인이 필요합니다.");
+    } else if (error.response?.status === 404) {
+      throw new Error("채팅방 목록을 찾을 수 없습니다.");
+    } else {
+      throw new Error("채팅방 목록을 불러오는 중 오류가 발생했습니다.");
+    }
   }
 };
 
@@ -47,91 +36,67 @@ export const getDMMessages = async (
   sortDirection = "ASC"
 ) => {
   try {
-    const params = new URLSearchParams({
+    const params = {
       roomId,
-      userId: userId.toString(),
-      page: page.toString(),
-      size: size.toString(),
+      userId,
+      page,
+      size,
       sortDirection,
-    });
+    };
 
-    const response = await fetch(`${BASE_URL}/dm/messages?${params}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    console.log(`💬 DM 메시지 목록 조회 성공 (방 ${roomId}):`, data);
-    return data;
+    const response = await apiClient.get("/api/v1/dm/messages", { params });
+    return response.data;
   } catch (error) {
-    console.error(`❌ DM 메시지 목록 조회 실패 (방 ${roomId}):`, error);
-    throw error;
+    if (error.response?.status === 401) {
+      throw new Error("로그인이 필요합니다.");
+    } else if (error.response?.status === 404) {
+      throw new Error("채팅 기록을 찾을 수 없습니다.");
+    } else {
+      throw new Error("채팅 기록을 불러오는 중 오류가 발생했습니다.");
+    }
   }
 };
 
 /**
- * 채팅방 생성 (새로운 API 스펙)
+ * 채팅방 생성
  * @param {number} partnerId - 채팅 상대방 사용자 ID
  * @returns {Promise<Object>} 생성된 방 정보
  */
 export const createDMRoom = async (partnerId) => {
   try {
-    console.log(`🏗️ DM 방 생성 시도 (상대방 ID: ${partnerId})`);
-
-    const response = await fetch(`${BASE_URL}/dm/${partnerId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    console.log(`✅ DM 방 생성 성공:`, data);
-    return data;
+    const response = await apiClient.post(`/api/v1/dm/${partnerId}`);
+    return response.data;
   } catch (error) {
-    console.error("❌ DM 방 생성 실패:", error);
-    throw error;
+    if (error.response?.status === 400) {
+      throw new Error("잘못된 요청입니다.");
+    } else if (error.response?.status === 401) {
+      throw new Error("로그인이 필요합니다.");
+    } else if (error.response?.status === 404) {
+      throw new Error("존재하지 않는 사용자입니다.");
+    } else {
+      throw new Error("채팅방 생성 중 오류가 발생했습니다.");
+    }
   }
 };
 
 /**
  * 방 나가기
  * @param {string} roomId - 방 ID
- * @param {number} userId - 사용자 ID
  * @returns {Promise<void>}
  */
-export const leaveDMRoom = async (roomId, userId) => {
+export const leaveDMRoom = async (roomId) => {
   try {
-    console.log(`🚪 DM 방 ${roomId} 나가기 (사용자 ${userId})`);
-
-    const response = await fetch(`${BASE_URL}/dm`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        roomId,
-        userId,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    console.log(`✅ DM 방 ${roomId} 나가기 성공`);
+    const response = await apiClient.delete(`/api/v1/dm/${roomId}`);
+    return response.data;
   } catch (error) {
-    console.error(`❌ DM 방 ${roomId} 나가기 실패:`, error);
-    throw error;
+    if (error.response?.status === 401) {
+      throw new Error("로그인이 필요합니다.");
+    } else if (error.response?.status === 403) {
+      throw new Error("방 나가기 권한이 없습니다.");
+    } else if (error.response?.status === 404) {
+      throw new Error("존재하지 않는 채팅방입니다.");
+    } else {
+      throw new Error("방 나가기 중 오류가 발생했습니다.");
+    }
   }
 };

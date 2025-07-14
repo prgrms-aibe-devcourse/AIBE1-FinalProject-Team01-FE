@@ -22,15 +22,15 @@ const TogetherBoardDetail = ({ post, onLike, onBookmark, boardType }) => {
   const navigate = useNavigate();
 
   const handleEdit = () => {
-    navigate(`/together/${boardType.toLowerCase()}/write/${post.id}`, {
+    navigate(`/together/${boardType.toLowerCase()}/${post.id}/edit`, {
       state: { postToEdit: post },
     });
   };
 
   const handleDelete = async () => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
-    if (boardType === "GATHERING")      await deleteGatheringPost(post.id);
-    else if (boardType === "MATCH")     await deleteMatchingPost(post.id);
+    if (boardType === "gathering")      await deleteGatheringPost(post.id);
+    else if (boardType === "match")     await deleteMatchingPost(post.id);
     else /* MARKET */                   await deleteMarketPost(post.id);
     alert("삭제되었습니다.");
     navigate(`/together/${boardType}`);
