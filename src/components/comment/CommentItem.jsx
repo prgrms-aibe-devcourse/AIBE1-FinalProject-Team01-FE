@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLikeBookmark } from "../../hooks/useLikeBookmark";
 import { useInput } from "../../hooks/useInput";
-import { isAuthor } from "../../utils/auth";
+import { isAuthor, isAuthorByNickname } from "../../utils/auth";
 import ReportModal from "../common/ReportModal";
 import { submitReport } from "../../services/reportApi.js";
 import '../../styles/components/comment/CommentSection.css'
@@ -79,7 +79,7 @@ const CommentItem = (props) => {
   const depth = props.depth || 1;
 
   // 댓글 작성자 판별 (userId 기준)
-  const isMine = currentUser && currentUser.userId === userId;
+  const isMine = isAuthorByNickname(currentUser.nickname, comment.nickname);
 
   // 새로운 방식의 대댓글 데이터 사용 (repliesData가 있는 경우)
   // 없으면 기존 방식 사용 (하위 호환성)
@@ -277,12 +277,14 @@ const CommentItem = (props) => {
 
           {isMine && (
               <>
-                <button
-                    className="btn btn-link btn-sm text-secondary ms-2"
-                    onClick={handleEditClick}
-                >
-                  수정
-                </button>
+                {!comment.isBlinded && (
+                    <button
+                        className="btn btn-link btn-sm text-secondary ms-2"
+                        onClick={handleEditClick}
+                    >
+                      수정
+                    </button>
+                )}
                 <button
                     className="btn btn-link btn-sm text-danger ms-1"
                     onClick={handleDelete}

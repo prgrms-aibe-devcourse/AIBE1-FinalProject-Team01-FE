@@ -98,13 +98,15 @@ export const HubPostInfo = ({ post }) => {
         <h1 className="fw-bold mb-0">{title}</h1>
         {canEditOrDelete && (
           <div className="hub-post-actions">
-            <button 
-              className="btn btn-sm btn-link text-muted p-1"
-              onClick={handleEdit}
-              title="수정"
-            >
-              <i className="bi bi-pencil-square fs-5"></i>
-            </button>
+            {!post.isBlinded && (
+                <button
+                    className="btn btn-sm btn-link text-muted p-1"
+                    onClick={handleEdit}
+                    title="수정"
+                >
+                  <i className="bi bi-pencil-square fs-5"></i>
+                </button>
+            )}
             <button 
               className="btn btn-sm btn-link text-muted p-1"
               onClick={handleDelete}
