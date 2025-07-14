@@ -14,49 +14,6 @@ const DevLoginButtons = () => {
 
   // .env에서 개발용 토큰 가져오기
   const devToken = import.meta.env.VITE_DEV_JWT_TOKEN || "dev_dummy_token";
-
-  return (
-    <div className="d-flex gap-2">
-      <Button
-        variant="outline-secondary"
-        size="sm"
-        onClick={
-          () =>
-            login(
-              {
-                id: 1, // userId 1
-                name: "홍길동",
-                email: "test@example.com",
-                nickname: "amateur01",
-                topics: ["Frontend", "AI/CC"],
-              },
-              devToken
-            ) // .env의 토큰 사용
-        }
-      >
-        Dev Login1
-      </Button>
-      <Button
-        variant="outline-info"
-        size="sm"
-        onClick={
-          () =>
-            login(
-              {
-                id: 2, // userId 2
-                name: "김철수",
-                email: "test2@example.com",
-                nickname: "amateur02",
-                topics: ["Backend", "DevOps"],
-              },
-              devToken
-            ) // .env의 토큰 사용
-        }
-      >
-        Dev Login2
-      </Button>
-    </div>
-  );
 };
 
 export const NavigationBar = ({ onlyLogo }) => {
@@ -184,7 +141,6 @@ export const NavigationBar = ({ onlyLogo }) => {
                   >
                     회원가입
                   </Button>
-                  <DevLoginButtons />
                 </div>
               )}
             </Navbar.Collapse>
