@@ -58,6 +58,7 @@ export function AppRouter() {
             <Route path="/together/:boardType" element={<ProtectedRoute><TogetherPage /></ProtectedRoute>} />
             <Route path="/together/:boardType/:postId" element={<ProtectedRoute><TogetherBoardDetailPage /></ProtectedRoute>} />
             <Route path="/together/:boardType/write" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
+            <Route path="/together/:boardType/write/:postId" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
             <Route path="/info" element={<Navigate to="/info/review" replace />} />
             <Route path="/info/:boardType" element={<InfoPage />} />
             <Route path="/info/:boardType/:itId" element={<InfoBoardDetailPage />} />

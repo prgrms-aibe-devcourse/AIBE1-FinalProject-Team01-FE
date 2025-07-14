@@ -40,9 +40,9 @@ function TogetherWritePage() {
     (async () => {
       try {
         let data;
-        if (boardType === "GATHERING") {
+        if (boardType === "gathering") {
           data = await getGatheringPostDetail(postId);
-        } else if (boardType === "MATCH") {
+        } else if (boardType === "match") {
           data = await getMatchingPostDetail(postId);
         } else {
           data = await getMarketPostDetail(postId);

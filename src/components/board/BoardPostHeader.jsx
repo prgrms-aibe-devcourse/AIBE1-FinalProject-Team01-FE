@@ -28,20 +28,17 @@ export const BoardPostHeader = ({
     isDeleting
 }) => {
   const { user: currentUser } = useAuth();
-    const canEditOrDelete = currentUser && isAuthorByNickname(currentUser.nickname, post.user.nickname);
 
-  const user =
-    post.user ||
-    (post.nickname && post.profileImageUrl
-      ? {
+  const user = post.user ||
+    (post.nickname ? {
           nickname: post.nickname,
           profileImageUrl: post.profileImageUrl,
           devcourseName: post.devcourseName,
           devcourseBatch: post.devcourseBatch,
         }
       : null);
-
-  const status = post.gathering_post?.status || post.market_item?.status;
+    const canEditOrDelete = currentUser && isAuthorByNickname(currentUser.nickname, user?.nickname);
+    const status = post.gathering_post?.status || post.market_item?.status;
 
   const getStatusBadgeClass = () => {
     if (!status) return "d-none";
