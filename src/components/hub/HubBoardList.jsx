@@ -40,6 +40,19 @@ export default function HubBoardList({ posts = [] }) {
           likeCount,
         } = post;
 
+        function processTagsString(tags) {
+          if (!tags || typeof tags !== 'string') {
+            return [];
+          }
+
+          return tags
+              .split(',')
+              .map(tag => tag.trim())
+              .filter(tag => tag.length > 0);
+        }
+
+        const validTags = processTagsString(tags);
+
         return (
           <div key={postId} className="col">
             <div
@@ -76,7 +89,7 @@ export default function HubBoardList({ posts = [] }) {
                   <strong>기간:</strong> {formatDate(startedAt)} ~ {formatDate(endedAt)}
                 </p>
                 <div className="hub-card-tags mt-auto pt-3">
-                  {tags?.map((tag, i) => (
+                  {validTags?.map((tag, i) => (
                     <span
                       key={i}
                       className="badge rounded-pill bg-light text-dark"

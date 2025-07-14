@@ -49,7 +49,6 @@ export const BoardPostHeader = ({
   };
 
   const { devcourseName, devcourseBatch, boardType, isBlinded } = post;
-  const isInfoBoard = boardType === "REVIEW" || boardType === "NEWS";
 
     return (
         <div className="post-info-header">
@@ -58,62 +57,6 @@ export const BoardPostHeader = ({
                     {BOARD_TYPE_LABEL[boardType] || boardType}
                 </p>
             )}
-            {isInfoBoard ? (
-                <>
-                    <div className="d-flex justify-content-between align-items-start mb-3">
-                        <h1 className="post-info-title mb-0">{post.title}</h1>
-                        {canEditOrDelete && (
-                            <div className="hub-post-actions">
-                                {!isBlinded && (
-                                    <button
-                                        className="btn btn-sm btn-link text-muted p-1"
-                                        onClick={onEdit}
-                                        title="수정"
-                                    >
-                                        <i className="bi bi-pencil-square fs-5"></i>
-                                    </button>
-                                )}
-
-                                <button
-                                    className="btn btn-sm btn-link text-muted p-1"
-                                    onClick={onDelete}
-                                    disabled={isDeleting}
-                                    title={isDeleting ? "삭제 중..." : "삭제"}
-                                >
-                                    {isDeleting ? (
-                                        <div className="spinner-border spinner-border-sm" role="status">
-                                            <span className="visually-hidden">삭제 중...</span>
-                                        </div>
-                                    ) : (
-                                        <i className="bi bi-trash fs-5"></i>
-                                    )}
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                    <div className="d-flex justify-content-between align-items-center text-muted small mb-2">
-                        <div className="d-flex align-items-center gap-2">
-                            {devcourseName && devcourseBatch && (
-                                <InfoPostInfo
-                                    devcourseName={devcourseName}
-                                    devcourseBatch={devcourseBatch}
-                                    nickname={user?.nickname}
-                                    boardType={boardType}
-                                />
-                            )}
-                        </div>
-                        <div>
-              <span>
-                {post.createdAt
-                    ? new Date(post.createdAt).toLocaleDateString()
-                    : ""}
-              </span>
-                            <span className="mx-1">|</span>
-                            <span>조회 {post.viewCount ?? 0}</span>
-                        </div>
-                    </div>
-                </>
-            ) : (
                 <div className="d-flex justify-content-between align-items-start">
                     <div className="flex-grow-1">
                         <div className="d-flex justify-content-between align-items-start mb-3">
@@ -179,7 +122,6 @@ export const BoardPostHeader = ({
                         </div>
                     </div>
                 </div>
-            )}
             <hr />
         </div>
     );
