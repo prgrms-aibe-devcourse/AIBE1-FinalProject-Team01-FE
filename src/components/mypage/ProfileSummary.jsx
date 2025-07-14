@@ -13,7 +13,12 @@ import { TOPICS } from "../../constants/topics";
  * 회원 정보 요약 컴포넌트 (API 연동)
  * @param {ProfileSummaryProps} props
  */
-export const ProfileSummary = ({ onEdit, onChangePassword, profile: initialProfile }) => {
+export const ProfileSummary = ({ 
+  onEdit, 
+  onChangePassword, 
+  onStudentVerification, 
+  profile: initialProfile 
+}) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
