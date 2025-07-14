@@ -52,6 +52,8 @@ export const PostCard = ({
     nickname,
     profileImageUrl,
     devcourseName,
+    devCourseTrack,
+    userProfileImg,
     createdAt,
     tags,
     likeCount,
@@ -63,12 +65,13 @@ export const PostCard = ({
 
   // user 정보 구조 통일
   const user =
-    post.user ||
-    (nickname && profileImageUrl
+    (nickname
       ? {
           nickname,
           profileImageUrl,
           devcourseName,
+          devCourseTrack,
+          userProfileImg
         }
       : null);
 

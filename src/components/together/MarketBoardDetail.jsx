@@ -31,7 +31,7 @@ const MarketBoardDetail = ({
   bookmarked,
   bookmarkCount,
   onBookmark,
-  boardType = "MARKET", // 기본값을 MARKET으로 설정
+  boardType,
 }) => {
   const navigate = useNavigate();
   const { user: currentUser } = useAuth();
@@ -45,7 +45,7 @@ const MarketBoardDetail = ({
   );
 
   const handleEdit = () => {
-    navigate(`/together/${boardType.toLowerCase()}/write`, {
+    navigate(`/together/${boardType.toLowerCase()}/${post.id}/edit`, {
       state: { postToEdit: post },
     });
   };
