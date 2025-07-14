@@ -3,6 +3,7 @@ import { Button, Form, Alert, Spinner } from "react-bootstrap";
 import { accountApi } from "../../services/accountApi";
 import { TOPICS } from "../../constants/topics";
 import { getProviderName } from "../../utils/provider";
+import { convertTrackFromApi } from "../../constants/devcourse";
 
 /**
  * 마이페이지 계정 관리(프로필 수정) 폼 (API 연동)
@@ -213,10 +214,11 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
         }
     };
 
+    // 로딩 상태
     if (loading) {
         return (
             <div className="card p-4">
-                <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
+                <div className="d-flex justify-content-center align-items-center edit-profile-loading">
                     <div className="text-center">
                         <Spinner animation="border" variant="primary" />
                         <p className="mt-3 text-muted">프로필 정보를 불러오는 중...</p>
@@ -226,11 +228,11 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
         );
     }
 
-    // 데이터가 아직 로드되지 않았으면 로딩 표시
+    // 데이터 준비 중
     if (!formData.email) {
         return (
             <div className="card p-4">
-                <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
+                <div className="d-flex justify-content-center align-items-center edit-profile-loading">
                     <div className="text-center">
                         <Spinner animation="border" variant="primary" />
                         <p className="mt-3 text-muted">데이터를 준비하는 중...</p>
@@ -245,27 +247,14 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
             <h5 className="mb-4">계정 관리</h5>
 
             {/* 프로필 이미지 및 기본 정보 */}
-            <div
-                className="p-3 rounded mb-4"
-                style={{
-                    backgroundColor: '#f8f9fa',
-                    borderRadius: '12px'
-                }}
-            >
+            <div className="edit-profile-form-container">
                 <div className="d-flex align-items-start">
                     {/* 프로필 이미지 */}
-                    <div style={{ position: 'relative' }}>
+                    <div className="edit-profile-image-container">
                         <img
                             src={formData.imageUrl || "https://via.placeholder.com/96x96?text=User"}
                             alt="프로필"
-                            className="rounded-circle border"
-                            style={{
-                                width: '96px',
-                                height: '96px',
-                                objectFit: 'cover',
-                                borderWidth: '3px',
-                                borderColor: '#e9ecef'
-                            }}
+                            className="edit-profile-image rounded-circle border"
                         />
                         <input
                             type="file"
@@ -277,16 +266,7 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
                         <Button
                             variant="light"
                             size="sm"
-                            style={{
-                                position: "absolute",
-                                bottom: '4px',
-                                right: '4px',
-                                borderRadius: '50%',
-                                width: '32px',
-                                height: '32px',
-                                padding: '0',
-                                fontSize: '12px'
-                            }}
+                            className="edit-profile-camera-btn"
                             onClick={() => fileInputRef.current.click()}
                         >
                             <i className="bi bi-camera"></i>
@@ -294,86 +274,27 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
                     </div>
 
                     {/* 기본 정보 */}
-                    <div className="ms-4 flex-grow-1">
+                    <div className="edit-profile-info-container flex-grow-1">
                         <div className="row g-3">
-                            {/* 읽기 전용 필드들 */}
                             <div className="col-6">
-                                <div
-                                    className="fw-medium mb-1"
-                                    style={{
-                                        fontSize: '0.875rem',
-                                        color: '#6c757d'
-                                    }}
-                                >
-                                    과정명
-                                </div>
-                                <div
-                                    className="fw-semibold"
-                                    style={{
-                                        fontSize: '1rem',
-                                        color: '#212529'
-                                    }}
-                                >
-                                    {formData.devcourseName}
+                                <div className="edit-profile-label">과정명</div>
+                                <div className="edit-profile-value">
+                                    {formData.devcourseName ? convertTrackFromApi(formData.devcourseName) : '미설정'}
                                 </div>
                             </div>
                             <div className="col-6">
-                                <div
-                                    className="fw-medium mb-1"
-                                    style={{
-                                        fontSize: '0.875rem',
-                                        color: '#6c757d'
-                                    }}
-                                >
-                                    기수
-                                </div>
-                                <div
-                                    className="fw-semibold"
-                                    style={{
-                                        fontSize: '1rem',
-                                        color: '#212529'
-                                    }}
-                                >
-                                    {formData.devcourseBatch}기
+                                <div className="edit-profile-label">기수</div>
+                                <div className="edit-profile-value">
+                                    {formData.devcourseBatch ? `${formData.devcourseBatch}기` : '미설정'}
                                 </div>
                             </div>
                             <div className="col-6">
-                                <div
-                                    className="fw-medium mb-1"
-                                    style={{
-                                        fontSize: '0.875rem',
-                                        color: '#6c757d'
-                                    }}
-                                >
-                                    이메일
-                                </div>
-                                <div
-                                    className="fw-semibold"
-                                    style={{
-                                        fontSize: '1rem',
-                                        color: '#212529'
-                                    }}
-                                >
-                                    {formData.email}
-                                </div>
+                                <div className="edit-profile-label">이메일</div>
+                                <div className="edit-profile-value">{formData.email}</div>
                             </div>
                             <div className="col-6">
-                                <div
-                                    className="fw-medium mb-1"
-                                    style={{
-                                        fontSize: '0.875rem',
-                                        color: '#6c757d'
-                                    }}
-                                >
-                                    유형
-                                </div>
-                                <div
-                                    className="fw-semibold"
-                                    style={{
-                                        fontSize: '1rem',
-                                        color: '#212529'
-                                    }}
-                                >
+                                <div className="edit-profile-label">유형</div>
+                                <div className="edit-profile-value">
                                     {getProviderName(formData.providerType)}
                                 </div>
                             </div>
@@ -384,33 +305,14 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
 
             {/* 편집 가능한 필드들 */}
             <div className="mb-4">
-                <h6
-                    className="mb-3"
-                    style={{
-                        fontSize: '1.1rem',
-                        color: '#495057'
-                    }}
-                >
-                </h6>
-
                 {/* 이름 */}
                 <Form.Group className="mb-3">
-                    <Form.Label
-                        className="fw-medium"
-                        style={{
-                            fontSize: '0.875rem',
-                            color: '#6c757d'
-                        }}
-                    >
-                        이름
-                    </Form.Label>
+                    <Form.Label className="edit-profile-form-label fw-medium">이름</Form.Label>
                     <Form.Control
                         value={formData.name}
                         onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                         isInvalid={!!validationErrors.name}
-                        style={{
-                            fontSize: '1rem'
-                        }}
+                        className="edit-profile-form-control"
                         required
                     />
                     <Form.Control.Feedback type="invalid">
@@ -420,46 +322,22 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
 
                 {/* 닉네임 + 중복확인 */}
                 <Form.Group className="mb-3">
-                    <Form.Label
-                        className="fw-medium"
-                        style={{
-                            fontSize: '0.875rem',
-                            color: '#6c757d'
-                        }}
-                    >
-                        닉네임
-                    </Form.Label>
+                    <Form.Label className="edit-profile-form-label fw-medium">닉네임</Form.Label>
                     <div className="d-flex gap-2 align-items-start">
-                        <div style={{ flex: 1, position: 'relative' }}>
+                        <div className="edit-profile-nickname-container">
                             <Form.Control
                                 value={formData.nickname}
                                 onChange={(e) => setFormData(prev => ({ ...prev, nickname: e.target.value }))}
                                 isInvalid={!!validationErrors.nickname}
-                                className={
-                                    nicknameStatus === 'available' && formData.nickname !== originalData?.nickname
-                                        ? 'border-success'
-                                        : nicknameStatus === 'unavailable'
-                                            ? 'border-danger'
-                                            : ''
-                                }
-                                style={{
-                                    fontSize: '1rem',
-                                    paddingRight: nicknameStatus === 'available' ? '40px' : '12px'
-                                }}
+                                className={`edit-profile-nickname-input ${
+                                    nicknameStatus === 'available' ? 'border-success has-check' : 
+                                    nicknameStatus === 'unavailable' ? 'border-danger no-check' : 'no-check'
+                                }`}
                                 required
                             />
-                            {/* 입력 필드 내 체크 아이콘 */}
+                            {/* 체크 아이콘 */}
                             {nicknameStatus === 'available' && formData.nickname !== originalData?.nickname && (
-                                <i
-                                    className="bi bi-check-circle-fill text-success"
-                                    style={{
-                                        position: 'absolute',
-                                        right: '12px',
-                                        top: '50%',
-                                        transform: 'translateY(-50%)',
-                                        fontSize: '18px'
-                                    }}
-                                ></i>
+                                <i className="bi bi-check-circle-fill text-success edit-profile-check-icon"></i>
                             )}
                         </div>
                         <Button
@@ -467,35 +345,18 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
                             variant="outline-primary"
                             disabled={checkingNickname || !formData.nickname.trim() || nicknameStatus === 'available'}
                             onClick={checkNicknameDuplicate}
-                            style={{
-                                minWidth: '90px',
-                                height: '38px',
-                                fontSize: '0.875rem',
-                                fontWeight: '500',
-                                borderRadius: '6px',
-                                transition: 'all 0.2s ease'
-                            }}
-                            className={
-                                nicknameStatus === 'available'
-                                    ? 'btn-outline-success border-success text-success'
-                                    : nicknameStatus === 'unavailable'
-                                        ? 'btn-outline-danger border-danger text-danger'
-                                        : ''
-                            }
+                            className={`edit-profile-duplicate-btn ${
+                                nicknameStatus === 'available' ? 'btn-outline-success border-success text-success' :
+                                nicknameStatus === 'unavailable' ? 'btn-outline-danger border-danger text-danger' : ''
+                            }`}
                         >
                             {checkingNickname ? (
                                 <>
-                                    <Spinner
-                                        size="sm"
-                                        style={{ width: '14px', height: '14px' }}
-                                        className="me-1"
-                                    />
+                                    <Spinner size="sm" className="edit-profile-spinner me-1" />
                                     확인중
                                 </>
                             ) : nicknameStatus === 'available' ? (
-                                <>
-                                    <i className="bi bi-check-lg me-1"></i>
-                                </>
+                                <i className="bi bi-check-lg me-1"></i>
                             ) : nicknameStatus === 'unavailable' ? (
                                 <>
                                     <i className="bi bi-x-lg me-1"></i>
@@ -512,39 +373,22 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
                     <Form.Control.Feedback type="invalid">
                         {validationErrors.nickname}
                     </Form.Control.Feedback>
+                    
                     {/* 상태 메시지 */}
                     {nicknameStatus === 'available' && formData.nickname !== originalData?.nickname && (
-                        <div
-                            className="mt-2 d-flex align-items-center"
-                            style={{
-                                fontSize: '0.875rem',
-                                color: '#198754'
-                            }}
-                        >
+                        <div className="edit-profile-status-message edit-profile-status-success">
                             <i className="bi bi-check-circle-fill me-2"></i>
                             <span className="fw-medium">사용 가능한 닉네임입니다</span>
                         </div>
                     )}
                     {nicknameStatus === 'unavailable' && (
-                        <div
-                            className="mt-2 d-flex align-items-center"
-                            style={{
-                                fontSize: '0.875rem',
-                                color: '#dc3545'
-                            }}
-                        >
+                        <div className="edit-profile-status-message edit-profile-status-error">
                             <i className="bi bi-exclamation-circle-fill me-2"></i>
                             <span className="fw-medium">이미 사용중인 닉네임입니다</span>
                         </div>
                     )}
                     {formData.nickname === originalData?.nickname && (
-                        <div
-                            className="mt-2 d-flex align-items-center"
-                            style={{
-                                fontSize: '0.875rem',
-                                color: '#6c757d'
-                            }}
-                        >
+                        <div className="edit-profile-status-message edit-profile-status-info">
                             <i className="bi bi-info-circle me-2"></i>
                             <span>현재 사용중인 닉네임입니다</span>
                         </div>
@@ -554,21 +398,10 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
 
             {/* 관심 토픽 */}
             <Form.Group className="mb-4">
-                <Form.Label
-                    className="fw-medium"
-                    style={{
-                        fontSize: '1.1rem',
-                        color: '#495057'
-                    }}
-                >
+                <Form.Label className="edit-profile-topics-label fw-medium">
                     관심 토픽 (최소 1개, 최대 3개)
                 </Form.Label>
-                <div
-                    className="p-3 rounded"
-                    style={{
-                        backgroundColor: '#f8f9fa'
-                    }}
-                >
+                <div className="edit-profile-topics-container">
                     <div className="d-flex flex-wrap gap-2 mb-3">
                         {TOPICS.map((topic) => {
                             const isSelected = formData.topics.includes(topic.key);
@@ -579,29 +412,7 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
                                     variant="outline-secondary"
                                     size="sm"
                                     onClick={() => handleTopicClick(topic.key)}
-                                    style={{
-                                        borderRadius: '25px',
-                                        padding: '8px 16px',
-                                        fontSize: '0.875rem',
-                                        fontWeight: isSelected ? '700' : '500',
-                                        border: isSelected ? '2px solid #0d6efd' : '2px solid #dee2e6',
-                                        backgroundColor: isSelected ? '#e7f3ff' : '#ffffff',
-                                        color: isSelected ? '#0d6efd' : '#6c757d',
-                                        transition: 'all 0.2s ease',
-                                        minHeight: '36px'
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        if (!isSelected) {
-                                            e.target.style.borderColor = '#adb5bd';
-                                            e.target.style.backgroundColor = '#f8f9fa';
-                                        }
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        if (!isSelected) {
-                                            e.target.style.borderColor = '#dee2e6';
-                                            e.target.style.backgroundColor = '#ffffff';
-                                        }
-                                    }}
+                                    className={`edit-profile-topic-btn ${isSelected ? 'selected' : ''}`}
                                 >
                                     {topic.label}
                                 </Button>
@@ -610,54 +421,48 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
                     </div>
 
                     {topicError && (
-                        <div className="text-danger mb-2" style={{ fontSize: '0.875rem' }}>
+                        <div className="edit-profile-error-message">
                             <i className="bi bi-exclamation-triangle me-1"></i>
                             {topicError}
                         </div>
                     )}
 
                     {validationErrors.topics && (
-                        <div className="text-danger mb-2" style={{ fontSize: '0.875rem' }}>
+                        <div className="edit-profile-error-message">
                             <i className="bi bi-exclamation-triangle me-1"></i>
                             {validationErrors.topics}
                         </div>
                     )}
 
-                    <div
-                        className="text-muted"
-                        style={{ fontSize: '0.875rem' }}
-                    >
+                    <div className="edit-profile-topic-summary">
                         <strong>선택된 토픽 ({formData.topics.length}/3):</strong> {
-                        formData.topics.length > 0
-                            ? formData.topics.map(topicKey =>
-                                TOPICS.find(t => t.key === topicKey)?.label
-                            ).join(", ")
-                            : "없음"
-                    }
+                            formData.topics.length > 0
+                                ? formData.topics.map(topicKey =>
+                                    TOPICS.find(t => t.key === topicKey)?.label
+                                ).join(", ")
+                                : "없음"
+                        }
                     </div>
                 </div>
             </Form.Group>
 
             {/* 버튼 */}
             <div className="d-flex justify-content-end gap-2">
-                <Button variant="secondary" type="button" onClick={onCancel} disabled={saving}
-                style={{
-                    borderRadius: '8px',
-                    padding: '12px 24px',
-                    fontSize: '1rem',
-                    fontWeight: '600',
-                    minWidth: '120px',
-                    transition: 'all 0.2s ease'
-                }}>
+                <Button 
+                    variant="secondary" 
+                    type="button" 
+                    onClick={onCancel} 
+                    disabled={saving}
+                    className="edit-profile-btn"
+                >
                     취소
                 </Button>
-                <Button variant="primary" type="submit" disabled={saving} style={{
-                    borderRadius: '8px',
-                    padding: '12px 24px',
-                    fontSize: '1rem',
-                    fontWeight: '600',
-                    minWidth: '120px',
-                    transition: 'all 0.2s ease'}}>
+                <Button 
+                    variant="primary" 
+                    type="submit" 
+                    disabled={saving}
+                    className="edit-profile-btn"
+                >
                     {saving ? (
                         <>
                             <Spinner size="sm" className="me-2" />

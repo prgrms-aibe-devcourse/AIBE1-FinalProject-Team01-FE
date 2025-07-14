@@ -358,3 +358,187 @@
     margin-left: 2rem;
   }
 }
+
+
+/* EditProfileForm 컴포넌트 스타일 */
+.edit-profile-loading {
+  min-height: 300px;
+}
+
+.edit-profile-form-container {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.edit-profile-image-container {
+  position: relative;
+}
+
+.edit-profile-image {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-width: 3px;
+  border-color: #e9ecef;
+}
+
+.edit-profile-camera-btn {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 12px;
+}
+
+.edit-profile-info-container {
+  margin-left: 1rem;
+}
+
+.edit-profile-label {
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.edit-profile-value {
+  font-size: 1rem;
+  color: #212529;
+  font-weight: 600;
+}
+
+.edit-profile-section-title {
+  font-size: 1.1rem;
+  color: #495057;
+  margin-bottom: 0.75rem;
+}
+
+.edit-profile-form-label {
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.edit-profile-form-control {
+  font-size: 1rem;
+}
+
+.edit-profile-nickname-container {
+  flex: 1;
+  position: relative;
+}
+
+.edit-profile-nickname-input {
+  font-size: 1rem;
+}
+
+.edit-profile-nickname-input.has-check {
+  padding-right: 40px;
+}
+
+.edit-profile-nickname-input.no-check {
+  padding-right: 12px;
+}
+
+.edit-profile-check-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+}
+
+.edit-profile-duplicate-btn {
+  min-width: 90px;
+  height: 38px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.edit-profile-spinner {
+  width: 14px;
+  height: 14px;
+}
+
+.edit-profile-status-message {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.edit-profile-status-success {
+  color: #198754;
+}
+
+.edit-profile-status-error {
+  color: #dc3545;
+}
+
+.edit-profile-status-info {
+  color: #6c757d;
+}
+
+.edit-profile-topics-label {
+  font-size: 1.1rem;
+  color: #495057;
+  font-weight: 500;
+}
+
+.edit-profile-topics-container {
+  background-color: #f8f9fa;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+}
+
+.edit-profile-topic-btn {
+  border-radius: 25px;
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  min-height: 36px;
+  border: 2px solid;
+  background-color: #ffffff;
+  color: #6c757d;
+  border-color: #dee2e6;
+  font-weight: 500;
+}
+
+.edit-profile-topic-btn.selected {
+  font-weight: 700;
+  border-color: #0d6efd;
+  background-color: #e7f3ff;
+  color: #0d6efd;
+}
+
+.edit-profile-topic-btn:hover:not(.selected) {
+  border-color: #adb5bd;
+  background-color: #f8f9fa;
+}
+
+.edit-profile-error-message {
+  font-size: 0.875rem;
+  color: #dc3545;
+  margin-bottom: 0.5rem;
+}
+
+.edit-profile-topic-summary {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.edit-profile-btn {
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  min-width: 120px;
+  transition: all 0.2s ease;
+}
