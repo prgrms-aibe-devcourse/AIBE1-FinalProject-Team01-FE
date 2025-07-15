@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { confirmPasswordReset } from "../../services/api";
 import { useInput } from "../../hooks/useInput";
+import { isValidPassword, arePasswordsEqual } from "../../utils/auth";
 import "../../styles/components/auth/auth.css";
 
 /**
@@ -16,8 +17,12 @@ export const ResetPasswordForm = () => {
   const { value: confirmPassword, onChange: onConfirmPasswordChange } = useInput("");
   
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(""); // 전체 폼 에러
   const [success, setSuccess] = useState(false);
+  
+  // 개별 필드 에러
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   useEffect(() => {
     if (!token) {
@@ -25,26 +30,56 @@ export const ResetPasswordForm = () => {
     }
   }, [token]);
 
+  // 비밀번호 입력시 실시간 검증
+  const handlePasswordChange = (e) => {
+    onNewPasswordChange(e);
+    setError(""); // 전체 에러 초기화
+    setPasswordError(""); // 개별 에러 초기화
+    setConfirmPasswordError("");
+  };
+
+  // 비밀번호 확인 입력시 실시간 검증
+  const handleConfirmPasswordChange = (e) => {
+    onConfirmPasswordChange(e);
+    setError("");
+    setConfirmPasswordError("");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // 모든 에러 초기화
+    setError("");
+    setPasswordError("");
+    setConfirmPasswordError("");
+    
+    let hasError = false;
+
     if (!token) {
       setError("유효하지 않은 토큰입니다.");
       return;
     }
 
-    if (newPassword !== confirmPassword) {
-      setError("비밀번호가 일치하지 않습니다.");
-      return;
+    // 개별 필드 검증
+    if (!newPassword) {
+      setPasswordError("새 비밀번호를 입력해 주세요");
+      hasError = true;
+    } else if (!isValidPassword(newPassword)) {
+      setPasswordError("비밀번호는 8자 이상, 알파벳과 숫자를 모두 포함해야 합니다");
+      hasError = true;
     }
 
-    if (newPassword.length < 8) {
-      setError("비밀번호는 8자 이상이어야 합니다.");
-      return;
+    if (!confirmPassword) {
+      setConfirmPasswordError("비밀번호 확인을 입력해 주세요");
+      hasError = true;
+    } else if (!arePasswordsEqual(newPassword, confirmPassword)) {
+      setConfirmPasswordError("비밀번호가 일치하지 않습니다");
+      hasError = true;
     }
+
+    if (hasError) return;
 
     setLoading(true);
-    setError("");
 
     try {
       await confirmPasswordReset(token, newPassword, confirmPassword);
@@ -85,41 +120,69 @@ export const ResetPasswordForm = () => {
         </div>
       </div>
 
+      {/* 전체 폼 에러 메시지 */}
       {error && (
-        <div style={{ color: "red", marginBottom: "16px", textAlign: "center" }}>
-          {error}
+        <div className="error-message">
+          ⚠️ {error}
         </div>
       )}
 
       <form
         className="loginpage-figma-form signup-form"
         onSubmit={handleSubmit}
+        noValidate
       >
         <div className="signup-label">새 비밀번호</div>
-        <div className="loginpage-figma-input-group">
+        <div
+          className={`loginpage-figma-input-group ${
+            passwordError ? "error" : newPassword && isValidPassword(newPassword) ? "success" : ""
+          }`}
+        >
           <input
             type="password"
-            placeholder="새 비밀번호를 입력해 주세요"
+            placeholder="최소 8자 이상(알파벳, 숫자 필수)"
             value={newPassword}
-            onChange={onNewPasswordChange}
+            onChange={handlePasswordChange}
             required
             disabled={loading}
             minLength="8"
           />
         </div>
+        {/* 개별 필드 에러 메시지 */}
+        {passwordError && (
+          <div className="email-check-message error" role="alert" aria-live="polite">
+            {passwordError}
+          </div>
+        )}
 
         <div className="signup-label">새 비밀번호 확인</div>
-        <div className="loginpage-figma-input-group">
+        <div
+            className={`loginpage-figma-input-group ${
+                confirmPasswordError 
+                ? "error" 
+                : confirmPassword && 
+                    isValidPassword(newPassword) &&
+                    arePasswordsEqual(newPassword, confirmPassword)
+                    ? "success" 
+                    : ""
+            }`}
+        >
           <input
             type="password"
             placeholder="새 비밀번호를 다시 입력해 주세요"
             value={confirmPassword}
-            onChange={onConfirmPasswordChange}
+            onChange={handleConfirmPasswordChange}
             required
             disabled={loading}
             minLength="8"
           />
         </div>
+        {/* 개별 필드 에러 메시지 */}
+        {confirmPasswordError && (
+          <div className="email-check-message error" role="alert" aria-live="polite">
+            {confirmPasswordError}
+          </div>
+        )}
 
         <button
           type="submit"

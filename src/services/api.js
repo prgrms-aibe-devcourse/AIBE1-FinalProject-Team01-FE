@@ -36,7 +36,8 @@ const redirectToLogin = () => {
   if (
     currentPath === "/" ||
     currentPath === "/login" ||
-    currentPath === "/signup"
+    currentPath === "/signup" ||
+    currentPath.startsWith("/reset-password")
   ) {
     return;
   }
@@ -133,12 +134,12 @@ export const loginUser = async (credentials) => {
 
 // 비밀번호 재설정 요청
 export const requestPasswordReset = (email) => {
-  return apiClient.post('/auth/password/reset/request', { email });
+  return apiClient.post('/api/v1/auth/password/reset/request', { email });
 };
 
 // 비밀번호 재설정 확인
 export const confirmPasswordReset = (token, newPassword, confirmPassword) => {
-  return apiClient.post('/auth/password/reset/confirm', {
+  return apiClient.post('/api/v1/auth/password/reset/confirm', {
     token,
     newPassword,
     confirmPassword
