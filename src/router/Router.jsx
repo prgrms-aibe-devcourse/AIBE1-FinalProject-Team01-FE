@@ -22,6 +22,7 @@ const HubWritePage = lazy(() => import("../pages/hub/HubWritePage"));
 const MyPage = lazy(() => import("../pages/mypage/MyPage"));
 const DMPage = lazy(() => import("../pages/dm/DMPage"));
 const OAuthCallbackPage = lazy(() => import("../pages/auth/OAuthCallbackPage"));
+const ResetPasswordPage = lazy(() => import("../pages/auth/ResetPasswordPage"));
 import { Spinner } from "react-bootstrap";
 
 const ProtectedRoute = ({ children }) => {
@@ -62,6 +63,7 @@ export function AppRouter() {
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/signup/profile" element={<ProfileSetupPage />} />
                 <Route path="/find-account" element={<FindPasswordPage />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} /> 
 
                 <Route path="/community" element={<ProtectedRoute><Navigate to="/community/free" replace /></ProtectedRoute>} />
                 <Route path="/community/:boardType" element={<ProtectedRoute><CommunityPage /></ProtectedRoute>} />
