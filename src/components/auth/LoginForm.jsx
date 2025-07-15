@@ -46,7 +46,7 @@ export const LoginForm = () => {
       case 503:
         return "서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도해주세요.";
       default:
-        return error.response?.data?.message || "로그인 중 오류가 발생했습니다.";
+        return "로그인 중 오류가 발생했습니다.";
     }
   };
 
