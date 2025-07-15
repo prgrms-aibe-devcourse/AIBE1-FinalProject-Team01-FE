@@ -16,6 +16,7 @@ import {
   getDMMessageSearch,
 } from "../../services/dmApi";
 import { useAuth } from "../../context/AuthContext";
+import chatDefaultImage from "../../assets/chat-default-image.png";
 
 /**
  * @typedef {Object} DMSidebarProps
@@ -50,6 +51,7 @@ export const DMSidebar = ({
   const [error, setError] = useState(null);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState(null);
+  const [isSearchMode, setIsSearchMode] = useState(false);
 
   const currentUserId = user?.id || 1;
 
@@ -109,6 +111,7 @@ export const DMSidebar = ({
     e.preventDefault();
     if (!searchKeyword.trim()) {
       setSearchError(null);
+      setIsSearchMode(false);
       setChatList(
         serverRooms.map((room) => ({
           id: room.id,
@@ -131,30 +134,18 @@ export const DMSidebar = ({
         sortDirection: "DESC",
       });
       const messages = res.content || [];
-      // roomId별로 가장 최신 메시지(검색 결과 중 첫 번째)를 매핑
-      const roomMessageMap = {};
-      messages.forEach((msg) => {
-        if (!roomMessageMap[msg.roomId]) {
-          roomMessageMap[msg.roomId] = msg;
-        }
-      });
-      const roomIds = Object.keys(roomMessageMap);
-      const filtered = serverRooms.filter((room) => roomIds.includes(room.id));
+      setIsSearchMode(true);
       setChatList(
-        filtered.map((room) => {
-          const msg = roomMessageMap[room.id];
-          return {
-            id: room.id,
-            nickname: room.partnerNickname || `사용자 ${room.partnerId}`,
-            lastMessage: msg ? msg.content : room.lastMessage,
-            lastMessageTime: msg
-              ? msg.sentAt
-              : room.sentAt || room.lastMessageTime || new Date(),
-            profileImage: room.partnerProfileImage || null,
-            unreadCount: 0,
-            otherUserId: room.partnerId,
-          };
-        })
+        messages.map((msg) => ({
+          id: msg.id, // 메시지 id
+          roomId: msg.roomId,
+          nickname: msg.senderNickname,
+          lastMessage: msg.content,
+          lastMessageTime: msg.sentAt,
+          profileImage: msg.senderProfileImage || null,
+          unreadCount: 0,
+          otherUserId: msg.senderId,
+        }))
       );
     } catch (err) {
       setSearchError(err.message || "메시지 검색 중 오류가 발생했습니다.");
@@ -163,6 +154,24 @@ export const DMSidebar = ({
       setSearchLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (searchKeyword === "") {
+      setIsSearchMode(false);
+      setSearchError(null);
+      setChatList(
+        serverRooms.map((room) => ({
+          id: room.id,
+          nickname: room.partnerNickname || `사용자 ${room.partnerId}`,
+          lastMessage: room.lastMessage,
+          lastMessageTime: room.sentAt || room.lastMessageTime || new Date(),
+          profileImage: room.partnerProfileImage || null,
+          unreadCount: 0,
+          otherUserId: room.partnerId,
+        }))
+      );
+    }
+  }, [searchKeyword, serverRooms]);
 
   const handleDeleteChat = async (chatId) => {
     try {
@@ -282,6 +291,64 @@ export const DMSidebar = ({
                 </div>
               </div>
             </div>
+          ) : isSearchMode ? (
+            <ul
+              className="dm-search-message-list"
+              style={{ listStyle: "none", padding: 0, margin: 0 }}
+            >
+              {chatList.map((msg) => (
+                <li
+                  key={msg.id}
+                  className="dm-search-message-item"
+                  style={{
+                    padding: "12px 16px",
+                    borderBottom: "1px solid #f0f0f0",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                  }}
+                  onClick={() => onChatSelect && onChatSelect(msg.roomId)}
+                >
+                  <img
+                    src={msg.profileImage || chatDefaultImage}
+                    alt={msg.nickname}
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, fontSize: 15 }}>
+                      {msg.nickname}
+                    </div>
+                    <div style={{ color: "#555", fontSize: 14, marginTop: 2 }}>
+                      {msg.lastMessage}
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 12,
+                      color: "#888",
+                      minWidth: 70,
+                      textAlign: "right",
+                    }}
+                  >
+                    {msg.lastMessageTime
+                      ? new Date(msg.lastMessageTime).toLocaleString("ko-KR", {
+                          hour12: false,
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      : ""}
+                  </div>
+                </li>
+              ))}
+            </ul>
           ) : (
             <DMChatList
               chats={filteredChats}
