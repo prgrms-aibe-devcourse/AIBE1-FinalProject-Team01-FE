@@ -62,10 +62,15 @@ export const FindPasswordForm = () => {
           </div>
           <button
             type="submit"
-            className="loginpage-figma-login-btn signup-btn"
+            className="loginpage-figma-login-btn signup-btn d-flex align-items-center justify-content-center"
             disabled={loading}
           >
-            {loading ? "전송 중..." : "비밀번호 재설정 메일 받기"}
+            {loading && (
+              <div className="spinner-border spinner-border-sm me-2" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            )}
+            {loading ? "이메일 전송 중..." : "비밀번호 재설정 메일 받기"}
           </button>
         </form>
       ) : (
