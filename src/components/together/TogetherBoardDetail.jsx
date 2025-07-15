@@ -46,8 +46,6 @@ const TogetherBoardDetail = ({ post, onLike, onBookmark, boardType, onPostUpdate
     if (onPostUpdate) {
       onPostUpdate(updatedPost);
     }
-
-    alert("상태가 업데이트되었습니다.");
   };
 
   if (!post) {
