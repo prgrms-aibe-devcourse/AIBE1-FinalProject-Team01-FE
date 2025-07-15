@@ -24,6 +24,44 @@ const DMPage = lazy(() => import("../pages/dm/DMPage"));
 const OAuthCallbackPage = lazy(() => import("../pages/auth/OAuthCallbackPage"));
 import { Spinner } from "react-bootstrap";
 
+const RoleProtectedRoute = ({ children, allowedRoles = [], accessDeniedMessage }) => {
+    const { isLoggedIn, user, loading } = useAuth();
+    const location = useLocation();
+
+    if (loading) {
+        return (
+            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: 300 }}>
+                <Spinner animation="border" role="status" variant="primary" style={{ width: "3rem", height: "3rem" }}>
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            </div>
+        );
+    }
+
+    // 로그인되지 않은 경우
+    if (!isLoggedIn) {
+        alert("로그인이 필요한 서비스입니다.");
+        const redirectUrl = encodeURIComponent(location.pathname + location.search);
+        return <Navigate to={`/login?redirectUrl=${redirectUrl}`} replace />;
+    }
+
+    // 역할 권한이 없는 경우
+    if (allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
+        alert(accessDeniedMessage);
+        return <Navigate to="/" replace />;
+    }
+
+    return children;
+};
+
+const StudentRoute = ({ children, accessDeniedMessage = "수강생만 접근할 수 있는 페이지입니다."}) => {
+    return (
+        <RoleProtectedRoute allowedRoles={['ADMIN', 'STUDENT']} accessDeniedMessage={accessDeniedMessage}>
+            {children}
+        </RoleProtectedRoute>
+    );
+};
+
 const ProtectedRoute = ({ children }) => {
     const { isLoggedIn, loading } = useAuth();
     const location = useLocation();
@@ -68,11 +106,11 @@ export function AppRouter() {
                 <Route path="/community/:boardType/write" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
                 <Route path="/community/:boardType/:communityId" element={<ProtectedRoute><CommunityBoardDetailPage /></ProtectedRoute>} />
                 <Route path="/community/:boardType/:communityId/edit" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
-                <Route path="/together" element={<ProtectedRoute><Navigate to="/together/gathering" replace /></ProtectedRoute>} />
-                <Route path="/together/:boardType" element={<ProtectedRoute><TogetherPage /></ProtectedRoute>} />
-                <Route path="/together/:boardType/:postId" element={<ProtectedRoute><TogetherBoardDetailPage /></ProtectedRoute>} />
-                <Route path="/together/:boardType/write" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
-                <Route path="/together/:boardType/:postId/edit" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
+                <Route path="/together" element={<StudentRoute><Navigate to="/together/gathering" replace /></StudentRoute>} />
+                <Route path="/together/:boardType" element={<StudentRoute><TogetherPage /></StudentRoute>} />
+                <Route path="/together/:boardType/:postId" element={<StudentRoute><TogetherBoardDetailPage /></StudentRoute>} />
+                <Route path="/together/:boardType/write" element={<StudentRoute><TogetherWritePage /></StudentRoute>} />
+                <Route path="/together/:boardType/:postId/edit" element={<StudentRoute><TogetherWritePage /></StudentRoute>} />
                 <Route path="/info" element={<Navigate to="/info/review" replace />} />
                 <Route path="/info/:boardType" element={<InfoPage />} />
                 <Route path="/info/:boardType/:itId" element={<InfoBoardDetailPage />} />

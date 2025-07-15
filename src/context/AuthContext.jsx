@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
     devcourseBatch: responseData.devcourseBatch,
     topics: responseData.topics,
     providerType: responseData.providerType,
+    role: responseData.role,
   });
 
   const fetchUserInfo = async () => {

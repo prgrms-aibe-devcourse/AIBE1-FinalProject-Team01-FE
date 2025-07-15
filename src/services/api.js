@@ -105,11 +105,11 @@ apiClient.interceptors.response.use(
 
       if (shouldExclude) {
         console.log("🚫 권한 부족");
+
         return Promise.reject(error);
       }
 
       console.log("🔐 인증 만료");
-      redirectToLogin();
     }
     return Promise.reject(error);
   }
