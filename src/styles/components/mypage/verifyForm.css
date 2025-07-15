@@ -1,0 +1,40 @@
+.verification-example-thumbnails {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .verification-example-thumbnail {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    cursor: pointer;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    transition: box-shadow 0.2s;
+  }
+  
+  .verification-example-thumbnail:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+  
+  .verification-modal-backdrop {
+    display: block;
+    background: rgba(0,0,0,0.5);
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 1050;
+  }
+  
+  .verification-modal-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .verification-modal-img {
+    max-width: 90vw;
+    max-height: 80vh;
+    border-radius: 12px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.2);
+  }

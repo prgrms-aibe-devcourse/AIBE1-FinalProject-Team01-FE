@@ -85,11 +85,6 @@ export const PostCard = ({
 
   const validTags = processTagsString(tags);
 
-  const isActiveStatus = (currentStatus) => {
-    const activeKeywords = ["모집중", "매칭가능", "판매중"];
-    return activeKeywords.includes(currentStatus);
-  };
-
   return (
     <div
       className="card p-3 shadow-sm board-list-item"
@@ -97,7 +92,7 @@ export const PostCard = ({
       onClick={onClick ? () => onClick(postId) : undefined}
     >
       <div className="d-flex align-items-center mb-2 gap-2">
-        <span className={`community-category-label me-1 label-${categoryKey}`}>
+        <span className={`community-category-label me-1 label-${categoryKey.toUpperCase()}`}>
           {categoryLabel}
         </span>
         {status &&

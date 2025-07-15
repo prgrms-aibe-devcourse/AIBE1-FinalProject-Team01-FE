@@ -24,12 +24,12 @@ export const GATHERING_STATUS = {
 };
 
 export const MATCH_STATUS = {
-  AVAILABLE: "AVAILABLE",
-  COMPLETED: "COMPLETED",
+  AVAILABLE: "OPEN",
+  COMPLETED: "MATCHED",
 };
 
 export const MARKET_STATUS = {
-  ON_SALE: "ON_SALE",
+  ON_SALE: "SELLING",
   RESERVED: "RESERVED",
   SOLD_OUT: "SOLD_OUT",
 };
@@ -37,7 +37,7 @@ export const MARKET_STATUS = {
 // UI 표시 이름
 export const GATHERING_TYPE_LABELS = {
   [GATHERING_TYPE.STUDY]: "스터디",
-  [GATHERING_TYPE.SIDE_PROJECT]: "프로젝트",
+  [GATHERING_TYPE.SIDE_PROJECT]: "팀 프로젝트",
 };
 
 export const MATCH_TYPE_LABELS = {
@@ -83,12 +83,11 @@ export const STATUS_LABELS = {
 };
 
 export const STATUS_COLOR_MAP = {
-  모집중: "bg-success text-white",
-  모집완료: "bg-secondary text-white",
-  매칭가능: "bg-primary text-white",
-  매칭완료: "bg-secondary text-white",
-  판매중: "bg-warning text-dark",
-  예약중: "bg-info text-dark",
+  모집중: "bg-success-subtle text-success-emphasis border border-success-subtle",
+  모집완료: "bg-light text-secondary border border-light",
+  매칭가능: "bg-primary-subtle text-primary-emphasis border border-primary-subtle",
+  매칭완료: "bg-light text-secondary border border-light",
+  예약중: "bg-success text-white",
   판매완료: "bg-secondary text-white",
 };
 

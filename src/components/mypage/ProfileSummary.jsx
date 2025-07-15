@@ -57,6 +57,9 @@ export const ProfileSummary = ({
   const getTopicName = (key) => 
     TOPICS.find(topic => topic.key === key)?.label || key;
 
+  // 인증 상태 판별
+  const isVerified = profile?.devcourseName && profile?.devcourseBatch;
+
   // 로딩 상태
   if (loading) {
     return (
@@ -103,11 +106,12 @@ export const ProfileSummary = ({
             정보 수정
           </button>
           <button
-            className="profile-summary-btn profile-summary-btn-success"
+            className={`profile-summary-btn ${isVerified ? "profile-summary-btn-success" : "profile-summary-btn-danger"}`}
             onClick={onStudentVerification}
+            disabled={isVerified}
           >
             <i className="bi bi-shield-check"></i>
-            수강생 인증
+            {isVerified ? "수강생 인증 완료" : "수강생 인증"}
           </button>
           {profile.providerType === "LOCAL" && (
             <button
@@ -137,7 +141,7 @@ export const ProfileSummary = ({
                       과정명
                     </div>
                     <div className="profile-summary-value">
-                      {profile.devcourseName ? convertTrackFromApi(profile.devcourseName) : '미설정'}
+                      {profile.devcourseName ? convertTrackFromApi(profile.devcourseName) : '수강생 인증을 해주세요'}
                     </div>
                   </div>
                   <div className="col-6">
@@ -145,7 +149,7 @@ export const ProfileSummary = ({
                       기수
                     </div>
                     <div className="profile-summary-value">
-                      {profile.devcourseBatch ? `${profile.devcourseBatch}기` : '미설정'}
+                      {profile.devcourseBatch ? `${profile.devcourseBatch}기` : '수강생 인증을 해주세요'}
                     </div>
                   </div>
                   <div className="col-6">

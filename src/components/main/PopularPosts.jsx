@@ -7,6 +7,22 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import apiClient from "../../services/api";
 
+const safeProcessPostData = (posts) => {
+  return posts.map(post => ({
+    ...post,
+    id: post.id || 0,
+    title: post.title || "제목 없음",
+    authorNickname: post.authorNickname || "익명",
+    authorDevcourseName: post.authorDevcourseName || null,
+    likeCount: post.likeCount || 0,
+    commentCount: post.commentCount || 0,
+    viewCount: post.viewCount || 0,
+    boardType: post.boardType || "FREE",
+    boardId: post.boardId || post.id || 0,
+    createdAt: post.createdAt || new Date().toISOString()
+  }));
+};
+
 // 날짜 포맷팅 함수
 const formatDate = (dateString) => {
   if (!dateString) return "";
@@ -22,23 +38,6 @@ const formatDate = (dateString) => {
   if (diffInDays < 7) return `${diffInDays}일 전`;
 
   return date.toLocaleDateString("ko-KR");
-};
-
-// PopularPosts.jsx 상단에 추가
-const safeProcessPostData = (posts) => {
-  return posts.map(post => ({
-    ...post,
-    id: post.id || 0,
-    title: post.title || "제목 없음",
-    authorNickname: post.authorNickname || "익명",
-    authorDevcourseName: post.authorDevcourseName || null,
-    likeCount: post.likeCount || 0,
-    commentCount: post.commentCount || 0,
-    viewCount: post.viewCount || 0,
-    boardType: post.boardType || "FREE",
-    boardId: post.boardId || post.id || 0,
-    createdAt: post.createdAt || new Date().toISOString()
-  }));
 };
 
 /**

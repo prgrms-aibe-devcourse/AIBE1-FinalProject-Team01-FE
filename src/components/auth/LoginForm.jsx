@@ -30,14 +30,24 @@ export const LoginForm = () => {
   const { value: pw, onChange: onPwChange } = useInput("");
 
   const getErrorMessage = (error) => {
-    if (error.response?.status === 401) {
-      return "이메일 또는 비밀번호가 올바르지 않습니다.";
-    } else if (error.response?.status >= 500) {
-      return "서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도해주세요.";
-    } else if (!error.response) {
+    if (!error.response) {
       return "네트워크 연결을 확인해주세요.";
     }
-    return error.response?.data?.message || "로그인 중 오류가 발생했습니다.";
+    
+    switch (error.response.status) {
+      case 400:
+        return "비밀번호가 일치하지 않습니다.";
+      case 401:
+        return "이메일 또는 비밀번호가 올바르지 않습니다.";
+      case 404:
+        return "존재하지 않는 사용자입니다.";
+      case 500:
+      case 502:
+      case 503:
+        return "서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도해주세요.";
+      default:
+        return "로그인 중 오류가 발생했습니다.";
+    }
   };
 
   // 실시간 이메일 검증
@@ -150,8 +160,8 @@ export const LoginForm = () => {
       )}
 
       {loginError && (
-        <div className="input-check-message" role="alert" aria-live="polite">
-          {loginError}
+        <div className="error-message">
+          ⚠️ {loginError}
         </div>
       )}
 

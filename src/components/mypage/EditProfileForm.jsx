@@ -279,13 +279,13 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
                             <div className="col-6">
                                 <div className="edit-profile-label">과정명</div>
                                 <div className="edit-profile-value">
-                                    {formData.devcourseName ? convertTrackFromApi(formData.devcourseName) : '미설정'}
+                                    {formData.devcourseName ? convertTrackFromApi(formData.devcourseName) : '수강생 인증을 해주세요'}
                                 </div>
                             </div>
                             <div className="col-6">
                                 <div className="edit-profile-label">기수</div>
                                 <div className="edit-profile-value">
-                                    {formData.devcourseBatch ? `${formData.devcourseBatch}기` : '미설정'}
+                                    {formData.devcourseBatch ? `${formData.devcourseBatch}기` : '수강생 인증을 해주세요'}
                                 </div>
                             </div>
                             <div className="col-6">
