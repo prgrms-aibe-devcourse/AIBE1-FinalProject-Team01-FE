@@ -130,3 +130,18 @@ export const loginUser = async (credentials) => {
     throw error;
   }
 };
+
+// 비밀번호 재설정 요청
+export const requestPasswordReset = (email) => {
+  return apiClient.post('/auth/password/reset/request', { email });
+};
+
+// 비밀번호 재설정 확인
+export const confirmPasswordReset = (token, newPassword, confirmPassword) => {
+  return apiClient.post('/auth/password/reset/confirm', {
+    token,
+    newPassword,
+    confirmPassword
+  });
+};
+

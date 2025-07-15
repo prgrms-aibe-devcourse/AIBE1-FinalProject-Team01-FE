@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { requestPasswordReset } from "../../services/api";
 import "../../styles/components/auth/auth.css";
 import { useInput } from "../../hooks/useInput";
 
@@ -7,12 +8,23 @@ import { useInput } from "../../hooks/useInput";
  */
 export const FindPasswordForm = () => {
   const { value: email, onChange: onEmailChange } = useInput("");
-  const [sent, setSent] = React.useState(false);
+  const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: 실제 이메일 전송 로직
-    setSent(true);
+    setLoading(true);
+    setError("");
+
+    try {
+      await requestPasswordReset(email);
+      setSent(true);
+    } catch (err) {
+      setError(err.response?.data?.message || "이메일 전송에 실패했습니다.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -25,6 +37,13 @@ export const FindPasswordForm = () => {
           비밀번호 재설정 링크를 보내드립니다.
         </div>
       </div>
+      
+      {error && (
+        <div style={{ color: "red", marginBottom: "16px", textAlign: "center" }}>
+          {error}
+        </div>
+      )}
+
       {!sent ? (
         <form
           className="loginpage-figma-form signup-form"
@@ -38,13 +57,15 @@ export const FindPasswordForm = () => {
               value={email}
               onChange={onEmailChange}
               required
+              disabled={loading}
             />
           </div>
           <button
             type="submit"
             className="loginpage-figma-login-btn signup-btn"
+            disabled={loading}
           >
-            비밀번호 재설정 메일 받기
+            {loading ? "전송 중..." : "비밀번호 재설정 메일 받기"}
           </button>
         </form>
       ) : (
