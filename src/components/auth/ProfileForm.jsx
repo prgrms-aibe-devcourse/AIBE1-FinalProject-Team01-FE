@@ -44,6 +44,9 @@ export const ProfileForm = ({
 
   // 닉네임 중복확인
   const handleNicknameCheck = async () => {
+
+    setNicknameError(""); 
+    
     if (!nickname) {
       setNicknameCheck({ checked: false, message: "닉네임을 입력해 주세요." });
       return;
@@ -224,19 +227,13 @@ export const ProfileForm = ({
           </button>
         </div>
         {nicknameError && (
-          <div
-            className="email-check-message error"
-            role="alert"
-            aria-live="polite"
-          >
+          <div className="email-check-message error" role="alert" aria-live="polite">
             {nicknameError}
           </div>
         )}
-        {nicknameCheck.message && (
+        {!nicknameError && nicknameCheck.message && (
           <div
-            className={`email-check-message ${
-              nicknameCheck.checked ? "success" : "error"
-            }`}
+            className={`email-check-message ${nicknameCheck.checked ? "success" : "error"}`}
             role="alert"
             aria-live="polite"
           >
