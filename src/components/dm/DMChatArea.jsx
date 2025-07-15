@@ -260,6 +260,7 @@ export const DMChatArea = ({ selectedChatId, onMessageUpdate }) => {
           }),
           isMe: msg.senderId === currentUserId,
           senderNickname: msg.senderNickname,
+          senderProfileImage: msg.senderProfileImage || null, // 다시 추가!
         };
       });
 
@@ -342,8 +343,8 @@ export const DMChatArea = ({ selectedChatId, onMessageUpdate }) => {
       }
 
       const newMessage = {
-        id: messageData.id || `ws-${Date.now()}-${Math.random()}`, // 서버에서 제공하는 ID 사용
-        chatId: messageData.roomId || selectedChatId, // 서버에서 제공하는 roomId 사용
+        id: messageData.id || `ws-${Date.now()}-${Math.random()}`,
+        chatId: messageData.roomId || selectedChatId,
         senderId: messageData.senderId,
         text: messageContent,
         type: messageType,
@@ -358,7 +359,8 @@ export const DMChatArea = ({ selectedChatId, onMessageUpdate }) => {
               minute: "2-digit",
             }),
         isMe: messageData.senderId === currentUserId,
-        senderNickname: messageData.senderNickname, // 서버 DTO의 senderNickname 필드
+        senderNickname: messageData.senderNickname,
+        senderProfileImage: messageData.senderProfileImage || null, // 다시 추가!
       };
 
       setMessages((prev) => {

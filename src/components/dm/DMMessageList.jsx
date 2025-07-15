@@ -105,7 +105,7 @@ export const DMMessageList = ({ messages, currentUserId }) => {
           {!message.isMe && (
             <div className="dm-message-avatar">
               <img
-                src={chatDefaultImage}
+                src={message.senderProfileImage || chatDefaultImage}
                 alt={message.senderNickname || "사용자"}
                 className="dm-message-avatar-img"
               />
