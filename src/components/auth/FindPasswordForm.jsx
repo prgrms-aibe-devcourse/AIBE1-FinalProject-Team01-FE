@@ -39,7 +39,7 @@ export const FindPasswordForm = () => {
       </div>
       
       {error && (
-        <div style={{ color: "red", marginBottom: "16px", textAlign: "center" }}>
+        <div className="error-message">
           {error}
         </div>
       )}
