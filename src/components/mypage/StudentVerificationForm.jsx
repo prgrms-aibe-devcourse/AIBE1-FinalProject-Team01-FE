@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { Button, Form, Alert, Spinner } from "react-bootstrap";
 import { COURSE_NAMES, BATCH_NUMBERS, convertTrackToApi } from "../../constants/devcourse";
 import { requestVerification, getVerificationStatus } from "../../services/verifyApi";
+import example1 from '../../assets/example/1.jpg';
+import example2 from '../../assets/example/2.jpg';
+import "../../styles/components/mypage/verifyForm.css";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -23,6 +26,7 @@ export const StudentVerificationForm = ({ onSave, onCancel, initial }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef();
   const currentImageUrlRef = useRef(null);
+  const [modalImg, setModalImg] = useState(null);
 
   useEffect(() => {
     if (initial) {
@@ -328,12 +332,40 @@ export const StudentVerificationForm = ({ onSave, onCancel, initial }) => {
         {/* 업로드 예시 안내 */}
         <div className="mt-3 p-3 bg-light rounded">
           <div className="fw-medium mb-2">📷 인증용 사진 가이드</div>
-          <div className="small text-muted">
-            • 데브코스 수강을 증명할 수 있는 자료
+          <div className="small text-muted mb-2">
+            • 예시 사진을 참고하여 수강생 인증 이미지를 제출해주세요
             <br />
-            • 과정명과 기수, 성함이 한장의 사진에 담길수있게 캡쳐해주세요
-            <br />• 개인정보가 포함된 경우 일부 가릴 수 있습니다
+            • 왼쪽 창은 '프로그래머스 마이페이지 - 수강중인 코스' 창을, 오른쪽 창은 '데브코스 LMS' 창을 함께 캡쳐해주세요
+            <br />
+            • 수강생 인증 과정에 문제가 있을 경우 daycodingdan@gmail.com 으로 문의 부탁드립니다
           </div>
+          <div className="d-flex gap-2 verification-example-thumbnails">
+            {[example1, example2].map((img, idx) => (
+              <img
+                key={idx}
+                src={img}
+                alt={`예시${idx + 1}`}
+                className="verification-example-thumbnail"
+                onClick={() => setModalImg(img)}
+              />
+            ))}
+          </div>
+          {/* 모달 */}
+          {modalImg && (
+            <div
+              className="modal show verification-modal-backdrop"
+              onClick={() => setModalImg(null)}
+            >
+              <div className="verification-modal-center">
+                <img
+                  src={modalImg}
+                  alt="예시 크게 보기"
+                  className="verification-modal-img"
+                  onClick={e => e.stopPropagation()}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </Form.Group>
 
