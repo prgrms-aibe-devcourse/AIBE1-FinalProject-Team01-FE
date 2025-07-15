@@ -1,8 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { PostContent } from "../common/PostContent";
 import TogetherPostInfo from "./TogetherPostInfo";
 import { BoardDetailLayout } from "../board/BoardDetailLayout";
+import { deleteGatheringPost } from "../../services/together/gatheringApi";
+import { deleteMatchingPost } from "../../services/together/matchingApi";
+import { deleteMarketPost } from "../../services/together/marketApi";
 
 /**
  * @typedef {Object} TogetherBoardDetailProps
@@ -15,20 +18,33 @@ import { BoardDetailLayout } from "../board/BoardDetailLayout";
  * 함께해요 글 상세 메인 컴포넌트
  * @param {TogetherBoardDetailProps} props
  */
-const TogetherBoardDetail = ({ post, onLike, onBookmark }) => {
+const TogetherBoardDetail = ({ post, onLike, onBookmark, boardType, onPostUpdate  }) => {
   const navigate = useNavigate();
+  const [currentPost, setCurrentPost] = useState(post);
 
   const handleEdit = () => {
-    navigate(`/together/${post.boardType.toLowerCase()}/write`, {
+    navigate(`/together/${boardType.toLowerCase()}/${post.id}/edit`, {
       state: { postToEdit: post },
     });
   };
 
-  const handleDelete = () => {
-    if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
-      console.log("삭제할 게시글 ID:", post.postId);
-      alert("게시글이 삭제되었습니다.");
-      navigate(`/together/${post.boardType.toLowerCase()}`);
+  const handleDelete = async () => {
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+    if (boardType === "gathering")      await deleteGatheringPost(post.id);
+    else if (boardType === "match")     await deleteMatchingPost(post.id);
+    else /* MARKET */                   await deleteMarketPost(post.id);
+    alert("삭제되었습니다.");
+    navigate(`/together/${boardType}`);
+  };
+
+  const handleStatusUpdate = (newStatus) => {
+    // 로컬 상태 업데이트
+    const updatedPost = { ...currentPost, status: newStatus };
+    setCurrentPost(updatedPost);
+
+    // 부모 컴포넌트에 업데이트 알림
+    if (onPostUpdate) {
+      onPostUpdate(updatedPost);
     }
   };
 
@@ -52,6 +68,8 @@ const TogetherBoardDetail = ({ post, onLike, onBookmark }) => {
         post={post}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        boardType={boardType}
+        onStatusUpdate={handleStatusUpdate}
       />
       <PostContent post={post} />
     </BoardDetailLayout>

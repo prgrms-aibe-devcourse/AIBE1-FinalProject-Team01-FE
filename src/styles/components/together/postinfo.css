@@ -1,0 +1,123 @@
+.status-badge-container {
+    position: relative;
+    display: inline-block;
+}
+
+    .status-badge-hoverable {
+        cursor: pointer;
+        transition: all 0.2s ease;
+        user-select: none;
+    }
+
+    .status-badge-hoverable:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .status-options-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        animation: dropdownFadeIn 0.2s ease;
+    }
+
+    /* 뱃지와 드롭다운을 연결하는 투명한 다리 */
+    .dropdown-bridge {
+        height: 8px;
+        width: 100%;
+        background: transparent;
+        margin-bottom: 0;
+    }
+
+    .dropdown-content {
+        background: white;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        min-width: 140px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* 말풍선 꼬리 */
+    .dropdown-content::before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid #dee2e6;
+    }
+
+    .dropdown-content::after {
+        content: '';
+        position: absolute;
+        top: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 5px solid white;
+    }
+
+    @keyframes dropdownFadeIn {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-5px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+
+    .status-options-header {
+        padding: 8px 12px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-option-btn {
+        width: 100%;
+        padding: 8px 12px;
+        border: none;
+        background: none;
+        text-align: left;
+        font-size: 0.875rem;
+        color: #495057;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+        display: flex;
+        align-items: center;
+    }
+
+    .status-option-btn:hover {
+        background-color: #f8f9fa;
+        color: #212529;
+    }
+
+    .status-option-btn:active {
+        background-color: #e9ecef;
+    }
+
+    .spin-animation {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }

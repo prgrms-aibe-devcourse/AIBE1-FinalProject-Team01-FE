@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { MARKET_STATUS_LABELS } from "../../pages/together/constants";
+import {MARKET_STATUS_LABELS, STATUS_COLOR_MAP} from "../../pages/together/constants";
 import "../../styles/components/together/market.css";
 
 /**
@@ -19,33 +19,28 @@ const MarketBoardList = ({ posts }) => {
     navigate(`/together/market/${postId}`);
   };
 
-  if (!posts || posts.length === 0) {
-    return <p>해당 카테고리의 게시글이 없습니다.</p>;
-  }
-
   return (
     <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
       {posts.map((post) => {
         // 최신 구조: post.price, post.status, post.place, post.nickname, post.profileImg, post.postId, post.title, post_images 등
         const {
-          post_images,
+          thumbnail,
           nickname,
           profileImg,
-          postId,
           title,
           price,
           status,
         } = post;
         return (
-          <div key={postId} className="col">
+          <div key={post.id} className="col">
             <div
               className="card h-100 market-card"
-              onClick={() => handleCardClick(postId)}
+              onClick={() => handleCardClick(post.id)}
             >
               <div className="market-card-img-wrapper">
-                {post_images && post_images.length > 0 ? (
+                {thumbnail ? (
                   <img
-                    src={post_images[0].image_url}
+                    src={thumbnail}
                     alt={title}
                     className="market-card-img"
                   />
@@ -56,7 +51,7 @@ const MarketBoardList = ({ posts }) => {
                 )}
                 <span
                   className={`badge market-status-badge ${
-                    status === "ON_SALE" ? "bg-dark" : "bg-secondary"
+                      STATUS_COLOR_MAP[MARKET_STATUS_LABELS[status]]
                   }`}
                 >
                   {MARKET_STATUS_LABELS[status]}

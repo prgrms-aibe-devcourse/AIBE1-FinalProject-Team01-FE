@@ -1,10 +1,24 @@
 import axios from "axios";
+import { reissueToken } from "./authApi.js";
 
 // 기본 API 설정
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
-// 환경변수에서 도메인 가져오기
-const COOKIE_DOMAIN = import.meta.env.VITE_COOKIE_DOMAIN || "localhost";
+
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) {
+      reject(error);
+    } else {
+      resolve(token);
+    }
+  });
+
+  failedQueue = [];
+};
 
 // Axios 인스턴스 생성
 export const apiClient = axios.create({
@@ -16,54 +30,14 @@ export const apiClient = axios.create({
   },
 });
 
-// 토큰 관리자 객체
-const tokenManager = {
-  // 토큰 조회
-  getToken: () => {
-    const cookies = document.cookie.split(";");
-    const accessTokenCookie = cookies.find((cookie) =>
-      cookie.trim().startsWith("accessToken=")
-    );
-    return accessTokenCookie ? accessTokenCookie.split("=")[1] : null;
-  },
-
-  // 토큰 제거
-  removeToken: () => {
-    // TODO: 로그아웃 API 구현 후 서버에서 쿠키 삭제로 변경 예정
-    document.cookie = `accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${COOKIE_DOMAIN}`;
-    document.cookie = `refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${COOKIE_DOMAIN}`;
-  },
-
-  // 토큰 유효성 검사 (간단한 형태)
-  isTokenValid: () => {
-    const token = tokenManager.getToken();
-    if (!token) return false;
-
-    // 개발용 더미 토큰이거나 .env의 토큰인 경우 항상 유효하다고 처리
-    const devToken = import.meta.env.VITE_DEV_JWT_TOKEN || "dev_dummy_token";
-    if (token === "dev_dummy_token" || token === devToken) return true;
-
-    try {
-      // JWT 토큰 구조 확인 (실제로는 만료 시간도 체크해야 함)
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      const currentTime = Date.now() / 1000;
-      return payload.exp > currentTime;
-    } catch (error) {
-      console.warn("토큰 검증 실패:", error);
-      return false;
-    }
-  },
-};
-
-// 명시적으로 export
-export { tokenManager };
-
 const redirectToLogin = () => {
   const currentPath = window.location.pathname;
 
-  // 메인페이지에서는 리다이렉트 안 함
-  if (currentPath === "/") {
-    console.log("메인페이지에서는 401 에러 무시");
+  if (
+    currentPath === "/" ||
+    currentPath === "/login" ||
+    currentPath === "/signup"
+  ) {
     return;
   }
 
@@ -72,29 +46,49 @@ const redirectToLogin = () => {
   window.location.href = `/login?redirectUrl=${encodedRedirectUrl}`;
 };
 
-// 요청 인터셉터 - JWT 토큰 자동 추가
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = tokenManager.getToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
 // 응답 인터셉터 - 401 에러 처리
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      if (error.config.url.includes("/users/me")) {
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      if (error.config.url.includes("/auth/reissue")) {
         return Promise.reject(error);
       }
 
+      originalRequest._retry = true;
+
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then(() => {
+            return apiClient(originalRequest);
+          })
+          .catch((err) => {
+            return Promise.reject(err);
+          });
+      }
+
+      isRefreshing = true;
+
+      try {
+        await reissueToken();
+
+        processQueue(null);
+        return apiClient(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError, null);
+
+        redirectToLogin();
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
+    if (error.response?.status === 401) {
       const excludeUrls = [
         "/api/v1/community/",
         "/api/v1/like",
@@ -115,7 +109,6 @@ apiClient.interceptors.response.use(
       }
 
       console.log("🔐 인증 만료");
-      tokenManager.removeToken();
       redirectToLogin();
     }
     return Promise.reject(error);
@@ -131,21 +124,9 @@ export const loginUser = async (credentials) => {
       email: credentials.email,
       password: credentials.password,
     });
+
     return response.data;
   } catch (error) {
-    console.error("로그인 API 에러:", error);
-
-    // HTTP 상태 코드에 따른 안전한 에러 메시지
-    let errorMessage =
-      "이메일 또는 비밀번호가 올바르지 않습니다. 다시 시도해주세요.";
-
-    if (error.response?.status >= 500) {
-      errorMessage =
-        "서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도해주세요.";
-    } else if (!error.response) {
-      errorMessage = "네트워크 연결을 확인해주세요.";
-    }
-
-    throw new Error(errorMessage);
+    throw error;
   }
 };

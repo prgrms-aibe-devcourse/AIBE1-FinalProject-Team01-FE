@@ -7,7 +7,7 @@ import { getPostById } from "../../services/hubApi";
 import { Alert, Spinner } from "react-bootstrap";
 import "../../styles/components/community/community.css";
 
-export default function HubDetailPage() {
+const HubDetailPage = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
@@ -76,7 +76,8 @@ export default function HubDetailPage() {
 
   // 프로젝트가 있을 때만 렌더링하는 컴포넌트
   return <HubDetailContent post={post} />;
-}
+};
+export default HubDetailPage;
 
 /**
  * 실제 상세 내용을 렌더링하는 컴포넌트
@@ -94,6 +95,7 @@ function HubDetailContent({ post }) {
     initialLiked: post.isLiked || false,
     initialBookmarkCount: post.bookmarkCount || 0,
     initialBookmarked: post.isBookmarked || false,
+    postId: post.postId,
   });
 
   const detailPost = {

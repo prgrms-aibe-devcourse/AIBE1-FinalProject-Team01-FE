@@ -24,6 +24,17 @@ function getStatusLabelAndColor(status) {
   return { label, colorClass };
 }
 
+function processTagsString(tags) {
+  if (!tags || typeof tags !== 'string') {
+    return [];
+  }
+
+  return tags
+      .split(',')
+      .map(tag => tag.trim())
+      .filter(tag => tag.length > 0);
+}
+
 /**
  * 게시글 목록에 사용되는 공통 카드 레이아웃
  * @param {PostCardProps} props
@@ -41,6 +52,8 @@ export const PostCard = ({
     nickname,
     profileImageUrl,
     devcourseName,
+    devCourseTrack,
+    userProfileImg,
     createdAt,
     tags,
     likeCount,
@@ -52,12 +65,13 @@ export const PostCard = ({
 
   // user 정보 구조 통일
   const user =
-    post.user ||
-    (nickname && profileImageUrl
+    (nickname
       ? {
           nickname,
           profileImageUrl,
           devcourseName,
+          devCourseTrack,
+          userProfileImg
         }
       : null);
 
@@ -69,10 +83,7 @@ export const PostCard = ({
       ? comments.length
       : 0;
 
-  const isActiveStatus = (currentStatus) => {
-    const activeKeywords = ["모집중", "매칭가능", "판매중"];
-    return activeKeywords.includes(currentStatus);
-  };
+  const validTags = processTagsString(tags);
 
   return (
     <div
@@ -81,7 +92,7 @@ export const PostCard = ({
       onClick={onClick ? () => onClick(postId) : undefined}
     >
       <div className="d-flex align-items-center mb-2 gap-2">
-        <span className={`community-category-label me-1 label-${categoryKey}`}>
+        <span className={`community-category-label me-1 label-${categoryKey.toUpperCase()}`}>
           {categoryLabel}
         </span>
         {status &&
@@ -105,7 +116,7 @@ export const PostCard = ({
       {children}
       <div className="d-flex align-items-center gap-2 mt-2">
         <span className="small tags-container">
-          {tags?.split(',').map((tag, i) => (
+          {validTags.map((tag, i) => (
               <span key={i} className="badge bg-light text-dark ms-1">
               #{tag.trim()}
             </span>

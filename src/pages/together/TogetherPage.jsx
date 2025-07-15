@@ -1,25 +1,31 @@
 import React from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import BoardCategoryBar from "../../components/board/BoardCategoryBar";
 import { BoardSearchBar } from "../../components/board/BoardSearchBar";
 import TogetherBoardList from "../../components/together/TogetherBoardList";
 import MarketBoardList from "../../components/together/MarketBoardList";
-import { allTogetherPosts } from "./togetherData";
 import { BOARD_TABS } from "./constants";
 import { HeroSection } from "../../components/common/HeroSection";
 import heroTogetherImg from "../../assets/hero-together.png";
 import { useAuth } from "../../context/AuthContext";
 import { BoardPagination } from "../../components/board/BoardPagination";
-import { useBoardList } from "../../hooks/useBoardList";
+import useTogetherPosts from "../../hooks/useTogetherPosts";
+import {Spinner} from "react-bootstrap";
+import {CommunityBoardList} from "../../components/community/CommunityBoardList.jsx";
+//import { useBoardList } from "../../hooks/useBoardList";
+//import { allTogetherPosts } from "./togetherData";
 
 /**
  * 투게더 메인 페이지 컴포넌트
  */
-function TogetherPage() {
-  const { category = "GATHERING" } = useParams();
+const TogetherPage = () => {
+  const { boardType = "gathering" } = useParams();
+
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
 
+  
   const {
     keyword,
     setKeyword,
@@ -28,25 +34,24 @@ function TogetherPage() {
     setPage,
     sort,
     setSort,
+    loading,
     posts: pagedPosts,
     totalPages,
     reset,
-  } = useBoardList({
-    data: allTogetherPosts,
-    boardType: category,
-  });
+    searchTerm
+  } = useTogetherPosts(boardType);
 
   // URL 파라미터에 따라 탭 이동
-  const handleTabClick = (tabId) => {
-    navigate(`/together/${tabId}`);
-    reset();
+  const handleTabClick = (boardType) => {
+    navigate(`/together/${boardType}`, { replace: true });
   };
 
+
   const renderContent = () => {
-    if (category === "MARKET") {
-      return <MarketBoardList posts={pagedPosts} />;
+    if (boardType === "market") {
+      return <MarketBoardList posts={pagedPosts} boardType={boardType} />;
     }
-    return <TogetherBoardList posts={pagedPosts} />;
+    return <TogetherBoardList posts={pagedPosts} boardType={boardType} />;
   };
 
   return (
@@ -56,7 +61,7 @@ function TogetherPage() {
         <div className="community-main-container">
           <BoardCategoryBar
             tabs={BOARD_TABS}
-            activeTab={category}
+            activeTab={boardType}
             onTabClick={handleTabClick}
           />
 
@@ -68,16 +73,35 @@ function TogetherPage() {
             onSearch={search}
             // TODO: 수강생만 글쓰기 가능하도록 수정 필요
             onWrite={() =>
-              navigate(`/together/${category.toLowerCase()}/write`)
+              navigate(`/together/${boardType.toLowerCase()}/write`)
             }
           />
+          {loading ? (
+              <div className="text-center py-5">
+                <Spinner animation="border" size="sm" className="me-2" />
+                게시글을 불러오는 중...
+              </div>
+          ) : (
+              <>
+                <div className="mt-4">{renderContent()}</div>
 
-          <div className="mt-4">{renderContent()}</div>
-          <BoardPagination page={page} total={totalPages} onChange={setPage} />
+                {pagedPosts.length === 0 && !loading && (
+                    <div className="text-center py-5">
+                      <p className="text-muted">
+                        {searchTerm ? `"${searchTerm}"에 대한 검색 결과가 없습니다.` : "등록된 게시글이 없습니다."}
+                      </p>
+                    </div>
+                )}
+
+                {/* 페이지네이션 */}
+                {!loading && pagedPosts.length > 0 && totalPages > 1 && (
+                    <BoardPagination page={page} total={totalPages} onChange={setPage} />
+                )}
+              </>
+          )}
         </div>
       </div>
     </>
   );
-}
-
+};
 export default TogetherPage;

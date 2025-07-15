@@ -16,7 +16,7 @@ const COMMUNITY_TABS = [
   { key: BOARD_TYPE.RETROSPECT, label: BOARD_TYPE_LABEL.RETROSPECT },
 ];
 
-export default function CommunityPage() {
+const CommunityPage = () => {
   const { boardType = BOARD_TYPE.FREE } = useParams();
   const navigate = useNavigate();
 
@@ -33,6 +33,7 @@ export default function CommunityPage() {
     loading,
     error,
     search,
+    searchTerm
   } = useCommunityPosts(boardType);
 
   const handleTabSelect = (tabKey) => {
@@ -100,7 +101,7 @@ export default function CommunityPage() {
                   {posts.length === 0 && (
                       <div className="text-center py-5">
                         <p className="text-muted">
-                          {keyword ? `"${keyword}"에 대한 검색 결과가 없습니다.` : "등록된 게시글이 없습니다."}
+                          {searchTerm ? `"${searchTerm}"에 대한 검색 결과가 없습니다.` : "등록된 게시글이 없습니다."}
                         </p>
                       </div>
                   )}
@@ -115,4 +116,5 @@ export default function CommunityPage() {
         </div>
       </>
   );
-}
+};
+export default CommunityPage;

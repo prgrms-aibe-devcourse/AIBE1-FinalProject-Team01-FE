@@ -11,7 +11,7 @@ import heroHub from "../../assets/hero-hub.png";
 import { Alert, Spinner } from "react-bootstrap";
 import "../../styles/components/community/community.css";
 
-export default function HubPage() {
+const HubPage = () => {
   const navigate = useNavigate();
   
   const {
@@ -107,4 +107,5 @@ export default function HubPage() {
       </div>
     </>
   );
-}
+};
+export default HubPage;

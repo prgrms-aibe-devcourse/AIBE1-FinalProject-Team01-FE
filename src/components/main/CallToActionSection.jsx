@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 /**
  * @typedef {Object} CallToActionSectionProps
@@ -10,6 +11,16 @@ import { Container, Button } from "react-bootstrap";
  * @param {CallToActionSectionProps} props
  */
 export const CallToActionSection = () => {
+  const navigate = useNavigate();
+
+  const handleSignUpClick = () => {
+    navigate('/signup');
+  };
+
+  const handleCommunityClick = () => {
+    navigate('/community');
+  };
+
   return (
     <section className="call-to-action-section d-flex flex-column justify-content-center align-items-center py-5">
       <Container className="d-flex flex-column align-items-center gap-4 px-5">
@@ -20,10 +31,10 @@ export const CallToActionSection = () => {
           있습니다
         </p>
         <div className="d-flex gap-3 mt-3">
-          <Button variant="dark" className="px-5 py-3">
+          <Button variant="dark" className="px-5 py-3" onClick={handleSignUpClick}>
             가입하기
           </Button>
-          <Button variant="outline-dark" className="px-5 py-3">
+          <Button variant="outline-dark" className="px-5 py-3" onClick={handleCommunityClick}>
             커뮤니티
           </Button>
         </div>

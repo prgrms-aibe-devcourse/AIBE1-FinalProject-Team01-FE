@@ -12,9 +12,10 @@ import { useInfoPosts } from "../../hooks/useInfoPosts";
 import "../../styles/components/board/Board.css";
 import "../../styles/components/community/community.css";
 import "../../styles/components/info/info.css";
+import {CommunityBoardList} from "../../components/community/CommunityBoardList.jsx";
 
-export default function InfoPage() {
-  const { boardType = "REVIEW" } = useParams();
+const InfoPage = () => {
+  const { boardType = "review" } = useParams();
   const navigate = useNavigate();
 
   const {
@@ -30,6 +31,7 @@ export default function InfoPage() {
     loading,
     error,
     search,
+    searchTerm
   } = useInfoPosts(boardType);
 
   const handleTabSelect = (tabKey) => {
@@ -77,37 +79,39 @@ export default function InfoPage() {
             <BoardSearchBar
                 keyword={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
-                onWrite={boardType === "REVIEW" ? () => navigate(`/info/${boardType}/write`) : undefined}
+                onWrite={boardType === "review" ? () => navigate(`/info/${boardType}/write`) : undefined}
                 sort={sort}
                 onSortChange={setSort}
                 onSearch={search} // 검색 버튼 클릭 시
             />
 
             {/* 로딩 상태 표시 */}
-            {loading && (
-                <div className="text-center py-3">
-                  <Spinner animation="border" size="sm" className="me-2" />
-                  게시글을 불러오는 중...
-                </div>
-            )}
+            {loading ? (
+                    <div className="text-center py-5">
+                      <Spinner animation="border" size="sm" className="me-2" />
+                      게시글을 불러오는 중...
+                    </div>
+                ) : (
+                <>
+                  <InfoBoardList posts={posts} onPostClick={handlePostClick} />
 
-            <InfoBoardList posts={posts} onPostClick={handlePostClick} />
 
-            {/* 게시글이 없을 때 메시지 */}
-            {!loading && posts.length === 0 && (
-                <div className="text-center py-5">
-                  <p className="text-muted">
-                    {keyword ? `"${keyword}"에 대한 검색 결과가 없습니다.` : "등록된 게시글이 없습니다."}
-                  </p>
-                </div>
-            )}
+                  {posts.length === 0 && (
+                      <div className="text-center py-5">
+                        <p className="text-muted">
+                          {searchTerm ? `"${searchTerm}"에 대한 검색 결과가 없습니다.` : "등록된 게시글이 없습니다."}
+                        </p>
+                      </div>
+                  )}
 
-            {/* 페이지네이션 */}
-            {!loading && posts.length > 0 && totalPages > 1 && (
-                <BoardPagination page={page} total={totalPages} onChange={setPage} />
+                  {!loading && posts.length > 0 && totalPages > 1 && (
+                      <BoardPagination page={page} total={totalPages} onChange={setPage} />
+                  )}
+                </>
             )}
           </div>
         </div>
       </>
   );
-}
+};
+export default InfoPage;

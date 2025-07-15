@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useLikeBookmark } from "../../hooks/useLikeBookmark";
 import { useInput } from "../../hooks/useInput";
-import { isAuthor } from "../../utils/auth";
+import { isAuthor, isAuthorByNickname } from "../../utils/auth";
 import ReportModal from "../common/ReportModal";
 import { submitReport } from "../../services/reportApi.js";
 import '../../styles/components/comment/CommentSection.css'
+import UserInfoModal from "../user/UserInfoModal.jsx";
 
 /**
  * @typedef {Object} CommentItemProps
@@ -51,6 +52,7 @@ const CommentItem = (props) => {
 
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [replySubmitting, setReplySubmitting] = useState(false);
@@ -68,16 +70,18 @@ const CommentItem = (props) => {
   const {
     liked,
     likeCount: likeCountState,
-    toggleLike,
+    toggleLikeComment,
   } = useLikeBookmark({
     initialLikeCount: likeCount,
     initialLiked: hasLiked,
+    postId: postId,
+    commentId: id,
   });
 
   const depth = props.depth || 1;
 
   // 댓글 작성자 판별 (userId 기준)
-  const isMine = currentUser && currentUser.userId === userId;
+  const isMine = isAuthorByNickname(currentUser.nickname, comment.nickname);
 
   // 새로운 방식의 대댓글 데이터 사용 (repliesData가 있는 경우)
   // 없으면 기존 방식 사용 (하위 호환성)
@@ -127,7 +131,7 @@ const CommentItem = (props) => {
   };
 
   const handleLikeClick = () => {
-    toggleLike();
+    toggleLikeComment();
     if (props.onLike) {
       props.onLike(id);
     }
@@ -208,10 +212,18 @@ const CommentItem = (props) => {
               src={profileImageUrl}
               alt="프로필"
               className="comment-author-img"
+              style={{ cursor: 'pointer' }}
+              onClick={() => setShowModal(true)}
           />
           <div className="d-flex align-items-center w-100">
             <div className="d-flex align-items-center flex-grow-1">
-              <span className="comment-author-name">{nickname}</span>
+              <span 
+                className="comment-author-name"
+                style={{ cursor: 'pointer' }} 
+                onClick={() => setShowModal(true)}
+              >
+                {nickname}
+              </span>
             </div>
             <span className="comment-date">
             {new Date(createdAt).toLocaleString()}
@@ -275,12 +287,14 @@ const CommentItem = (props) => {
 
           {isMine && (
               <>
-                <button
-                    className="btn btn-link btn-sm text-secondary ms-2"
-                    onClick={handleEditClick}
-                >
-                  수정
-                </button>
+                {!comment.isBlinded && (
+                    <button
+                        className="btn btn-link btn-sm text-secondary ms-2"
+                        onClick={handleEditClick}
+                    >
+                      수정
+                    </button>
+                )}
                 <button
                     className="btn btn-link btn-sm text-danger ms-1"
                     onClick={handleDelete}
@@ -404,6 +418,12 @@ const CommentItem = (props) => {
             reportTarget="COMMENT"
             onSubmit={handleReportSubmit}
         />
+        {/* 사용자 정보 모달 */}
+        <UserInfoModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        nickname={nickname}
+      />
       </div>
   );
 };

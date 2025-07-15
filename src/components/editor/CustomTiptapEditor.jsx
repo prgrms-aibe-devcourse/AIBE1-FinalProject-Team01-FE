@@ -108,7 +108,7 @@ export const CustomTiptapEditor = ({
   };
 
   return (
-    <div className="border rounded">
+    <div className="custom-editor border rounded">
       <Toolbar editor={editor} handleImageUpload={handleToolbarImageUpload} />
       <EditorContent editor={editor} />
     </div>

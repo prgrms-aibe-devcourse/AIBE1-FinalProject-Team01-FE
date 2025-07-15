@@ -27,18 +27,56 @@
   display: flex;
   align-items: center;
   gap: 6px;
-}
+}/* 기존 스타일에 추가하거나 수정 */
 .mypage-sidebar .sidebar-item {
-  padding-left: 22px;
+  padding: 12px 22px;
   font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  margin: 2px 8px;
+  color: #495057;
 }
-.mypage-sidebar .sidebar-item.active {
-  background: #e3f0ff;
+
+.mypage-sidebar .sidebar-item:hover {
+  background-color: #f1f3f5 !important;
   color: #1976d2;
-  font-weight: bold;
+  transform: translateX(2px);
 }
+
+.mypage-sidebar .sidebar-item.active {
+  background: #e3f0ff !important;
+  color: #1976d2 !important;
+  font-weight: 600;
+  border-left: 3px solid #1976d2;
+}
+
 .mypage-sidebar .sidebar-item.text-danger {
   color: #e74c3c !important;
+}
+
+.mypage-sidebar .sidebar-item.text-danger:hover {
+  background-color: #fdf2f2 !important;
+  color: #c53030 !important;
+}
+
+/* 섹션 헤더는 클릭 불가하도록 */
+.mypage-sidebar .sidebar-section {
+  font-weight: bold;
+  color: #222;
+  font-size: 1.08rem;
+  margin-bottom: 8px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  cursor: default;
+}
+
+/* 첫 번째 섹션의 위쪽 마진 제거 */
+.mypage-sidebar .sidebar-section:first-child {
+  margin-top: 0;
 }
 
 .mypage-profile-img {
@@ -96,4 +134,416 @@
 .mypage-content-col {
   flex: 1 1 0%;
   min-width: 940px;
+}
+
+
+/* ProfileSummary 컴포넌트 스타일 */
+.profile-summary-header {
+  font-size: 1.25rem;
+  color: #495057;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.profile-summary-btn {
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.profile-summary-btn-primary {
+  border-color: #0d6efd;
+  color: #0d6efd;
+  background-color: transparent;
+  min-width: 100px;
+}
+
+.profile-summary-btn-primary:hover {
+  background-color: #0d6efd !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2);
+}
+
+.profile-summary-btn-success {
+  border-color: #198754;
+  background-color: #198754b9 !important;
+  color: #ffffff;
+  background-color: transparent;
+  min-width: 120px;
+}
+
+.profile-summary-btn-secondary {
+  border-color: #6c757d;
+  color: #6c757d;
+  background-color: transparent;
+  min-width: 130px;
+}
+
+.profile-summary-btn-secondary:hover {
+  background-color: #6c757d !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(108, 117, 125, 0.2);
+}
+
+.profile-summary-btn-danger {
+  border-color: #dc3545;
+  color: #dc3545;
+  background-color: transparent;
+  min-width: 120px;
+}
+.profile-summary-btn-danger:hover {
+  border-color: #dc3545;
+  background-color: #dc3545 !important;
+  color: #ffffff !important;
+}
+
+.profile-summary-image {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-width: 3px;
+  border-color: #e9ecef;
+  margin-left: 2rem;
+  margin-top: 2rem;
+}
+
+.profile-summary-content {
+  margin-left: 6rem;
+}
+
+.profile-summary-label {
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.profile-summary-value {
+  font-size: 1rem;
+  color: #212529;
+  font-weight: 600;
+}
+
+.profile-summary-topics {
+  background-color: #f8f9fa;
+  font-size: 0.95rem;
+  color: #6c757d;
+  line-height: 1.5;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+}
+
+.profile-summary-topics-title {
+  font-size: 1.1rem;
+  color: #495057;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.profile-summary-card-container {
+  border-radius: 12px;
+}
+
+
+/* 모바일 반응형 CSS */
+@media (max-width: 768px) {
+  /* 마이페이지 전체 레이아웃 */
+  .mypage-main-container {
+    flex-direction: column;
+    gap: 20px;
+    max-width: 100%;
+    padding: 0 16px;
+  }
+  
+  .mypage-sidebar-col {
+    width: 100%;
+    min-width: unset;
+  }
+  
+  .mypage-content-col {
+    min-width: unset;
+  }
+  
+  .mypage-card {
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  /* ProfileSummary 모바일 대응 */
+  .profile-summary-header {
+    font-size: 1.1rem;
+  }
+  
+  /* 버튼들 모바일 대응 */
+  .d-flex.gap-2 {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  
+  .profile-summary-btn {
+    width: 100%;
+    min-width: unset;
+    justify-content: center;
+  }
+  
+  /* 프로필 섹션 모바일 대응 */
+  .profile-summary-card-container .d-flex {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  
+  .profile-summary-image {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .profile-summary-content {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  /* 개인정보 1열 배치 */
+  .profile-summary-content .row .col-6 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* 관심 토픽 */
+  .profile-summary-topics-title {
+    font-size: 1rem;
+  }
+  
+  .profile-summary-topics {
+    font-size: 0.875rem;
+    padding: 0.5rem;
+  }
+}
+
+/* 태블릿 사이즈 */
+@media (max-width: 992px) and (min-width: 769px) {
+  .mypage-main-container {
+    gap: 30px;
+    padding: 0 20px;
+  }
+  
+  .mypage-content-col {
+    min-width: unset;
+  }
+  
+  /* 버튼 2줄로 배치 */
+  .d-flex.gap-2 {
+    flex-wrap: wrap;
+  }
+  
+  .profile-summary-btn {
+    flex: 1;
+    min-width: 140px;
+  }
+
+  /* 프로필 사진 테블릿 대응 */
+  .profile-summary-image {
+    width: 80px;
+    height: 80px;
+    margin-top: 3rem;
+    aspect-ratio: 1/1;
+    flex-shrink: 0; 
+  }
+  
+  .profile-summary-content {
+    margin-left: 2rem;
+  }
+}
+
+
+/* EditProfileForm 컴포넌트 스타일 */
+.edit-profile-loading {
+  min-height: 300px;
+}
+
+.edit-profile-form-container {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.edit-profile-image-container {
+  position: relative;
+}
+
+.edit-profile-image {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-width: 3px;
+  border-color: #e9ecef;
+}
+
+.edit-profile-camera-btn {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 12px;
+}
+
+.edit-profile-info-container {
+  margin-left: 1rem;
+}
+
+.edit-profile-label {
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.edit-profile-value {
+  font-size: 1rem;
+  color: #212529;
+  font-weight: 600;
+}
+
+.edit-profile-section-title {
+  font-size: 1.1rem;
+  color: #495057;
+  margin-bottom: 0.75rem;
+}
+
+.edit-profile-form-label {
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.edit-profile-form-control {
+  font-size: 1rem;
+}
+
+.edit-profile-nickname-container {
+  flex: 1;
+  position: relative;
+}
+
+.edit-profile-nickname-input {
+  font-size: 1rem;
+}
+
+.edit-profile-nickname-input.has-check {
+  padding-right: 40px;
+}
+
+.edit-profile-nickname-input.no-check {
+  padding-right: 12px;
+}
+
+.edit-profile-check-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+}
+
+.edit-profile-duplicate-btn {
+  min-width: 90px;
+  height: 38px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.edit-profile-spinner {
+  width: 14px;
+  height: 14px;
+}
+
+.edit-profile-status-message {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.edit-profile-status-success {
+  color: #198754;
+}
+
+.edit-profile-status-error {
+  color: #dc3545;
+}
+
+.edit-profile-status-info {
+  color: #6c757d;
+}
+
+.edit-profile-topics-label {
+  font-size: 1.1rem;
+  color: #495057;
+  font-weight: 500;
+}
+
+.edit-profile-topics-container {
+  background-color: #f8f9fa;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+}
+
+.edit-profile-topic-btn {
+  border-radius: 25px;
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  min-height: 36px;
+  border: 2px solid;
+  background-color: #ffffff;
+  color: #6c757d;
+  border-color: #dee2e6;
+  font-weight: 500;
+}
+
+.edit-profile-topic-btn.selected {
+  font-weight: 700;
+  border-color: #0d6efd;
+  background-color: #e7f3ff;
+  color: #0d6efd;
+}
+
+.edit-profile-topic-btn:hover:not(.selected) {
+  border-color: #adb5bd;
+  background-color: #f8f9fa;
+}
+
+.edit-profile-error-message {
+  font-size: 0.875rem;
+  color: #dc3545;
+  margin-bottom: 0.5rem;
+}
+
+.edit-profile-topic-summary {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.edit-profile-btn {
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  min-width: 120px;
+  transition: all 0.2s ease;
 }

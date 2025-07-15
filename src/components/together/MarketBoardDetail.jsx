@@ -31,6 +31,7 @@ const MarketBoardDetail = ({
   bookmarked,
   bookmarkCount,
   onBookmark,
+  boardType,
 }) => {
   const navigate = useNavigate();
   const { user: currentUser } = useAuth();
@@ -44,16 +45,16 @@ const MarketBoardDetail = ({
   );
 
   const handleEdit = () => {
-    navigate(`/together/${post.boardType.toLowerCase()}/write`, {
+    navigate(`/together/${boardType.toLowerCase()}/${post.id}/edit`, {
       state: { postToEdit: post },
     });
   };
 
   const handleDelete = () => {
     if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
-      console.log("삭제할 게시글 ID:", post.postId);
+      console.log("삭제할 게시글 ID:", post.id);
       alert("게시글이 삭제되었습니다.");
-      navigate(`/together/${post.boardType.toLowerCase()}`);
+      navigate(`/together/${boardType}`);
     }
   };
 

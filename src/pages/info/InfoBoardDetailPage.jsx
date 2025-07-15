@@ -7,7 +7,7 @@ import { getInfoPost } from "../../services/infoApi.js";
 /**
  * Info 게시글 상세 페이지 컴포넌트
  */
-export default function InfoBoardDetailPage() {
+const InfoBoardDetailPage = () => {
   const { boardType, itId } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
@@ -72,7 +72,8 @@ export default function InfoBoardDetailPage() {
 
   // 게시글이 있을 때만 렌더링하는 컴포넌트
   return <InfoDetailContent post={post} />;
-}
+};
+export default InfoBoardDetailPage;
 
 /**
  * 실제 상세 내용을 렌더링하는 컴포넌트 (post가 확실히 있을 때만 사용)
@@ -91,6 +92,7 @@ function InfoDetailContent({ post }) {
     initialLiked: post.isLiked || false,
     initialBookmarkCount: post.bookmarkCount || 0,
     initialBookmarked: post.isBookmarked || false,
+    postId: post.postId,
   });
 
   const detailPost = {
