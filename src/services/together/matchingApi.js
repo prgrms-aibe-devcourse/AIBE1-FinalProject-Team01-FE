@@ -57,6 +57,15 @@ export const updateMatchingPost = async (matchingId, matchingData) => {
   }
 }
 
+export const updateMatchingStatus = async (matchingId, status) => {
+  try {
+    await apiClient.put(`${MATCHING_BASE_URL}/${matchingId}/${status}`);
+  } catch (error) {
+    console.error("❌ 매칭 게시글 상태 업데이트 실패:", error);
+    throw error;
+  }
+}
+
 export const deleteMatchingPost = async (matchingId) => {
   try {
     await apiClient.delete(`${MATCHING_BASE_URL}/${matchingId}`);
