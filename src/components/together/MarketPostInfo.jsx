@@ -28,9 +28,10 @@ const MarketPostInfo = ({ post, onEdit, onDelete }) => {
     <>
       <BoardPostHeader
         post={post}
+        boardType = {"market"}
         onEdit={isMine ? onEdit : undefined}
         onDelete={isMine ? onDelete : undefined}
-        categoryLabel="중고장터"
+        categoryLabel="MARKET"
       />
       <div className="d-flex align-items-center justify-content-around p-3 rounded bg-light">
         <div className="text-center">

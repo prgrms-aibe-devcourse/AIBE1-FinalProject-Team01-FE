@@ -57,6 +57,15 @@ export const updateMarketPost = async (marketId, marketData) => {
   }
 }
 
+export const updateMarketStatus = async (marketId, status) => {
+  try {
+    await apiClient.put(`${MARKET_BASE_URL}/${marketId}/${status}`);
+  } catch (error) {
+    console.error("❌ 마켓 게시글 상태 업데이트 실패:", error);
+    throw error;
+  }
+}
+
 export const deleteMarketPost = async (marketId) => {
   try {
     await apiClient.delete(`${MARKET_BASE_URL}/${marketId}`);
