@@ -19,7 +19,7 @@ import {CommunityBoardList} from "../../components/community/CommunityBoardList.
 /**
  * 투게더 메인 페이지 컴포넌트
  */
-Page = () => {
+const TogetherPage = () => {
   const { boardType = "gathering" } = useParams();
 
   const navigate = useNavigate();
