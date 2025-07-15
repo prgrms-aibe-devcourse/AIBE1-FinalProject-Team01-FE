@@ -22,13 +22,20 @@ const HubWritePage = lazy(() => import("../pages/hub/HubWritePage"));
 const MyPage = lazy(() => import("../pages/mypage/MyPage"));
 const DMPage = lazy(() => import("../pages/dm/DMPage"));
 const OAuthCallbackPage = lazy(() => import("../pages/auth/OAuthCallbackPage"));
+import { Spinner } from "react-bootstrap";
 
 const ProtectedRoute = ({ children }) => {
     const { isLoggedIn, loading } = useAuth();
     const location = useLocation();
 
     if (loading) {
-        return <div>로딩 중...</div>;
+        return (
+            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: 300 }}>
+              <Spinner animation="border" role="status" variant="primary" style={{ width: "3rem", height: "3rem" }}>
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </div>
+          );
     }
 
     if (!isLoggedIn) {
@@ -43,7 +50,12 @@ const ProtectedRoute = ({ children }) => {
 
 export function AppRouter() {
     return (
-        <Suspense fallback={<div>로딩 중...</div>}>
+        <Suspense fallback={
+        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: 300 }}>
+        <Spinner animation="border" role="status" variant="primary" style={{ width: "3rem", height: "3rem" }}>
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+        </div>}>
             <Routes>
                 <Route path="/" element={<MainPage />} />
                 <Route path="/login" element={<LoginPage />} />
