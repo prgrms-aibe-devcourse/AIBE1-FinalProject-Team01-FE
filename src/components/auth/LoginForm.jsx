@@ -160,8 +160,8 @@ export const LoginForm = () => {
       )}
 
       {loginError && (
-        <div className="input-check-message" role="alert" aria-live="polite">
-          {loginError}
+        <div className="error-message">
+          ⚠️ {loginError}
         </div>
       )}
 
