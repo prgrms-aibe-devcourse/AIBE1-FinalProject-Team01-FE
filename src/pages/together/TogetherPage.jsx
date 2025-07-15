@@ -20,7 +20,7 @@ import {CommunityBoardList} from "../../components/community/CommunityBoardList.
  * 투게더 메인 페이지 컴포넌트
  */
 Page = () => {
-  const { boardType = "GATHERING" } = useParams();
+  const { boardType = "gathering" } = useParams();
 
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
