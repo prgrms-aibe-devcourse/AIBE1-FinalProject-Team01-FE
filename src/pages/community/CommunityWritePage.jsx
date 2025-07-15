@@ -79,7 +79,7 @@ const CommunityWritePage = () => {
           >
             {Object.keys(BOARD_TYPE).map((key) => (
               <option key={key} value={BOARD_TYPE[key]}>
-                {BOARD_TYPE_LABEL[BOARD_TYPE[key]]}
+                {BOARD_TYPE_LABEL[key]}
               </option>
             ))}
           </Form.Select>

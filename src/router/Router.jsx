@@ -56,17 +56,16 @@ export function AppRouter() {
                 <Route path="/community/:boardType/write" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
                 <Route path="/community/:boardType/:communityId" element={<ProtectedRoute><CommunityBoardDetailPage /></ProtectedRoute>} />
                 <Route path="/community/:boardType/:communityId/edit" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
-                <Route path="/together" element={<ProtectedRoute><Navigate to="/together/GATHERING" replace /></ProtectedRoute>} />
+                <Route path="/together" element={<ProtectedRoute><Navigate to="/together/gathering" replace /></ProtectedRoute>} />
                 <Route path="/together/:boardType" element={<ProtectedRoute><TogetherPage /></ProtectedRoute>} />
                 <Route path="/together/:boardType/:postId" element={<ProtectedRoute><TogetherBoardDetailPage /></ProtectedRoute>} />
                 <Route path="/together/:boardType/write" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
-                <Route path="/together/:boardType/write/:postId" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
+                <Route path="/together/:boardType/:postId/edit" element={<ProtectedRoute><TogetherWritePage /></ProtectedRoute>} />
                 <Route path="/info" element={<Navigate to="/info/review" replace />} />
                 <Route path="/info/:boardType" element={<InfoPage />} />
                 <Route path="/info/:boardType/:itId" element={<InfoBoardDetailPage />} />
                 <Route path="/info/:boardType/write" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />
                 <Route path="/info/:boardType/:itId/edit" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />
-
                 <Route path="/hub" element={<HubPage />} />
                 <Route path="/hub/:projectId" element={<HubDetailPage />} />
                 <Route path="/hub/:projectId/edit" element={<ProtectedRoute><HubWritePage /></ProtectedRoute>} />
