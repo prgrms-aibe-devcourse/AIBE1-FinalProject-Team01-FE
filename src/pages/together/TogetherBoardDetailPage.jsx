@@ -2,14 +2,12 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Container, Spinner, Alert } from "react-bootstrap";
 import TogetherBoardDetail from "../../components/together/TogetherBoardDetail";
-import MarketBoardDetail from "../../components/together/MarketBoardDetail";
-import { allTogetherPosts } from "./togetherData";
 import { useLikeBookmark } from "../../hooks/useLikeBookmark";
 import { getGatheringPostDetail } from "../../services/together/gatheringApi";
 import { getMatchingPostDetail } from "../../services/together/matchingApi";
 import { getMarketPostDetail } from "../../services/together/marketApi";
 
-function TogetherBoardDetailPage() {
+const TogetherBoardDetailPage = () => {
   const { postId, boardType } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -88,6 +86,13 @@ function TogetherBoardDetailPage() {
     bookmarkCount: bookmarkCount,
   };
 
+  const handlePostUpdate = (updatedPost) => {
+    setPost(prevPost => ({
+      ...prevPost,
+      ...updatedPost
+    }));
+  };
+
   return (
     <Container className="py-5">
         <TogetherBoardDetail
@@ -95,9 +100,9 @@ function TogetherBoardDetailPage() {
           onLike={toggleLike}
           onBookmark={toggleBookmark}
           boardType={boardType}
+          onPostUpdate={handlePostUpdate}
         />
     </Container>
   );
-}
-
+};
 export default TogetherBoardDetailPage;

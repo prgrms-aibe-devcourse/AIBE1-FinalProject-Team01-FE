@@ -19,8 +19,9 @@ import {CommunityBoardList} from "../../components/community/CommunityBoardList.
 /**
  * 투게더 메인 페이지 컴포넌트
  */
-function TogetherPage() {
+const TogetherPage = () => {
   const { boardType = "gathering" } = useParams();
+
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
 
@@ -102,6 +103,5 @@ function TogetherPage() {
       </div>
     </>
   );
-}
-
+};
 export default TogetherPage;

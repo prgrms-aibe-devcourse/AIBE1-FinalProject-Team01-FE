@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import apiClient from "../../services/api";
 import { convertTrackFromApi } from "../../constants/devcourse.js";
 
-export const OAuthCallbackPage = () => {
+const OAuthCallbackPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { login } = useAuth();
@@ -71,3 +71,4 @@ export const OAuthCallbackPage = () => {
     </div>
   );
 };
+export default OAuthCallbackPage;

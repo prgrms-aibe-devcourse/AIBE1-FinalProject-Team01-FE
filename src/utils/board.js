@@ -5,14 +5,14 @@ export function getPostDetailUrl(post) {
     return `/hub/${post.id}`;
   }
   if (post.boardType === "REVIEW" || post.boardType === "NEWS") {
-    return `/info/${post.boardType}/${post.id}`;
+    return `/info/${post.boardType.toLowerCase()}/${post.id}`;
   }
   if (
     post.boardType === "MARKET" ||
     post.boardType === "GATHERING" ||
     post.boardType === "MATCH"
   ) {
-    return `/together/${post.boardType}/${post.id}`;
+    return `/together/${post.boardType.toLowerCase()}/${post.id}`;
   }
-  return `/community/${post.boardType}/${post.id}`;
+  return `/community/${post.boardType.toLowerCase()}/${post.id}`;
 }

@@ -7,6 +7,22 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import apiClient from "../../services/api";
 
+const safeProcessPostData = (posts) => {
+  return posts.map(post => ({
+    ...post,
+    id: post.id || 0,
+    title: post.title || "제목 없음",
+    authorNickname: post.authorNickname || "익명",
+    authorDevcourseName: post.authorDevcourseName || null,
+    likeCount: post.likeCount || 0,
+    commentCount: post.commentCount || 0,
+    viewCount: post.viewCount || 0,
+    boardType: post.boardType || "FREE",
+    boardId: post.boardId || post.id || 0,
+    createdAt: post.createdAt || new Date().toISOString()
+  }));
+};
+
 // 날짜 포맷팅 함수
 const formatDate = (dateString) => {
   if (!dateString) return "";
@@ -34,7 +50,7 @@ export const PopularPosts = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
   // API 호출 함수
-  const fetchRecommendedPosts = async (limit = 10) => {
+  const fetchRecommendedPosts = async (limit = 9) => {
     try {
       const response = await apiClient.get(
         `/api/v1/ai/posts/recommendations?limit=${limit}`
@@ -42,26 +58,27 @@ export const PopularPosts = () => {
       return response.data;
     } catch (error) {
       console.error("추천 게시글 조회 실패:", error);
-      throw new Error("추천 게시글 조회 실패");
+      // 백엔드 에러가 발생해도 빈 배열을 반환하여 UI가 깨지지 않도록 함
+      return [];
     }
   };
 
-  const fetchPopularPosts = async (limit = 10) => {
+  const fetchPopularPosts = async (limit = 9) => {
     try {
       const response = await apiClient.get(
         `/api/v1/ai/posts/popular?limit=${limit}`
       );
-      return response.data;
+      return safeProcessPostData(response.data || []);
     } catch (error) {
       console.error("인기 게시글 조회 실패:", error);
-      throw new Error("인기 게시글 조회 실패");
+      return [];
     }
   };
 
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        const popularPosts = await fetchPopularPosts(10);
+        const popularPosts = await fetchPopularPosts(9);
         setPosts(popularPosts);
         setType("popular");
 
@@ -89,7 +106,33 @@ export const PopularPosts = () => {
     loadPosts();
   }, [isLoggedIn]);
 
-  // posts 데이터에 맞게 렌더링 (아래는 예시, 실제 API 응답에 맞게 수정 필요)
+  // 게시글이 없을 때의 처리
+  if (posts.length === 0) {
+    return (
+      <section className="popular-posts-section">
+        <h2 className="popular-title">
+          {type === "recommend" ? "AI 맞춤 추천 게시글" : "인기 게시글"}
+        </h2>
+        <div className="text-center py-5">
+          <div className="text-muted mb-3">
+            <i className="bi bi-inbox" style={{ fontSize: "3rem" }}></i>
+          </div>
+          <p className="text-muted">
+            {type === "recommend" 
+              ? "아직 추천할 게시글이 없습니다." 
+              : "아직 인기 게시글이 없습니다."}
+          </p>
+          <button
+            className="btn btn-outline-primary"
+            onClick={() => navigate("/community/FREE")}
+          >
+            게시글 보러가기
+          </button>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="popular-posts-section">
       <h2 className="popular-title">
@@ -139,6 +182,12 @@ export const PopularPosts = () => {
                 <div className="user-details">
                   <img src={iconUser} alt="user" className="icon-user" />
                   <span>{post.authorNickname || "익명"}</span>
+                  {post.authorDevcourseName && (
+                    <>
+                      <span className="dot" />
+                      <span className="devcourse-name">{post.authorDevcourseName}</span>
+                    </>
+                  )}
                   <span className="dot" />
                   <span>{formatDate(post.createdAt)}</span>
                 </div>

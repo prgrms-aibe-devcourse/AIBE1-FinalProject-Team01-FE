@@ -85,8 +85,8 @@
 }
 
 .loginpage-figma-bg {
-  min-height: calc(100vh - 70px);
-  width: 100vw;
+  min-height: 100vh;
+  width: 100%;
   background: #2d4053;
   display: flex;
   justify-content: center;
@@ -547,4 +547,15 @@
   max-width: 183px;
   height: 45px;
   object-fit: contain;
+}
+
+.error-message {
+  background: #fee;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  color: #c53030;
+  font-size: 14px;
+  border: 1px solid #fed7d7;
+  text-align: center;
 }

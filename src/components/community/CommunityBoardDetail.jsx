@@ -66,6 +66,7 @@ export const CommunityBoardDetail = ({ post, onLike, onBookmark }) => {
       >
         <BoardPostHeader
           post={post}
+          boardType = {post.boardType}
           onEdit={handleEdit}
           onDelete={handleDelete}
           categoryLabel={BOARD_TYPE_LABEL[post.boardType]}

@@ -7,7 +7,7 @@ import { useImageUpload } from "../../hooks/useImageUpload";
 import { BOARD_TYPE, BOARD_TYPE_LABEL } from "./constants";
 import { createCommunityPost, updateCommunityPost } from "../../services/communityApi.js";
 
-export default function CommunityWritePage() {
+const CommunityWritePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
@@ -79,7 +79,7 @@ export default function CommunityWritePage() {
           >
             {Object.keys(BOARD_TYPE).map((key) => (
               <option key={key} value={BOARD_TYPE[key]}>
-                {BOARD_TYPE_LABEL[BOARD_TYPE[key]]}
+                {BOARD_TYPE_LABEL[key]}
               </option>
             ))}
           </Form.Select>
@@ -118,4 +118,5 @@ export default function CommunityWritePage() {
       </Form>
     </div>
   );
-}
+};
+export default CommunityWritePage;

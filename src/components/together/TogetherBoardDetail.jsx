@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { PostContent } from "../common/PostContent";
 import TogetherPostInfo from "./TogetherPostInfo";
@@ -18,8 +18,9 @@ import { deleteMarketPost } from "../../services/together/marketApi";
  * 함께해요 글 상세 메인 컴포넌트
  * @param {TogetherBoardDetailProps} props
  */
-const TogetherBoardDetail = ({ post, onLike, onBookmark, boardType }) => {
+const TogetherBoardDetail = ({ post, onLike, onBookmark, boardType, onPostUpdate  }) => {
   const navigate = useNavigate();
+  const [currentPost, setCurrentPost] = useState(post);
 
   const handleEdit = () => {
     navigate(`/together/${boardType.toLowerCase()}/${post.id}/edit`, {
@@ -34,6 +35,17 @@ const TogetherBoardDetail = ({ post, onLike, onBookmark, boardType }) => {
     else /* MARKET */                   await deleteMarketPost(post.id);
     alert("삭제되었습니다.");
     navigate(`/together/${boardType}`);
+  };
+
+  const handleStatusUpdate = (newStatus) => {
+    // 로컬 상태 업데이트
+    const updatedPost = { ...currentPost, status: newStatus };
+    setCurrentPost(updatedPost);
+
+    // 부모 컴포넌트에 업데이트 알림
+    if (onPostUpdate) {
+      onPostUpdate(updatedPost);
+    }
   };
 
   if (!post) {
@@ -57,6 +69,7 @@ const TogetherBoardDetail = ({ post, onLike, onBookmark, boardType }) => {
         onEdit={handleEdit}
         onDelete={handleDelete}
         boardType={boardType}
+        onStatusUpdate={handleStatusUpdate}
       />
       <PostContent post={post} />
     </BoardDetailLayout>

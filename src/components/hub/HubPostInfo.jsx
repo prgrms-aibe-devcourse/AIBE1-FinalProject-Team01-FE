@@ -5,6 +5,7 @@ import { isAuthor } from "../../utils/auth";
 import { deletePost } from "../../services/hubApi";
 import "../../styles/components/hub/hub.css";
 import {formatDate} from "../../utils/date.js";
+import {BOARD_TYPE_LABEL} from "../../pages/community/constants.js";
 
 /**
  * @typedef {Object} HubPostInfoProps
@@ -94,8 +95,11 @@ export const HubPostInfo = ({ post }) => {
 
   return (
     <div className="p-1 mt-3">
+      <p className="post-category-label">
+        PROJECT
+      </p>
       <div className="d-flex justify-content-between align-items-start mb-3">
-        <h1 className="fw-bold mb-0">{title}</h1>
+        <h1 className="post-info-title mb-0">{title}</h1>
         {canEditOrDelete && (
           <div className="hub-post-actions">
             {!post.isBlinded && (
@@ -148,52 +152,54 @@ export const HubPostInfo = ({ post }) => {
         </div>
       </div>
       <hr />
-      <div className="row g-3 bg-light">
-        <div className="col-md-6">
-          <p>
-            <strong>팀원:</strong>
-          </p>
-          <ul>
-            {projectMembers && projectMembers.length > 0 ? (
-              projectMembers.map((member, i) => (
-                <li key={i}>
-                  {typeof member === 'string' ? member : `${member.name}${member.role ? ` - ${member.role}` : ''}`}
-                </li>
-              ))
-            ) : (
-              <li>-</li>
-            )}
-          </ul>
-        </div>
-        <div className="col-md-6">
-          <p>
-            <strong>기간:</strong> {formatDate(startedAt)} ~ {formatDate(endedAt)}
-          </p>
-          <div className="d-flex flex-wrap gap-2"></div>
-          <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-            {githubUrl && (
-              <a
-                href={githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-outline-dark"
-              >
-                <i className="bi bi-github"></i> GitHub
-              </a>
-            )}
-            {demoUrl && (
-              <a
-                href={demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-primary"
-              >
-                <i className="bi bi-globe"></i> Demo
-              </a>
-            )}
+      {!post.isBlinded && (
+          <div className="row g-3 bg-light">
+            <div className="col-md-6">
+              <p>
+                <strong>팀원:</strong>
+              </p>
+              <ul>
+                {projectMembers && projectMembers.length > 0 ? (
+                    projectMembers.map((member, i) => (
+                        <li key={i}>
+                          {typeof member === 'string' ? member : `${member.name}${member.role ? ` - ${member.role}` : ''}`}
+                        </li>
+                    ))
+                ) : (
+                    <li>-</li>
+                )}
+              </ul>
+            </div>
+            <div className="col-md-6">
+              <p>
+                <strong>기간:</strong> {formatDate(startedAt)} ~ {formatDate(endedAt)}
+              </p>
+              <div className="d-flex flex-wrap gap-2"></div>
+              <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                {githubUrl && (
+                    <a
+                        href={githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-outline-dark"
+                    >
+                      <i className="bi bi-github"></i> GitHub
+                    </a>
+                )}
+                {demoUrl && (
+                    <a
+                        href={demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-primary"
+                    >
+                      <i className="bi bi-globe"></i> Demo
+                    </a>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

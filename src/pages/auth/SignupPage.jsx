@@ -2,8 +2,9 @@ import React from "react";
 import { AuthLayout } from "../../components/auth/AuthLayout";
 import { SignupForm } from "../../components/auth/SignupForm";
 
-export const SignupPage = () => (
+const SignupPage = () => (
   <AuthLayout>
     <SignupForm />
   </AuthLayout>
 );
+export default SignupPage;

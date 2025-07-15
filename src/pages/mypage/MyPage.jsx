@@ -7,12 +7,11 @@ import { MyPageSidebar } from "../../components/mypage/MyPageSidebar";
 import { EditProfileForm } from "../../components/mypage/EditProfileForm";
 import { useAuth } from "../../context/AuthContext";
 import WithdrawPage from "../../components/mypage/WithdrawPage.jsx";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { getPostDetailUrl } from "../../utils/board";
 import ChangePasswordPage from "../../components/mypage/ChangePasswordPage.jsx";
 import { StudentVerificationForm } from "../../components/mypage/StudentVerificationForm";
 import masseukiImg from "../../assets/masseuki.png";
-
 
 /**
  * 마이페이지 메인 (쿼리 파라미터 기반 라우팅)
@@ -24,13 +23,14 @@ const TAB_LIST = [
     { key: "bookmarks", label: "북마크" },
 ];
 
-export default function MyPage() {
+const MyPage = () => {
     const [editMode, setEditMode] = useState(false);
     const [verificationMode, setVerificationMode] = useState(false);
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const { user, isLoggedIn, refreshUserInfo } = useAuth();
     const [cachedProfileData, setCachedProfileData] = useState(null);
+    const location = useLocation();
 
     const profileData = {
         name: user.name || '사용자',
@@ -76,6 +76,12 @@ export default function MyPage() {
             navigate('/login?redirectUrl=' + encodeURIComponent(currentUrl));
         }
     }, [isLoggedIn, navigate]);
+
+    useEffect(() => {
+        if (activeMenu === 'account') {
+            refreshUserInfo(); // 또는 loadProfile()
+        }
+    }, [location.pathname, activeMenu]);
 
     const handleEdit = () => setEditMode(true);
 
@@ -152,8 +158,9 @@ export default function MyPage() {
         ) : verificationMode ? (
             <StudentVerificationForm
                 initial={profileData}
-                onSave={(updatedData) => {
-                setVerificationMode(false);
+                onSave={async (updatedData) => {
+                    setVerificationMode(false);
+                    await refreshUserInfo(); // 인증 성공 시 사용자 정보 새로고침
                 }}
                 onCancel={() => setVerificationMode(false)}
             />
@@ -225,4 +232,5 @@ export default function MyPage() {
             <FooterBar />
         </div>
     );
-}
+};
+export default MyPage;

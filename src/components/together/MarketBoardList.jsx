@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { MARKET_STATUS_LABELS } from "../../pages/together/constants";
+import {MARKET_STATUS_LABELS, STATUS_COLOR_MAP} from "../../pages/together/constants";
 import "../../styles/components/together/market.css";
 
 /**
@@ -51,7 +51,7 @@ const MarketBoardList = ({ posts }) => {
                 )}
                 <span
                   className={`badge market-status-badge ${
-                    status === "ON_SALE" ? "bg-dark" : "bg-secondary"
+                      STATUS_COLOR_MAP[MARKET_STATUS_LABELS[status]]
                   }`}
                 >
                   {MARKET_STATUS_LABELS[status]}

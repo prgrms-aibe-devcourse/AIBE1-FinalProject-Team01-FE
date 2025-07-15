@@ -65,21 +65,31 @@
   background-color: #e7f3ff;
   color: #007bff;
 }
-.label-PROJECT {
+.label-SIDE_PROJECT {
   background-color: #f0eaff;
   color: #6f42c1;
 }
 .label-COFFEE_CHAT {
-  background-color: #fff3cd;
-  color: #856404;
+  background-color: #fff8e1;
+  color: #e65100;
 }
 .label-MENTORING {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: #e8f5e8;
+  color: #2e7d32;
 }
 .label-MARKET {
-  background-color: #d6d8db;
-  color: #383d41;
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.label-REVIEW {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+.label-NEWS {
+  background-color: #e3f2fd;
+  color: #1565c0;
 }
 
 /* --- Tags --- */
