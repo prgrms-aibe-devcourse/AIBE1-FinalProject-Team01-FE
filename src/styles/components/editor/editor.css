@@ -192,3 +192,42 @@ img.ProseMirror-selectednode {
   border-color: #007bff;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
+
+/* 클립보드 이미지 붙여넣기 힌트 */
+.ProseMirror::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(45deg, transparent 49%, rgba(0, 123, 255, 0.1) 50%, transparent 51%);
+  transition: opacity 0.2s ease;
+}
+
+.ProseMirror.paste-active::after {
+  opacity: 1;
+}
+
+/* 간단한 이미지 업로드 텍스트 표시 */
+.custom-editor.uploading {
+  position: relative;
+}
+
+.custom-editor.uploading::before {
+  content: '이미지 업로드 중...';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  z-index: 1000;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
