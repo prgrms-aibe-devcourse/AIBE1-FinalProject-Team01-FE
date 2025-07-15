@@ -3,7 +3,7 @@ import { AuthLayout } from "../../components/auth/AuthLayout";
 import { ProfileForm } from "../../components/auth/ProfileForm";
 import { useLocation, useNavigate } from "react-router-dom";
 import { signupUser } from "../../services/authApi";
-import { INTEREST_TOPICS } from "../../constants/topics";
+import { TOPICS } from "../../constants/topics";
 import "../../styles/components/auth/auth.css";
 import apiClient from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
@@ -40,7 +40,9 @@ const ProfileSetupPage = () => {
     e.preventDefault();
 
     const isOAuthFlow = location.pathname === "/oauth/profile-complete";
-    const backendTopics = selectedTopics.map((topic) => INTEREST_TOPICS[topic]);
+    const backendTopics = selectedTopics.map((topic) => 
+      TOPICS.find(t => t.label === topic)?.key
+    );
 
     setIsSubmitting(true);
 
@@ -101,5 +103,4 @@ const ProfileSetupPage = () => {
     </AuthLayout>
   );
 };
-
 export default ProfileSetupPage;

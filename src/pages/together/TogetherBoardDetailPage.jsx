@@ -9,7 +9,7 @@ import { getGatheringPostDetail } from "../../services/together/gatheringApi";
 import { getMatchingPostDetail } from "../../services/together/matchingApi";
 import { getMarketPostDetail } from "../../services/together/marketApi";
 
-function TogetherBoardDetailPage() {
+const TogetherBoardDetailPage = () => {
   const { postId, boardType } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,11 +26,11 @@ function TogetherBoardDetailPage() {
       setError(null);
       try {
         let data;
-        if (boardType === "GATHERING") {
+        if (boardType === "gathering") {
           data = await getGatheringPostDetail(postId);
-        } else if (boardType === "MATCH") {
+        } else if (boardType === "match") {
           data = await getMatchingPostDetail(postId);
-        } else if (boardType === "MARKET") {
+        } else if (boardType === "market") {
           data = await getMarketPostDetail(postId);
         } else {
           throw new Error("Unknown board type: " + boardType);
@@ -90,22 +90,13 @@ function TogetherBoardDetailPage() {
 
   return (
     <Container className="py-5">
-      {boardType === "MARKET" ? (
-        <MarketBoardDetail
-          post={detailPost}
-          onLike={toggleLike}
-          onBookmark={toggleBookmark}
-        />
-      ) : (
         <TogetherBoardDetail
           post={detailPost}
           onLike={toggleLike}
           onBookmark={toggleBookmark}
           boardType={boardType}
         />
-      )}
     </Container>
   );
-}
-
+};
 export default TogetherBoardDetailPage;

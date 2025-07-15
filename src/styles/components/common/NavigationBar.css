@@ -1,7 +1,6 @@
 .main-navbar {
   background-color: #fff;
   border-bottom: 1px solid #e9ecf3;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .main-navbar .container {
@@ -67,8 +66,9 @@
 }
 
 .main-navbar.login-navbar {
-  background: linear-gradient(135deg, #2d4053 0%, #4a5568 100%);
-  border-bottom: none;
+  
+  border-bottom: 1px solid #2d4053;
+  background: #2d4053;
 }
 
 .main-navbar.login-navbar .navbar-brand-text {

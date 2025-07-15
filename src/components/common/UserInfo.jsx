@@ -15,13 +15,18 @@ export default function UserInfo({ user, className = "" }) {
     return null;
   }
 
-  const { nickname, profileImageUrl, devcourseName } = user;
-
-  return (
-    <div className={`user-info d-flex align-items-center gap-2 ${className}`}>
-      <img src={profileImageUrl} alt="프로필" className="author-img" />
-      <span className="author-name">{nickname}</span>
-      {devcourseName && <span className="author-batch">{devcourseName}</span>}
-    </div>
-  );
+    const { nickname, profileImageUrl, devCourseTrack, userProfileImg, devcourseName } = user;
+    return (
+        <div className={`user-info d-flex align-items-center gap-2 ${className}`}>
+            <img
+                src={profileImageUrl ?? userProfileImg ?? '/default-profile.png'}
+                alt="프로필"
+                className="author-img"
+            />
+            <span className="author-name">{nickname}</span>
+            {(devcourseName ?? devCourseTrack) && (
+                <span className="author-batch">{devcourseName ?? devCourseTrack}</span>
+            )}
+        </div>
+    );
 }

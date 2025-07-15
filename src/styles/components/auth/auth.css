@@ -85,8 +85,8 @@
 }
 
 .loginpage-figma-bg {
-  min-height: calc(100vh - 70px);
-  width: 100vw;
+  min-height: 100vh;
+  width: 100%;
   background: #2d4053;
   display: flex;
   justify-content: center;

@@ -11,14 +11,17 @@ import heroTogetherImg from "../../assets/hero-together.png";
 import { useAuth } from "../../context/AuthContext";
 import { BoardPagination } from "../../components/board/BoardPagination";
 import useTogetherPosts from "../../hooks/useTogetherPosts";
+import {Spinner} from "react-bootstrap";
+import {CommunityBoardList} from "../../components/community/CommunityBoardList.jsx";
 //import { useBoardList } from "../../hooks/useBoardList";
 //import { allTogetherPosts } from "./togetherData";
 
 /**
  * 투게더 메인 페이지 컴포넌트
  */
-function TogetherPage() {
+Page = () => {
   const { boardType = "GATHERING" } = useParams();
+
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
 
@@ -31,9 +34,11 @@ function TogetherPage() {
     setPage,
     sort,
     setSort,
+    loading,
     posts: pagedPosts,
     totalPages,
     reset,
+    searchTerm
   } = useTogetherPosts(boardType);
 
   // URL 파라미터에 따라 탭 이동
@@ -43,7 +48,7 @@ function TogetherPage() {
 
 
   const renderContent = () => {
-    if (boardType === "MARKET") {
+    if (boardType === "market") {
       return <MarketBoardList posts={pagedPosts} boardType={boardType} />;
     }
     return <TogetherBoardList posts={pagedPosts} boardType={boardType} />;
@@ -71,13 +76,32 @@ function TogetherPage() {
               navigate(`/together/${boardType.toLowerCase()}/write`)
             }
           />
+          {loading ? (
+              <div className="text-center py-5">
+                <Spinner animation="border" size="sm" className="me-2" />
+                게시글을 불러오는 중...
+              </div>
+          ) : (
+              <>
+                <div className="mt-4">{renderContent()}</div>
 
-          <div className="mt-4">{renderContent()}</div>
-          <BoardPagination page={page} total={totalPages} onChange={setPage} />
+                {pagedPosts.length === 0 && !loading && (
+                    <div className="text-center py-5">
+                      <p className="text-muted">
+                        {searchTerm ? `"${searchTerm}"에 대한 검색 결과가 없습니다.` : "등록된 게시글이 없습니다."}
+                      </p>
+                    </div>
+                )}
+
+                {/* 페이지네이션 */}
+                {!loading && pagedPosts.length > 0 && totalPages > 1 && (
+                    <BoardPagination page={page} total={totalPages} onChange={setPage} />
+                )}
+              </>
+          )}
         </div>
       </div>
     </>
   );
-}
-
+};
 export default TogetherPage;
