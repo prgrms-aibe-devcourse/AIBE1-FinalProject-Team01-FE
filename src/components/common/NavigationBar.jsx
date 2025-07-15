@@ -107,7 +107,7 @@ export const NavigationBar = ({ onlyLogo }) => {
                   <span
                     style={{ fontWeight: 500, marginLeft: 4, marginRight: 8 }}
                   >
-                    {user?.name || "사용자"}
+                    {user?.nickname || "사용자"}
                   </span>
                   <Button
                     variant="outline-dark"
