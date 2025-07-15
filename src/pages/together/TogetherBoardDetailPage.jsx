@@ -9,7 +9,7 @@ import { getGatheringPostDetail } from "../../services/together/gatheringApi";
 import { getMatchingPostDetail } from "../../services/together/matchingApi";
 import { getMarketPostDetail } from "../../services/together/marketApi";
 
-function TogetherBoardDetailPage() {
+const TogetherBoardDetailPage = () => {
   const { postId, boardType } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -98,6 +98,5 @@ function TogetherBoardDetailPage() {
         />
     </Container>
   );
-}
-
+};
 export default TogetherBoardDetailPage;

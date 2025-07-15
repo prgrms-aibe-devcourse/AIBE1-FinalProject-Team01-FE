@@ -11,7 +11,7 @@ import { HubWriteForm } from "../../components/hub/HubWriteForm";
 import { ValidationAlert } from "../../components/common/ValidationAlert";
 import "../../styles/components/hub/hub.css";
 
-export default function HubWritePage() {
+const HubWritePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { project } = location.state || {};
@@ -296,4 +296,5 @@ export default function HubWritePage() {
       </Form>
     </div>
   );
-}
+};
+export default HubWritePage;

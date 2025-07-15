@@ -23,7 +23,7 @@ const TAB_LIST = [
     { key: "bookmarks", label: "북마크" },
 ];
 
-export default function MyPage() {
+const MyPage = () => {
     const [editMode, setEditMode] = useState(false);
     const [verificationMode, setVerificationMode] = useState(false);
     const navigate = useNavigate();
@@ -224,4 +224,5 @@ export default function MyPage() {
             <FooterBar />
         </div>
     );
-}
+};
+export default MyPage;

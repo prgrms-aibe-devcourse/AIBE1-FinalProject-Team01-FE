@@ -14,7 +14,7 @@ import "../../styles/components/community/community.css";
 import "../../styles/components/info/info.css";
 import {CommunityBoardList} from "../../components/community/CommunityBoardList.jsx";
 
-export default function InfoPage() {
+const InfoPage = () => {
   const { boardType = "review" } = useParams();
   const navigate = useNavigate();
 
@@ -113,4 +113,5 @@ export default function InfoPage() {
         </div>
       </>
   );
-}
+};
+export default InfoPage;

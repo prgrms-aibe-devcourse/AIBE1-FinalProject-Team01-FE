@@ -103,5 +103,4 @@ const ProfileSetupPage = () => {
     </AuthLayout>
   );
 };
-
 export default ProfileSetupPage;

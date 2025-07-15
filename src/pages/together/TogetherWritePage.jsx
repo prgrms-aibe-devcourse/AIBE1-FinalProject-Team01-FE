@@ -9,7 +9,7 @@ import { createMatchingPost, updateMatchingPost } from "../../services/together/
 import { createMarketPost, updateMarketPost } from "../../services/together/marketApi";
 import {useImageUpload} from "../../hooks/useImageUpload.js";
 
-function TogetherWritePage() {
+const TogetherWritePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { boardType, postId } = useParams(); 
@@ -369,6 +369,5 @@ function TogetherWritePage() {
       </Form>
     </Container>
   );
-}
-
+};
 export default TogetherWritePage;

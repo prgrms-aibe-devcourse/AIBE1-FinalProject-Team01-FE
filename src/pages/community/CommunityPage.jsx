@@ -16,7 +16,7 @@ const COMMUNITY_TABS = [
   { key: BOARD_TYPE.RETROSPECT, label: BOARD_TYPE_LABEL.RETROSPECT },
 ];
 
-export default function CommunityPage() {
+const CommunityPage = () => {
   const { boardType = BOARD_TYPE.FREE } = useParams();
   const navigate = useNavigate();
 
@@ -116,4 +116,5 @@ export default function CommunityPage() {
         </div>
       </>
   );
-}
+};
+export default CommunityPage;

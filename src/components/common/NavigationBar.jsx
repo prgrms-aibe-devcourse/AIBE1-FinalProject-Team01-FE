@@ -7,6 +7,7 @@ import AlarmDropdown from "./AlarmDropdown";
 import { useAlarms } from "../../hooks/useAlarms";
 import "../../styles/components/common/NavigationBar.css";
 
+
 export const NavigationBar = ({ onlyLogo }) => {
   const navigate = useNavigate();
   const { isLoggedIn, logout, user } = useAuth();

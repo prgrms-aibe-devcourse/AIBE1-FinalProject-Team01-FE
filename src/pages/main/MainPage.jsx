@@ -16,7 +16,7 @@ import { CallToActionSection } from "../../components/main/CallToActionSection";
  * MainPage Component
  * @param {MainPageProps} props
  */
-export const MainPage = () => {
+const MainPage = () => {
   return (
     <div className="community-main-page">
       <HeroSection backgroundImageSrc={mainhero} />
@@ -27,3 +27,5 @@ export const MainPage = () => {
     </div>
   );
 };
+
+export default MainPage;

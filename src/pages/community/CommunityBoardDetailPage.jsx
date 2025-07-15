@@ -7,7 +7,7 @@ import { getCommunityPost } from "../../services/communityApi.js"
 /**
  * 커뮤니티 게시글 상세 페이지 컴포넌트
  */
-export default function CommunityBoardDetailPage() {
+const CommunityBoardDetailPage = () => {
   const { boardType, communityId } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
@@ -72,7 +72,8 @@ export default function CommunityBoardDetailPage() {
 
   // 게시글이 있을 때만 렌더링하는 컴포넌트
   return <CommunityDetailContent post={post} />;
-}
+};
+export default CommunityBoardDetailPage;
 
 /**
  * 실제 상세 내용을 렌더링하는 컴포넌트 (post가 확실히 있을 때만 사용)
