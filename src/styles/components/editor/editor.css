@@ -1,7 +1,27 @@
 /* Basic editor styles */
+.custom-editor {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-editor .toolbar-container {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+  border-bottom: 1px solid #dee2e6;
+  flex-shrink: 0;
+}
+
+.custom-editor .editor-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
 .ProseMirror {
-  min-height: 300px;
   padding: 0.75rem;
+  outline: none;
 }
 
 .ProseMirror:focus {
@@ -24,6 +44,7 @@ pre {
   font-family: "JetBrainsMono", monospace;
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
+  overflow-x: auto;
 }
 
 pre code {
@@ -58,14 +79,34 @@ img {
 }
 
 .custom-editor img {
-  max-width: 30%;
-  height: auto;}
+  max-width: 100%;
+  height: auto;
+}
 
 img.ProseMirror-selectednode {
   outline: 3px solid #68cef8;
 }
 
-/* Add styles for rich text formatting */
+/* 스크롤바 스타일링 */
+.custom-editor .editor-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-editor .editor-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.custom-editor .editor-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.custom-editor .editor-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Rich text formatting styles */
 .ProseMirror h1,
 .ProseMirror h2,
 .ProseMirror h3,
@@ -122,4 +163,32 @@ img.ProseMirror-selectednode {
 
 .ProseMirror li > p {
   margin-bottom: 0.25em;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .custom-editor.scrollable-editor {
+    max-height: 60vh;
+  }
+  
+  .ProseMirror {
+    min-height: 150px;
+    padding: 0.5rem;
+  }
+  
+  .toolbar-container {
+    padding: 0.25rem;
+  }
+}
+
+/* 드래그 앤 드롭 스타일 */
+.ProseMirror.drag-over {
+  border: 2px dashed #007bff;
+  background-color: #f8f9fa;
+}
+
+/* 포커스 상태 */
+.custom-editor:focus-within {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }

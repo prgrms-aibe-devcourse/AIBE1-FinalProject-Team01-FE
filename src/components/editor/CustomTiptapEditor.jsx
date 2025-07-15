@@ -30,6 +30,8 @@ export const CustomTiptapEditor = ({
   onChange,
   placeholder,
   onImageUpload, // 이미지 업로드 핸들러를 prop으로 받음
+  maxHeight = 800, // 전체 에디터 최대 높이
+  minHeight = 300, // 에디터 최소 높이
 }) => {
   const editor = useEditor({
     extensions: [
@@ -54,6 +56,9 @@ export const CustomTiptapEditor = ({
       onChange(editor.getHTML());
     },
     editorProps: {
+      attributes: {
+        style: `min-height: ${minHeight}px;`,
+      },
       handleDrop: function (view, event, slice, moved) {
         event.preventDefault();
 
@@ -108,9 +113,22 @@ export const CustomTiptapEditor = ({
   };
 
   return (
-    <div className="custom-editor border rounded">
-      <Toolbar editor={editor} handleImageUpload={handleToolbarImageUpload} />
-      <EditorContent editor={editor} />
+    <div 
+      className="custom-editor border rounded"
+      style={{ maxHeight: `${maxHeight}px` }}
+    >
+      <div className="toolbar-container">
+        <Toolbar editor={editor} handleImageUpload={handleToolbarImageUpload} />
+      </div>
+      <div 
+        className="editor-content"
+        style={{ 
+          maxHeight: `${maxHeight - 50}px`, // 툴바 높이 제외
+          minHeight: `${minHeight}px`
+        }}
+      >
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 };
