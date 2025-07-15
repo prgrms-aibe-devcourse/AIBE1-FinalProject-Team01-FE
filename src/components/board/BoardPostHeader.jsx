@@ -6,6 +6,7 @@ import InfoPostInfo from "../info/InfoPostInfo";
 import "../../styles/components/common/PostInfoHeader.css";
 import { BOARD_TYPE_LABEL } from "../../pages/community/constants";
 import UserInfoModal from "../user/UserInfoModal";
+import {STATUS_COLOR_MAP, STATUS_LABELS} from "../../pages/together/constants.js";
 
 /**
  * @typedef {Object} BoardPostHeaderProps
@@ -26,7 +27,8 @@ export const BoardPostHeader = ({
   onEdit,
   onDelete,
   showStatus = true,
-    isDeleting
+    isDeleting,
+    statusBadge
 }) => {
   const { user: currentUser } = useAuth();
   const [showModal, setShowModal] = useState(false);
@@ -40,15 +42,7 @@ export const BoardPostHeader = ({
         }
       : null);
     const canEditOrDelete = currentUser && isAuthorByNickname(currentUser.nickname, user?.nickname);
-    const status = post.gathering_post?.status || post.market_item?.status;
-
-  const getStatusBadgeClass = () => {
-    if (!status) return "d-none";
-    if (["모집중", "판매중", "매칭가능"].includes(status)) {
-      return "bg-dark"; // 진행중 상태
-    }
-    return "bg-secondary"; // 완료 상태
-  };
+    const status = post.status || post.status;
 
   const { devcourseName, devcourseBatch, boardType, isBlinded } = post;
 
@@ -59,16 +53,25 @@ export const BoardPostHeader = ({
                     {BOARD_TYPE_LABEL[boardType] || boardType}
                 </p>
             )}
+            {categoryLabel && (
+                <p className="post-category-label">
+                    {BOARD_TYPE_LABEL[categoryLabel]}
+                </p>
+            )}
                 <div className="d-flex justify-content-between align-items-start">
                     <div className="flex-grow-1">
                         <div className="d-flex justify-content-between align-items-start mb-3">
-                            <div>
-                                {showStatus && status && (
-                                    <span className={`badge me-2 mb-2 ${getStatusBadgeClass()}`}>
-                    {status}
-                  </span>
-                                )}
+                            <div className="d-flex align-items-center gap-2">
                                 <h1 className="post-info-title mb-0">{post.title}</h1>
+                                {statusBadge ? (
+                                    statusBadge
+                                ) : (
+                                    showStatus && status && STATUS_LABELS[status] && (
+                                        <span className={`badge ${STATUS_COLOR_MAP[STATUS_LABELS[status]] || 'bg-secondary'}`}>
+                                            {STATUS_LABELS[status]}
+                                        </span>
+                                    )
+                                )}
                             </div>
                             {canEditOrDelete && (
                                 <div className="hub-post-actions">
@@ -109,7 +112,7 @@ export const BoardPostHeader = ({
                                         onClick={() => setShowModal(true)}
                                     />
                                 )}
-                                <span 
+                                <span
                                     className="author-name fw-bold"
                                     onClick={() => setShowModal(true)}
                                     style={{ cursor: "pointer" }}

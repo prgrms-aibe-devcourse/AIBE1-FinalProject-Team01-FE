@@ -72,6 +72,7 @@ export const InfoBoardDetail = ({ post, onLike, onBookmark }) => {
       >
         <BoardPostHeader
           post={post}
+          boardType={post.boardType}
           onEdit={canEdit ? handleEdit : undefined}
           onDelete={canEdit ? handleDelete : undefined}
           categoryLabel={INFO_CATEGORY_LABELS[post.boardType]}

@@ -57,6 +57,15 @@ export const updateGatheringPost = async (gatheringId, gatheringData) => {
     }
 }
 
+export const updateGatheringStatus = async (gatheringId, status) => {
+    try {
+        await apiClient.put(`${GATHERING_BASE_URL}/${gatheringId}/${status}`);
+    } catch (error) {
+        console.error("❌ 모임 게시글 상태 업데이트 실패:", error);
+        throw error;
+    }
+}
+
 export const deleteGatheringPost = async (gatheringId) => {
     try {
         await apiClient.delete(`${GATHERING_BASE_URL}/${gatheringId}`);
