@@ -10,7 +10,11 @@ import {
 import { Search, Trash, Plus } from "react-bootstrap-icons";
 import { useInput } from "../../hooks/useInput";
 import { DMChatList } from "./DMChatList";
-import { createDMRoom, leaveDMRoom } from "../../services/dmApi";
+import {
+  createDMRoom,
+  leaveDMRoom,
+  getDMMessageSearch,
+} from "../../services/dmApi";
 import { useAuth } from "../../context/AuthContext";
 
 /**
@@ -44,6 +48,8 @@ export const DMSidebar = ({
   const [newChatUserId, setNewChatUserId] = useState("");
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState(null);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState(null);
 
   const currentUserId = user?.id || 1;
 
@@ -97,6 +103,66 @@ export const DMSidebar = ({
       setChatList(formattedServerRooms);
     }
   }, [serverRooms, loading]);
+
+  // 메시지 내용 검색 핸들러
+  const handleMessageSearch = async (e) => {
+    e.preventDefault();
+    if (!searchKeyword.trim()) {
+      setSearchError(null);
+      setChatList(
+        serverRooms.map((room) => ({
+          id: room.id,
+          nickname: room.partnerNickname || `사용자 ${room.partnerId}`,
+          lastMessage: room.lastMessage,
+          lastMessageTime: room.sentAt || room.lastMessageTime || new Date(),
+          profileImage: room.partnerProfileImage || null,
+          unreadCount: 0,
+          otherUserId: room.partnerId,
+        }))
+      );
+      return;
+    }
+    setSearchLoading(true);
+    setSearchError(null);
+    try {
+      const res = await getDMMessageSearch({
+        keyword: searchKeyword,
+        size: 50,
+        sortDirection: "DESC",
+      });
+      const messages = res.content || [];
+      // roomId별로 가장 최신 메시지(검색 결과 중 첫 번째)를 매핑
+      const roomMessageMap = {};
+      messages.forEach((msg) => {
+        if (!roomMessageMap[msg.roomId]) {
+          roomMessageMap[msg.roomId] = msg;
+        }
+      });
+      const roomIds = Object.keys(roomMessageMap);
+      const filtered = serverRooms.filter((room) => roomIds.includes(room.id));
+      setChatList(
+        filtered.map((room) => {
+          const msg = roomMessageMap[room.id];
+          return {
+            id: room.id,
+            nickname: room.partnerNickname || `사용자 ${room.partnerId}`,
+            lastMessage: msg ? msg.content : room.lastMessage,
+            lastMessageTime: msg
+              ? msg.sentAt
+              : room.sentAt || room.lastMessageTime || new Date(),
+            profileImage: room.partnerProfileImage || null,
+            unreadCount: 0,
+            otherUserId: room.partnerId,
+          };
+        })
+      );
+    } catch (err) {
+      setSearchError(err.message || "메시지 검색 중 오류가 발생했습니다.");
+      setChatList([]);
+    } finally {
+      setSearchLoading(false);
+    }
+  };
 
   const handleDeleteChat = async (chatId) => {
     try {
@@ -154,13 +220,20 @@ export const DMSidebar = ({
           <div className="dm-search-container">
             <div className="dm-search-wrapper">
               <Search className="dm-search-icon" size={18} />
-              <input
-                type="text"
-                className="dm-search-input"
-                placeholder="메시지를 검색해보세요"
-                value={searchKeyword}
-                onChange={onSearchChange}
-              />
+              <form
+                onSubmit={handleMessageSearch}
+                style={{ flex: 1, display: "flex", gap: 4 }}
+              >
+                <input
+                  type="text"
+                  className="dm-search-input"
+                  placeholder="메시지를 검색해보세요"
+                  value={searchKeyword}
+                  onChange={onSearchChange}
+                  disabled={searchLoading}
+                  style={{ flex: 1 }}
+                />
+              </form>
               <button
                 className="dm-create-btn"
                 onClick={() => setShowCreateModal(true)}
@@ -169,6 +242,11 @@ export const DMSidebar = ({
                 <Plus size={18} />
               </button>
             </div>
+            {searchError && (
+              <div style={{ color: "#dc3545", marginTop: 4 }}>
+                {searchError}
+              </div>
+            )}
           </div>
         </div>
 
