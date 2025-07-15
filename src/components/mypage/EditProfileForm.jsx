@@ -2,9 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import { Button, Form, Alert, Spinner } from "react-bootstrap";
 import "../../styles/components/mypage/mypage.css";
 import { accountApi } from "../../services/accountApi";
+import apiClient from "../../services/api.js";
 import { TOPICS } from "../../constants/topics";
 import { getProviderName } from "../../utils/provider";
 import { convertTrackFromApi } from "../../constants/devcourse";
+import masseukiImg from "../../assets/masseuki.png";
 
 /**
  * 마이페이지 계정 관리(프로필 수정) 폼 (API 연동)
@@ -131,13 +133,11 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
     const handleImgChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            // 파일 크기 체크 (5MB)
             if (file.size > 5 * 1024 * 1024) {
                 setError('이미지 파일 크기는 5MB 이하여야 합니다.');
                 return;
             }
 
-            // 임시 URL 생성
             const imageUrl = URL.createObjectURL(file);
             setFormData(prev => ({ ...prev, imageUrl }));
             setError('');
@@ -253,7 +253,7 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
                     {/* 프로필 이미지 */}
                     <div className="edit-profile-image-container">
                         <img
-                            src={formData.imageUrl || "https://via.placeholder.com/96x96?text=User"}
+                            src={formData.imageUrl || masseukiImg}
                             alt="프로필"
                             className="edit-profile-image rounded-circle border"
                         />

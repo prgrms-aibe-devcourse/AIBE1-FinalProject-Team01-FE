@@ -11,6 +11,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { getPostDetailUrl } from "../../utils/board";
 import ChangePasswordPage from "../../components/mypage/ChangePasswordPage.jsx";
 import { StudentVerificationForm } from "../../components/mypage/StudentVerificationForm";
+import masseukiImg from "../../assets/masseuki.png";
 
 
 /**
@@ -34,7 +35,7 @@ export default function MyPage() {
     const profileData = {
         name: user.name || '사용자',
         email: user.email || '',
-        imageUrl: user.avatar || '/assets/user-icon.png',
+        imageUrl: user.avatar || masseukiImg,
         nickname: user.nickname || '',
         devcourseName: user.devcourseTrack || '',
         devcourseBatch: user.devcourseBatch || '',
