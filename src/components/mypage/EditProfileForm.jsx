@@ -85,18 +85,30 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
 
         if (formData.nickname === originalData?.nickname) {
             setNicknameStatus('available');
+            setValidationErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.nickname;
+            });
             return;
         }
 
         try {
             setCheckingNickname(true);
             setError('');
+            setSuccess('');
 
             const response = await accountApi.checkNicknameDuplicate(formData.nickname);
 
             if (response.available) {
                 setNicknameStatus('available');
                 setSuccess('사용 가능한 닉네임입니다.');
+
+                setValidationErrors(prev => {
+                    const newErrors = { ...prev };
+                    delete newErrors.nickname;
+                    return newErrors;
+                });
+
                 setTimeout(() => setSuccess(''), 2000);
             } else {
                 setNicknameStatus('unavailable');
@@ -275,18 +287,6 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
     return (
         <Form className="card p-4" onSubmit={handleSubmit}>
             <h5 className="mb-4">계정 관리</h5>
-
-            {/* 에러 및 성공 메시지 */}
-            {error && (
-                <div className="alert alert-danger" role="alert">
-                    {error}
-                </div>
-            )}
-            {success && (
-                <div className="alert alert-success" role="alert">
-                    {success}
-                </div>
-            )}
 
             {/* 프로필 이미지 및 기본 정보 */}
             <div className="edit-profile-form-container">
