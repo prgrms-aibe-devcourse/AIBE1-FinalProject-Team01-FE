@@ -30,6 +30,7 @@
     "@tiptap/starter-kit": "^2.14.1",
     "axios": "^1.10.0",
     "bootstrap": "^5.3.7",
+    "framer-motion": "^12.23.6",
     "lowlight": "^3.3.0",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.10",
