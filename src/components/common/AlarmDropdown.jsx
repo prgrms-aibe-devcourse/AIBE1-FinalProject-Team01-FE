@@ -6,6 +6,7 @@ const AlarmDropdown = ({
   alarms,
   onMarkAllRead,
   onMarkAsRead,
+  onAlarmClick,
 }) => {
   const [markingAll, setMarkingAll] = useState(false);
   const [markingIds, setMarkingIds] = useState(new Set());
@@ -24,6 +25,9 @@ const AlarmDropdown = ({
   };
 
   const handleAlarmClick = async (alarm) => {
+    if (onAlarmClick) {
+      onAlarmClick(alarm); // 라우팅 먼저!
+    }
     if (!alarm.isRead) {
       try {
         setMarkingIds((prev) => new Set(prev).add(alarm.id));

@@ -26,7 +26,7 @@ import "../../styles/components/together/postinfo.css"
  * 함께해요 게시글 상단 정보 (스터디/프로젝트, 커피챗/멘토링)
  * @param {TogetherPostInfoProps} props
  */
-const TogetherPostInfo = ({ post, onEdit, onDelete, boardType, onStatusUpdate }) => {
+const TogetherPostInfo = ({ post, onEdit, onDelete, boardType, onStatusUpdate, isDeleting }) => {
   const { user: currentUser } = useAuth();
     const [isUpdating, setIsUpdating] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -183,6 +183,7 @@ const TogetherPostInfo = ({ post, onEdit, onDelete, boardType, onStatusUpdate })
               onDelete={isMine ? onDelete : undefined}
               categoryLabel = {post.gatheringType}
               statusBadge={<StatusBadge />}
+              isDeleting={isDeleting}
           />
           {!post.isBlinded && (
               <div className="d-flex flex-wrap justify-content-around align-items-center p-3 my-4 rounded bg-light">
@@ -232,6 +233,7 @@ const TogetherPostInfo = ({ post, onEdit, onDelete, boardType, onStatusUpdate })
               onDelete={isMine ? onDelete : undefined}
               categoryLabel = {post.matchingType}
               statusBadge={<StatusBadge />}
+              isDeleting={isDeleting}
           />
           {!post.isBlinded && (
               <div className="d-flex flex-wrap justify-content-around align-items-center p-3 my-4 rounded bg-light">
@@ -274,6 +276,7 @@ const TogetherPostInfo = ({ post, onEdit, onDelete, boardType, onStatusUpdate })
               onDelete={isMine ? onDelete : undefined}
               categoryLabel={"MARKET"}
               statusBadge={<StatusBadge />}
+              isDeleting={isDeleting}
           />
           {!post.isBlinded && (
               <div className="d-flex flex-wrap justify-content-around align-items-center p-3 my-4 rounded bg-light">

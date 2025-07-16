@@ -126,6 +126,29 @@ export function AppRouter() {
                 <Route path="/signup/profile" element={<ProfileSetupPage />} />
                 <Route path="/find-account" element={<FindPasswordPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} /> 
+
+                <Route path="/community" element={<ProtectedRoute><Navigate to="/community/free" replace /></ProtectedRoute>} />
+                <Route path="/community/:boardType" element={<ProtectedRoute><CommunityPage /></ProtectedRoute>} />
+                <Route path="/community/:boardType/write" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
+                <Route path="/community/:boardType/:communityId" element={<ProtectedRoute><CommunityBoardDetailPage /></ProtectedRoute>} />
+                <Route path="/community/:boardType/:communityId/edit" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
+                <Route path="/together" element={<StudentRoute><Navigate to="/together/gathering" replace /></StudentRoute>} />
+                <Route path="/together/:boardType" element={<StudentRoute><TogetherPage /></StudentRoute>} />
+                <Route path="/together/:boardType/:postId" element={<StudentRoute><TogetherBoardDetailPage /></StudentRoute>} />
+                <Route path="/together/:boardType/write" element={<StudentRoute><TogetherWritePage /></StudentRoute>} />
+                <Route path="/together/:boardType/:postId/edit" element={<StudentRoute><TogetherWritePage /></StudentRoute>} />
+                <Route path="/info" element={<Navigate to="/info/review" replace />} />
+                <Route path="/info/:boardType" element={<InfoPage />} />
+                <Route path="/info/:boardType/:itId" element={<InfoBoardDetailPage />} />
+                <Route path="/info/:boardType/write" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />
+                <Route path="/info/:boardType/:itId/edit" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />
+                <Route path="/hub" element={<HubPage />} />
+                <Route path="/hub/:projectId" element={<HubDetailPage />} />
+                <Route path="/hub/:projectId/edit" element={<ProtectedRoute><HubWritePage /></ProtectedRoute>} />
+                <Route path="/hub/write" element={<ProtectedRoute><HubWritePage /></ProtectedRoute>} />
+
+                <Route path="/dm" element={<ProtectedRoute><DMPage /></ProtectedRoute>} />
+                <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
                 <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
                 <Route path="/oauth/profile-complete" element={<ProfileSetupPage />} />
 
