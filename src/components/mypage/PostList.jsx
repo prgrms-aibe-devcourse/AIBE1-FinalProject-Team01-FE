@@ -100,7 +100,8 @@ export const PostList = ({
         const labels = {
             posts: '작성한 글',
             likes: '좋아요한 글',
-            bookmarks: '북마크한 글'
+            bookmarks: '북마크한 글',
+            follow: '팔로우 글'
         };
         return labels[type] || type;
     };
