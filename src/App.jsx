@@ -4,6 +4,7 @@ import { NavigationBar } from "./components/common/NavigationBar";
 import { FooterBar } from "./components/common/FooterBar";
 import { AppRouter } from "./router/Router";
 import { AuthProvider } from "./context/AuthContext";
+import { PageTransition } from "./components/common/PageTransition";
 import ScrollToTop from "./components/common/ScrollToTop";
 
 function AppContent() {
@@ -13,6 +14,7 @@ function AppContent() {
     "/signup",
     "/signup/profile",
     "/find-account",
+    "/reset-password", 
   ];
 
   return (
@@ -20,7 +22,9 @@ function AppContent() {
       <ScrollToTop />
       <NavigationBar onlyLogo={hideNavOnPaths.includes(location.pathname)} />
       <main className="flex-fill">
-        <AppRouter />
+        <PageTransition>
+          <AppRouter />
+        </PageTransition>
       </main>
       {!hideNavOnPaths.includes(location.pathname) && <FooterBar />}
     </div>

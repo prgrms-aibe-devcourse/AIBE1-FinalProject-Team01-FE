@@ -16,7 +16,7 @@ const ProfileSetupPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const signupData = location.state;
-  const { login } = useAuth();
+  const { login, refreshUserInfo } = useAuth();
 
   useEffect(() => {
     const isOAuthFlow = location.pathname === "/oauth/profile-complete";
@@ -25,6 +25,31 @@ const ProfileSetupPage = () => {
       navigate("/signup", { replace: true });
     }
   }, [location.pathname, signupData, navigate]);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const isOAuthFlow = location.pathname === "/oauth/profile-complete";
+      
+      if (isOAuthFlow) {
+        try {
+          const response = await apiClient.get("/api/v1/users/me");
+          const userInfo = response.data;
+          
+          if (userInfo.name && userInfo.name.trim()) {
+            setName(userInfo.name);
+          }
+          if (userInfo.nickname && userInfo.nickname.trim()) {
+            setNickname(userInfo.nickname);
+          }
+        } catch (error) {
+          console.error("사용자 정보 로드 실패:", error);
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, [location.pathname]);
+
 
   const handleTopicClick = (topic) => {
     setSelectedTopics((prev) =>
@@ -54,6 +79,8 @@ const ProfileSetupPage = () => {
           nickname: nickname,
           topics: backendTopics,
         });
+
+        await refreshUserInfo();
         console.log("OAuth 프로필 완성");
       } else {
         // 로컬 회원가입
@@ -72,6 +99,8 @@ const ProfileSetupPage = () => {
           email: signupData.email,
           password: signupData.password,
         });
+
+        await refreshUserInfo();
         console.log("로컬 회원가입 및 자동 로그인 완료");
       }
 

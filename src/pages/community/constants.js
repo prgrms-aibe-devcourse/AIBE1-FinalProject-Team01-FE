@@ -14,5 +14,8 @@ export const BOARD_TYPE_LABEL = {
   SIDE_PROJECT: "팀프로젝트",
   COFFEE_CHAT: "커피챗",
   MENTORING: "멘토링",
-  MARKET: "중고장터"
+  MARKET: "중고장터",
+  PROJECT_HUB: "프로젝트 허브",
+  GATHER:"스터디/프로젝트",
+  MATCH:"커피챗/멘토링"
 };

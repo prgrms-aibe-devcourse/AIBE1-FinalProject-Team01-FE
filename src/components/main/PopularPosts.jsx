@@ -84,7 +84,7 @@ export const PopularPosts = () => {
 
         if (isLoggedIn) {
           try {
-            const recommended = await fetchRecommendedPosts(4);
+            const recommended = await fetchRecommendedPosts(9);
             if (recommended && recommended.length > 0) {
               setPosts(recommended);
               setType("recommend");
@@ -152,18 +152,19 @@ export const PopularPosts = () => {
               switch (boardType) {
                 case "free":
                 case "qna":
-                case "share":
-                case "notice":
+                case "retrospect":
                   path = `/community/${boardType}/${boardId}`;
                   break;
-                case "gathering":
+                case "gather":
                 case "market":
+                case "match":
                   path = `/together/${boardType}/${boardId}`;
                   break;
                 case "review":
                 case "news":
                   path = `/info/${boardType}/${boardId}`;
                   break;
+                case "project_hub":
                 case "hub":
                   path = `/hub/${boardId}`;
                   break;

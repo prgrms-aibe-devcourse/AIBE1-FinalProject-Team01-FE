@@ -11,6 +11,8 @@ import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { getPostDetailUrl } from "../../utils/board";
 import ChangePasswordPage from "../../components/mypage/ChangePasswordPage.jsx";
 import { StudentVerificationForm } from "../../components/mypage/StudentVerificationForm";
+import masseukiImg from "../../assets/masseuki.png";
+import {FollowList} from "../../components/mypage/FollowList.jsx";
 
 /**
  * 마이페이지 메인 (쿼리 파라미터 기반 라우팅)
@@ -20,6 +22,7 @@ const TAB_LIST = [
     { key: "posts", label: "작성글" },
     { key: "likes", label: "좋아요" },
     { key: "bookmarks", label: "북마크" },
+    { key: "follow", label: "팔로우 글" },
 ];
 
 const MyPage = () => {
@@ -31,15 +34,23 @@ const MyPage = () => {
     const [cachedProfileData, setCachedProfileData] = useState(null);
     const location = useLocation();
 
-    const profileData = {
+    // 기본 프로필 데이터 생성
+    const currentProfileData = cachedProfileData || {
         name: user.name || '사용자',
         email: user.email || '',
-        imageUrl: user.avatar || '/assets/user-icon.png',
+        imageUrl: user.avatar || masseukiImg,
         nickname: user.nickname || '',
         devcourseName: user.devcourseTrack || '',
         devcourseBatch: user.devcourseBatch || '',
         topics: user.topics || [],
-        providerType: user.providerType || 'LOCAL'  // 추가 필요
+        providerType: user.providerType || 'LOCAL'
+    };
+
+    const profileData = {
+        ...currentProfileData,
+        imageUrl: currentProfileData.imageUrl && currentProfileData.imageUrl.startsWith('blob:') 
+            ? masseukiImg 
+            : currentProfileData.imageUrl
     };
 
     const handleStudentVerification = () => {
@@ -50,7 +61,7 @@ const MyPage = () => {
     // URL 쿼리 파라미터에서 현재 탭과 페이지 정보 추출
     const getCurrentTab = () => {
         const tab = searchParams.get('tab');
-        const validTabs = ['account', 'posts', 'likes', 'bookmarks', 'changePassword', 'withdraw'];
+        const validTabs = ['account','following' , 'posts', 'likes', 'bookmarks','follow' , 'changePassword', 'withdraw'];
         return validTabs.includes(tab) ? tab : 'account'; // 기본값은 account
     };
 
@@ -86,13 +97,20 @@ const MyPage = () => {
 
     const handleSave = async (updatedData) => {
         setEditMode(false);
-        setCachedProfileData(updatedData); // 업데이트된 데이터 캐시
+        
+        const cleanedData = {
+            ...updatedData,
+            imageUrl: updatedData.imageUrl && updatedData.imageUrl.startsWith('blob:') 
+                ? currentProfileData.imageUrl
+                : updatedData.imageUrl
+        };
+        
+        setCachedProfileData(cleanedData);
+        
         try {
             await refreshUserInfo();
-            alert("저장되었습니다.");
         } catch (error) {
             console.error("사용자 정보 새로고침 실패:", error);
-            alert("저장되었습니다.");
         }
     };
 
@@ -111,7 +129,7 @@ const MyPage = () => {
         if (menu === 'account') {
             // account는 기본값이므로 쿼리 파라미터 없이
             navigate('/mypage', { replace: true });
-        } else if (['posts', 'likes', 'bookmarks'].includes(menu)) {
+        } else if (['posts', 'likes', 'bookmarks', 'follow', 'following'].includes(menu)) {
             // 게시글 관련 메뉴는 첫 페이지로
             newSearchParams.set('tab', menu);
             newSearchParams.set('page', '1');
@@ -165,7 +183,7 @@ const MyPage = () => {
             />
         ) : (
             <ProfileSummary
-                profile={profileData}  // 현재 user 데이터 전달
+                profile={profileData}  // ⭐ 정리된 profileData 전달
                 onEdit={handleEdit}
                 onChangePassword={() => handleMenuChange("changePassword")}
                 onStudentVerification={handleStudentVerification}
@@ -207,8 +225,26 @@ const MyPage = () => {
                 onPageChange={handlePageChange}
             />
         ), // 북마크
+        follow: (
+            <PostList
+                type="follow"
+                onPostClick={handlePostClick}
+                usePagination={true}
+                pageSize={10}
+                currentPage={getCurrentPage()}
+                onPageChange={handlePageChange}
+            />
+        ),
+        following: (
+            <FollowList
+                usePagination={true}
+                pageSize={10}
+                currentPage={getCurrentPage()}
+                onPageChange={handlePageChange}
+            />
+        ),
         withdraw: <WithdrawPage
-            profile={profileData}
+            profile={profileData}  // ⭐ 정리된 profileData 전달
         />, // 회원 탈퇴
     };
 

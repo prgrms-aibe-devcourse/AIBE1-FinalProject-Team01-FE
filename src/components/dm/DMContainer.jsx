@@ -8,10 +8,17 @@ import "../../styles/components/dm/dm.css";
 
 /**
  * DM 메인 컨테이너 컴포넌트
+ * @param {Object} props
+ * @param {string|null} [props.initialRoomId]
+ * @param {string|null} [props.initialMessageId]
  */
-export const DMContainer = () => {
+export const DMContainer = ({
+  initialRoomId = null,
+  initialMessageId = null,
+}) => {
   const { user } = useAuth();
-  const [selectedChatId, setSelectedChatId] = useState(null);
+  const [selectedChatId, setSelectedChatId] = useState(initialRoomId);
+  const [targetMessageId, setTargetMessageId] = useState(initialMessageId);
   const [dmRooms, setDmRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -41,8 +48,15 @@ export const DMContainer = () => {
     loadDMRooms();
   }, [loadDMRooms]);
 
+  // location.state로부터 받은 roomId/messageId로 최초 진입 시 세팅
+  useEffect(() => {
+    if (initialRoomId) setSelectedChatId(initialRoomId);
+    if (initialMessageId) setTargetMessageId(initialMessageId);
+  }, [initialRoomId, initialMessageId]);
+
   const handleChatSelect = (chatId) => {
     setSelectedChatId(chatId);
+    setTargetMessageId(null); // 채팅방 수동 선택 시 타겟 메시지 초기화
   };
 
   const handleRoomCreated = () => {

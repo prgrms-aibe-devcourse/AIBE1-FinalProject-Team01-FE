@@ -48,23 +48,34 @@ export const BoardTagShareBar = ({
     alert("URL이 복사되었습니다!");
   };
 
-    function processTagsString(tags) {
-        if (!tags || typeof tags !== 'string') {
-            return [];
-        }
-
-        return tags
-            .split(',')
-            .map(tag => tag.trim())
-            .filter(tag => tag.length > 0);
+  // 태그가 문자열인 경우 파싱 처리
+  const processTagsString = (tags) => {
+    if (!tags) {
+      return [];
     }
+    
+    // 이미 배열인 경우
+    if (Array.isArray(tags)) {
+      return tags.filter(tag => tag && tag.trim().length > 0);
+    }
+    
+    // 문자열인 경우 파싱
+    if (typeof tags === 'string') {
+      return tags
+        .split(',')
+        .map(tag => tag.trim())
+        .filter(tag => tag.length > 0);
+    }
+    
+    return [];
+  };
 
-    const validTags = processTagsString(tags);
+  const validTags = processTagsString(tags);
 
   return (
     <div className="d-flex justify-content-between align-items-center py-3 my-3">
       <div className="d-flex flex-wrap gap-2 tags-container">
-        {validTags.map((tag, idx) => (
+        {validTags.length > 0 && validTags.map((tag, idx) => (
           <span className="badge bg-light text-dark rounded-pill" key={idx}>
             #{tag}
           </span>

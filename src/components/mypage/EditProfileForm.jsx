@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Button, Form, Alert, Spinner } from "react-bootstrap";
+import { Button, Form, Spinner } from "react-bootstrap";
+import "../../styles/components/mypage/mypage.css";
 import { accountApi } from "../../services/accountApi";
 import { TOPICS } from "../../constants/topics";
 import { getProviderName } from "../../utils/provider";
 import { convertTrackFromApi } from "../../constants/devcourse";
+import masseukiImg from "../../assets/masseuki.png";
 
 /**
  * 마이페이지 계정 관리(프로필 수정) 폼 (API 연동)
@@ -83,18 +85,30 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
 
         if (formData.nickname === originalData?.nickname) {
             setNicknameStatus('available');
+            setValidationErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors.nickname;
+            });
             return;
         }
 
         try {
             setCheckingNickname(true);
             setError('');
+            setSuccess('');
 
             const response = await accountApi.checkNicknameDuplicate(formData.nickname);
 
             if (response.available) {
                 setNicknameStatus('available');
                 setSuccess('사용 가능한 닉네임입니다.');
+
+                setValidationErrors(prev => {
+                    const newErrors = { ...prev };
+                    delete newErrors.nickname;
+                    return newErrors;
+                });
+
                 setTimeout(() => setSuccess(''), 2000);
             } else {
                 setNicknameStatus('unavailable');
@@ -127,19 +141,42 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
         setTopicError("");
     };
 
-    const handleImgChange = (e) => {
+    const handleImgChange = async (e) => {
         const file = e.target.files[0];
-        if (file) {
-            // 파일 크기 체크 (5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                setError('이미지 파일 크기는 5MB 이하여야 합니다.');
-                return;
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+            setError('이미지 파일 크기는 5MB 이하여야 합니다.');
+            return;
+        }
+
+        try {
+            setError('');
+            
+            const uploadingImageUrl = URL.createObjectURL(file);
+            setFormData(prev => ({ ...prev, imageUrl: uploadingImageUrl }));
+
+            const response = await accountApi.uploadProfileImage(file);
+            
+            if (response.success) {
+                setFormData(prev => ({ 
+                    ...prev, 
+                    imageUrl: response.url
+                }));
+
+                URL.revokeObjectURL(uploadingImageUrl);
+            } else {
+                throw new Error(response.message || '업로드 실패');
             }
 
-            // 임시 URL 생성
-            const imageUrl = URL.createObjectURL(file);
-            setFormData(prev => ({ ...prev, imageUrl }));
-            setError('');
+        } catch (err) {
+            console.error('이미지 업로드 실패:', err);
+            setError('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+
+            setFormData(prev => ({ 
+                ...prev, 
+                imageUrl: originalData?.imageUrl || ''
+            }));
         }
     };
 
@@ -178,7 +215,7 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
             setError('');
             setSuccess('');
 
-            // 기본 프로필 정보 수정
+            // blob: URL 제외하고 기본 프로필 데이터 준비
             const basicProfileData = {
                 name: formData.name,
                 nickname: formData.nickname,
@@ -195,8 +232,13 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
             setSuccess('프로필이 성공적으로 수정되었습니다.');
 
             setTimeout(() => {
-                // 최신 데이터로 부모 컴포넌트 콜백 호출
-                onSave && onSave(formData);
+                // blob: URL 제거한 콜백 데이터
+                const callbackData = {
+                    ...formData,
+                    imageUrl: formData.imageUrl.startsWith('blob:') ?
+                        originalData?.imageUrl : formData.imageUrl
+                };
+                onSave && onSave(callbackData);
             }, 1500);
 
         } catch (err) {
@@ -252,7 +294,7 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
                     {/* 프로필 이미지 */}
                     <div className="edit-profile-image-container">
                         <img
-                            src={formData.imageUrl || "https://via.placeholder.com/96x96?text=User"}
+                            src={formData.imageUrl || masseukiImg}
                             alt="프로필"
                             className="edit-profile-image rounded-circle border"
                         />
@@ -330,8 +372,8 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
                                 onChange={(e) => setFormData(prev => ({ ...prev, nickname: e.target.value }))}
                                 isInvalid={!!validationErrors.nickname}
                                 className={`edit-profile-nickname-input ${
-                                    nicknameStatus === 'available' ? 'border-success has-check' : 
-                                    nicknameStatus === 'unavailable' ? 'border-danger no-check' : 'no-check'
+                                    nicknameStatus === 'available' ? 'border-success has-check' :
+                                        nicknameStatus === 'unavailable' ? 'border-danger no-check' : 'no-check'
                                 }`}
                                 required
                             />
@@ -347,7 +389,7 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
                             onClick={checkNicknameDuplicate}
                             className={`edit-profile-duplicate-btn ${
                                 nicknameStatus === 'available' ? 'btn-outline-success border-success text-success' :
-                                nicknameStatus === 'unavailable' ? 'btn-outline-danger border-danger text-danger' : ''
+                                    nicknameStatus === 'unavailable' ? 'btn-outline-danger border-danger text-danger' : ''
                             }`}
                         >
                             {checkingNickname ? (
@@ -373,7 +415,7 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
                     <Form.Control.Feedback type="invalid">
                         {validationErrors.nickname}
                     </Form.Control.Feedback>
-                    
+
                     {/* 상태 메시지 */}
                     {nicknameStatus === 'available' && formData.nickname !== originalData?.nickname && (
                         <div className="edit-profile-status-message edit-profile-status-success">
@@ -436,30 +478,30 @@ export const EditProfileForm = ({ onSave, onCancel, initial }) => {
 
                     <div className="edit-profile-topic-summary">
                         <strong>선택된 토픽 ({formData.topics.length}/3):</strong> {
-                            formData.topics.length > 0
-                                ? formData.topics.map(topicKey =>
-                                    TOPICS.find(t => t.key === topicKey)?.label
-                                ).join(", ")
-                                : "없음"
-                        }
+                        formData.topics.length > 0
+                            ? formData.topics.map(topicKey =>
+                                TOPICS.find(t => t.key === topicKey)?.label
+                            ).join(", ")
+                            : "없음"
+                    }
                     </div>
                 </div>
             </Form.Group>
 
             {/* 버튼 */}
             <div className="d-flex justify-content-end gap-2">
-                <Button 
-                    variant="secondary" 
-                    type="button" 
-                    onClick={onCancel} 
+                <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={onCancel}
                     disabled={saving}
                     className="edit-profile-btn"
                 >
                     취소
                 </Button>
-                <Button 
-                    variant="primary" 
-                    type="submit" 
+                <Button
+                    variant="primary"
+                    type="submit"
                     disabled={saving}
                     className="edit-profile-btn"
                 >

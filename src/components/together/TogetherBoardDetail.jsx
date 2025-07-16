@@ -21,6 +21,7 @@ import { deleteMarketPost } from "../../services/together/marketApi";
 const TogetherBoardDetail = ({ post, onLike, onBookmark, boardType, onPostUpdate  }) => {
   const navigate = useNavigate();
   const [currentPost, setCurrentPost] = useState(post);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleEdit = () => {
     navigate(`/together/${boardType.toLowerCase()}/${post.id}/edit`, {
@@ -29,7 +30,11 @@ const TogetherBoardDetail = ({ post, onLike, onBookmark, boardType, onPostUpdate
   };
 
   const handleDelete = async () => {
+    if (isDeleting) return;
+
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
+    setIsDeleting(true);
+
     if (boardType === "gathering")      await deleteGatheringPost(post.id);
     else if (boardType === "match")     await deleteMatchingPost(post.id);
     else /* MARKET */                   await deleteMarketPost(post.id);
@@ -70,6 +75,7 @@ const TogetherBoardDetail = ({ post, onLike, onBookmark, boardType, onPostUpdate
         onDelete={handleDelete}
         boardType={boardType}
         onStatusUpdate={handleStatusUpdate}
+        isDeleting={isDeleting}
       />
       <PostContent post={post} />
     </BoardDetailLayout>

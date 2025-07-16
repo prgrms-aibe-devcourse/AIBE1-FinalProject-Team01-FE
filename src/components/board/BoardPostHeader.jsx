@@ -7,6 +7,7 @@ import "../../styles/components/common/PostInfoHeader.css";
 import { BOARD_TYPE_LABEL } from "../../pages/community/constants";
 import UserInfoModal from "../user/UserInfoModal";
 import {STATUS_COLOR_MAP, STATUS_LABELS} from "../../pages/together/constants.js";
+import masseukiImg from "../../assets/masseuki.png";
 
 /**
  * @typedef {Object} BoardPostHeaderProps
@@ -103,15 +104,13 @@ export const BoardPostHeader = ({
                         </div>
                         <div className="d-flex w-100 justify-content-between align-items-center mt-2">
                             <div className="d-flex align-items-center gap-2">
-                                {user?.profileImageUrl && (
-                                    <img
-                                        src={user.profileImageUrl}
-                                        alt="프로필"
-                                        className="author-img"
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() => setShowModal(true)}
-                                    />
-                                )}
+                                <img
+                                        src={user?.profileImageUrl || masseukiImg}
+                                    alt="프로필"
+                                    className="author-img"
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => setShowModal(true)}
+                                />
                                 <span
                                     className="author-name fw-bold"
                                     onClick={() => setShowModal(true)}
@@ -141,6 +140,7 @@ export const BoardPostHeader = ({
                 show={showModal}
                 onHide={() => setShowModal(false)}
                 nickname={user?.nickname}
+                currentUser = {currentUser}
             />
         </div>
     );
