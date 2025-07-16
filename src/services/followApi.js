@@ -13,7 +13,7 @@ export const followUser = async (userId) => {
     }
 }
 
-export const unfollowUser = async (userId) => {
+export const unfollowUserApi = async (userId) => {
     try {
         await apiClient.delete(`${FOLLOW_API_BASE_URL}/users/${userId}/follow`);
     } catch (error) {
@@ -32,9 +32,14 @@ export const getModalInfo = async (nickname) => {
     }
 };
 
-export const getFollowingList = async () => {
+export const getFollowingList = async ({ page = 0, size = 10 } = {}) => {
     try {
-        const response = await apiClient.get(`${FOLLOW_API_BASE_URL}/users/following`);
+        const response = await apiClient.get(`${FOLLOW_API_BASE_URL}/users/following`, {
+            params: {
+                page,
+                size
+            }
+        });
         return response.data;
     } catch (error) {
         console.error("❌ 팔로잉 목록 조회 실패:", error);

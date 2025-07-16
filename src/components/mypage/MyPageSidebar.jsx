@@ -29,6 +29,15 @@ export const MyPageSidebar = ({ activeMenu, onMenuChange }) => (
       >
         계정 관리
       </ListGroup.Item>
+      <ListGroup.Item
+          as="li"
+          action
+          active={activeMenu === "following"}
+          onClick={() => onMenuChange("following")}
+          className={`sidebar-item${activeMenu === "following" ? " active" : ""}`}
+      >
+        팔로잉 목록
+      </ListGroup.Item>
       <ListGroup.Item as="li" className="sidebar-section" disabled>
         <Activity size={18} /> 나의 활동
       </ListGroup.Item>

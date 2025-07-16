@@ -11,6 +11,7 @@ import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { getPostDetailUrl } from "../../utils/board";
 import ChangePasswordPage from "../../components/mypage/ChangePasswordPage.jsx";
 import { StudentVerificationForm } from "../../components/mypage/StudentVerificationForm";
+import {FollowList} from "../../components/mypage/FollowList.jsx";
 
 /**
  * 마이페이지 메인 (쿼리 파라미터 기반 라우팅)
@@ -51,7 +52,7 @@ const MyPage = () => {
     // URL 쿼리 파라미터에서 현재 탭과 페이지 정보 추출
     const getCurrentTab = () => {
         const tab = searchParams.get('tab');
-        const validTabs = ['account', 'posts', 'likes', 'bookmarks','follow' , 'changePassword', 'withdraw'];
+        const validTabs = ['account','following' , 'posts', 'likes', 'bookmarks','follow' , 'changePassword', 'withdraw'];
         return validTabs.includes(tab) ? tab : 'account'; // 기본값은 account
     };
 
@@ -112,7 +113,7 @@ const MyPage = () => {
         if (menu === 'account') {
             // account는 기본값이므로 쿼리 파라미터 없이
             navigate('/mypage', { replace: true });
-        } else if (['posts', 'likes', 'bookmarks'].includes(menu)) {
+        } else if (['posts', 'likes', 'bookmarks', 'follow', 'following'].includes(menu)) {
             // 게시글 관련 메뉴는 첫 페이지로
             newSearchParams.set('tab', menu);
             newSearchParams.set('page', '1');
@@ -212,6 +213,14 @@ const MyPage = () => {
             <PostList
                 type="follow"
                 onPostClick={handlePostClick}
+                usePagination={true}
+                pageSize={10}
+                currentPage={getCurrentPage()}
+                onPageChange={handlePageChange}
+            />
+        ),
+        following: (
+            <FollowList
                 usePagination={true}
                 pageSize={10}
                 currentPage={getCurrentPage()}

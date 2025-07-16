@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Modal, Button, Spinner, Image } from "react-bootstrap";
 import {
   followUser,
-  unfollowUser,
+  unfollowUserApi,
   getModalInfo,
 } from "../../services/followApi";
 import { createDMRoom } from "../../services/dmApi";
@@ -37,7 +37,7 @@ export default function UserInfoModal({ show, onHide, nickname }) {
     setActioning(true);
     try {
       if (isFollowing) {
-        await unfollowUser(modalInfo.userId);
+        await unfollowUserApi(modalInfo.userId);
       } else {
         await followUser(modalInfo.userId);
       }
