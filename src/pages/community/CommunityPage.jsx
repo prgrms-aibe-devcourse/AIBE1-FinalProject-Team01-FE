@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Navigate } from "react-router-dom";
 import { BoardCategoryBar } from "../../components/board/BoardCategoryBar";
 import { BoardSearchBar } from "../../components/board/BoardSearchBar";
 import { CommunityBoardList } from "../../components/community/CommunityBoardList";
@@ -17,8 +17,13 @@ const COMMUNITY_TABS = [
 ];
 
 const CommunityPage = () => {
-  const { boardType = BOARD_TYPE.FREE } = useParams();
+  const { boardType } = useParams();
   const navigate = useNavigate();
+
+  // boardType이 없으면 'free'로 리다이렉트
+  if (!boardType) {
+    return <Navigate to="/community/free" replace />;
+  }
 
   const {
     keyword,
