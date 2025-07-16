@@ -26,6 +26,31 @@ const ProfileSetupPage = () => {
     }
   }, [location.pathname, signupData, navigate]);
 
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const isOAuthFlow = location.pathname === "/oauth/profile-complete";
+      
+      if (isOAuthFlow) {
+        try {
+          const response = await apiClient.get("/api/v1/users/me");
+          const userInfo = response.data;
+          
+          if (userInfo.name && userInfo.name.trim()) {
+            setName(userInfo.name);
+          }
+          if (userInfo.nickname && userInfo.nickname.trim()) {
+            setNickname(userInfo.nickname);
+          }
+        } catch (error) {
+          console.error("사용자 정보 로드 실패:", error);
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, [location.pathname]);
+
+
   const handleTopicClick = (topic) => {
     setSelectedTopics((prev) =>
       prev.includes(topic) ? prev.filter((t) => t !== topic) : [...prev, topic]
