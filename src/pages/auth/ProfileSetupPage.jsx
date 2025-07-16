@@ -16,7 +16,7 @@ const ProfileSetupPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const signupData = location.state;
-  const { login, refreshUserInfo } = useAuth();
+  const { login, refreshUserInfo, user } = useAuth();
 
   useEffect(() => {
     const isOAuthFlow = location.pathname === "/oauth/profile-complete";
@@ -25,6 +25,20 @@ const ProfileSetupPage = () => {
       navigate("/signup", { replace: true });
     }
   }, [location.pathname, signupData, navigate]);
+
+  useEffect(() => {
+    const isOAuthFlow = location.pathname === "/oauth/profile-complete";
+    
+    if (isOAuthFlow && user) {
+      // AuthContext에서 바로 가져오기 (API 호출 없음!)
+      if (user.name && user.name.trim()) {
+        setName(user.name);
+      }
+      if (user.nickname && user.nickname.trim()) {
+        setNickname(user.nickname);
+      }
+    }
+  }, [location.pathname, user]);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
