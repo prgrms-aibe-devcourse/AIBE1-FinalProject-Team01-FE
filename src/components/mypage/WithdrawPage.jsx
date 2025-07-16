@@ -78,13 +78,9 @@ export default function WithdrawPage({ profile }) {
             await accountApi.deleteAccount(requestData);
 
             // 성공 시 로그아웃 및 메인 페이지로 이동
-            await logout();
-
-            navigate('/', {
-                state: {
-                    message: '회원 탈퇴가 완료되었습니다. 그동안 이용해 주셔서 감사합니다.'
-                }
-            });
+            navigate("/");
+            logout();
+            alert("회원 탈퇴가 완료되었습니다. 그동안 이용해 주셔서 감사합니다.");
 
         } catch (err) {
             console.error('회원 탈퇴 실패:', err);
