@@ -36,7 +36,11 @@ import {
  * DM 채팅 영역 컴포넌트
  * @param {DMChatAreaProps} props
  */
-export const DMChatArea = ({ selectedChatId, onMessageUpdate }) => {
+export const DMChatArea = ({
+  selectedChatId,
+  onMessageUpdate,
+  chatPartnerInfo,
+}) => {
   const { user } = useAuth();
   const {
     value: messageText,
@@ -744,6 +748,9 @@ export const DMChatArea = ({ selectedChatId, onMessageUpdate }) => {
     }
   };
 
+  // partner: chatPartnerInfo가 있으면 그걸 우선 사용, 없으면 기존 chatPartner state 사용
+  const partner = chatPartnerInfo || chatPartner;
+
   if (!selectedChatId) {
     return (
       <div className="dm-welcome-area">
@@ -802,17 +809,17 @@ export const DMChatArea = ({ selectedChatId, onMessageUpdate }) => {
         <div className="dm-chat-user-info">
           <div className="dm-chat-avatar">
             <img
-              src={chatPartner?.profileImage || chatDefaultImage}
-              alt={chatPartner?.nickname || "채팅 상대"}
+              src={partner?.profileImage || chatDefaultImage}
+              alt={partner?.nickname || "채팅 상대"}
               className="dm-avatar-img"
             />
           </div>
           <div>
             <div className="dm-chat-user-name">
-              {chatPartner?.nickname || "채팅 상대"}
+              {partner?.nickname || "채팅 상대"}
             </div>
             <div className="dm-chat-user-status">
-              {chatPartner?.devcourse || "생성형 AI 백엔드 1기"}
+              {partner?.devcourseName || ""}
             </div>
           </div>
         </div>

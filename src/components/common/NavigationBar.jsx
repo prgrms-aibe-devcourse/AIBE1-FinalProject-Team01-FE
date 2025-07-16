@@ -141,7 +141,6 @@ export const NavigationBar = ({ onlyLogo }) => {
                   </span>
                   <Button
                     variant="outline-dark"
-                    className="px-4"
                     onClick={logout}
                   >
                     로그아웃
@@ -151,14 +150,12 @@ export const NavigationBar = ({ onlyLogo }) => {
                 <div className="d-flex gap-3">
                   <Button
                     variant="dark"
-                    className="px-5 py-3"
                     onClick={() => navigate("/login")}
                   >
                     로그인
                   </Button>
                   <Button
                     variant="outline-dark"
-                    className="px-5 py-3"
                     onClick={() => navigate("/signup")}
                   >
                     회원가입

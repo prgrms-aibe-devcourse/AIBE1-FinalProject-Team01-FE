@@ -243,6 +243,7 @@ export const DMSidebar = ({
       const room = await createDMRoom(userId);
       setShowFollowingModal(false);
       if (onChatSelect) onChatSelect(room.id);
+      if (onRoomCreated) onRoomCreated(); // 방 생성 후 목록 새로고침
     } catch (e) {
       alert("채팅방 생성 실패");
     } finally {
