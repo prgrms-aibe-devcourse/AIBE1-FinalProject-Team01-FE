@@ -6,6 +6,7 @@ import {
   Modal,
   Form,
   Alert,
+  Spinner,
 } from "react-bootstrap";
 import { Search, Trash, Plus } from "react-bootstrap-icons";
 import { useInput } from "../../hooks/useInput";
@@ -17,6 +18,7 @@ import {
 } from "../../services/dmApi";
 import { useAuth } from "../../context/AuthContext";
 import chatDefaultImage from "../../assets/chat-default-image.png";
+import { getFollowingList } from "../../services/followApi";
 
 /**
  * @typedef {Object} DMSidebarProps
@@ -52,6 +54,10 @@ export const DMSidebar = ({
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState(null);
   const [isSearchMode, setIsSearchMode] = useState(false);
+  const [showFollowingModal, setShowFollowingModal] = useState(false);
+  const [followingList, setFollowingList] = useState([]);
+  const [followingLoading, setFollowingLoading] = useState(false);
+  const [creatingChatUserId, setCreatingChatUserId] = useState(null);
 
   const currentUserId = user?.id || 1;
 
@@ -216,6 +222,34 @@ export const DMSidebar = ({
     }
   };
 
+  // 팔로잉 목록 모달 열기
+  const handleOpenFollowingModal = async () => {
+    setShowFollowingModal(true);
+    setFollowingLoading(true);
+    try {
+      const list = await getFollowingList({ page: 0, size: 100 });
+      setFollowingList(Array.isArray(list) ? list : list.content || []);
+    } catch (e) {
+      setFollowingList([]);
+    } finally {
+      setFollowingLoading(false);
+    }
+  };
+
+  // 팔로잉 유저 클릭 시 채팅방 생성
+  const handleStartChatWithUser = async (userId) => {
+    setCreatingChatUserId(userId);
+    try {
+      const room = await createDMRoom(userId);
+      setShowFollowingModal(false);
+      if (onChatSelect) onChatSelect(room.id);
+    } catch (e) {
+      alert("채팅방 생성 실패");
+    } finally {
+      setCreatingChatUserId(null);
+    }
+  };
+
   const filteredChats = chatList.filter(
     (chat) =>
       chat.nickname.toLowerCase().includes(searchKeyword.toLowerCase()) ||
@@ -245,7 +279,7 @@ export const DMSidebar = ({
               </form>
               <button
                 className="dm-create-btn"
-                onClick={() => setShowCreateModal(true)}
+                onClick={handleOpenFollowingModal}
                 title="새 채팅방 만들기"
               >
                 <Plus size={18} />
@@ -417,6 +451,90 @@ export const DMSidebar = ({
             {creating ? "생성 중..." : "채팅방 생성"}
           </Button>
         </Modal.Footer>
+      </Modal>
+
+      {/* 팔로잉 목록 모달 */}
+      <Modal
+        show={showFollowingModal}
+        onHide={() => setShowFollowingModal(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>팔로잉 목록</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="dm-chat-list-container" style={{ padding: 0 }}>
+          {followingLoading ? (
+            <div className="dm-loading">
+              <div className="text-center p-3">
+                <Spinner animation="border" />
+              </div>
+            </div>
+          ) : followingList.length === 0 ? (
+            <div className="dm-empty">
+              <div className="text-center p-4">
+                <div className="mb-2">💬</div>
+                <div className="text-muted">팔로잉한 사용자가 없습니다.</div>
+              </div>
+            </div>
+          ) : (
+            <ul className="dm-chat-list" style={{ margin: 0, padding: 0 }}>
+              {followingList.map((user) => (
+                <li
+                  key={user.userId}
+                  className="dm-chat-item"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "12px 16px",
+                    borderBottom: "1px solid #f0f0f0",
+                    cursor: "pointer",
+                    gap: 12,
+                  }}
+                  onClick={() => handleStartChatWithUser(user.userId)}
+                >
+                  <img
+                    src={user.profileImg || chatDefaultImage}
+                    alt={user.nickname}
+                    className="dm-avatar-img"
+                    style={{ width: 36, height: 36, borderRadius: "50%" }}
+                  />
+                  <div className="dm-chat-info" style={{ flex: 1 }}>
+                    <span className="dm-chat-nickname">{user.nickname}</span>
+                  </div>
+                  <Button
+                    size="sm"
+                    style={{
+                      background: "#2d4053",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: 8,
+                      minWidth: 80,
+                      fontWeight: 500,
+                      transition: "all 0.2s",
+                    }}
+                    onMouseOver={(e) =>
+                      (e.currentTarget.style.background = "#1a252f")
+                    }
+                    onMouseOut={(e) =>
+                      (e.currentTarget.style.background = "#2d4053")
+                    }
+                    disabled={creatingChatUserId === user.userId}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleStartChatWithUser(user.userId);
+                    }}
+                  >
+                    {creatingChatUserId === user.userId ? (
+                      <Spinner as="span" animation="border" size="sm" />
+                    ) : (
+                      "채팅 시작"
+                    )}
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Modal.Body>
       </Modal>
     </>
   );
