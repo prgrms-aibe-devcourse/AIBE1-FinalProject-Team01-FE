@@ -6,6 +6,7 @@ import "./styles/components/common/NavigationBar.css";
 import "./styles/components/common/FooterBar.css";
 import "./styles/components/main/MainBoards.css";
 import "./styles/components/dm/dm.css";
+import "./styles/scrollbar.css";
 import App from "./App.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter } from "react-router-dom";

@@ -1,0 +1,131 @@
+/* 커스텀 스크롤바 스타일 - 텍스트에디터 느낌 */
+
+/* 전체 스크롤바 항상 표시 */
+html {
+  overflow-y: scroll; /* 항상 세로 스크롤바 표시 */
+}
+
+/* 웹킷 브라우저 (Chrome, Safari, Edge) 스크롤바 커스텀 */
+::-webkit-scrollbar {
+  width: 12px; /* 스크롤바 너비 */
+  background-color: #f1f3f4; /* 스크롤바 배경색 */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f3f4; /* 트랙 배경색 */
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1; /* 스크롤바 색상 */
+  border-radius: 6px;
+  border: 2px solid #f1f3f4; /* 테두리로 여백 효과 */
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8a8a8; /* 호버 시 색상 */
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: #909090; /* 클릭 시 색상 */
+}
+
+/* 모서리 스타일 */
+::-webkit-scrollbar-corner {
+  background-color: #f1f3f4;
+}
+
+/* Firefox 스크롤바 스타일 */
+html {
+  scrollbar-width: thin; /* thin, auto, none */
+  scrollbar-color: #c1c1c1 #f1f3f4; /* thumb track */
+}
+
+/* 다크모드 지원 */
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar {
+    background-color: #2d2d2d;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: #2d2d2d;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-color: #2d2d2d;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #666;
+  }
+  
+  ::-webkit-scrollbar-thumb:active {
+    background-color: #777;
+  }
+  
+  ::-webkit-scrollbar-corner {
+    background-color: #2d2d2d;
+  }
+  
+  html {
+    scrollbar-color: #555 #2d2d2d;
+  }
+}
+
+/* 내부 스크롤 영역들도 동일한 스타일 적용 */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f3f4;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  background-color: #f1f3f4;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #f1f3f4;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 4px;
+  border: 1px solid #f1f3f4;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #a8a8a8;
+}
+
+/* 텍스트 에디터 스타일 스크롤바 */
+.editor-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #999 #f5f5f5;
+}
+
+.editor-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  background-color: #f5f5f5;
+}
+
+.editor-scrollbar::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+
+.editor-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border-radius: 5px;
+  border: 1px solid #f5f5f5;
+}
+
+.editor-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #666;
+}
+
+.editor-scrollbar::-webkit-scrollbar-thumb:active {
+  background-color: #444;
+}
