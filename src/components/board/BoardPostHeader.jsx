@@ -126,7 +126,7 @@ export const BoardPostHeader = ({
                             <div className="d-flex align-items-center gap-2 text-muted small">
                 <span>
                   {post.createdAt
-                      ? new Date(post.createdAt).toLocaleDateString()
+                      ? new Date(post.createdAt).toLocaleString()
                       : ""}
                 </span>
                                 <span className="mx-1">|</span>
