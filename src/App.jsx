@@ -13,6 +13,7 @@ function AppContent() {
     "/signup",
     "/signup/profile",
     "/find-account",
+    "/reset-password", 
   ];
 
   return (

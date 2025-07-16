@@ -20,6 +20,7 @@ const TAB_LIST = [
     { key: "posts", label: "작성글" },
     { key: "likes", label: "좋아요" },
     { key: "bookmarks", label: "북마크" },
+    { key: "follow", label: "팔로우 글" },
 ];
 
 const MyPage = () => {
@@ -50,7 +51,7 @@ const MyPage = () => {
     // URL 쿼리 파라미터에서 현재 탭과 페이지 정보 추출
     const getCurrentTab = () => {
         const tab = searchParams.get('tab');
-        const validTabs = ['account', 'posts', 'likes', 'bookmarks', 'changePassword', 'withdraw'];
+        const validTabs = ['account', 'posts', 'likes', 'bookmarks','follow' , 'changePassword', 'withdraw'];
         return validTabs.includes(tab) ? tab : 'account'; // 기본값은 account
     };
 
@@ -207,6 +208,16 @@ const MyPage = () => {
                 onPageChange={handlePageChange}
             />
         ), // 북마크
+        follow: (
+            <PostList
+                type="follow"
+                onPostClick={handlePostClick}
+                usePagination={true}
+                pageSize={10}
+                currentPage={getCurrentPage()}
+                onPageChange={handlePageChange}
+            />
+        ),
         withdraw: <WithdrawPage
             profile={profileData}
         />, // 회원 탈퇴

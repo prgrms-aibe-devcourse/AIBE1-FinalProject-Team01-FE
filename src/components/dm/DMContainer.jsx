@@ -100,7 +100,7 @@ export const DMContainer = () => {
   return (
     <Container className="dm-main-container">
       <Row className="dm-content-row">
-        <Col md={4} className="dm-sidebar-col">
+        <Col xs={4} sm={4} md={4} lg={4} xl={4} className="dm-sidebar-col">
           <DMSidebar
             selectedChatId={selectedChatId}
             onChatSelect={handleChatSelect}
@@ -109,7 +109,7 @@ export const DMContainer = () => {
             onRoomCreated={handleRoomCreated}
           />
         </Col>
-        <Col md={8} className="dm-chat-col">
+        <Col xs={8} sm={8} md={8} lg={8} xl={8} className="dm-chat-col">
           <DMChatArea
             selectedChatId={selectedChatId}
             onMessageUpdate={handleMessageUpdate}

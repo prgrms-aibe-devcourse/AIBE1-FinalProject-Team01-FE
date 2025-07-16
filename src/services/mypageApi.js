@@ -84,26 +84,21 @@ export const getMyBookmarkedPosts = async (params = {}) => {
     }
 };
 
-/**
- * 마이페이지 모든 데이터를 한번에 조회하는 헬퍼 함수
- * @param {Object} params - 공통 쿼리 파라미터
- * @returns {Promise<Object>} 모든 데이터가 포함된 객체
- */
-export const getMyPageData = async (params = {}) => {
+export const getMyFollowPosts = async (params = {}) => {
     try {
-        const [postsData, likedData, bookmarkedData] = await Promise.all([
-            getMyPosts(params),
-            getMyLikedPosts(params),
-            getMyBookmarkedPosts(params)
-        ]);
+        const { page = 0, size = 10} = params;
 
-        return {
-            posts: postsData,
-            liked: likedData,
-            bookmarked: bookmarkedData
-        };
+        const response = await apiClient.get('/api/v1/users/me/followPost', {
+            params: {
+                page,
+                size
+            }
+        });
+
+
+        return response.data;
     } catch (error) {
-        console.error('마이페이지 데이터 조회 실패:', error);
+        console.error('북마크한 글 조회 실패:', error);
         throw error;
     }
 };
@@ -115,5 +110,5 @@ export const mypageApi = {
     getMyPosts,
     getMyLikedPosts,
     getMyBookmarkedPosts,
-    getMyPageData
+    getMyFollowPosts
 };
