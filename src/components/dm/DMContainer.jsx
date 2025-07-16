@@ -135,6 +135,8 @@ export const DMContainer = ({
                 nickname: selectedRoom.partnerNickname,
                 profileImage: selectedRoom.partnerProfileImage,
                 partnerId: selectedRoom.partnerId,
+                devcourseName: selectedRoom.devcourseName,
+                devcourseBatch: selectedRoom.devcourseBatch,
               }
             }
             // targetMessageId={targetMessageId} // 추후 메시지 위치 이동 구현 시 사용

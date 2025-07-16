@@ -819,7 +819,7 @@ export const DMChatArea = ({
               {partner?.nickname || "채팅 상대"}
             </div>
             <div className="dm-chat-user-status">
-              {partner?.devcourse || "생성형 AI 백엔드 1기"}
+              {partner?.devcourseName || ""}
             </div>
           </div>
         </div>
