@@ -82,14 +82,7 @@ export default function UserInfoModal({ show, onHide, nickname, currentUser }) {
           {/* 헤더 */}
           <div className="profile-modal-header">
             <button className="close-btn" onClick={onHide}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path
-                    d="M18 6L6 18M6 6L18 18"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                />
-              </svg>
+              ✕
             </button>
           </div>
 
