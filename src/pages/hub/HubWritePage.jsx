@@ -78,7 +78,21 @@ const HubWritePage = () => {
   useEffect(() => {
     if (isEditMode && project) {
       setTitle(project.title);
-      setTags(project.tags || []);
+      
+      // 태그 처리: 문자열인 경우 배열로 변환
+      let processedTags = [];
+      if (project.tags) {
+        if (Array.isArray(project.tags)) {
+          processedTags = project.tags.filter(tag => tag && tag.trim().length > 0);
+        } else if (typeof project.tags === 'string') {
+          processedTags = project.tags
+            .split(',')
+            .map(tag => tag.trim())
+            .filter(tag => tag.length > 0);
+        }
+      }
+      setTags(processedTags);
+      
       setContent(project.content);
       setSimpleContent(project.simpleContent || "");
       setStartedAt(project.startedAt ? new Date(project.startedAt) : null);

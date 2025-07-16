@@ -242,113 +242,155 @@ const CommentItem = (props) => {
 
         <div className="comment-content">
           {isEditing ? (
-              <div className="d-flex align-items-center">
-                <input
-                    type="text"
-                    className="form-control me-2"
+              <div className="edit-form-wrapper">
+                <textarea
+                    className="edit-form-textarea"
                     value={editContent}
-                    onChange={onEditChange}
+                    onChange={(e) => {
+                      onEditChange(e);
+                      // 자동 높이 조절
+                      e.target.style.height = 'auto';
+                      e.target.style.height = Math.min(e.target.scrollHeight, 150) + 'px';
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleEditSave();
+                      }
+                    }}
+                    ref={(el) => {
+                      if (el) {
+                        // 렌더링 후 높이 자동 조절
+                        setTimeout(() => {
+                          el.style.height = 'auto';
+                          el.style.height = Math.min(el.scrollHeight, 150) + 'px';
+                        }, 0);
+                      }
+                    }}
                     autoFocus
+                    rows={1}
                 />
-                <button
-                    className="btn btn-primary btn-sm me-2 flex-shrink-0"
-                    onClick={handleEditSave}
-                >
-                  저장
-                </button>
-                <button
-                    className="btn btn-secondary btn-sm flex-shrink-0"
-                    onClick={() => setIsEditing(false)}
-                >
-                  취소
-                </button>
+                <div className="edit-form-buttons">
+                  <button
+                      className="edit-form-submit"
+                      onClick={handleEditSave}
+                  >
+                    저장
+                  </button>
+                  <button
+                      className="edit-form-cancel"
+                      onClick={() => setIsEditing(false)}
+                  >
+                    취소
+                  </button>
+                </div>
               </div>
           ) : (
-              initialContent
+              <div className="comment-text" style={{ whiteSpace: 'pre-wrap' }}>
+                {initialContent}
+              </div>
           )}
         </div>
 
         <div className="comment-actions">
-          <button className="btn-comment-like" onClick={handleLikeClick}>
-            <i
-                className={liked ? "bi bi-heart-fill text-danger" : "bi bi-heart"}
-            ></i>{" "}
-            {likeCountState}
-          </button>
+          <div className="comment-actions-left">
+            <button className="comment-action-btn comment-like-btn" onClick={handleLikeClick}>
+              <i className={liked ? "bi bi-heart-fill" : "bi bi-heart"}></i>
+              <span>{likeCountState}</span>
+            </button>
 
-          {depth === 1 && (
-              <button
-                  className="btn-comment-reply"
-                  onClick={() => setShowReplyInput(prev => !prev)}
-              >
-                답글
-              </button>
-          )}
+            {depth === 1 && (
+                <button
+                    className="comment-action-btn comment-reply-btn"
+                    onClick={() => setShowReplyInput(prev => !prev)}
+                >
+                  <i className="bi bi-reply"></i>
+                  <span>답글</span>
+                </button>
+            )}
+
+            {/* 대댓글 보기/숨기기 버튼 (부모 댓글만) */}
+            {depth === 1 && (replyCount > 0 || (repliesData && repliesData.comments && repliesData.comments.length > 0)) && !showReplies && (
+                <button
+                    className="comment-action-btn comment-toggle-btn"
+                    onClick={handleToggleReplies}
+                    disabled={repliesLoading}
+                >
+                  <i className="bi bi-chat-dots"></i>
+                  <span>{repliesLoading ? '로딩 중...' : `답글 보기(${replyCount})`}</span>
+                </button>
+            )}
+
+            {depth === 1 && showReplies && (replyCount > 0 || (repliesData && repliesData.comments && repliesData.comments.length > 0)) && (
+                <button
+                    className="comment-action-btn comment-toggle-btn"
+                    onClick={handleToggleReplies}
+                >
+                  <i className="bi bi-eye-slash"></i>
+                  <span>답글 숨기기</span>
+                </button>
+            )}
+          </div>
 
           {isMine && (
-              <>
-                {!comment.isBlinded && (
-                    <button
-                        className="btn btn-link btn-sm text-secondary ms-2"
-                        onClick={handleEditClick}
-                    >
-                      수정
-                    </button>
-                )}
-                <button
-                    className="btn btn-link btn-sm text-danger ms-1"
-                    onClick={handleDelete}
-                >
-                  삭제
-                </button>
-              </>
-          )}
-
-          {/* 대댓글 보기/숨기기 버튼 (부모 댓글만) */}
-          {depth === 1 && (replyCount > 0 || (repliesData && repliesData.comments && repliesData.comments.length > 0)) && !showReplies && (
+            <div className="comment-actions-right">
+              {!comment.isBlinded && (
+                  <button
+                      className="comment-action-btn comment-edit-btn"
+                      onClick={handleEditClick}
+                  >
+                    <i className="bi bi-pencil"></i>
+                    <span>수정</span>
+                  </button>
+              )}
               <button
-                  className="btn btn-link btn-sm text-primary ms-2"
-                  style={{ textDecoration: "underline" }}
-                  onClick={handleToggleReplies}
-                  disabled={repliesLoading}
+                  className="comment-action-btn comment-delete-btn"
+                  onClick={handleDelete}
               >
-                {repliesLoading ? '로딩 중...' : `답글 보기(${replyCount})`}
+                <i className="bi bi-trash"></i>
+                <span>삭제</span>
               </button>
-          )}
-
-          {depth === 1 && showReplies && (replyCount > 0 || (repliesData && repliesData.comments && repliesData.comments.length > 0)) && (
-              <button
-                  className="btn btn-link btn-sm text-secondary ms-2"
-                  style={{ textDecoration: "underline" }}
-                  onClick={handleToggleReplies}
-              >
-                답글 숨기기
-              </button>
+            </div>
           )}
         </div>
 
         {/* 대댓글 입력 폼 */}
         {showReplyInput && depth === 1 && (
             <form
-                className="comment-reply-form d-flex mt-2"
+                className="comment-reply-form mt-2"
                 onSubmit={handleReplySubmit}
             >
-              <input
-                  type="text"
-                  className="form-control me-2"
-                  value={replyContent}
-                  onChange={onReplyChange}
-                  placeholder="답글을 입력하세요"
-                  autoFocus
-                  disabled={replySubmitting}
-              />
-              <button
-                  type="submit"
-                  className="btn btn-primary btn-sm"
-                  disabled={replySubmitting || !replyContent.trim()}
-              >
-                {replySubmitting ? '등록 중...' : '등록'}
-              </button>
+              <div className="reply-form-wrapper">
+                <textarea
+                    className="reply-form-textarea"
+                    value={replyContent}
+                    onChange={(e) => {
+                      onReplyChange(e);
+                      // 자동 높이 조절
+                      e.target.style.height = 'auto';
+                      e.target.style.height = Math.min(e.target.scrollHeight, 150) + 'px';
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        if (replyContent.trim() && !replySubmitting) {
+                          handleReplySubmit(e);
+                        }
+                      }
+                    }}
+                    placeholder="답글을 입력하세요 (Shift + Enter로 줄바꿈)"
+                    autoFocus
+                    disabled={replySubmitting}
+                    rows={1}
+                />
+                <button
+                    type="submit"
+                    className="reply-form-submit"
+                    disabled={replySubmitting || !replyContent.trim()}
+                >
+                  {replySubmitting ? '등록 중' : '등록'}
+                </button>
+              </div>
             </form>
         )}
 
@@ -423,6 +465,7 @@ const CommentItem = (props) => {
         show={showModal}
         onHide={() => setShowModal(false)}
         nickname={nickname}
+        currentUser={currentUser}
       />
       </div>
   );

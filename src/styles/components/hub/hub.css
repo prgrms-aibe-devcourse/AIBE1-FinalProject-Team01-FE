@@ -138,3 +138,132 @@
   background: #1b2838;
   color: #fff;
 }
+
+/* 프로젝트 정보 섹션 스타일 */
+.project-info-section {
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 1.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.project-info-label {
+  color: #2d4053;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.project-members-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.project-member-item {
+  background: #ffffff;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  color: #495057;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: inline-block;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.project-member-item:hover {
+  background: #f8f9fa;
+  border-color: #007bff;
+  color: #007bff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.project-period {
+  color: #495057;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-left: 4px solid #007bff;
+  background: linear-gradient(90deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.project-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.project-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 120px;
+  justify-content: center;
+}
+
+.project-link-btn.github-btn {
+  background: #f8f9fa;
+  color: #2d4053;
+  border-color: #dee2e6;
+}
+
+.project-link-btn.github-btn:hover {
+  background: #2d4053;
+  color: #ffffff;
+  border-color: #2d4053;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(45, 64, 83, 0.2);
+}
+
+.project-link-btn.demo-btn {
+  background: #007bff;
+  color: #ffffff;
+  border-color: #007bff;
+}
+
+.project-link-btn.demo-btn:hover {
+  background: #0056b3;
+  border-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* 반응형 대응 */
+@media (max-width: 768px) {
+  .project-info-section {
+    padding-bottom: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .project-info-label {
+    font-size: 0.85rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .project-member-item {
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+  }
+
+  .project-period {
+    font-size: 0.85rem;
+  }
+}

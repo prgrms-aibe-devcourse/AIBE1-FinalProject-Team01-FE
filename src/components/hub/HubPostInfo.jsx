@@ -6,6 +6,7 @@ import { deletePost } from "../../services/hubApi";
 import "../../styles/components/hub/hub.css";
 import {formatDate} from "../../utils/date.js";
 import {BOARD_TYPE_LABEL} from "../../pages/community/constants.js";
+import {BoardPostHeader} from "../board/BoardPostHeader.jsx";
 
 /**
  * @typedef {Object} HubPostInfoProps
@@ -94,112 +95,77 @@ export const HubPostInfo = ({ post }) => {
   } = post;
 
   return (
+      <>
+        <BoardPostHeader
+            post={post}
+            boardType={"PROJECT_HUB"}
+            onEdit={canEditOrDelete ? handleEdit : undefined}
+            onDelete={canEditOrDelete ? handleDelete : undefined}
+            categoryLabel={"PROJECT_HUB"}
+            isDeleting={isDeleting}
+        />
     <div className="p-1 mt-3">
-      <p className="post-category-label">
-        PROJECT
-      </p>
-      <div className="d-flex justify-content-between align-items-start mb-3">
-        <h1 className="post-info-title mb-0">{title}</h1>
-        {canEditOrDelete && (
-          <div className="hub-post-actions">
-            {!post.isBlinded && (
-                <button
-                    className="btn btn-sm btn-link text-muted p-1"
-                    onClick={handleEdit}
-                    title="수정"
-                >
-                  <i className="bi bi-pencil-square fs-5"></i>
-                </button>
-            )}
-            <button 
-              className="btn btn-sm btn-link text-muted p-1"
-              onClick={handleDelete}
-              disabled={isDeleting}
-              title={isDeleting ? "삭제 중..." : "삭제"}
-            >
-              {isDeleting ? (
-                <div className="spinner-border spinner-border-sm" role="status">
-                  <span className="visually-hidden">삭제 중...</span>
-                </div>
-              ) : (
-                <i className="bi bi-trash fs-5"></i>
-              )}
-            </button>
-          </div>
-        )}
-      </div>
-      <div className="d-flex justify-content-between align-items-center mb-2">
-        <div className="d-flex align-items-center gap-2">
-          {user?.imageUrl && (
-            <img
-              src={user.imageUrl}
-              alt={user.nickname}
-              className="rounded-circle"
-              width="32"
-              height="32"
-            />
-          )}
-          <span className="author-name fw-bold">{user?.nickname}</span>
-          {/* 과정 명만 노출, 기수는 민감하기에 노출안함 */}
-          {courseName && <span className="author-batch">{courseName}</span>}
-        </div>
-        <div className="d-flex align-items-center gap-2 text-muted small">
-          <span>
-            {createdAt ? new Date(createdAt).toLocaleDateString() : ""}
-          </span>
-          <span className="mx-1">|</span>
-          <span>조회 {post.viewCount ?? 0}</span>
-        </div>
-      </div>
-      <hr />
       {!post.isBlinded && (
-          <div className="row g-3 bg-light">
-            <div className="col-md-6">
-              <p>
-                <strong>팀원:</strong>
-              </p>
-              <ul>
-                {projectMembers && projectMembers.length > 0 ? (
-                    projectMembers.map((member, i) => (
-                        <li key={i}>
-                          {typeof member === 'string' ? member : `${member.name}${member.role ? ` - ${member.role}` : ''}`}
-                        </li>
-                    ))
-                ) : (
-                    <li>-</li>
-                )}
-              </ul>
-            </div>
-            <div className="col-md-6">
-              <p>
-                <strong>기간:</strong> {formatDate(startedAt)} ~ {formatDate(endedAt)}
-              </p>
-              <div className="d-flex flex-wrap gap-2"></div>
-              <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                {githubUrl && (
-                    <a
-                        href={githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-outline-dark"
-                    >
-                      <i className="bi bi-github"></i> GitHub
-                    </a>
-                )}
-                {demoUrl && (
-                    <a
-                        href={demoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-primary"
-                    >
-                      <i className="bi bi-globe"></i> Demo
-                    </a>
-                )}
+          <div className="project-info-section">
+            <div className="row">
+              {/* 팀원 - 전체 너비 */}
+              <div className="col-12">
+                <div className="project-info-label">
+                  팀원
+                </div>
+                <ul className="project-members-list">
+                  {projectMembers && projectMembers.length > 0 ? (
+                      projectMembers.map((member, i) => (
+                          <li key={i} className="project-member-item">
+                            {typeof member === 'string' ? member : `${member.name}${member.role ? ` - ${member.role}` : ''}`}
+                          </li>
+                      ))
+                  ) : (
+                      <li className="project-member-item">정보 없음</li>
+                  )}
+                </ul>
+              </div>
+              
+              {/* 기간과 링크 - 좌우 분할 */}
+              <div className="col-md-6">
+                <div className="project-info-label">
+                  기간
+                </div>
+                <div className="project-period">
+                  {formatDate(startedAt)} ~ {formatDate(endedAt)}
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="project-info-label">
+                  링크
+                </div>
+                <div className="project-links">
+                  {githubUrl && (
+                      <a
+                          href={githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="project-link-btn github-btn"
+                      >
+                        <i className="bi bi-github"></i> GitHub
+                      </a>
+                  )}
+                  {demoUrl && (
+                      <a
+                          href={demoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="project-link-btn demo-btn"
+                      >
+                        <i className="bi bi-globe"></i> Demo
+                      </a>
+                  )}
+                </div>
               </div>
             </div>
           </div>
       )}
     </div>
+      </>
   );
 };

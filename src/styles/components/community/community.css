@@ -163,16 +163,9 @@
 
 .community-detail-comment-form button {
   flex-shrink: 0;
-  border-radius: 6px;
-  background-color: #f8f9fa;
-  color: #212529;
-  border: 1px solid #dee2e6;
+  color: #2d4053;
   padding: 0.5rem 1rem;
   font-weight: 600;
-  transition: background-color 0.2s;
-}
-.community-detail-comment-form button:hover {
-  background-color: #e2e6ea;
 }
 
 .community-detail-comment-list .community-detail-comment-item {
