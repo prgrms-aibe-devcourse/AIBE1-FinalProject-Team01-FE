@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getMyPosts, getMyLikedPosts, getMyBookmarkedPosts } from '../services/mypageApi';
+import {getMyPosts, getMyLikedPosts, getMyBookmarkedPosts, getMyFollowPosts} from '../services/mypageApi';
 import { useAuth } from '../context/AuthContext';
 
 /**
@@ -33,6 +33,12 @@ export const useMyPage = (activeTab = 'posts', options = {}) => {
             pageInfo: { page: 0, size: pageSize, totalPages: 0, totalElements: 0 },
             loading: false,
             error: null
+        },
+        follow: {
+            content: [],
+            pageInfo: { page: 0, size: pageSize, totalPages: 0, totalElements: 0 },
+            loading: false,
+            error: null
         }
     });
 
@@ -56,7 +62,8 @@ export const useMyPage = (activeTab = 'posts', options = {}) => {
             const apiFunctions = {
                 posts: getMyPosts,
                 likes: getMyLikedPosts,
-                bookmarks: getMyBookmarkedPosts
+                bookmarks: getMyBookmarkedPosts,
+                follow: getMyFollowPosts
             };
 
             response = await apiFunctions[tab](params);
