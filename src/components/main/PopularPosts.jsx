@@ -84,7 +84,7 @@ export const PopularPosts = () => {
 
         if (isLoggedIn) {
           try {
-            const recommended = await fetchRecommendedPosts(4);
+            const recommended = await fetchRecommendedPosts(9);
             if (recommended && recommended.length > 0) {
               setPosts(recommended);
               setType("recommend");
