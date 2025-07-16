@@ -152,18 +152,19 @@ export const PopularPosts = () => {
               switch (boardType) {
                 case "free":
                 case "qna":
-                case "share":
-                case "notice":
+                case "retrospect":
                   path = `/community/${boardType}/${boardId}`;
                   break;
-                case "gathering":
+                case "gather":
                 case "market":
+                case "match":
                   path = `/together/${boardType}/${boardId}`;
                   break;
                 case "review":
                 case "news":
                   path = `/info/${boardType}/${boardId}`;
                   break;
+                case "project_hub":
                 case "hub":
                   path = `/hub/${boardId}`;
                   break;

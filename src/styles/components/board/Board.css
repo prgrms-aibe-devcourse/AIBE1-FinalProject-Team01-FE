@@ -67,7 +67,7 @@
 }
 
 /* Together Labels */
-.label-STUDY {
+.label-STUDY, .label-GATHER {
   background-color: #e7f3ff;
   color: #007bff;
 }
@@ -75,7 +75,7 @@
   background-color: #f0eaff;
   color: #6f42c1;
 }
-.label-COFFEE_CHAT {
+.label-COFFEE_CHAT, .label-MATCH {
   background-color: #fff8e1;
   color: #e65100;
 }

@@ -141,6 +141,7 @@ export const BoardPostHeader = ({
                 show={showModal}
                 onHide={() => setShowModal(false)}
                 nickname={user?.nickname}
+                currentUser = {currentUser}
             />
         </div>
     );

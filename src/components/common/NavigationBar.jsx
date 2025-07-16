@@ -7,7 +7,6 @@ import AlarmDropdown from "./AlarmDropdown";
 import { useAlarms } from "../../hooks/useAlarms";
 import "../../styles/components/common/NavigationBar.css";
 
-
 export const NavigationBar = ({ onlyLogo }) => {
   const navigate = useNavigate();
   const { isLoggedIn, logout, user } = useAuth();
@@ -41,6 +40,36 @@ export const NavigationBar = ({ onlyLogo }) => {
     setShowAlarms(!showAlarms);
     if (!showAlarms) {
       fetchAlarms(); // 열 때마다 새로고침
+    }
+  };
+
+  const BOARD_TYPE_MAP = {
+    // 예시: 실제 서비스에서는 postId로 boardType을 조회해야 함
+    // 1: 'free',
+    // 2: 'qna',
+    // 3: 'retrospect',
+  };
+
+  const handleAlarmClick = (alarm) => {
+    if (alarm.type === "DIRECT_MESSAGE" && alarm.metaData) {
+      // DM 채팅방으로 이동 (roomId, messageId)
+      navigate("/dm", {
+        state: {
+          roomId: alarm.metaData.roomId,
+          messageId: alarm.metaData.messageId,
+        },
+      });
+    } else if (
+      (alarm.type === "COMMENT" || alarm.type === "REPLY") &&
+      alarm.metaData
+    ) {
+      // 게시글/댓글로 이동
+      // postId만 있을 때 boardType을 알 수 없으므로, 임시로 FREE가 아닌 boardType 매핑 시도
+      const postId = alarm.metaData.postId;
+      let boardType = BOARD_TYPE_MAP[postId] || "free"; // 실제로는 API로 조회 필요
+      navigate(`/community/${boardType}/${postId}`, {
+        state: { commentId: alarm.metaData.commentId },
+      });
     }
   };
 
@@ -94,6 +123,7 @@ export const NavigationBar = ({ onlyLogo }) => {
                       alarms={alarms}
                       onMarkAllRead={handleMarkAllRead}
                       onMarkAsRead={handleMarkAsRead}
+                      onAlarmClick={handleAlarmClick}
                     />
                   </div>
                   <ChatDots
