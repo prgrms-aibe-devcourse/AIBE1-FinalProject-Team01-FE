@@ -94,6 +94,10 @@ const ProfileSetupPage = () => {
           topics: backendTopics,
         });
 
+        setTimeout(async () => {
+          await refreshUserInfo();
+        }, 500);
+
         await refreshUserInfo();
         console.log("OAuth 프로필 완성");
       } else {
