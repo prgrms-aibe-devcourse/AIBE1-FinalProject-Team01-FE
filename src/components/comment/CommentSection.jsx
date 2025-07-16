@@ -125,21 +125,34 @@ const CommentSection = ({ postId, comments: initialComments = [] }) => {
       <div className="community-detail-comments">
         {/* 댓글 작성 폼 */}
         <form className="community-detail-comment-form" onSubmit={handleAdd}>
-          <div className="d-flex gap-2">
-            <input
-                type="text"
-                className="form-control"
+          <div className="comment-form-simple">
+            <textarea
+                className="comment-form-textarea-simple"
                 value={value}
-                onChange={onChange}
-                placeholder="댓글을 작성해주세요"
+                onChange={(e) => {
+                  onChange(e);
+                  // 자동 높이 조절
+                  e.target.style.height = 'auto';
+                  e.target.style.height = Math.min(e.target.scrollHeight, 200) + 'px';
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    if (value.trim() && !submitLoading) {
+                      handleAdd(e);
+                    }
+                  }
+                }}
+                placeholder="댓글을 작성하세요 (Shift + Enter로 줄바꿈)"
                 disabled={submitLoading}
+                rows={1}
             />
             <button
                 type="submit"
-                className="btn btn-primary"
+                className="comment-form-submit-simple"
                 disabled={submitLoading || !value.trim()}
             >
-              {submitLoading ? '작성 중...' : '댓글 쓰기'}
+              {submitLoading ? '작성 중' : '댓글 작성'}
             </button>
           </div>
         </form>

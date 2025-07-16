@@ -1,18 +1,22 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Modal, Button, Spinner, Image } from "react-bootstrap";
-import { followUser, unfollowUserApi, getModalInfo } from "../../services/followApi";
+import {
+  followUser,
+  unfollowUserApi,
+  getModalInfo,
+} from "../../services/followApi";
+import { createDMRoom } from "../../services/dmApi";
+import { useNavigate } from "react-router-dom";
 import defaultImage from "../../assets/masseuki.png";
 
-export default function UserInfoModal({
-  show,
-  onHide,
-  nickname,
-}) {
+export default function UserInfoModal({ show, onHide, nickname }) {
+  const navigate = useNavigate();
   const [modalInfo, setModalInfo] = useState(null);
   const [loadingInfo, setLoadingInfo] = useState(false);
   const [actioning, setActioning] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [creatingChat, setCreatingChat] = useState(false);
 
   useEffect(() => {
     if (!show || !nickname) return;
@@ -42,6 +46,20 @@ export default function UserInfoModal({
       console.error("팔로우 토글 실패:", err);
     } finally {
       setActioning(false);
+    }
+  };
+
+  const handleStartChat = async () => {
+    if (!modalInfo?.userId) return;
+    setCreatingChat(true);
+    try {
+      const newRoom = await createDMRoom(modalInfo.userId);
+      onHide(); // 모달 닫기
+      navigate("/dm"); // DM 페이지로 이동
+    } catch (err) {
+      console.error("채팅방 생성 실패:", err);
+    } finally {
+      setCreatingChat(false);
     }
   };
 
@@ -77,12 +95,24 @@ export default function UserInfoModal({
           onClick={handleToggle}
           disabled={actioning || loadingInfo}
         >
-          {actioning
-            ? <Spinner as="span" animation="border" size="sm"/>
-            : isFollowing
-              ? "언팔로우"
-              : "팔로우"
-          }
+          {actioning ? (
+            <Spinner as="span" animation="border" size="sm" />
+          ) : isFollowing ? (
+            "언팔로우"
+          ) : (
+            "팔로우"
+          )}
+        </Button>
+        <Button
+          variant="primary"
+          onClick={handleStartChat}
+          disabled={loadingInfo || creatingChat}
+        >
+          {creatingChat ? (
+            <Spinner as="span" animation="border" size="sm" />
+          ) : (
+            "채팅 시작"
+          )}
         </Button>
       </Modal.Footer>
     </Modal>
