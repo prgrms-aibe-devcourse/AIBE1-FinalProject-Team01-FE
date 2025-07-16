@@ -423,6 +423,7 @@ const CommentItem = (props) => {
         show={showModal}
         onHide={() => setShowModal(false)}
         nickname={nickname}
+        currentUser={currentUser}
       />
       </div>
   );
