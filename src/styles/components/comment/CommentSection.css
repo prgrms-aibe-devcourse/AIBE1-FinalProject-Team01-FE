@@ -1,3 +1,397 @@
+/* 댓글 작성 폼 스타일 - 심플 버전 */
+.community-detail-comment-form {
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.comment-form-simple {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.comment-form-textarea-simple {
+  width: 100%;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  line-height: 1.5;
+  resize: none;
+  min-height: 45px;
+  max-height: 200px;
+  overflow-y: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background: #ffffff;
+  color: #212529;
+  box-sizing: border-box;
+}
+
+.comment-form-textarea-simple:focus {
+  outline: none;
+  border-color: #2d4053;
+  box-shadow: 0 0 0 2px rgba(45, 64, 83, 0.1);
+}
+
+.comment-form-textarea-simple:disabled {
+  background: #f8f9fa;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+.comment-form-submit-simple {
+  background: transparent;
+  color: #2d4053;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  align-self: flex-end;
+  white-space: nowrap;
+  outline: none !important;
+}
+
+.comment-form-submit-simple:hover:not(:disabled) {
+  background: #2d4053;
+  color: #ffffff;
+}
+
+.comment-form-submit-simple:focus {
+  outline: none !important;
+}
+
+.comment-form-submit-simple:active:not(:disabled) {
+  background: #2d4053;
+  color: #ffffff;
+}
+
+.comment-form-submit-simple:disabled {
+  background: transparent;
+  color: #adb5bd;
+  border-color: #adb5bd;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .comment-form-simple {
+    gap: 0.5rem;
+  }
+  
+  .comment-form-textarea-simple {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+    max-height: 150px;
+  }
+  
+  .comment-form-submit-simple {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    align-self: stretch;
+  }
+}
+
+/* 답글 입력 폼 스타일 */
+.reply-form-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+}
+
+.reply-form-textarea {
+  width: 100%;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  line-height: 1.4;
+  resize: none;
+  min-height: 38px;
+  max-height: 150px;
+  overflow-y: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background: #ffffff;
+  color: #212529;
+  box-sizing: border-box;
+}
+
+.reply-form-textarea:focus {
+  outline: none;
+  border-color: #2d4053;
+  box-shadow: 0 0 0 2px rgba(45, 64, 83, 0.1);
+}
+
+.reply-form-textarea:disabled {
+  background: #f8f9fa;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+.reply-form-submit {
+  background: transparent;
+  color: #2d4053;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  align-self: flex-end;
+  white-space: nowrap;
+  outline: none !important;
+}
+
+.reply-form-submit:hover:not(:disabled) {
+  background: #2d4053;
+  color: #ffffff;
+}
+
+.reply-form-submit:focus {
+  outline: none !important;
+}
+
+.reply-form-submit:active:not(:disabled) {
+  background: #2d4053;
+  color: #ffffff;
+}
+
+.reply-form-submit:disabled {
+  background: transparent;
+  color: #adb5bd;
+  border-color: #adb5bd;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 수정 폼 스타일 */
+.edit-form-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.edit-form-textarea {
+  width: 100%;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  line-height: 1.4;
+  resize: none;
+  min-height: 38px;
+  max-height: 150px;
+  overflow-y: hidden;
+  transition: border-color 0.2s ease;
+  background: #ffffff;
+  color: #212529;
+  box-sizing: border-box;
+}
+
+.edit-form-textarea:focus {
+  outline: none;
+  border-color: #2d4053;
+  box-shadow: 0 0 0 2px rgba(45, 64, 83, 0.1);
+}
+
+.edit-form-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-self: flex-end;
+}
+
+.edit-form-submit {
+  background: transparent;
+  color: #2d4053;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+  outline: none !important;
+}
+
+.edit-form-submit:hover:not(:disabled) {
+  background: #2d4053;
+  color: #ffffff;
+}
+
+.edit-form-submit:focus {
+  outline: none !important;
+}
+
+.edit-form-submit:active:not(:disabled) {
+  background: #2d4053;
+  color: #ffffff;
+}
+
+.edit-form-cancel {
+  background: transparent;
+  color: #6c757d;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+  outline: none !important;
+}
+
+.edit-form-cancel:hover:not(:disabled) {
+  background: #6c757d;
+  color: #ffffff;
+}
+
+.edit-form-cancel:focus {
+  outline: none !important;
+}
+
+.edit-form-cancel:active:not(:disabled) {
+  background: #6c757d;
+  color: #ffffff;
+}
+
+/* 댓글 텍스트 스타일 */
+.comment-text {
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+/* 댓글 액션 버튼 스타일 */
+.comment-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+
+.comment-actions-left,
+.comment-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.comment-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem !important;
+  background: transparent;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6c757d;
+  outline: none !important;
+}
+
+.comment-action-btn:hover {
+  background: #f8f9fa;
+  transform: translateY(-1px);
+}
+
+.comment-action-btn i {
+  font-size: 0.95rem;
+}
+
+.comment-action-btn span {
+  font-size: 0.85rem;
+}
+
+/* 좋아요 버튼 */
+.comment-like-btn:hover {
+  background: #ffe6e6;
+  color: #dc3545;
+}
+
+.comment-like-btn .bi-heart-fill {
+  color: #dc3545;
+}
+
+/* 답글 버튼 */
+.comment-reply-btn:hover {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+/* 수정 버튼 */
+.comment-edit-btn:hover {
+  background: #fff3cd;
+  color: #856404;
+}
+
+/* 삭제 버튼 */
+.comment-delete-btn:hover {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* 답글 보기/숨기기 버튼 */
+.comment-toggle-btn:hover {
+  background: #e8f5e8;
+  color: #198754;
+}
+
+.comment-toggle-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.comment-toggle-btn:disabled:hover {
+  background: transparent;
+  color: #6c757d;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .comment-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .comment-actions-left,
+  .comment-actions-right {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  
+  .comment-action-btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .comment-action-btn i {
+    font-size: 0.85rem;
+  }
+  
+  .comment-action-btn span {
+    font-size: 0.8rem;
+  }
+}
+
 /* 미니멀한 더보기 버튼 스타일 */
 .btn-load-more {
     position: relative;

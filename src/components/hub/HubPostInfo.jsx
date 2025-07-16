@@ -153,49 +153,61 @@ export const HubPostInfo = ({ post }) => {
       </div>
       <hr />
       {!post.isBlinded && (
-          <div className="row g-3 bg-light">
-            <div className="col-md-6">
-              <p>
-                <strong>팀원:</strong>
-              </p>
-              <ul>
-                {projectMembers && projectMembers.length > 0 ? (
-                    projectMembers.map((member, i) => (
-                        <li key={i}>
-                          {typeof member === 'string' ? member : `${member.name}${member.role ? ` - ${member.role}` : ''}`}
-                        </li>
-                    ))
-                ) : (
-                    <li>-</li>
-                )}
-              </ul>
-            </div>
-            <div className="col-md-6">
-              <p>
-                <strong>기간:</strong> {formatDate(startedAt)} ~ {formatDate(endedAt)}
-              </p>
-              <div className="d-flex flex-wrap gap-2"></div>
-              <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                {githubUrl && (
-                    <a
-                        href={githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-outline-dark"
-                    >
-                      <i className="bi bi-github"></i> GitHub
-                    </a>
-                )}
-                {demoUrl && (
-                    <a
-                        href={demoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-primary"
-                    >
-                      <i className="bi bi-globe"></i> Demo
-                    </a>
-                )}
+          <div className="project-info-section">
+            <div className="row">
+              {/* 팀원 - 전체 너비 */}
+              <div className="col-12">
+                <div className="project-info-label">
+                  팀원
+                </div>
+                <ul className="project-members-list">
+                  {projectMembers && projectMembers.length > 0 ? (
+                      projectMembers.map((member, i) => (
+                          <li key={i} className="project-member-item">
+                            {typeof member === 'string' ? member : `${member.name}${member.role ? ` - ${member.role}` : ''}`}
+                          </li>
+                      ))
+                  ) : (
+                      <li className="project-member-item">정보 없음</li>
+                  )}
+                </ul>
+              </div>
+              
+              {/* 기간과 링크 - 좌우 분할 */}
+              <div className="col-md-6">
+                <div className="project-info-label">
+                  기간
+                </div>
+                <div className="project-period">
+                  {formatDate(startedAt)} ~ {formatDate(endedAt)}
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="project-info-label">
+                  링크
+                </div>
+                <div className="project-links">
+                  {githubUrl && (
+                      <a
+                          href={githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="project-link-btn github-btn"
+                      >
+                        <i className="bi bi-github"></i> GitHub
+                      </a>
+                  )}
+                  {demoUrl && (
+                      <a
+                          href={demoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="project-link-btn demo-btn"
+                      >
+                        <i className="bi bi-globe"></i> Demo
+                      </a>
+                  )}
+                </div>
               </div>
             </div>
           </div>
