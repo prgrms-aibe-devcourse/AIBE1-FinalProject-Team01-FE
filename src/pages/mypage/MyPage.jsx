@@ -32,7 +32,8 @@ const MyPage = () => {
     const [cachedProfileData, setCachedProfileData] = useState(null);
     const location = useLocation();
 
-    const profileData = {
+    // 기본 프로필 데이터 생성
+    const currentProfileData = cachedProfileData || {
         name: user.name || '사용자',
         email: user.email || '',
         imageUrl: user.avatar || masseukiImg,
@@ -40,7 +41,14 @@ const MyPage = () => {
         devcourseName: user.devcourseTrack || '',
         devcourseBatch: user.devcourseBatch || '',
         topics: user.topics || [],
-        providerType: user.providerType || 'LOCAL'  // 추가 필요
+        providerType: user.providerType || 'LOCAL'
+    };
+
+    const profileData = {
+        ...currentProfileData,
+        imageUrl: currentProfileData.imageUrl && currentProfileData.imageUrl.startsWith('blob:') 
+            ? masseukiImg 
+            : currentProfileData.imageUrl
     };
 
     const handleStudentVerification = () => {
@@ -87,7 +95,16 @@ const MyPage = () => {
 
     const handleSave = async (updatedData) => {
         setEditMode(false);
-        setCachedProfileData(updatedData); // 업데이트된 데이터 캐시
+        
+        const cleanedData = {
+            ...updatedData,
+            imageUrl: updatedData.imageUrl && updatedData.imageUrl.startsWith('blob:') 
+                ? currentProfileData.imageUrl
+                : updatedData.imageUrl
+        };
+        
+        setCachedProfileData(cleanedData);
+        
         try {
             await refreshUserInfo();
             alert("저장되었습니다.");
@@ -166,7 +183,7 @@ const MyPage = () => {
             />
         ) : (
             <ProfileSummary
-                profile={profileData}  // 현재 user 데이터 전달
+                profile={profileData}  // ⭐ 정리된 profileData 전달
                 onEdit={handleEdit}
                 onChangePassword={() => handleMenuChange("changePassword")}
                 onStudentVerification={handleStudentVerification}
@@ -209,7 +226,7 @@ const MyPage = () => {
             />
         ), // 북마크
         withdraw: <WithdrawPage
-            profile={profileData}
+            profile={profileData}  // ⭐ 정리된 profileData 전달
         />, // 회원 탈퇴
     };
 
