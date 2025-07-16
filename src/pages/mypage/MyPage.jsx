@@ -107,10 +107,8 @@ const MyPage = () => {
         
         try {
             await refreshUserInfo();
-            alert("저장되었습니다.");
         } catch (error) {
             console.error("사용자 정보 새로고침 실패:", error);
-            alert("저장되었습니다.");
         }
     };
 
