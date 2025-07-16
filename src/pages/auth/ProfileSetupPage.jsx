@@ -16,7 +16,7 @@ const ProfileSetupPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const signupData = location.state;
-  const { login } = useAuth();
+  const { login, refreshUserInfo } = useAuth();
 
   useEffect(() => {
     const isOAuthFlow = location.pathname === "/oauth/profile-complete";
@@ -54,6 +54,8 @@ const ProfileSetupPage = () => {
           nickname: nickname,
           topics: backendTopics,
         });
+
+        await refreshUserInfo();
         console.log("OAuth 프로필 완성");
       } else {
         // 로컬 회원가입
@@ -72,6 +74,8 @@ const ProfileSetupPage = () => {
           email: signupData.email,
           password: signupData.password,
         });
+
+        await refreshUserInfo();
         console.log("로컬 회원가입 및 자동 로그인 완료");
       }
 
