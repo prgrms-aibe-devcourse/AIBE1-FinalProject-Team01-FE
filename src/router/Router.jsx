@@ -87,6 +87,31 @@ const ProtectedRoute = ({ children }) => {
     return children;
 };
 
+const ProfileCompleteGuard = ({ children }) => {
+    const { isLoggedIn, user, loading } = useAuth();
+
+    if (loading) {
+        return (
+            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: 300 }}>
+                <Spinner animation="border" role="status" variant="primary" style={{ width: "3rem", height: "3rem" }}>
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            </div>
+        );
+    }
+
+    if (!isLoggedIn) {
+        return <Navigate to="/login" replace />;
+    }
+
+    if (!user?.isProfileCompleted) {
+        alert('프로필 완성후 이용 가능 합니다');
+        return <Navigate to="/oauth/profile-complete" replace />;
+    }
+
+    return children;
+};
+
 export function AppRouter() {
     return (
         <Suspense fallback={
@@ -96,37 +121,159 @@ export function AppRouter() {
         </Spinner>
         </div>}>
             <Routes>
-                <Route path="/" element={<MainPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/signup/profile" element={<ProfileSetupPage />} />
                 <Route path="/find-account" element={<FindPasswordPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} /> 
-
-                <Route path="/community" element={<ProtectedRoute><Navigate to="/community/free" replace /></ProtectedRoute>} />
-                <Route path="/community/:boardType" element={<ProtectedRoute><CommunityPage /></ProtectedRoute>} />
-                <Route path="/community/:boardType/write" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
-                <Route path="/community/:boardType/:communityId" element={<ProtectedRoute><CommunityBoardDetailPage /></ProtectedRoute>} />
-                <Route path="/community/:boardType/:communityId/edit" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
-                <Route path="/together" element={<StudentRoute><Navigate to="/together/gathering" replace /></StudentRoute>} />
-                <Route path="/together/:boardType" element={<StudentRoute><TogetherPage /></StudentRoute>} />
-                <Route path="/together/:boardType/:postId" element={<StudentRoute><TogetherBoardDetailPage /></StudentRoute>} />
-                <Route path="/together/:boardType/write" element={<StudentRoute><TogetherWritePage /></StudentRoute>} />
-                <Route path="/together/:boardType/:postId/edit" element={<StudentRoute><TogetherWritePage /></StudentRoute>} />
-                <Route path="/info" element={<Navigate to="/info/review" replace />} />
-                <Route path="/info/:boardType" element={<InfoPage />} />
-                <Route path="/info/:boardType/:itId" element={<InfoBoardDetailPage />} />
-                <Route path="/info/:boardType/write" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />
-                <Route path="/info/:boardType/:itId/edit" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />
-                <Route path="/hub" element={<HubPage />} />
-                <Route path="/hub/:projectId" element={<HubDetailPage />} />
-                <Route path="/hub/:projectId/edit" element={<ProtectedRoute><HubWritePage /></ProtectedRoute>} />
-                <Route path="/hub/write" element={<ProtectedRoute><HubWritePage /></ProtectedRoute>} />
-
-                <Route path="/dm" element={<ProtectedRoute><DMPage /></ProtectedRoute>} />
-                <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
                 <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
                 <Route path="/oauth/profile-complete" element={<ProfileSetupPage />} />
+
+                <Route path="/" element={
+                    <ProfileCompleteGuard>
+                        <MainPage />
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/community" element={
+                    <ProfileCompleteGuard>
+                        <ProtectedRoute>
+                            <Navigate to="/community/free" replace />
+                        </ProtectedRoute>
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/community/:boardType" element={
+                    <ProfileCompleteGuard>
+                        <ProtectedRoute>
+                            <CommunityPage />
+                        </ProtectedRoute>
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/community/:boardType/write" element={
+                    <ProfileCompleteGuard>
+                        <ProtectedRoute>
+                            <CommunityWritePage />
+                        </ProtectedRoute>
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/community/:boardType/:communityId" element={
+                    <ProfileCompleteGuard>
+                        <ProtectedRoute>
+                            <CommunityBoardDetailPage />
+                        </ProtectedRoute>
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/community/:boardType/:communityId/edit" element={
+                    <ProfileCompleteGuard>
+                        <ProtectedRoute>
+                            <CommunityWritePage />
+                        </ProtectedRoute>
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/together" element={
+                    <ProfileCompleteGuard>
+                        <StudentRoute>
+                            <Navigate to="/together/gathering" replace />
+                        </StudentRoute>
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/together/:boardType" element={
+                    <ProfileCompleteGuard>
+                        <StudentRoute>
+                            <TogetherPage />
+                        </StudentRoute>
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/together/:boardType/:postId" element={
+                    <ProfileCompleteGuard>
+                        <StudentRoute>
+                            <TogetherBoardDetailPage />
+                        </StudentRoute>
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/together/:boardType/write" element={
+                    <ProfileCompleteGuard>
+                        <StudentRoute>
+                            <TogetherWritePage />
+                        </StudentRoute>
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/together/:boardType/:postId/edit" element={
+                    <ProfileCompleteGuard>
+                        <StudentRoute>
+                            <TogetherWritePage />
+                        </StudentRoute>
+                    </ProfileCompleteGuard>
+                } />
+
+                <Route path="/info" element={
+                    <ProfileCompleteGuard>
+                        <Navigate to="/info/review" replace />
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/info/:boardType" element={
+                    <ProfileCompleteGuard>
+                        <InfoPage />
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/info/:boardType/:itId" element={
+                    <ProfileCompleteGuard>
+                        <InfoBoardDetailPage />
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/info/:boardType/write" element={
+                    <ProfileCompleteGuard>
+                        <ProtectedRoute>
+                            <InfoWritePage />
+                        </ProtectedRoute>
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/info/:boardType/:itId/edit" element={
+                    <ProfileCompleteGuard>
+                        <ProtectedRoute>
+                            <InfoWritePage />
+                        </ProtectedRoute>
+                    </ProfileCompleteGuard>
+                } />
+
+                <Route path="/hub" element={
+                    <ProfileCompleteGuard>
+                        <HubPage />
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/hub/:projectId" element={
+                    <ProfileCompleteGuard>
+                        <HubDetailPage />
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/hub/:projectId/edit" element={
+                    <ProfileCompleteGuard>
+                        <ProtectedRoute>
+                            <HubWritePage />
+                        </ProtectedRoute>
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/hub/write" element={
+                    <ProfileCompleteGuard>
+                        <ProtectedRoute>
+                            <HubWritePage />
+                        </ProtectedRoute>
+                    </ProfileCompleteGuard>
+                } />
+
+                <Route path="/dm" element={
+                    <ProfileCompleteGuard>
+                        <ProtectedRoute>
+                            <DMPage />
+                        </ProtectedRoute>
+                    </ProfileCompleteGuard>
+                } />
+                <Route path="/mypage" element={
+                    <ProfileCompleteGuard>
+                        <ProtectedRoute>
+                            <MyPage />
+                        </ProtectedRoute>
+                    </ProfileCompleteGuard>
+                } />
             </Routes>
         </Suspense>
     );
