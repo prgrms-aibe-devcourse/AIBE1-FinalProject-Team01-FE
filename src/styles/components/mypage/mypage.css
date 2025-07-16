@@ -213,8 +213,11 @@
   object-fit: cover;
   border-width: 3px;
   border-color: #e9ecef;
+  border-radius: 50%;
   margin-left: 2rem;
   margin-top: 2rem;
+  flex-shrink: 0;
+  aspect-ratio: 1/1;
 }
 
 .profile-summary-content {
