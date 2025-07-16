@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import apiClient from "../services/api.js";
 import { logoutUser } from "../services/authApi.js";
+import masseukiImg from "../assets/masseuki.png";
 
 const AuthContext = createContext();
 
@@ -13,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     id: responseData.userId,
     name: responseData.name,
     email: responseData.email,
-    avatar: responseData.imageUrl || "/assets/user-icon.png",
+    avatar: responseData.imageUrl || masseukiImg,
     nickname: responseData.nickname,
     devcourseTrack: responseData.devcourseName,
     devcourseBatch: responseData.devcourseBatch,

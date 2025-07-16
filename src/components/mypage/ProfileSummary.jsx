@@ -4,6 +4,7 @@ import "../../styles/components/mypage/mypage.css";
 import { TOPICS } from "../../constants/topics";
 import { convertTrackFromApi } from "../../constants/devcourse";
 import { getProviderName } from "../../utils/provider";
+import masseukiImg from "../../assets/masseuki.png";
 
 
 /**
@@ -130,7 +131,7 @@ export const ProfileSummary = ({
           <div className="profile-summary-card-container p-3 rounded">
             <div className="d-flex align-items-start">
               <img
-                src={profile.imageUrl || "https://via.placeholder.com/96x96?text=User"}
+                src={profile.imageUrl || masseukiImg}
                 alt="프로필"
                 className="profile-summary-image rounded-circle border"
               />

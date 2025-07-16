@@ -11,6 +11,7 @@ import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { getPostDetailUrl } from "../../utils/board";
 import ChangePasswordPage from "../../components/mypage/ChangePasswordPage.jsx";
 import { StudentVerificationForm } from "../../components/mypage/StudentVerificationForm";
+import masseukiImg from "../../assets/masseuki.png";
 import {FollowList} from "../../components/mypage/FollowList.jsx";
 
 /**
@@ -33,15 +34,23 @@ const MyPage = () => {
     const [cachedProfileData, setCachedProfileData] = useState(null);
     const location = useLocation();
 
-    const profileData = {
+    // 기본 프로필 데이터 생성
+    const currentProfileData = cachedProfileData || {
         name: user.name || '사용자',
         email: user.email || '',
-        imageUrl: user.avatar || '/assets/user-icon.png',
+        imageUrl: user.avatar || masseukiImg,
         nickname: user.nickname || '',
         devcourseName: user.devcourseTrack || '',
         devcourseBatch: user.devcourseBatch || '',
         topics: user.topics || [],
-        providerType: user.providerType || 'LOCAL'  // 추가 필요
+        providerType: user.providerType || 'LOCAL'
+    };
+
+    const profileData = {
+        ...currentProfileData,
+        imageUrl: currentProfileData.imageUrl && currentProfileData.imageUrl.startsWith('blob:') 
+            ? masseukiImg 
+            : currentProfileData.imageUrl
     };
 
     const handleStudentVerification = () => {
@@ -88,13 +97,20 @@ const MyPage = () => {
 
     const handleSave = async (updatedData) => {
         setEditMode(false);
-        setCachedProfileData(updatedData); // 업데이트된 데이터 캐시
+        
+        const cleanedData = {
+            ...updatedData,
+            imageUrl: updatedData.imageUrl && updatedData.imageUrl.startsWith('blob:') 
+                ? currentProfileData.imageUrl
+                : updatedData.imageUrl
+        };
+        
+        setCachedProfileData(cleanedData);
+        
         try {
             await refreshUserInfo();
-            alert("저장되었습니다.");
         } catch (error) {
             console.error("사용자 정보 새로고침 실패:", error);
-            alert("저장되었습니다.");
         }
     };
 
@@ -167,7 +183,7 @@ const MyPage = () => {
             />
         ) : (
             <ProfileSummary
-                profile={profileData}  // 현재 user 데이터 전달
+                profile={profileData}  // ⭐ 정리된 profileData 전달
                 onEdit={handleEdit}
                 onChangePassword={() => handleMenuChange("changePassword")}
                 onStudentVerification={handleStudentVerification}
@@ -228,7 +244,7 @@ const MyPage = () => {
             />
         ),
         withdraw: <WithdrawPage
-            profile={profileData}
+            profile={profileData}  // ⭐ 정리된 profileData 전달
         />, // 회원 탈퇴
     };
 

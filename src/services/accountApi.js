@@ -1,5 +1,7 @@
 // src/services/accountApi.js
 import apiClient from "./api.js";
+import { uploadProfileImage as uploadImage } from "./imageApi.js";
+
 
 /**
  * 계정 관리 관련 API 서비스
@@ -72,6 +74,23 @@ export const updateMyTopics = async (data) => {
 };
 
 /**
+ * 프로필 이미지 업로드 (imageApi 활용)
+ * @param {File} file - 업로드할 파일
+ * @returns {Promise<string>} 업로드된 이미지 URL
+ */
+export const uploadProfileImage = async (file) => {
+    try {
+        // imageApi의 uploadProfileImage 함수 재사용
+        const imageUrl = await uploadImage(file, "profile-images");
+        return { success: true, url: imageUrl };
+    } catch (error) {
+        console.error('프로필 이미지 업로드 실패:', error);
+        throw error;
+    }
+};
+
+
+/**
  * 회원 탈퇴
  * @param {Object} data - UserDeleteRequestDTO
  * @param {string} data.currentPassword - 현재 비밀번호
@@ -104,5 +123,6 @@ export const accountApi = {
     changePassword,
     updateMyTopics,
     deleteAccount,
-    checkNicknameDuplicate
+    checkNicknameDuplicate,
+    uploadProfileImage
 };
