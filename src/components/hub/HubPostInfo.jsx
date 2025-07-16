@@ -6,6 +6,7 @@ import { deletePost } from "../../services/hubApi";
 import "../../styles/components/hub/hub.css";
 import {formatDate} from "../../utils/date.js";
 import {BOARD_TYPE_LABEL} from "../../pages/community/constants.js";
+import {BoardPostHeader} from "../board/BoardPostHeader.jsx";
 
 /**
  * @typedef {Object} HubPostInfoProps
@@ -94,64 +95,16 @@ export const HubPostInfo = ({ post }) => {
   } = post;
 
   return (
+      <>
+        <BoardPostHeader
+            post={post}
+            boardType={"PROJECT_HUB"}
+            onEdit={canEditOrDelete ? handleEdit : undefined}
+            onDelete={canEditOrDelete ? handleDelete : undefined}
+            categoryLabel={"PROJECT_HUB"}
+            isDeleting={isDeleting}
+        />
     <div className="p-1 mt-3">
-      <p className="post-category-label">
-        PROJECT
-      </p>
-      <div className="d-flex justify-content-between align-items-start mb-3">
-        <h1 className="post-info-title mb-0">{title}</h1>
-        {canEditOrDelete && (
-          <div className="hub-post-actions">
-            {!post.isBlinded && (
-                <button
-                    className="btn btn-sm btn-link text-muted p-1"
-                    onClick={handleEdit}
-                    title="수정"
-                >
-                  <i className="bi bi-pencil-square fs-5"></i>
-                </button>
-            )}
-            <button 
-              className="btn btn-sm btn-link text-muted p-1"
-              onClick={handleDelete}
-              disabled={isDeleting}
-              title={isDeleting ? "삭제 중..." : "삭제"}
-            >
-              {isDeleting ? (
-                <div className="spinner-border spinner-border-sm" role="status">
-                  <span className="visually-hidden">삭제 중...</span>
-                </div>
-              ) : (
-                <i className="bi bi-trash fs-5"></i>
-              )}
-            </button>
-          </div>
-        )}
-      </div>
-      <div className="d-flex justify-content-between align-items-center mb-2">
-        <div className="d-flex align-items-center gap-2">
-          {user?.imageUrl && (
-            <img
-              src={user.imageUrl}
-              alt={user.nickname}
-              className="rounded-circle"
-              width="32"
-              height="32"
-            />
-          )}
-          <span className="author-name fw-bold">{user?.nickname}</span>
-          {/* 과정 명만 노출, 기수는 민감하기에 노출안함 */}
-          {courseName && <span className="author-batch">{courseName}</span>}
-        </div>
-        <div className="d-flex align-items-center gap-2 text-muted small">
-          <span>
-            {createdAt ? new Date(createdAt).toLocaleDateString() : ""}
-          </span>
-          <span className="mx-1">|</span>
-          <span>조회 {post.viewCount ?? 0}</span>
-        </div>
-      </div>
-      <hr />
       {!post.isBlinded && (
           <div className="project-info-section">
             <div className="row">
@@ -213,5 +166,6 @@ export const HubPostInfo = ({ post }) => {
           </div>
       )}
     </div>
+      </>
   );
 };

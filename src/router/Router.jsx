@@ -116,12 +116,12 @@ export function AppRouter() {
                 <Route path="/info" element={<Navigate to="/info/review" replace />} />
                 <Route path="/info/:boardType" element={<InfoPage />} />
                 <Route path="/info/:boardType/:itId" element={<InfoBoardDetailPage />} />
-                <Route path="/info/:boardType/write" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />
-                <Route path="/info/:boardType/:itId/edit" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />
+                <Route path="/info/:boardType/write" element={<StudentRoute><InfoWritePage /></StudentRoute>} />
+                <Route path="/info/:boardType/:itId/edit" element={<StudentRoute><InfoWritePage /></StudentRoute>} />
                 <Route path="/hub" element={<HubPage />} />
                 <Route path="/hub/:projectId" element={<HubDetailPage />} />
-                <Route path="/hub/:projectId/edit" element={<ProtectedRoute><HubWritePage /></ProtectedRoute>} />
-                <Route path="/hub/write" element={<ProtectedRoute><HubWritePage /></ProtectedRoute>} />
+                <Route path="/hub/:projectId/edit" element={<StudentRoute><HubWritePage /></StudentRoute>} />
+                <Route path="/hub/write" element={<StudentRoute><HubWritePage /></StudentRoute>} />
 
                 <Route path="/dm" element={<ProtectedRoute><DMPage /></ProtectedRoute>} />
                 <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
