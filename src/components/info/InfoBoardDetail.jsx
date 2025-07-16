@@ -4,6 +4,7 @@ import { BoardDetailLayout } from "../board/BoardDetailLayout";
 import { BoardPostHeader } from "../board/BoardPostHeader";
 import { PostContent } from "../common/PostContent";
 import { INFO_CATEGORY_LABELS } from "../../pages/info/constants";
+import "../../styles/components/community/community.css";
 import "../../styles/components/info/info.css";
 import { deleteInfoPost } from "../../services/infoApi.js";
 
