@@ -15,6 +15,7 @@ export const DMContainer = () => {
   const [dmRooms, setDmRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [chatPartner, setChatPartner] = useState(null);
 
   // 현재 사용자 ID (AuthContext에서 실제 userId 우선 사용, 없으면 테스트용으로 1)
   const currentUserId = user?.id || 1;
@@ -41,12 +42,13 @@ export const DMContainer = () => {
     loadDMRooms();
   }, [loadDMRooms]);
 
-  const handleChatSelect = (chatId) => {
+  const handleChatSelect = (chatId, partner) => {
     setSelectedChatId(chatId);
+    setChatPartner(partner)
   };
 
-  const handleRoomCreated = () => {
-    loadDMRooms();
+  const handleRoomCreated = async () => {
+     await loadDMRooms();
   };
 
   // 마지막 메시지 업데이트 함수
@@ -113,6 +115,7 @@ export const DMContainer = () => {
           <DMChatArea
             selectedChatId={selectedChatId}
             onMessageUpdate={handleMessageUpdate}
+            chatPartner={chatPartner}
           />
         </Col>
       </Row>

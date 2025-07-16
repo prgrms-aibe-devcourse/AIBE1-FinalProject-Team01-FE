@@ -210,9 +210,15 @@ export const DMSidebar = ({
       setShowCreateModal(false);
       setNewChatUserId("");
 
-      // 부모 컴포넌트에 방 생성 완료 알림 (방 목록 새로고침 위해)
       if (onRoomCreated) {
-        onRoomCreated();
+        await onRoomCreated();
+      }
+
+      if (onChatSelect && newRoom) {
+        const partnerInfo = {
+          nickname: `사용자 ${newChatUserId}`,
+          profileImage: null
+        };
       }
     } catch (error) {
       console.error("❌ 채팅방 생성 실패:", error);
@@ -242,7 +248,16 @@ export const DMSidebar = ({
     try {
       const room = await createDMRoom(userId);
       setShowFollowingModal(false);
-      if (onChatSelect) onChatSelect(room.id);
+
+      if (onRoomCreated) {
+        await onRoomCreated();
+      }
+
+
+      if (onChatSelect) onChatSelect(room.id, {
+        nickname: room.partnerNickname || '사용자',
+        profileImage: room.partnerProfileImage || null
+      });
     } catch (e) {
       alert("채팅방 생성 실패");
     } finally {

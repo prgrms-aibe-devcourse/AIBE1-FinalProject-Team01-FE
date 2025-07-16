@@ -36,7 +36,7 @@ import {
  * DM 채팅 영역 컴포넌트
  * @param {DMChatAreaProps} props
  */
-export const DMChatArea = ({ selectedChatId, onMessageUpdate }) => {
+export const DMChatArea = ({ selectedChatId, onMessageUpdate, chatPartner }) => {
   const { user } = useAuth();
   const {
     value: messageText,
@@ -50,7 +50,6 @@ export const DMChatArea = ({ selectedChatId, onMessageUpdate }) => {
   const messagesContainerRef = useRef(null);
   const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false);
   const [isUserScrolledUp, setIsUserScrolledUp] = useState(false);
-  const [chatPartner, setChatPartner] = useState(null);
   const [uploading, setUploading] = useState(false);
 
   // 파일명 캐시 (같은 URL에 대해 중복 요청 방지)
@@ -177,7 +176,6 @@ export const DMChatArea = ({ selectedChatId, onMessageUpdate }) => {
     } else {
       // 채팅방 선택 해제 시 상태 초기화
       setMessages([]);
-      setChatPartner(null);
       setError(null);
     }
   }, [selectedChatId, currentUserId]);
@@ -264,16 +262,6 @@ export const DMChatArea = ({ selectedChatId, onMessageUpdate }) => {
         };
       });
 
-      // 채팅 상대방 정보 설정 (첫 번째 메시지의 상대방 정보 활용)
-      if (formattedMessages.length > 0) {
-        const otherMessage = formattedMessages.find((msg) => !msg.isMe);
-        if (otherMessage) {
-          setChatPartner({
-            id: otherMessage.senderId,
-            nickname: otherMessage.senderNickname,
-          });
-        }
-      }
 
       // 해당 채팅방의 메시지만 업데이트
       setMessages((prev) => [
@@ -812,7 +800,7 @@ export const DMChatArea = ({ selectedChatId, onMessageUpdate }) => {
               {chatPartner?.nickname || "채팅 상대"}
             </div>
             <div className="dm-chat-user-status">
-              {chatPartner?.devcourse || "생성형 AI 백엔드 1기"}
+              {chatPartner?.devcourse || ""}
             </div>
           </div>
         </div>

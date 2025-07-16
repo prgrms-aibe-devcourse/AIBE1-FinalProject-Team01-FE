@@ -57,7 +57,10 @@ export const DMChatList = ({
           className={`dm-chat-item ${
             selectedChatId === chat.id ? "active" : ""
           }`}
-          onClick={() => onChatSelect(chat.id)}
+          onClick={() => onChatSelect(chat.id, {
+            nickname: chat.nickname,
+            profileImage: chat.profileImage
+          })}
         >
           <div className="dm-chat-item-content">
             <div className="dm-chat-avatar">
