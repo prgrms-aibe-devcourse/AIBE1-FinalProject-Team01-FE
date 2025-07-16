@@ -1,4 +1,5 @@
 import React from "react";
+import masseukiImg from "../../assets/masseuki.png";
 
 /**
  * @typedef {Object} UserInfoProps
@@ -19,7 +20,7 @@ export default function UserInfo({ user, className = "" }) {
     return (
         <div className={`user-info d-flex align-items-center gap-2 ${className}`}>
             <img
-                src={profileImageUrl ?? userProfileImg ?? '/default-profile.png'}
+                src={profileImageUrl ?? userProfileImg ?? masseukiImg}
                 alt="프로필"
                 className="author-img"
             />

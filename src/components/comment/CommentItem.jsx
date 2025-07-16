@@ -6,6 +6,7 @@ import ReportModal from "../common/ReportModal";
 import { submitReport } from "../../services/reportApi.js";
 import '../../styles/components/comment/CommentSection.css'
 import UserInfoModal from "../user/UserInfoModal.jsx";
+import masseukiImg from "../../assets/masseuki.png";
 
 /**
  * @typedef {Object} CommentItemProps
@@ -209,7 +210,7 @@ const CommentItem = (props) => {
       <div className={`community-detail-comment-item ${depth > 1 ? 'comment-reply' : ''}`}>
         <div className="comment-author-row">
           <img
-              src={profileImageUrl}
+              src={profileImageUrl || masseukiImg}
               alt="프로필"
               className="comment-author-img"
               style={{ cursor: 'pointer' }}

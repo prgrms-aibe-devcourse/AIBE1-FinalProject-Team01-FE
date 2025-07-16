@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
     topics: responseData.topics,
     providerType: responseData.providerType,
     role: responseData.role,
+    isProfileCompleted: responseData.isProfileCompleted, 
   });
 
   const fetchUserInfo = async () => {
