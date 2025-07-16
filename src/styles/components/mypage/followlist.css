@@ -1,0 +1,54 @@
+.follow-list-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.follow-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.follow-list-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.follow-count {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.follow-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.follow-list-loading,
+.follow-list-error {
+    text-align: center;
+    padding: 40px;
+    color: #6b7280;
+}
+
+.follow-list-error {
+    color: #ef4444;
+}
+
+.follow-list-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b7280;
+}
+
+.follow-list-empty p {
+    margin: 0;
+    font-size: 16px;
+}

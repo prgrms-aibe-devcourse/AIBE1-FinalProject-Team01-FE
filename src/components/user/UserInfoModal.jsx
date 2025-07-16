@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Modal, Button, Spinner, Image } from "react-bootstrap";
-import { followUser, unfollowUser, getModalInfo } from "../../services/followApi";
+import { followUser, unfollowUserApi, getModalInfo } from "../../services/followApi";
 import defaultImage from "../../assets/masseuki.png";
 
 export default function UserInfoModal({
@@ -33,7 +33,7 @@ export default function UserInfoModal({
     setActioning(true);
     try {
       if (isFollowing) {
-        await unfollowUser(modalInfo.userId);
+        await unfollowUserApi(modalInfo.userId);
       } else {
         await followUser(modalInfo.userId);
       }
