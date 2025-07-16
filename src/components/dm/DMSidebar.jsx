@@ -10,8 +10,13 @@ import {
 import { Search, Trash, Plus } from "react-bootstrap-icons";
 import { useInput } from "../../hooks/useInput";
 import { DMChatList } from "./DMChatList";
-import { createDMRoom, leaveDMRoom } from "../../services/dmApi";
+import {
+  createDMRoom,
+  leaveDMRoom,
+  getDMMessageSearch,
+} from "../../services/dmApi";
 import { useAuth } from "../../context/AuthContext";
+import chatDefaultImage from "../../assets/chat-default-image.png";
 
 /**
  * @typedef {Object} DMSidebarProps
@@ -44,6 +49,9 @@ export const DMSidebar = ({
   const [newChatUserId, setNewChatUserId] = useState("");
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState(null);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState(null);
+  const [isSearchMode, setIsSearchMode] = useState(false);
 
   const currentUserId = user?.id || 1;
 
@@ -60,7 +68,27 @@ export const DMSidebar = ({
         // lastMessage 처리
         let displayLastMessage = "새로운 대화를 시작해보세요";
         if (room.lastMessage && room.lastMessage.trim() !== "") {
-          displayLastMessage = room.lastMessage;
+          // JSON 형태의 파일 메시지인지 확인
+          try {
+            const parsedContent = JSON.parse(room.lastMessage);
+            if (parsedContent.fileUrl && parsedContent.fileName) {
+              // 파일 메시지인 경우 파일명과 텍스트 표시 (이모지 제거)
+              const fileExtension = parsedContent.fileName
+                .split(".")
+                .pop()
+                ?.toLowerCase();
+              const isImage = ["jpg", "jpeg", "png", "gif", "webp"].includes(
+                fileExtension
+              );
+              const filePrefix = isImage ? "이미지" : "파일";
+              displayLastMessage = `${filePrefix}: ${parsedContent.fileName}`;
+            } else {
+              displayLastMessage = room.lastMessage;
+            }
+          } catch (e) {
+            // JSON이 아닌 경우 일반 텍스트 메시지
+            displayLastMessage = room.lastMessage;
+          }
         }
 
         return {
@@ -77,6 +105,73 @@ export const DMSidebar = ({
       setChatList(formattedServerRooms);
     }
   }, [serverRooms, loading]);
+
+  // 메시지 내용 검색 핸들러
+  const handleMessageSearch = async (e) => {
+    e.preventDefault();
+    if (!searchKeyword.trim()) {
+      setSearchError(null);
+      setIsSearchMode(false);
+      setChatList(
+        serverRooms.map((room) => ({
+          id: room.id,
+          nickname: room.partnerNickname || `사용자 ${room.partnerId}`,
+          lastMessage: room.lastMessage,
+          lastMessageTime: room.sentAt || room.lastMessageTime || new Date(),
+          profileImage: room.partnerProfileImage || null,
+          unreadCount: 0,
+          otherUserId: room.partnerId,
+        }))
+      );
+      return;
+    }
+    setSearchLoading(true);
+    setSearchError(null);
+    try {
+      const res = await getDMMessageSearch({
+        keyword: searchKeyword,
+        size: 50,
+        sortDirection: "DESC",
+      });
+      const messages = res.content || [];
+      setIsSearchMode(true);
+      setChatList(
+        messages.map((msg) => ({
+          id: msg.id, // 메시지 id
+          roomId: msg.roomId,
+          nickname: msg.senderNickname,
+          lastMessage: msg.content,
+          lastMessageTime: msg.sentAt,
+          profileImage: msg.senderProfileImage || null,
+          unreadCount: 0,
+          otherUserId: msg.senderId,
+        }))
+      );
+    } catch (err) {
+      setSearchError(err.message || "메시지 검색 중 오류가 발생했습니다.");
+      setChatList([]);
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (searchKeyword === "") {
+      setIsSearchMode(false);
+      setSearchError(null);
+      setChatList(
+        serverRooms.map((room) => ({
+          id: room.id,
+          nickname: room.partnerNickname || `사용자 ${room.partnerId}`,
+          lastMessage: room.lastMessage,
+          lastMessageTime: room.sentAt || room.lastMessageTime || new Date(),
+          profileImage: room.partnerProfileImage || null,
+          unreadCount: 0,
+          otherUserId: room.partnerId,
+        }))
+      );
+    }
+  }, [searchKeyword, serverRooms]);
 
   const handleDeleteChat = async (chatId) => {
     try {
@@ -134,13 +229,20 @@ export const DMSidebar = ({
           <div className="dm-search-container">
             <div className="dm-search-wrapper">
               <Search className="dm-search-icon" size={18} />
-              <input
-                type="text"
-                className="dm-search-input"
-                placeholder="메시지를 검색해보세요"
-                value={searchKeyword}
-                onChange={onSearchChange}
-              />
+              <form
+                onSubmit={handleMessageSearch}
+                style={{ flex: 1, display: "flex", gap: 4 }}
+              >
+                <input
+                  type="text"
+                  className="dm-search-input"
+                  placeholder="메시지를 검색해보세요"
+                  value={searchKeyword}
+                  onChange={onSearchChange}
+                  disabled={searchLoading}
+                  style={{ flex: 1 }}
+                />
+              </form>
               <button
                 className="dm-create-btn"
                 onClick={() => setShowCreateModal(true)}
@@ -149,6 +251,11 @@ export const DMSidebar = ({
                 <Plus size={18} />
               </button>
             </div>
+            {searchError && (
+              <div style={{ color: "#dc3545", marginTop: 4 }}>
+                {searchError}
+              </div>
+            )}
           </div>
         </div>
 
@@ -184,6 +291,64 @@ export const DMSidebar = ({
                 </div>
               </div>
             </div>
+          ) : isSearchMode ? (
+            <ul
+              className="dm-search-message-list"
+              style={{ listStyle: "none", padding: 0, margin: 0 }}
+            >
+              {chatList.map((msg) => (
+                <li
+                  key={msg.id}
+                  className="dm-search-message-item"
+                  style={{
+                    padding: "12px 16px",
+                    borderBottom: "1px solid #f0f0f0",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                  }}
+                  onClick={() => onChatSelect && onChatSelect(msg.roomId)}
+                >
+                  <img
+                    src={msg.profileImage || chatDefaultImage}
+                    alt={msg.nickname}
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, fontSize: 15 }}>
+                      {msg.nickname}
+                    </div>
+                    <div style={{ color: "#555", fontSize: 14, marginTop: 2 }}>
+                      {msg.lastMessage}
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 12,
+                      color: "#888",
+                      minWidth: 70,
+                      textAlign: "right",
+                    }}
+                  >
+                    {msg.lastMessageTime
+                      ? new Date(msg.lastMessageTime).toLocaleString("ko-KR", {
+                          hour12: false,
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      : ""}
+                  </div>
+                </li>
+              ))}
+            </ul>
           ) : (
             <DMChatList
               chats={filteredChats}

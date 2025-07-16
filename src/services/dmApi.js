@@ -100,3 +100,40 @@ export const leaveDMRoom = async (roomId) => {
     }
   }
 };
+
+/**
+ * 채팅 메시지 검색
+ * @param {Object} params - 검색 파라미터 (keyword 필수)
+ * @param {string} params.keyword - 검색어
+ * @param {number} [params.page=0] - 페이지 번호
+ * @param {number} [params.size=10] - 페이지당 크기
+ * @param {string} [params.sortDirection] - 정렬 방법 (ASC/DESC)
+ * @param {string} [params.field] - 정렬 필드
+ * @returns {Promise<Object>} 검색 결과(메시지 목록, 페이지 정보)
+ */
+export const getDMMessageSearch = async (params) => {
+  try {
+    const { keyword, page = 0, size = 10, sortDirection, field } = params;
+    if (!keyword || !keyword.trim()) {
+      throw new Error("검색어를 입력해주세요.");
+    }
+    const queryParams = new URLSearchParams();
+    queryParams.append("keyword", keyword);
+    queryParams.append("page", page.toString());
+    queryParams.append("size", size.toString());
+    if (sortDirection) queryParams.append("sortDirection", sortDirection);
+    if (field) queryParams.append("field", field);
+    const response = await apiClient.get(
+      `/api/v1/dm/messages/search?${queryParams.toString()}`
+    );
+    return response.data;
+  } catch (error) {
+    if (error.response?.status === 401) {
+      throw new Error("로그인이 필요합니다.");
+    } else if (error.response?.status === 404) {
+      throw new Error("검색 결과가 없습니다.");
+    } else {
+      throw new Error("메시지 검색 중 오류가 발생했습니다.");
+    }
+  }
+};
