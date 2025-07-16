@@ -11,16 +11,6 @@ function AppContent() {
   const location = useLocation();
   const { isLoggedIn, user } = useAuth();
 
-  // 🔍 강제 디버깅
-  if (isLoggedIn && user) {
-    console.log('=== 사용자 정보 전체 ===');
-    console.log('user 객체:', user);
-    console.log('user.isProfileCompleted:', user.isProfileCompleted);
-    console.log('typeof:', typeof user.isProfileCompleted);
-    console.log('모든 키:', Object.keys(user));
-    console.log('========================');
-  }
-
   const hideNavOnPaths = [
     "/login",
     "/signup",
@@ -31,7 +21,6 @@ function AppContent() {
   ];
 
   if (isLoggedIn && user && user.isProfileCompleted === false) {
-    console.log('🚨 프로필 미완성으로 판단! 리다이렉트 실행');
     if (location.pathname === "/signup/profile" || location.pathname === "/oauth/profile-complete") {
       return (
         <div className="d-flex flex-column min-vh-100">
