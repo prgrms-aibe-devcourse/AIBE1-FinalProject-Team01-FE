@@ -29,6 +29,15 @@ export const MyPageSidebar = ({ activeMenu, onMenuChange }) => (
       >
         계정 관리
       </ListGroup.Item>
+      <ListGroup.Item
+          as="li"
+          action
+          active={activeMenu === "following"}
+          onClick={() => onMenuChange("following")}
+          className={`sidebar-item${activeMenu === "following" ? " active" : ""}`}
+      >
+        팔로잉 목록
+      </ListGroup.Item>
       <ListGroup.Item as="li" className="sidebar-section" disabled>
         <Activity size={18} /> 나의 활동
       </ListGroup.Item>
@@ -48,7 +57,7 @@ export const MyPageSidebar = ({ activeMenu, onMenuChange }) => (
         onClick={() => onMenuChange("likes")}
         className={`sidebar-item${activeMenu === "likes" ? " active" : ""}`}
       >
-        좋아요
+        좋아요 글
       </ListGroup.Item>
       <ListGroup.Item
         as="li"
@@ -57,7 +66,16 @@ export const MyPageSidebar = ({ activeMenu, onMenuChange }) => (
         onClick={() => onMenuChange("bookmarks")}
         className={`sidebar-item${activeMenu === "bookmarks" ? " active" : ""}`}
       >
-        북마크
+        북마크 글
+      </ListGroup.Item>
+      <ListGroup.Item
+          as="li"
+          action
+          active={activeMenu === "follow"}
+          onClick={() => onMenuChange("follow")}
+          className={`sidebar-item${activeMenu === "follow" ? " active" : ""}`}
+      >
+        팔로우 글
       </ListGroup.Item>
       <ListGroup.Item
         as="li"

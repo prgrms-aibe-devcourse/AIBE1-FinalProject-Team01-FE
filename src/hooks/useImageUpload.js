@@ -40,15 +40,28 @@ export const useImageUpload = (initialImageUrls = []) => {
   const handleUpload = useCallback(async (files) => {
     if (!files || files.length === 0) return [];
 
-    const newUrls = [];
-
     const imageFiles = Array.from(files).filter((f) =>
       f.type.startsWith("image/")
     );
 
+    if (imageFiles.length === 0) {
+      console.warn("업로드할 이미지 파일이 없습니다.");
+      return [];
+    }
+
     try {
       const urls = await Promise.all(
-        imageFiles.map((file) => uploadPostImage(file))
+        imageFiles.map((file) => {
+          if (!file.name) {
+            const timestamp = new Date().getTime();
+            const extension = file.type.split('/')[1] || 'png';
+            Object.defineProperty(file, 'name', {
+              writable: true,
+              value: `clipboard-image-${timestamp}.${extension}`
+            });
+          }
+          return uploadPostImage(file);
+        })
       );
       setImageUrls((prev) => [...prev, ...urls]);
       return urls;

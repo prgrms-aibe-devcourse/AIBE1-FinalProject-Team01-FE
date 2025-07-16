@@ -1,7 +1,27 @@
 /* Basic editor styles */
+.custom-editor {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-editor .toolbar-container {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+  border-bottom: 1px solid #dee2e6;
+  flex-shrink: 0;
+}
+
+.custom-editor .editor-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
 .ProseMirror {
-  min-height: 300px;
   padding: 0.75rem;
+  outline: none;
 }
 
 .ProseMirror:focus {
@@ -24,6 +44,7 @@ pre {
   font-family: "JetBrainsMono", monospace;
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
+  overflow-x: auto;
 }
 
 pre code {
@@ -58,14 +79,34 @@ img {
 }
 
 .custom-editor img {
-  max-width: 30%;
-  height: auto;}
+  max-width: 100%;
+  height: auto;
+}
 
 img.ProseMirror-selectednode {
   outline: 3px solid #68cef8;
 }
 
-/* Add styles for rich text formatting */
+/* 스크롤바 스타일링 */
+.custom-editor .editor-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-editor .editor-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.custom-editor .editor-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.custom-editor .editor-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Rich text formatting styles */
 .ProseMirror h1,
 .ProseMirror h2,
 .ProseMirror h3,
@@ -122,4 +163,71 @@ img.ProseMirror-selectednode {
 
 .ProseMirror li > p {
   margin-bottom: 0.25em;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .custom-editor.scrollable-editor {
+    max-height: 60vh;
+  }
+  
+  .ProseMirror {
+    min-height: 150px;
+    padding: 0.5rem;
+  }
+  
+  .toolbar-container {
+    padding: 0.25rem;
+  }
+}
+
+/* 드래그 앤 드롭 스타일 */
+.ProseMirror.drag-over {
+  border: 2px dashed #007bff;
+  background-color: #f8f9fa;
+}
+
+/* 포커스 상태 */
+.custom-editor:focus-within {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* 클립보드 이미지 붙여넣기 힌트 */
+.ProseMirror::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(45deg, transparent 49%, rgba(0, 123, 255, 0.1) 50%, transparent 51%);
+  transition: opacity 0.2s ease;
+}
+
+.ProseMirror.paste-active::after {
+  opacity: 1;
+}
+
+/* 간단한 이미지 업로드 텍스트 표시 */
+.custom-editor.uploading {
+  position: relative;
+}
+
+.custom-editor.uploading::before {
+  content: '이미지 업로드 중...';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  z-index: 1000;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
 }

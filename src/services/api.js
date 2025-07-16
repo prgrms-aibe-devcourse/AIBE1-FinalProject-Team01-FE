@@ -36,7 +36,8 @@ const redirectToLogin = () => {
   if (
     currentPath === "/" ||
     currentPath === "/login" ||
-    currentPath === "/signup"
+    currentPath === "/signup" ||
+    currentPath.startsWith("/reset-password")
   ) {
     return;
   }
@@ -105,11 +106,11 @@ apiClient.interceptors.response.use(
 
       if (shouldExclude) {
         console.log("🚫 권한 부족");
+
         return Promise.reject(error);
       }
 
       console.log("🔐 인증 만료");
-      redirectToLogin();
     }
     return Promise.reject(error);
   }
@@ -130,3 +131,18 @@ export const loginUser = async (credentials) => {
     throw error;
   }
 };
+
+// 비밀번호 재설정 요청
+export const requestPasswordReset = (email) => {
+  return apiClient.post('/api/v1/auth/password/reset/request', { email });
+};
+
+// 비밀번호 재설정 확인
+export const confirmPasswordReset = (token, newPassword, confirmPassword) => {
+  return apiClient.post('/api/v1/auth/password/reset/confirm', {
+    token,
+    newPassword,
+    confirmPassword
+  });
+};
+
