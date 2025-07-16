@@ -111,6 +111,9 @@ export const DMContainer = ({
     );
   }
 
+  // 선택된 채팅방 정보 찾기
+  const selectedRoom = dmRooms.find((room) => room.id === selectedChatId);
+
   return (
     <Container className="dm-main-container">
       <Row className="dm-content-row">
@@ -127,6 +130,15 @@ export const DMContainer = ({
           <DMChatArea
             selectedChatId={selectedChatId}
             onMessageUpdate={handleMessageUpdate}
+            chatPartnerInfo={
+              selectedRoom && {
+                nickname: selectedRoom.partnerNickname,
+                profileImage: selectedRoom.partnerProfileImage,
+                partnerId: selectedRoom.partnerId,
+                devcourseName: selectedRoom.devcourseName,
+                devcourseBatch: selectedRoom.devcourseBatch,
+              }
+            }
             // targetMessageId={targetMessageId} // 추후 메시지 위치 이동 구현 시 사용
           />
         </Col>
