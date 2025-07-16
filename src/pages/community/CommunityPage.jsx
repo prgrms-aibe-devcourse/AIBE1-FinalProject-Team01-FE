@@ -1,5 +1,5 @@
-import React from "react";
-import { useNavigate, useParams, Navigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { BoardCategoryBar } from "../../components/board/BoardCategoryBar";
 import { BoardSearchBar } from "../../components/board/BoardSearchBar";
 import { CommunityBoardList } from "../../components/community/CommunityBoardList";
@@ -17,13 +17,15 @@ const COMMUNITY_TABS = [
 ];
 
 const CommunityPage = () => {
-  const { boardType } = useParams();
+  const { boardType = "free" } = useParams();
   const navigate = useNavigate();
 
-  // boardType이 없으면 'free'로 리다이렉트
-  if (!boardType) {
-    return <Navigate to="/community/free" replace />;
-  }
+  // boardType이 없으면 리다이렉트
+  useEffect(() => {
+    if (!boardType) {
+      navigate("/community/free", { replace: true });
+    }
+  }, [boardType, navigate]);
 
   const {
     keyword,
@@ -42,7 +44,6 @@ const CommunityPage = () => {
   } = useCommunityPosts(boardType);
 
   const handleTabSelect = (tabKey) => {
-    // 탭 변경 시 URL 파라미터도 초기화
     navigate(`/community/${tabKey}`, { replace: true });
   };
 
@@ -89,10 +90,9 @@ const CommunityPage = () => {
                 onWrite={() => navigate(`/community/${boardType}/write`)}
                 sort={sort}
                 onSortChange={setSort}
-                onSearch={search} // 검색 버튼 클릭 시
+                onSearch={search}
             />
 
-            {/* 로딩 상태일 때는 기존 컨텐츠 숨기고 로딩만 표시 */}
             {loading ? (
                 <div className="text-center py-5">
                   <Spinner animation="border" size="sm" className="me-2" />
@@ -102,7 +102,6 @@ const CommunityPage = () => {
                 <>
                   <CommunityBoardList posts={posts} onPostClick={handlePostClick} />
 
-                  {/* 게시글이 없을 때 메시지 */}
                   {posts.length === 0 && (
                       <div className="text-center py-5">
                         <p className="text-muted">
@@ -111,15 +110,15 @@ const CommunityPage = () => {
                       </div>
                   )}
 
-            {/* 페이지네이션 */}
-            {!loading && posts.length > 0 && totalPages > 1 && (
-                <BoardPagination page={page} total={totalPages} onChange={setPage} />
-            )}
+                  {!loading && posts.length > 0 && totalPages > 1 && (
+                      <BoardPagination page={page} total={totalPages} onChange={setPage} />
+                  )}
                 </>
-                )}
+            )}
           </div>
         </div>
       </>
   );
 };
+
 export default CommunityPage;
