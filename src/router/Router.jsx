@@ -1,39 +1,7 @@
-import React, { Suspense, lazy, useState, useEffect } from "react";
+import React, { Suspense, lazy, useState, useEffect, useRef } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-
-let alertShown = false;
-let alertTimeoutId = null;
-
-const showLoginAlert = () => {
-    if (!alertShown) {
-        alertShown = true;
-        alert("로그인이 필요한 서비스입니다.");
-        
-        // 3초 후 alert 상태 초기화
-        if (alertTimeoutId) {
-            clearTimeout(alertTimeoutId);
-        }
-        alertTimeoutId = setTimeout(() => {
-            alertShown = false;
-        }, 3000);
-    }
-};
-
-const showRoleAlert = (message) => {
-    if (!alertShown) {
-        alertShown = true;
-        alert(message);
-        
-        // 3초 후 alert 상태 초기화
-        if (alertTimeoutId) {
-            clearTimeout(alertTimeoutId);
-        }
-        alertTimeoutId = setTimeout(() => {
-            alertShown = false;
-        }, 3000);
-    }
-};
+import { Spinner } from "react-bootstrap";
 
 const MainPage = lazy(() => import("../pages/main/MainPage"));
 const LoginPage = lazy(() => import("../pages/auth/LoginPage"));
@@ -56,13 +24,51 @@ const MyPage = lazy(() => import("../pages/mypage/MyPage"));
 const DMPage = lazy(() => import("../pages/dm/DMPage"));
 const OAuthCallbackPage = lazy(() => import("../pages/auth/OAuthCallbackPage"));
 const ResetPasswordPage = lazy(() => import("../pages/auth/ResetPasswordPage"));
-import { Spinner } from "react-bootstrap";
+
+const useAlert = () => {
+    const [isAlertShown, setIsAlertShown] = useState(false);
+    const timeoutRef = useRef(null);
+
+    const showAlert = (message) => {
+        if (!isAlertShown) {
+            setIsAlertShown(true);
+            alert(message);
+            
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+            
+            timeoutRef.current = setTimeout(() => {
+                setIsAlertShown(false);
+            }, 3000);
+        }
+    };
+
+    useEffect(() => {
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, []);
+
+    return showAlert;
+};
+
 
 const RoleProtectedRoute = ({ children, allowedRoles = [], accessDeniedMessage }) => {
     const { isLoggedIn, user, loading } = useAuth();
     const location = useLocation();
+    const showAlert = useAlert();
+    const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
 
-    if (loading) {
+    useEffect(() => {
+        if (!loading) {
+            setHasCheckedAuth(true);
+        }
+    }, [loading]);
+
+    if (loading || !hasCheckedAuth) {
         return (
             <div className="d-flex justify-content-center align-items-center" style={{ minHeight: 300 }}>
                 <Spinner animation="border" role="status" variant="primary" style={{ width: "3rem", height: "3rem" }}>
@@ -75,13 +81,13 @@ const RoleProtectedRoute = ({ children, allowedRoles = [], accessDeniedMessage }
     // 로그인되지 않은 경우
     if (!isLoggedIn) {
         const redirectUrl = encodeURIComponent(location.pathname + location.search);
-        showLoginAlert();
+        showAlert("로그인이 필요한 서비스입니다.");
         return <Navigate to={`/login?redirectUrl=${redirectUrl}`} replace />;
     }
 
     // 역할 권한이 없는 경우
     if (allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
-        showRoleAlert(accessDeniedMessage);
+        showAlert(accessDeniedMessage);
         return <Navigate to="/" replace />;
     }
 
@@ -99,8 +105,16 @@ const StudentRoute = ({ children, accessDeniedMessage = "수강생만 접근할 
 const ProtectedRoute = ({ children }) => {
     const { isLoggedIn, loading } = useAuth();
     const location = useLocation();
+    const showAlert = useAlert();
+    const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
 
-    if (loading) {
+    useEffect(() => {
+        if (!loading) {
+            setHasCheckedAuth(true);
+        }
+    }, [loading]);
+
+    if (loading || !hasCheckedAuth) {
         return (
             <div className="d-flex justify-content-center align-items-center" style={{ minHeight: 300 }}>
               <Spinner animation="border" role="status" variant="primary" style={{ width: "3rem", height: "3rem" }}>
@@ -112,7 +126,7 @@ const ProtectedRoute = ({ children }) => {
 
     if (!isLoggedIn) {
         const redirectUrl = encodeURIComponent(location.pathname + location.search);
-        showLoginAlert();
+        showAlert("로그인이 필요한 서비스입니다.");
         return <Navigate to={`/login?redirectUrl=${redirectUrl}`} replace />;
     }
 
@@ -128,44 +142,37 @@ export function AppRouter() {
         </Spinner>
         </div>}>
             <Routes>
-                {/* 인증 없이 접근 가능한 페이지 */}
                 <Route path="/" element={<MainPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/signup/profile" element={<ProfileSetupPage />} />
                 <Route path="/find-account" element={<FindPasswordPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} /> 
-                <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
-                <Route path="/oauth/profile-complete" element={<ProfileSetupPage />} />
 
-                {/* 정보게시판 (비로그인 접근 가능) */}
-                <Route path="/info" element={<Navigate to="/info/review" replace />} />
-                <Route path="/info/:boardType" element={<InfoPage />} />
-                <Route path="/info/:boardType/:itId" element={<InfoBoardDetailPage />} />
-                <Route path="/info/:boardType/write" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />
-                <Route path="/info/:boardType/:itId/edit" element={<ProtectedRoute><InfoWritePage /></ProtectedRoute>} />
-
-                {/* 허브 (비로그인 접근 가능) */}
-                <Route path="/hub" element={<HubPage />} />
-                <Route path="/hub/:projectId" element={<HubDetailPage />} />
-                <Route path="/hub/:projectId/edit" element={<ProtectedRoute><HubWritePage /></ProtectedRoute>} />
-                <Route path="/hub/write" element={<ProtectedRoute><HubWritePage /></ProtectedRoute>} />
-
-                {/* 로그인 필요한 페이지 */}
-                <Route path="/community" element={<ProtectedRoute><CommunityPage /></ProtectedRoute>} />
+                <Route path="/community" element={<ProtectedRoute><Navigate to="/community/free" replace /></ProtectedRoute>} />
                 <Route path="/community/:boardType" element={<ProtectedRoute><CommunityPage /></ProtectedRoute>} />
                 <Route path="/community/:boardType/write" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
                 <Route path="/community/:boardType/:communityId" element={<ProtectedRoute><CommunityBoardDetailPage /></ProtectedRoute>} />
                 <Route path="/community/:boardType/:communityId/edit" element={<ProtectedRoute><CommunityWritePage /></ProtectedRoute>} />
-                
                 <Route path="/together" element={<StudentRoute><Navigate to="/together/gathering" replace /></StudentRoute>} />
                 <Route path="/together/:boardType" element={<StudentRoute><TogetherPage /></StudentRoute>} />
                 <Route path="/together/:boardType/:postId" element={<StudentRoute><TogetherBoardDetailPage /></StudentRoute>} />
                 <Route path="/together/:boardType/write" element={<StudentRoute><TogetherWritePage /></StudentRoute>} />
                 <Route path="/together/:boardType/:postId/edit" element={<StudentRoute><TogetherWritePage /></StudentRoute>} />
+                <Route path="/info" element={<Navigate to="/info/review" replace />} />
+                <Route path="/info/:boardType" element={<InfoPage />} />
+                <Route path="/info/:boardType/:itId" element={<InfoBoardDetailPage />} />
+                <Route path="/info/:boardType/write" element={<StudentRoute><InfoWritePage /></StudentRoute>} />
+                <Route path="/info/:boardType/:itId/edit" element={<StudentRoute><InfoWritePage /></StudentRoute>} />
+                <Route path="/hub" element={<HubPage />} />
+                <Route path="/hub/:projectId" element={<HubDetailPage />} />
+                <Route path="/hub/:projectId/edit" element={<StudentRoute><HubWritePage /></StudentRoute>} />
+                <Route path="/hub/write" element={<StudentRoute><HubWritePage /></StudentRoute>} />
 
                 <Route path="/dm" element={<ProtectedRoute><DMPage /></ProtectedRoute>} />
                 <Route path="/mypage" element={<ProtectedRoute><MyPage /></ProtectedRoute>} />
+                <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
+                <Route path="/oauth/profile-complete" element={<ProfileSetupPage />} />
             </Routes>
         </Suspense>
     );

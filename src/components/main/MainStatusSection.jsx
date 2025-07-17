@@ -21,29 +21,29 @@ export const MainStatusSection = () => {
             md={3}
             className="community-status-item d-flex flex-column align-items-center gap-2 p-0"
           >
-            <span className="fw-bold text-white count">500</span>
+            <span className="fw-bold text-white count">152</span>
             <span className="fw-bold text-white label">회원 수</span>
           </Col>
           <Col
             md={3}
             className="community-status-item d-flex flex-column align-items-center gap-2 p-0"
           >
-            <span className="fw-bold text-white count">332</span>
+            <span className="fw-bold text-white count">85</span>
             <span className="fw-bold text-white label">수강생 회원 수</span>
           </Col>
           <Col
             md={3}
             className="community-status-item d-flex flex-column align-items-center gap-2 p-0"
           >
-            <span className="fw-bold text-white count">1,392</span>
+            <span className="fw-bold text-white count">201</span>
             <span className="fw-bold text-white label">게시글 수</span>
           </Col>
           <Col
             md={3}
             className="community-status-item d-flex flex-column align-items-center gap-2 p-0"
           >
-            <span className="fw-bold text-white count">36</span>
-            <span className="fw-bold text-white label">진행된 멘토링</span>
+            <span className="fw-bold text-white count">27</span>
+            <span className="fw-bold text-white label">커피챗/멘토링 수</span>
           </Col>
         </Row>
       </Container>
