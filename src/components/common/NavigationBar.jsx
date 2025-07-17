@@ -141,7 +141,16 @@ export const NavigationBar = ({ onlyLogo }) => {
                   </span>
                   <Button
                     variant="outline-dark"
-                    onClick={logout}
+                    onClick={async () => {
+                      try {
+                        navigate("/");
+                        await logout();
+                        alert("로그아웃되었습니다.");
+                      } catch (error) {
+                        console.error("로그아웃 오류:", error);
+                        alert("로그아웃 중 오류가 발생했습니다.");
+                      }
+                    }}
                   >
                     로그아웃
                   </Button>
