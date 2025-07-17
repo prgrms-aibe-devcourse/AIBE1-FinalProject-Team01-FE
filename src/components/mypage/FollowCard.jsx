@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, Button, Row, Col } from "react-bootstrap";
+import masseukiImg from "../../assets/masseuki.png";
 
 export const FollowCard = ({ user, onUnfollow }) => {
     const [isUnfollowing, setIsUnfollowing] = useState(false);
@@ -30,7 +31,7 @@ export const FollowCard = ({ user, onUnfollow }) => {
                     <Col xs="auto">
                         <div className="follow-card-avatar">
                             <img
-                                src={user.profileImg || 'src/assets/icon-user.png'}
+                                src={user.profileImg || masseukiImg}
                                 alt={`${user.nickname}의 프로필`}
                                 className="rounded-circle"
                                 style={{ width: '60px', height: '60px', objectFit: 'cover' }}
